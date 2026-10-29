@@ -6,9 +6,10 @@ delivers to other repos. People and agents install them with `npx skills add zge
 
 ## Required reading
 
-Load the `skill-writing` and `docs-writing` skills before you write or edit any skill or any prose
-in this repo. Until they move here, read the `SKILL.md` in each one's folder under `sync/skills/` in
-zgeoff/tools.
+Before you write or edit any skill or any prose in this repo, read
+[skills/skill-writing/SKILL.md](skills/skill-writing/SKILL.md) and
+[skills/docs-writing/SKILL.md](skills/docs-writing/SKILL.md). Read these copies, not an installed
+one, because the file you edit may be the one that changes the rules.
 
 ## Repo structure
 
@@ -19,6 +20,25 @@ skills/<name>/      one skill per folder: SKILL.md, plus any references/ and scr
 The skills CLI finds a skill at `skills/<name>/SKILL.md`, and the folder name matches the `name` in
 its frontmatter. Keep `SKILL.md` out of the repo root, because the CLI reads a root `SKILL.md` as
 the repo's only skill.
+
+## Checks
+
+Run these from the repo root. CI runs the same three on each push to `main`:
+
+```bash
+bun run format:check
+bun run check
+bun run test
+```
+
+- `bun run check` runs `check-length.sh`, which runs `check-prose.sh` and `check-skill.sh` in turn,
+  then `check-links.sh` and `check-readmes.sh`.
+- `bun run test` runs the test beside each script.
+- `bun run format` rewraps Markdown at 100 columns. The pre-commit hook runs it on the staged files,
+  so write each paragraph as one line.
+
+The skills tell an agent to run `bash .agents/skills/<skill>/scripts/<script>`, the path in a repo
+that installs them. In this repo the scripts sit under `skills/`.
 
 ## Commits
 
