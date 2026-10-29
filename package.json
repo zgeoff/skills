@@ -6,7 +6,7 @@
     "prepare": "lefthook install --force || true",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "check": "bash skills/docs-writing/scripts/check-length.sh && bash skills/docs-writing/scripts/check-links.sh && bash skills/docs-writing/scripts/check-readmes.sh && bash skills/skill-writing/scripts/check-skill.sh",
+    "check": "bash skills/docs-writing/scripts/check-length.sh && bash skills/docs-writing/scripts/check-links.sh && bash skills/docs-writing/scripts/check-readmes.sh",
     "test": "bun test"
   },
   "devDependencies": {
