@@ -8,7 +8,10 @@
 
 Geoff's agent skills, in one repo.
 
-The repo holds Geoff's user-level skills, the skills his agents' playbooks call, and the shared skills that repo-sync in [zgeoff/tools](https://github.com/zgeoff/tools) delivers to his other repos. Each skill is a folder with a `SKILL.md` that Claude Code, Codex, and the other agents the [skills CLI](https://github.com/vercel-labs/skills) supports can load.
+The repo holds Geoff's user-level skills, the skills his agents' playbooks call, and the shared
+skills that repo-sync in [zgeoff/tools](https://github.com/zgeoff/tools) delivers to his other
+repos. Each skill is a folder with a `SKILL.md` that Claude Code, Codex, and the other agents the
+[skills CLI](https://github.com/vercel-labs/skills) supports can load.
 
 ## Quick start
 

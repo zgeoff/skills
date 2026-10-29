@@ -35,6 +35,7 @@ subfolders by area, so a reader can scan the folder. Link `docs/reference/` from
   When a finding from a write-up still constrains the system, write it as one sentence in the
   architecture doc that owns it. Put each finding someone will act on in the issue tracker. Delete
   the write-up.
+
 - **Development and releasing live in runbooks.** Put the contributor setup in
   `docs/runbooks/development.md`. The release runbook, `docs/runbooks/releasing.md`, is for the
   steps the release tooling doesn't do. When the tooling does every step, delete the runbook.
@@ -52,10 +53,10 @@ Don't fit it under the cap by any of these:
 
 ## Designs
 
-Start a design only when the user asks for one. A design has open questions that need spikes
-before anyone can build; a plan for work about to be built has none, and goes in its issue or PR.
-The design lives in `docs/design/<work>/`, where `<work>` names the work in a few words, while its
-code is unbuilt.
+Start a design only when the user asks for one. A design has open questions that need spikes before
+anyone can build; a plan for work about to be built has none, and goes in its issue or PR. The
+design lives in `docs/design/<work>/`, where `<work>` names the work in a few words, while its code
+is unbuilt.
 
 When the work lands:
 
@@ -67,9 +68,9 @@ When the work lands:
 
 ## Decision records
 
-A decision record holds a choice between alternatives that the user signed off, in a design
-session, a ticket or a PR. Write one only for such a choice, never for a choice you made alone. You
-may write it later, from the session where the user decided. Never delete one.
+A decision record holds a choice between alternatives that the user signed off, in a design session,
+a ticket or a PR. Write one only for such a choice, never for a choice you made alone. You may write
+it later, from the session where the user decided. Never delete one.
 
 Name it `NNNN-<slug>.md`, with the next free number, and open it like this:
 
@@ -84,8 +85,8 @@ Name it `NNNN-<slug>.md`, with the next free number, and open it like this:
 
 `decided` is the only status. Add the `Updated` line only when the decision changes.
 
-It states the choice and the alternatives it rejected, with why, and never how the system works
-now: the architecture doc owns that. When a decision changes, edit the record in place:
+It states the choice and the alternatives it rejected, with why, and never how the system works now:
+the architecture doc owns that. When a decision changes, edit the record in place:
 
 1. Keep its number, and state the decision as it now stands.
 2. Add or change the `Updated` line in its header.
@@ -117,5 +118,5 @@ The README has these sections, in this order:
 5. `## Results`: one line that links `results.md` and each `<run>.md`.
 6. `## Untested`: 1 to 2 lines, with a link to the `## Untested` section of `results.md`.
 
-Give only the landing page the name `README.md`, because `check-length.sh` applies a README limit
-to every file with that name. `results.md` and the other files have no length cap.
+Give only the landing page the name `README.md`, because `check-length.sh` applies a README limit to
+every file with that name. `results.md` and the other files have no length cap.

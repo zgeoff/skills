@@ -7,8 +7,8 @@ delivers to other repos. People and agents install them with `npx skills add zge
 ## Required reading
 
 Load the `skill-writing` and `docs-writing` skills before you write or edit any skill or any prose
-in this repo. Until they move here, read the `SKILL.md` in each one's folder under
-`sync/skills/` in zgeoff/tools.
+in this repo. Until they move here, read the `SKILL.md` in each one's folder under `sync/skills/` in
+zgeoff/tools.
 
 ## Repo structure
 

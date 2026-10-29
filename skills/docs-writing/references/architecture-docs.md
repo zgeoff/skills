@@ -3,11 +3,11 @@
 A reader opens an architecture doc in `docs/architecture/` before they change a subsystem. An
 architecture doc goes wrong when it lists the package's parts instead of the concept, retells one
 function step by step, or gives facts without the reasons that connect them. The reader then knows
-the names but can't predict what the system does. The rules in the
-[docs-writing skill](../SKILL.md) apply throughout.
+the names but can't predict what the system does. The rules in the [docs-writing skill](../SKILL.md)
+apply throughout.
 
-Contents: [working model](#give-the-reader-a-working-model) ·
-[the concept](#open-with-the-concept) · [mechanisms](#describe-a-mechanism-that-spans-files) ·
+Contents: [working model](#give-the-reader-a-working-model) · [the concept](#open-with-the-concept)
+· [mechanisms](#describe-a-mechanism-that-spans-files) ·
 [reasons](#give-the-reason-in-the-sentence-that-needs-it) ·
 [the set of docs](#shape-the-set-of-docs-around-concepts) · [what stays out](#what-stays-out)
 
@@ -56,9 +56,9 @@ fail if it didn't. Write a paragraph that explains a design choice in this order
 4. the limit on the response: what the response doesn't cover, or the condition it needs.
 
 A `**Why:**` marker is a bold label in front of a reason. Join a reason to its fact with "because"
-instead. Keep the marker for a one-off decision that doesn't fit the argument of any paragraph.
-With a `**Why:**` on every paragraph, the doc turns into a list of rules, and the reader loses how
-one fact leads to the next.
+instead. Keep the marker for a one-off decision that doesn't fit the argument of any paragraph. With
+a `**Why:**` on every paragraph, the doc turns into a list of rules, and the reader loses how one
+fact leads to the next.
 
 - Bad:
 
@@ -70,12 +70,12 @@ one fact leads to the next.
 
 - Good:
 
-  > The pool's timeouts stop while the process is paused. The host suspends an idle machine with
-  > its memory intact, so the pool resumes holding its old sockets, and the database may have
-  > closed them in the meantime. The database factory therefore detects a resume, as a wall-clock
-  > gap between reads it takes on a timer, and swaps in a fresh pool for new queries. The gap
-  > threshold stays above any stretch of work that blocks the event loop, so a long job never
-  > trips a reset that would destroy its own queries.
+  > The pool's timeouts stop while the process is paused. The host suspends an idle machine with its
+  > memory intact, so the pool resumes holding its old sockets, and the database may have closed
+  > them in the meantime. The database factory therefore detects a resume, as a wall-clock gap
+  > between reads it takes on a timer, and swaps in a fresh pool for new queries. The gap threshold
+  > stays above any stretch of work that blocks the event loop, so a long job never trips a reset
+  > that would destroy its own queries.
 
 State an invariant, a rule that holds whatever a caller does, in the paragraph about the part that
 keeps it, with its reason beside it.
@@ -92,19 +92,19 @@ keeps it, with its reason beside it.
   When you add an architecture doc, add a paragraph and a link for it to the overview, under the
   part of the system it belongs to. The overview isn't a product overview, which says what the
   product is and who it's for.
-- **Write one architecture doc per concept, not per package.** A concept can span several
-  packages, and a reader changing the concept needs all of it in one place. Split a doc at a
-  concept boundary.
+
+- **Write one architecture doc per concept, not per package.** A concept can span several packages,
+  and a reader changing the concept needs all of it in one place. Split a doc at a concept boundary.
 - **Link the docs whose concepts this one uses**, right after the opening sentences, with one
-  sentence on what each covers, so the reader can open the facts next to these. An invented
-  example:
+  sentence on what each covers, so the reader can open the facts next to these. An invented example:
 
   ```markdown
-  [Replay verification](./replay-verification.md) covers the verifier that proves a stream and settles it.
+  [Replay verification](./replay-verification.md) covers the verifier that proves a stream and
+  settles it.
   ```
 
-- **Draw a diagram** for the overview's request path and topology, and in any doc whose subject is
-  a pipeline, a state machine or a topology, under
+- **Draw a diagram** for the overview's request path and topology, and in any doc whose subject is a
+  pipeline, a state machine or a topology, under
   [Diagrams for pipelines, state machines, and topologies](../SKILL.md#diagrams-for-pipelines-state-machines-and-topologies).
 
 ## What stays out
@@ -114,7 +114,7 @@ Each of these has another owner, and a copy here would go out of date:
 - **Design the code doesn't implement yet.** It goes under `docs/design/`. When a built part came
   from a design, link the design in one sentence.
 - **What a user sees and does.** That goes in a guide, in `docs/guides/`.
-- **The alternatives you rejected, and the history of the design.** Those go in a decision record,
-  a numbered file in `docs/decisions/`, when the user signed off the choice.
+- **The alternatives you rejected, and the history of the design.** Those go in a decision record, a
+  numbered file in `docs/decisions/`, when the user signed off the choice.
 - **Reference for internals**, such as one entry per protocol method, config key or module. That
   stays in the code, or in reference generated from it.
