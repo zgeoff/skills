@@ -50,8 +50,7 @@ wins for that repo's docs. Committed prose follows this skill, not the register 
 
 Write so a tired engineer understands on the first read. Two rules come before all the others:
 
-- **Cut every word that does no work.** If the sentence means the same without a word, the word
-  goes.
+- **Cut every word that does no work.**
 - **When a rule makes a sentence worse, fix the sentence another way.** A sentence that keeps every
   rule and sounds like a machine wrote it has failed.
 
@@ -190,7 +189,7 @@ bash .agents/skills/docs-writing/scripts/check-readmes.sh
 - `check-links.sh` resolves every relative link.
 - `check-readmes.sh` fails on a README that isn't one of the five kinds.
 
-Before the checks, reread each file you changed against [What goes in](#what-goes-in), then against
-the rest. After them, run the `cold-read` skill on each doc and skill you changed.
+Before the checks, reread each file you changed against this skill. After them, run the `cold-read`
+skill on each doc and skill you changed.
 
 **Reply:** the files you changed, the check output, and what the cold read found.
