@@ -327,3 +327,44 @@ test('it skips READMEs under .claude/ by default', async () => {
     stderr: '',
   });
 });
+
+test('it reads skills under .agents/skills/ and skills/, and skips READMEs under .agents/', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('.agents/skills/demo/SKILL.md', ['See [the guide](missing.md).']);
+  await ctx.writePage('.agents/skills/demo/README.md', ['See [the guide](missing.md).']);
+  await ctx.writePage('skills/docs-writing/SKILL.md', ['See [the script](./scripts/missing.sh).']);
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout: '',
+    stderr:
+      '.agents/skills/demo/SKILL.md:1: (missing.md) .agents/skills/demo/missing.md does not exist\n' +
+      'skills/docs-writing/SKILL.md:1: (./scripts/missing.sh) skills/docs-writing/scripts/missing.sh does not exist\n',
+  });
+});
+
+test('it skips the project-docs-writing skill, whose links are examples', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('.agents/skills/project-docs-writing/SKILL.md', ['See [x](missing.md).']);
+  await ctx.writePage('.claude/skills/project-docs-writing/SKILL.md', ['See [x](missing.md).']);
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-links: 0 files, every relative link resolves\n',
+    stderr: '',
+  });
+});

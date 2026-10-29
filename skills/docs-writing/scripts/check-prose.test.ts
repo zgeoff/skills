@@ -1,7 +1,7 @@
 import { expect, onTestFinished, test } from 'bun:test';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { $ } from 'bun';
 
@@ -71,6 +71,7 @@ async function setupTest() {
   };
 
   return {
+    directory,
     runGit,
     writeText,
     runCommit,
@@ -1262,6 +1263,77 @@ test('it reads the default branch from origin/HEAD', async () => {
       'Paragraphs over 250 words in a changed file (split each one; lists, tables and code blocks are exempt):\n' +
       'new.md:1:251 words\n' +
       '\n',
+    stderr: '',
+  });
+});
+
+test('it prints an "A x is a" definition as a candidate and passes', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writeText(
+    'guide.md',
+    'A ledger is a sequence of entries.\nThe ledger holds a row is a guess.\n',
+  );
+
+  const result = await ctx.run('guide.md');
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout:
+      'Candidates — sentence-initial "A x is a" definitions; keep one only where the reader needs the term defined:\n' +
+      'guide.md:1:A ledger is a sequence of entries.\n' +
+      '\n' +
+      'check-prose: clean (candidates above, if any, need judgment only)\n',
+    stderr: '',
+  });
+});
+
+test('it passes "fenced code" as the Markdown sense of the word', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writeText('guide.md', 'Skip fenced code blocks.\n');
+
+  const result = await ctx.run('guide.md');
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-prose: clean (candidates above, if any, need judgment only)\n',
+    stderr: '',
+  });
+});
+
+test('it skips the docs-writing and skill-writing skills under each skills folder', async () => {
+  const ctx = await setupTest();
+
+  const paths = [
+    '.agents/skills/docs-writing/SKILL.md',
+    '.claude/skills/skill-writing/SKILL.md',
+    'skills/docs-writing/references/readmes.md',
+    'skills/demo/SKILL.md',
+  ];
+
+  for (const path of paths) {
+    await mkdir(dirname(join(ctx.directory, path)), { recursive: true });
+    await ctx.writeText(path, 'The cache is load-bearing.\n');
+  }
+
+  const result = await ctx.run('.agents', '.claude', 'skills');
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout: 'Banned words:\nskills/demo/SKILL.md:1:The cache is load-bearing.\n\n',
     stderr: '',
   });
 });

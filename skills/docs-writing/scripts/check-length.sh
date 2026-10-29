@@ -79,7 +79,8 @@ while IFS= read -r readme; do
     echo "$readme: $lines lines ($name README; target $target, limit $limit)"
   fi
 done < <({
-  list_files ':(glob)**/README.md' ':(exclude,glob)docs/**' ':(exclude,glob).claude/**'
+  list_files ':(glob)**/README.md' ':(exclude,glob)docs/**' ':(exclude,glob).claude/**' \
+    ':(exclude,glob).agents/**'
 
   # git ls-files warns on a pathspec whose folder is missing.
   if [ -d docs/design ]; then
@@ -101,7 +102,7 @@ while IFS= read -r doc; do
   lines=$(count_lines "$doc")
 
   if [ "$lines" -gt "$cap" ]; then
-    echo "$doc: $lines lines, over the docs cap of $cap (warning: cut points, then split at a code boundary)"
+    echo "$doc: $lines lines, over the docs cap of $cap (warning: cut points, then split at a concept boundary)"
   fi
 done <<< "$docs"
 
@@ -110,10 +111,13 @@ if [ -n "$(list_files ':(glob)**/results.md')" ]; then
   prose_paths+=(':(glob)**/results.md')
 fi
 
-skills=$(list_files ':(glob).claude/skills/**/*.md' ':(glob)sync/skills/**/*.md')
+# A consumer repo installs skills under .agents/skills/ or .claude/skills/, and zgeoff/skills keeps
+# them under skills/.
+skill_globs=(':(glob).agents/skills/**/*.md' ':(glob).claude/skills/**/*.md' ':(glob)skills/**/*.md')
+skills=$(list_files "${skill_globs[@]}")
 
 if [ -n "$skills" ]; then
-  prose_paths+=(':(glob).claude/skills/**/*.md' ':(glob)sync/skills/**/*.md')
+  prose_paths+=("${skill_globs[@]}")
 fi
 
 echo
@@ -122,8 +126,8 @@ if [ "${#prose_paths[@]}" -gt 0 ]; then
   bash "$script_dir/check-prose.sh" "${prose_paths[@]}" || fail=1
 fi
 
-for check_skill in .claude/skills/skill-writing/scripts/check-skill.sh \
-  sync/skills/skill-writing/scripts/check-skill.sh; do
+for check_skill in .agents/skills/skill-writing/scripts/check-skill.sh \
+  .claude/skills/skill-writing/scripts/check-skill.sh skills/skill-writing/scripts/check-skill.sh; do
   if [ -f "$check_skill" ]; then
     echo
     bash "$check_skill" || fail=1

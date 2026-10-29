@@ -421,7 +421,7 @@ test('it warns and passes when SKILL.md is over 500 lines', async () => {
     'description:',
     '  Commands and traps for the demo service. Load it before running or writing a demo test.',
     '---',
-    ...Array.from({ length: 500 }, () => 'The tool reads one file.'),
+    ...Array.from({ length: 500 }, () => 'Read.'),
   ]);
 
   const result = await ctx.run();
@@ -786,6 +786,76 @@ test('it reads a link after a comment marker inside inline code', async () => {
     stdout:
       '.claude/skills/demo/SKILL.md:8: link ../../../src/demo.ts#L12 has a line anchor; name the target in the link text instead\n' +
       'check-skill: 1 skills, 1 errors, 0 warnings\n',
+    stderr: '',
+  });
+});
+
+const buildSkill = (name: string, words: number) => [
+  '---',
+  `name: ${name}`,
+  'description:',
+  `  Commands and traps for the ${name} service. Load it before running or writing a ${name} test.`,
+  '---',
+  '',
+  ...Array.from({ length: words / 5 }, () => 'The tool reads one file.'),
+];
+
+test('it passes a SKILL.md body of 1,500 words', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', buildSkill('demo', 1500));
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-skill: 1 skills, 0 errors, 0 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it warns and passes when a SKILL.md body is over 1,500 words', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('.agents/skills/demo/SKILL.md', buildSkill('demo', 1505));
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout:
+      '.agents/skills/demo/SKILL.md: body is 1505 words, over 1500; cut it, or move what only some tasks need into a reference (warning)\n' +
+      'check-skill: 1 skills, 0 errors, 1 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it fails a SKILL.md body over 1,700 words, and counts no word of the frontmatter', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', buildSkill('demo', 1700));
+  await ctx.writePage('skills/other/SKILL.md', buildSkill('other', 1705));
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout:
+      'skills/demo/SKILL.md: body is 1700 words, over 1500; cut it, or move what only some tasks need into a reference (warning)\n' +
+      'skills/other/SKILL.md: body is 1705 words, over the limit of 1700; cut it, or move what only some tasks need into a reference\n' +
+      'check-skill: 2 skills, 1 errors, 1 warnings\n',
     stderr: '',
   });
 });

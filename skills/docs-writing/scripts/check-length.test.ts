@@ -275,7 +275,7 @@ test('it warns and passes when a docs file is over its cap', async () => {
     exitCode: 0,
     stdout:
       'README.md: 10 lines (front page README; target 80, limit 100)\n' +
-      'docs/architecture/overview.md: 251 lines, over the docs cap of 250 (warning: cut points, then split at a code boundary)\n' +
+      'docs/architecture/overview.md: 251 lines, over the docs cap of 250 (warning: cut points, then split at a concept boundary)\n' +
       '\n' +
       'check-prose: clean (candidates above, if any, need judgment only)\n' +
       '\n' +
@@ -299,7 +299,7 @@ test('it holds a runbook to a cap of 300 lines', async () => {
   }).toStrictEqual({
     exitCode: 0,
     stdout:
-      'docs/runbooks/releasing.md: 301 lines, over the docs cap of 300 (warning: cut points, then split at a code boundary)\n' +
+      'docs/runbooks/releasing.md: 301 lines, over the docs cap of 300 (warning: cut points, then split at a concept boundary)\n' +
       '\n' +
       'check-prose: clean (candidates above, if any, need judgment only)\n' +
       '\n' +
@@ -524,6 +524,70 @@ test('it fails a value with a unit under docs/architecture but not one in code o
       'Values with units under docs/architecture (the code owns its values; code blocks are exempt):\n' +
       'docs/architecture/overview.md:4:The reaper waits 30 s.\n' +
       '\n' +
+      '\n' +
+      'check-length: 1 READMEs, 0 over the line limit\n',
+    stderr: '',
+  });
+});
+
+test('it checks the prose of skills under .agents/skills/ and skills/, and skips their READMEs', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writeLines('README.md', 10);
+  await ctx.writeText('.agents/skills/demo/SKILL.md', 'The cache is load-bearing.\n');
+  await ctx.writeLines('.agents/skills/demo/README.md', 71);
+  await ctx.writeText('skills/other/SKILL.md', 'The queue is load-bearing.\n');
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout:
+      'README.md: 10 lines (front page README; target 80, limit 100)\n' +
+      '\n' +
+      'Banned words:\n' +
+      '.agents/skills/demo/SKILL.md:1:The cache is load-bearing.\n' +
+      'skills/other/SKILL.md:1:The queue is load-bearing.\n' +
+      '\n' +
+      '\n' +
+      'check-length: 1 READMEs, 0 over the line limit\n',
+    stderr: '',
+  });
+});
+
+test('it runs check-skill from skills/ in the repo that publishes the skills', async () => {
+  const ctx = await setupTest();
+
+  const checkSkill = fileURLToPath(
+    new URL('../../skill-writing/scripts/check-skill.sh', import.meta.url),
+  );
+
+  await ctx.writeLines('README.md', 10);
+
+  const source = await readFile(checkSkill, 'utf8');
+
+  await ctx.writeText('skills/skill-writing/scripts/check-skill.sh', source);
+  await ctx.writeText('skills/demo/SKILL.md', '---\nname: demo\n---\n');
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout:
+      'README.md: 10 lines (front page README; target 80, limit 100)\n' +
+      '\n' +
+      'check-prose: clean (candidates above, if any, need judgment only)\n' +
+      '\n' +
+      'skills/demo/SKILL.md: has no description\n' +
+      'check-skill: 1 skills, 1 errors, 0 warnings\n' +
       '\n' +
       'check-length: 1 READMEs, 0 over the line limit\n',
     stderr: '',

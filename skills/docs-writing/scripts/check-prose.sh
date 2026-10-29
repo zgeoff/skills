@@ -16,12 +16,15 @@ paragraph_warn=150
 paragraph_fail=250
 
 # The skill's own files, the repo's project skill beside them, and the skill-writing skill document
-# the forbidden patterns and contain them as examples. A file git marks linguist-vendored belongs to
-# someone else, so a repo marks its third-party skills in .gitattributes.
-set -- "$@" ':(exclude).claude/skills/docs-writing' ':(exclude).claude/skills/project-docs-writing' \
-  ':(exclude)sync/skills/docs-writing' ':(exclude).claude/skills/skill-writing' \
-  ':(exclude)sync/skills/skill-writing' ':(exclude,attr:linguist-vendored)' \
-  ':(exclude,attr:linguist-vendored=true)'
+# the forbidden patterns and contain them as examples. A consumer repo installs skills under
+# .agents/skills/ or .claude/skills/, and zgeoff/skills keeps them under skills/. A file git marks
+# linguist-vendored belongs to someone else, so a repo marks its third-party skills in
+# .gitattributes.
+for root in .agents/skills .claude/skills skills; do
+  set -- "$@" ":(exclude)$root/docs-writing" ":(exclude)$root/project-docs-writing" \
+    ":(exclude)$root/skill-writing"
+done
+set -- "$@" ':(exclude,attr:linguist-vendored)' ':(exclude,attr:linguist-vendored=true)'
 
 # Every grep reads untracked files too, so a new doc is checked before it is staged, and skips
 # binary files.
@@ -88,11 +91,12 @@ report 'Process residue (date stamps, investigation framing, memory citations, �
 # The words every zgeoff repo bans; a repo's AGENTS.md lists them with their legal senses.
 # Judgment-only bans (bites, floor, anchor) are not grepped. CAS stays case-sensitive so "CAs"
 # passes.
-# AGENTS.md and the agents/ partials hold the banned-words registry itself, and "code fence" is the
-# legal markdown sense of the word. In Markdown, code blocks and code spans are exempt, since an
-# identifier in code may hold a banned word: awk blanks the spans and puts the rest before the line,
-# split by a unit separator, and grep matches the pattern only before that separator.
-banned_words='\bsurfaces?\b|load-bearing|\bseams?\b|\bceilings?\b|(?<!code )\bfenc(e|es|ed|ing)\b|(?-i:\bCAS\b)|significantly|near-instant'
+# AGENTS.md and the agents/ partials hold the banned-words registry itself, and "code fence" and
+# "fenced code" are the legal markdown sense of the word. In Markdown, code blocks and code spans
+# are exempt, since an identifier in code may hold a banned word: awk blanks the spans and puts the
+# rest before the line, split by a unit separator, and grep matches the pattern only before that
+# separator.
+banned_words='\bsurfaces?\b|load-bearing|\bseams?\b|\bceilings?\b|(?<!code )\bfenc(e|es|ed|ing)\b(?! code)|(?-i:\bCAS\b)|significantly|near-instant'
 report 'Banned words:' \
   "$(
     grep_docs -nPi "$banned_words" -- "$@" ':(exclude)*.md' ':(exclude)AGENTS.md' ':(exclude)agents'
@@ -613,6 +617,9 @@ candidate 'Candidates — delta-framing words; legal only when the baseline sits
 
 candidate 'Candidates — headings written as claims; move the thesis into the first sentence:' \
   "$(grep_docs -nP '^#{2,4} (?!(What|Why|When|How|Before|Where|Which)\b).*\b(is|are|does|has|cannot|never|not)\b' -- "$@")"
+
+candidate 'Candidates — sentence-initial "A x is a" definitions; keep one only where the reader needs the term defined:' \
+  "$(grep_docs -nP '\bAn? \w+ is an? ' -- "$@")"
 
 if [ "$fail" -eq 0 ]; then
   echo 'check-prose: clean (candidates above, if any, need judgment only)'

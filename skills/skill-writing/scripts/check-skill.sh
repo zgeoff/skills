@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Checks the structure of each skill; exits non-zero when a skill breaks a rule that fails the run.
 # Usage (from the repo root): check-skill.sh [<skill-dir>...]
-# With no argument it checks every directory holding a SKILL.md under .claude/skills/ and
-# sync/skills/. A skill whose SKILL.md git marks linguist-vendored is skipped, so a repo marks its
+# With no argument it checks every directory holding a SKILL.md under .agents/skills/ and
+# .claude/skills/, where a consumer repo installs skills, and under skills/, where zgeoff/skills
+# keeps them. A skill whose SKILL.md git marks linguist-vendored is skipped, so a repo marks its
 # third-party skills in .gitattributes.
 # Fails on: a missing name or description, a name that differs from the folder or breaks the name
 # format, a description over 1,024 characters, a plain description that holds a colon YAML reads as a
-# key, and a link with a line anchor outside code.
-# Warns on: a SKILL.md over 500 lines, a reference that SKILL.md does not list under ## References,
+# key, a link with a line anchor outside code, and a SKILL.md body over 1,700 words.
+# Warns on: a SKILL.md body over 1,500 words, a SKILL.md over 500 lines, a reference that SKILL.md does not list under ## References,
 # a reference over 100 lines with no contents list near its top, a reference that links to another
 # reference, and a code-formatted span outside a table that names an existing repo file.
 set -uo pipefail
@@ -37,7 +38,8 @@ if [ "$#" -gt 0 ]; then
 else
   while IFS= read -r file; do
     [ -f "$file" ] && dirs+=("$(dirname "$file")")
-  done < <(list_files ':(glob).claude/skills/**/SKILL.md' ':(glob)sync/skills/**/SKILL.md')
+  done < <(list_files ':(glob).agents/skills/**/SKILL.md' ':(glob).claude/skills/**/SKILL.md' \
+    ':(glob)skills/**/SKILL.md')
 fi
 
 checked=()
@@ -100,6 +102,7 @@ sub check_skill {
 
   warn_about($skill, scalar(@lines) . " lines, over 500; check that each section is one most tasks need")
     if @lines > 500;
+  check_words($skill, @lines);
   check_frontmatter($dir, $skill, @lines);
 
   open my $list, "-|", "git", "-c", "core.quotePath=false", "ls-files", "--cached", "--others",
@@ -121,6 +124,28 @@ sub check_skill {
   for my $file (sort grep { m{^\Q$dir\E/references/[^/]+\.md\z} } keys %files) {
     warn_about($file, "SKILL.md does not list it under ## References; add a line naming the task that needs it")
       unless $listed{$file};
+  }
+}
+
+# Counts the words of the body after the frontmatter, code blocks included: past the warning limit
+# an agent starts to skim, and past the error limit the skill fails the run.
+sub check_words {
+  my ($skill, @lines) = @_;
+  my ($warn, $limit) = (1500, 1700);
+  my $start = 0;
+  if (@lines && $lines[0] eq "---") {
+    for my $i (1 .. $#lines) {
+      if ($lines[$i] eq "---") { $start = $i + 1; last }
+    }
+  }
+  my $words = 0;
+  for my $line (@lines[$start .. $#lines]) {
+    $words += () = $line =~ /\S+/g;
+  }
+  if ($words > $limit) {
+    fail($skill, "body is $words words, over the limit of $limit; cut it, or move what only some tasks need into a reference");
+  } elsif ($words > $warn) {
+    warn_about($skill, "body is $words words, over $warn; cut it, or move what only some tasks need into a reference");
   }
 }
 
