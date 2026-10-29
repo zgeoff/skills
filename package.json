@@ -1,0 +1,17 @@
+{
+  "name": "skills",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "lefthook install --force || true",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "check": "bash skills/docs-writing/scripts/check-length.sh && bash skills/docs-writing/scripts/check-links.sh && bash skills/docs-writing/scripts/check-readmes.sh && bash skills/skill-writing/scripts/check-skill.sh",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "lefthook": "2.2.2",
+    "oxfmt": "0.72.0"
+  },
+  "packageManager": "bun@1.4.3"
+}

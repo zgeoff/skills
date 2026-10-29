@@ -1,0 +1,8 @@
+# Git hooks. pre-commit formats the staged files only.
+pre-commit:
+  piped: true
+  jobs:
+    - name: oxfmt
+      glob: '*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,json,jsonc,md,css,yml,yaml,html}'
+      run: bunx oxfmt --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true

@@ -1,0 +1,6 @@
+[install]
+# bun add saves exact versions, no ^/~ ranges
+exact = true
+
+# supply-chain guard: only install versions published >= 7 days ago
+minimumReleaseAge = 604800
