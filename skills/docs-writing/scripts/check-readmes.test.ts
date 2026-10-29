@@ -158,3 +158,26 @@ test('it skips a README that git marks linguist-vendored', async () => {
     stderr: '',
   });
 });
+
+test('it fails a spike index inside docs/design/, because the design README lists its spikes', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writeText('README.md', '# Demo\n');
+  await ctx.writeText('docs/design/sync/README.md', '# Sync\n');
+  await ctx.writeText('docs/design/sync/spikes/README.md', '# Spikes\n');
+  await ctx.writeText('docs/design/sync/spikes/cold-start/README.md', '# Spike: Cold start\n');
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout:
+      `docs/design/sync/spikes/README.md: ${advice}\n` +
+      'check-readmes: 4 READMEs, 1 not one of the five kinds\n',
+    stderr: '',
+  });
+});

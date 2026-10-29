@@ -8,8 +8,8 @@
 # 3. docs/README.md;
 # 4. a design README: docs/design/<work>/README.md, or the README of a folder inside a design folder
 #    whose own README is a design README, outside any spikes/ folder;
-# 5. a spike README, whose first H1 starts "Spike: ", or the README of a folder whose direct
-#    subfolders hold a spike README.
+# 5. a spike README, whose first H1 starts "Spike: ", or, outside docs/design/, the README of a
+#    folder whose direct subfolders hold a spike README. A design README lists its own spikes.
 # A README git marks linguist-vendored belongs to someone else and is skipped.
 set -uo pipefail
 
@@ -69,7 +69,7 @@ is_known() {
   [ "$readme" = docs/README.md ] && return 0
   is_design "$readme" && return 0
   is_spike "$readme" && return 0
-  indexes_spikes "$dir"
+  [[ $dir != docs/design/* ]] && indexes_spikes "$dir"
 }
 
 unknown=0
