@@ -7,7 +7,7 @@ Linear tickets hold the product side of the reason: what someone asked for, and 
 Report any other reason a ticket gives too, such as a provider's rate limit. A commit can name a
 sub-issue that says only how to do the work. Then look higher up: in a parent ticket or its project.
 
-Two traps:
+Traps:
 
 - **Anyone can edit a ticket after the commit.** Compare the dates of each edit and comment with the
   date of the commit that added the target. For a decision with no commit, use the date the decision

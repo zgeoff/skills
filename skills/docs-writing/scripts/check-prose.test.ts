@@ -1292,6 +1292,38 @@ test('it prints an "A x is a" definition as a candidate and passes', async () =>
   });
 });
 
+test('it prints contrast frames, counted lists and stock openers as candidates and passes', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writeText(
+    'guide.md',
+    'Water at the root, not the leaves.\n' +
+      'Prune in March rather than May.\n' +
+      'A bed goes wrong in three ways.\n' +
+      'This skill helps you plan a bed.\n' +
+      'Water the bed, not later.\n',
+  );
+
+  const result = await ctx.run('guide.md');
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout:
+      'Candidates — contrast frames, counted lists and stock openers; state the move, name the items, open with the job:\n' +
+      'guide.md:1:Water at the root, not the leaves.\n' +
+      'guide.md:2:Prune in March rather than May.\n' +
+      'guide.md:3:A bed goes wrong in three ways.\n' +
+      'guide.md:4:This skill helps you plan a bed.\n' +
+      '\n' +
+      'check-prose: clean (candidates above, if any, need judgment only)\n',
+    stderr: '',
+  });
+});
+
 test('it passes "fenced code" as the Markdown sense of the word', async () => {
   const ctx = await setupTest();
 
@@ -1310,13 +1342,14 @@ test('it passes "fenced code" as the Markdown sense of the word', async () => {
   });
 });
 
-test('it skips the docs-writing and skill-writing skills under each skills folder', async () => {
+test('it skips the docs-writing, skill-writing and deslop skills under each skills folder', async () => {
   const ctx = await setupTest();
 
   const paths = [
     '.agents/skills/docs-writing/SKILL.md',
     '.claude/skills/skill-writing/SKILL.md',
     'skills/docs-writing/references/readmes.md',
+    'skills/deslop/SKILL.md',
     'skills/demo/SKILL.md',
   ];
 

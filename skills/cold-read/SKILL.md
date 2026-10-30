@@ -95,6 +95,7 @@ rule break:
 
 Redraft every section with a fix or a gap. Start from what the section needs to say, and write it
 fresh. If you start from the sentences the cold reader quoted, you keep the shape that got it stuck.
+Then run the [deslop](../deslop/SKILL.md) skill on each section you redrafted.
 
 ## Read it again
 

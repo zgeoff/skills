@@ -110,7 +110,7 @@ can't reach is a gap.
 
 ## Fan out
 
-Before you start any subagent, decide two things.
+Before you start any subagent, decide these.
 
 First, the short path: when a PR or ticket in the anchor states the reason in words, and the caller
 plans no change to the target, answer from it yourself. Give the reason, its quote and link, and

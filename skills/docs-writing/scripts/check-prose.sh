@@ -15,14 +15,14 @@ fi
 paragraph_warn=150
 paragraph_fail=250
 
-# The skill's own files, the repo's project skill beside them, and the skill-writing skill document
-# the forbidden patterns and contain them as examples. A consumer repo installs skills under
+# The skill's own files, the repo's project skill beside them, and the skill-writing and deslop
+# skills document the forbidden patterns and contain them as examples. A consumer repo installs skills under
 # .agents/skills/ or .claude/skills/, and zgeoff/skills keeps them under skills/. A file git marks
 # linguist-vendored belongs to someone else, so a repo marks its third-party skills in
 # .gitattributes.
 for root in .agents/skills .claude/skills skills; do
   set -- "$@" ":(exclude)$root/docs-writing" ":(exclude)$root/project-docs-writing" \
-    ":(exclude)$root/skill-writing"
+    ":(exclude)$root/skill-writing" ":(exclude)$root/deslop"
 done
 set -- "$@" ':(exclude,attr:linguist-vendored)' ':(exclude,attr:linguist-vendored=true)'
 
@@ -620,6 +620,9 @@ candidate 'Candidates — headings written as claims; move the thesis into the f
 
 candidate 'Candidates — sentence-initial "A x is a" definitions; keep one only where the reader needs the term defined:' \
   "$(grep_docs -nP '\bAn? \w+ is an? ' -- "$@")"
+
+candidate 'Candidates — contrast frames, counted lists and stock openers; state the move, name the items, open with the job:' \
+  "$(grep_docs -nPi ', not (a|an|the|its|their|from|for|to|in|on|by|only|just)\b|\brather than\b|\bis not the (job|point)\b|\b(two|three|four|five) (ways|traps|mistakes|things|rules)\b|^(This|The) skill (is|helps|lets|explains|finds|builds|shows)\b' -- "$@")"
 
 if [ "$fail" -eq 0 ]; then
   echo 'check-prose: clean (candidates above, if any, need judgment only)'

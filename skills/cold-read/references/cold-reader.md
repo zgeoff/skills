@@ -22,7 +22,7 @@ You're done when you hand back one report, in the format under [The report](#the
 
 ## What to read
 
-Your prompt gives you three things:
+Your prompt gives you:
 
 - the file;
 - what it is: a doc or a skill;
