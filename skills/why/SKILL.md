@@ -16,8 +16,10 @@ comments and agent sessions. Each place that holds such writing is an evidence s
 
 The shape of code comes from many decisions, so trace past the latest commit. Write "because" only
 for a reason someone wrote down. Report a source you couldn't reach as a gap in the search, never as
-"no reason exists". You hand the user one cited report, and the user uses it to decide whether to
-keep or change the target.
+"no reason exists". You hand one cited report back to your caller. Usually that is an agent in a
+playbook, such as a refactor about to remove code, which uses the report to decide whether to keep
+or change the target. When the user asked the question, give the report the form
+[Explain it to the user, when asked](#explain-it-to-the-user-when-asked) gives.
 
 ## Key rules
 
@@ -28,6 +30,8 @@ keep or change the target.
   path when the anchor already states the reason and nobody plans a change.
 - [Weigh](#weigh): a separate subagent sorts the reasons and writes the report.
 - [Report](#report): the order the weigher writes in; every source gets a line.
+- [Explain it to the user, when asked](#explain-it-to-the-user-when-asked): a timeline of the
+  decisions, built up one frame at a time, before the levels.
 
 ## References
 
@@ -46,7 +50,7 @@ alone.
 ## Anchor
 
 Name the target: files and lines, symbols, or a decision. When the question is vague, take your best
-reading from the conversation, tell the user in one line, and go on without waiting.
+reading of it, state it in one line at the top of the report, and go on without waiting.
 
 For code, find the commits that introduced the target or changed its behaviour, and skip a move, a
 rename or a format change:
@@ -119,10 +123,9 @@ A source you don't search goes in the report with its reason. There are two kind
 - a gap: the project lacks the source, or your session can't reach it;
 - a skip: the source can't bear on the target, such as runtime logs for a build script.
 
-The short path: when a PR or ticket in the anchor states the reason in words, and neither the user
-nor you plans to change the target, answer from it yourself. Give the reason, its quote and link,
-and list the sources you didn't search. A planned change always gets the full fan-out and the
-weigher.
+The short path: when a PR or ticket in the anchor states the reason in words, and nobody plans to
+change the target, answer from it yourself. Give the reason, its quote and link, and list the
+sources you didn't search. A planned change always gets the full fan-out and the weigher.
 
 ## Weigh
 
@@ -138,7 +141,7 @@ Start one more subagent, the weigher, to sort the reasons and write the report. 
 Don't give it your own reasoning or the answer you hope for. You may have a stake in the answer,
 such as wanting a "yes, safe to change", and the weigher can't share it if it never sees it.
 
-Hand the weigher's report to the user as written. Don't soften or firm up its confidence.
+Hand the weigher's report to your caller as written. Don't soften or firm up its confidence.
 
 ## Report
 
@@ -154,5 +157,11 @@ The weigher writes the report in this order:
 
 When a change is planned, it ends with what to keep, what can change, what to avoid, and the risk of
 the change.
+
+## Explain it to the user, when asked
+
+When the user asked the question, tell the weigher that the reader is the user. The report then
+opens with a timeline of the decisions that shaped the target, drawn as the show-me skill says,
+before the levels. The levels, the quotes and the confidence words stay the same.
 
 **Reply:** the weigher's report, or on the short path your own answer.

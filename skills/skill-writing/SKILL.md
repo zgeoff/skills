@@ -19,9 +19,9 @@ The agent can read the code, so give it what the code can't tell it:
 - the traps that cost an hour;
 - the reasons behind rules that look arbitrary.
 
-You can get a skill wrong in four ways. You copy the code, and the copy goes out of date. You list
-rules with no reasons, and the agent can't judge the case you didn't foresee. You leave a gap, and
-the agent fills it with a guess. Or the skill grows until the agent skims it.
+Point at the code rather than copy it, because a copy goes out of date. Give the reason with a rule,
+so the agent can judge a case you didn't foresee. Leave no gap, because the agent fills it with a
+guess. Keep the skill short, or the agent skims it.
 
 When you're done, hand back the skill's path, the output of its checks, and what a
 [cold read](../cold-read/SKILL.md) found: a fresh subagent's report of where it got stuck.
@@ -102,6 +102,8 @@ write:
 
 - the stance, and its traps;
 - who reads the agent's output, and what that reader does with it;
+- for a skill both agents and the user call, the agent's form by default, and the user's in its own
+  section, such as "Show the user, when asked";
 - the steps, with the judgment inside each;
 - a last line that says what to hand back, such as "**Reply:** each risk with its proof".
 
@@ -133,8 +135,8 @@ Watch for four kinds of copy:
   [`check-skill.sh`](./scripts/check-skill.sh) fails on one, so link the file and name what to look
   for in it.
 
-When a review asks for one of these four kinds of copy, such as every member of a list, decline it
-and name this section. When a review shows a sentence is wrong, fix it.
+Decline a review that asks for one of these copies, and name this section. When a review shows a
+sentence is wrong, fix it.
 
 In a shared skill, one that `zgeoff/skills` delivers to other repos, invent every example. A reader
 in another repo can't open a real one.
@@ -170,8 +172,7 @@ bash .agents/skills/docs-writing/scripts/check-links.sh
 resolves every relative link. To check one skill, run
 `bash .agents/skills/skill-writing/scripts/check-skill.sh .agents/skills/<skill>`.
 
-Then run the `cold-read` skill on SKILL.md and on each reference. The checks can't tell whether the
-top of the file gives a cold agent the job; a cold read can.
+Then run the `cold-read` skill on SKILL.md and on each reference.
 
 When a check flags a sentence you like, rewrite the sentence so the check passes, and tell the user.
 The check may be wrong, and it lives in `zgeoff/skills`, where the user can change it for every
