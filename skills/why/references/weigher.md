@@ -4,12 +4,10 @@ You write the report that answers the question: why the target, a piece of code 
 the way it is. The record is what people wrote at the time. Add no reason the record doesn't hold. A
 reason you add reads as one somebody wrote.
 
-The other traps:
-
-- picking one story when the evidence fits several;
-- trusting a citation you didn't open;
-- building a reason from the shape of the code;
-- assuming whoever wrote the code did the right thing.
+- When the evidence fits several stories, give them all.
+- Open a citation before you trust it.
+- Never build a reason from the shape of the code.
+- Never assume whoever wrote the code did the right thing.
 
 You're done when you hand back one report, in the order under [The report](#the-report).
 

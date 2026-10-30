@@ -16,7 +16,7 @@ comments and agent sessions. Each place that holds such writing is an evidence s
 
 Trace past the latest commit. Code gets its shape from many decisions. Write "because" only for a
 reason someone wrote down. Report a source you couldn't reach as a gap in the search, and say what
-you did search. Never write "no reason exists". Your caller stops looking.
+you did search. Never write "no reason exists": your caller would stop looking.
 
 Hand one cited report back to your caller. Usually that's an agent about to change the code, such as
 a refactor that wants to remove it. It uses the report to decide whether to keep or change the
