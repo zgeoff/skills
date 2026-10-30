@@ -489,7 +489,9 @@ test('it warns about a long reference with no contents list', async () => {
 
   await ctx.writePage('.claude/skills/demo/references/e2e.md', [
     '# The harness',
-    ...Array.from({ length: 100 }, () => 'The tool reads one file.'),
+    '## Suites',
+    ...Array.from({ length: 98 }, () => 'The tool reads one file.'),
+    '## Host safety',
   ]);
 
   const result = await ctx.run();
@@ -856,6 +858,66 @@ test('it fails a SKILL.md body over 1,700 words, and counts no word of the front
       'skills/demo/SKILL.md: body is 1700 words, over 1500; cut it, or move what only some tasks need into a reference (warning)\n' +
       'skills/other/SKILL.md: body is 1705 words, over the limit of 1700; cut it, or move what only some tasks need into a reference\n' +
       'check-skill: 2 skills, 1 errors, 1 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it accepts a long reference with fewer than two headings to list', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('.claude/skills/demo/SKILL.md', [
+    '---',
+    'name: demo',
+    'description:',
+    '  Commands and traps for the demo service. Load it before running or writing a demo test.',
+    '---',
+    '',
+    '## References',
+    '',
+    '- [A worked example](./references/example.md): a message to copy.',
+  ]);
+
+  await ctx.writePage('.claude/skills/demo/references/example.md', [
+    '# A worked example',
+    ...Array.from({ length: 100 }, () => 'The tool reads one file.'),
+  ]);
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-skill: 1 skills, 0 errors, 0 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it reads a bare file name with no folder as a generic name, not a path', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('README.md', ['# Demo']);
+  await ctx.writePage('.claude/skills/demo/SKILL.md', [
+    '---',
+    'name: demo',
+    'description:',
+    '  Commands and traps for the demo service. Load it before running or writing a demo test.',
+    '---',
+    '',
+    'Every package gets a `README.md`.',
+  ]);
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-skill: 1 skills, 0 errors, 0 warnings\n',
     stderr: '',
   });
 });

@@ -9,7 +9,7 @@
 # format, a description over 1,024 characters, a plain description that holds a colon YAML reads as a
 # key, a link with a line anchor outside code, and a SKILL.md body over 1,700 words.
 # Warns on: a SKILL.md body over 1,500 words, a SKILL.md over 500 lines, a reference that SKILL.md does not list under ## References,
-# a reference over 100 lines with no contents list near its top, a reference that links to another
+# a reference over 100 lines with two or more headings and no contents list near its top, a reference that links to another
 # reference, and a code-formatted span outside a table that names an existing repo file.
 set -uo pipefail
 
@@ -256,6 +256,7 @@ sub check_markdown {
   my $open = "";
   my $line_number = 0;
   my $contents_links = 0;
+  my $headings = 0;
   my $reference = !$is_skill;
   my $in_comment = 0;
 
@@ -269,6 +270,7 @@ sub check_markdown {
       next;
     }
     next if $open ne "";
+    $headings++ if $line =~ /^#{2,6}\s/;
 
     # An HTML comment never renders, so its text holds no link and no path.
     # A comment marker inside inline code renders as text, so the spans hide their markers first.
@@ -310,13 +312,13 @@ sub check_markdown {
 
     for my $span (@bare) {
       $span =~ s/^\s+|\s+$//g;
-      next if $span !~ m{\A[\w.@/-]+\z} || $span !~ m{[./]};
+      next if $span !~ m{\A[\w.@/-]+\z} || $span !~ m{/};
       warn_about("$file:$line_number", "`$span` names a file in the repo; link it instead")
         if -f to_bytes($span);
     }
   }
 
-  if ($reference && @lines > 100 && $contents_links < 2) {
+  if ($reference && @lines > 100 && $headings >= 2 && $contents_links < 2) {
     warn_about($file, scalar(@lines) . " lines with no contents list near the top; open with links to its headings");
   }
 }
