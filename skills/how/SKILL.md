@@ -27,7 +27,7 @@ answer, written for the agent or for the user, as [Answer](#answer) and
   the concept.
 - [Simple or complex](#simple-or-complex): one explainer for a simple question; 2 to 4 explorers,
   then one explainer, for a complex one.
-- [Answer](#answer): five sections, real names and paths, with stale docs and gaps under Traps.
+- [Answer](#answer): up to six sections, real names and paths, with stale docs and gaps under Traps.
 - [When the user asked the question](#when-the-user-asked-the-question): tell the explainer, which
   then draws the flow in frames and drops the list of files.
 - [Asked twice](#asked-twice): an answer needed twice is a draft for an architecture doc.
