@@ -23,8 +23,8 @@ Point at the code rather than copy it, because a copy goes out of date. Give the
 so the agent can judge a case you didn't foresee. Leave no gap, because the agent fills it with a
 guess. Keep the skill short, or the agent skims it.
 
-When you're done, hand back the skill's path, the output of its checks, and what a
-[cold read](../cold-read/SKILL.md) found: a fresh subagent's report of where it got stuck.
+When you're done, hand back the skill's path, the [check](#check-it) output, and what a
+[cold read](../cold-read/SKILL.md) found.
 
 ## Key rules
 
@@ -42,20 +42,18 @@ When you're done, hand back the skill's path, the output of its checks, and what
 
 ## Write it the way you want the work done
 
-An agent copies how a skill is written as well as what it says. Write prohibitions, and it writes
-prohibitions back.
+An agent copies how a skill is written as well as what it says. An agent that reads prohibitions
+writes prohibitions, so say what to do.
 
 - **Put the reason next to each rule whose reason isn't obvious.** With the reason, the agent can
   judge a case you didn't foresee. "MUST" and "CRITICAL" can't do that, and agents over-apply them.
-- **Address the agent as "you"**, in plain words, because that's how it reads an instruction meant
-  for it.
+- **Address the agent as "you"**, in plain words.
 - **Make a person or the agent the subject**, not a thing acting like a person: "add a trap only if
   an agent with the source open would still lose time to it", not "a trap earns its place when an
   agent would still lose time to it". A sentence with a thing as the actor hides who has to do the
   work.
 - **Put a list the agent acts on or adds to in bullets.** A list inside a sentence is hard to scan,
-  and the next agent that edits it appends one more item to the sentence. Two or three short
-  examples inside a sentence are fine.
+  and it grows one item at a time. Two or three short examples inside a sentence are fine.
 - **Keep a slogan only next to its full rule.** A slogan like "read first, open the rules second"
   sticks, but only after the paragraph beside it says what it means and why.
 
@@ -66,24 +64,26 @@ disagree about a skill, this skill wins.
 
 Every skill opens the same way:
 
-1. A paragraph or two: the job, what the agent hands back, and the main traps, in this skill's own
-   words, with no count of traps. A method repeats its hand-back in its last line.
+1. A paragraph or two: the job, what the agent hands back, and the main traps, in the new skill's
+   own words, with no count of traps. A method skill also repeats the hand-back in a reply line at
+   the end of the file.
 2. `## Key rules`: one line for each `##` section, with a link and the rule in a phrase. A `###`
-   stays inside its section.
+   gets no line of its own.
 3. `## References`, when the skill has any: one line for each file in `references/`, with the task
    that needs it.
 
-When a long session runs out of room, the harness, such as Claude Code or Codex, summarises it. Only
-the start of a loaded skill survives in full.
+Claude Code or Codex summarises a long session when it runs out of room. Only the start of a loaded
+skill survives in full.
 
-Keep the detail in the section. When you change a rule, change its key rules line too.
+Keep a rule's detail in its section, and change its key rules line when you change the rule.
 
 A reference opens with the facts and traps its reader needs first, never with when to open it. What
-to hand back stays in SKILL.md.
+to hand back stays in SKILL.md. The exception is a reference that is a subagent's brief: it gives
+that subagent's return format.
 
 ## What goes in
 
-In a skill about one repo's machinery, write:
+A machinery skill covers one repo's tools, such as its migrations. In one, write:
 
 - a line on what it covers;
 - the commands, with what each needs, in a table when there's more than one;
@@ -102,10 +102,10 @@ write:
 
 - the stance, and its traps;
 - who reads the agent's output, and what that reader does with it;
-- for a skill both agents and the user call, the agent's form by default, and the user's in its own
-  section, such as "Show the user, when asked";
+- for a skill both agents and the user call, the output an agent needs by default, and the user's
+  version in its own section, such as "Show the user, when asked";
 - the steps, with the judgment inside each;
-- a last line that says what to hand back, such as "**Reply:** each risk with its proof".
+- a reply line that says what to hand back, such as "**Reply:** each risk with its proof".
 
 A machinery skill needs a reader and a reply line only when it produces something for someone, such
 as a report.
@@ -124,8 +124,7 @@ Watch for four kinds of copy:
 
 - **A list of members.** One row per file, function or option is a copy. Give the rule that defines
   the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
-  search there before you write one". A table of commands is fine: the agent needs those at the
-  call.
+  search there before you write one". A table of commands is fine.
 - **A retelling.** "The script builds, tags, pushes, then rolls out" goes out of date with the
   script. Keep the fact the agent acts on ("a failed push leaves the old version serving") and link
   the script.
@@ -174,8 +173,8 @@ resolves every relative link. To check one skill, run
 
 Then run the `cold-read` skill on SKILL.md and on each reference.
 
-When a check flags a sentence you like, rewrite the sentence so the check passes, and tell the user.
-The check may be wrong, and it lives in `zgeoff/skills`, where the user can change it for every
-repo.
+When a check flags a sentence you like, rewrite the sentence so the check passes, and tell the user
+or your caller. The check may be wrong, and it lives in `zgeoff/skills`, where the user can change
+it for every repo.
 
 **Reply:** the skill's path, the check output, and what the cold read found.

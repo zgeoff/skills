@@ -176,7 +176,8 @@ bash .agents/skills/docs-writing/scripts/check-readmes.sh
 ```
 
 - [`check-length.sh`](./scripts/check-length.sh) checks each README and `docs/` file against its
-  cap, then runs `check-prose.sh` over them and every skill.
+  cap, then runs `check-prose.sh` over them and every skill, and `check-skill.sh` when the repo has
+  the skill-writing skill.
 - [`check-prose.sh`](./scripts/check-prose.sh) fails on what a search can find, such as banned
   words. It also prints candidates: fix the real faults, and leave the rest out of your reply. To
   check other prose, such as AGENTS.md, run
