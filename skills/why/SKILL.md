@@ -19,7 +19,7 @@ for a reason someone wrote down. Report a source you couldn't reach as a gap in 
 "no reason exists". You hand one cited report back to your caller. Usually that is an agent in a
 playbook, such as a refactor about to remove code, which uses the report to decide whether to keep
 or change the target. When the user asked the question, give the report the form
-[Explain it to the user, when asked](#explain-it-to-the-user-when-asked) gives.
+[When the user asked the question](#when-the-user-asked-the-question) gives.
 
 ## Key rules
 
@@ -30,7 +30,7 @@ or change the target. When the user asked the question, give the report the form
   path when the anchor already states the reason and nobody plans a change.
 - [Weigh](#weigh): a separate subagent sorts the reasons and writes the report.
 - [Report](#report): the order the weigher writes in; every source gets a line.
-- [Explain it to the user, when asked](#explain-it-to-the-user-when-asked): a timeline of the
+- [When the user asked the question](#when-the-user-asked-the-question): a timeline of the
   decisions, built up one frame at a time, before the levels.
 
 ## References
@@ -158,7 +158,7 @@ The weigher writes the report in this order:
 When a change is planned, it ends with what to keep, what can change, what to avoid, and the risk of
 the change.
 
-## Explain it to the user, when asked
+## When the user asked the question
 
 When the user asked the question, tell the weigher that the reader is the user. The report then
 opens with a timeline of the decisions that shaped the target, drawn as the show-me skill says,
