@@ -66,8 +66,8 @@ disagree about a skill, this skill wins.
 
 Every skill opens the same way:
 
-1. A paragraph or two on the job and how it goes wrong. A method also says what the agent hands
-   back, here and again in its last line.
+1. A paragraph or two: the job, what the agent hands back, and the main traps, in this skill's own
+   words, with no count of traps. A method repeats its hand-back in its last line.
 2. `## Key rules`: one line for each `##` section, with a link and the rule in a phrase. A `###`
    stays inside its section.
 3. `## References`, when the skill has any: one line for each file in `references/`, with the task
@@ -100,7 +100,7 @@ example in a code block, because `check-links.sh` fails an invented link anywher
 A method skill teaches a way of working, such as finding out why code is the way it is. In one,
 write:
 
-- the stance, and how the work goes wrong;
+- the stance, and its traps;
 - who reads the agent's output, and what that reader does with it;
 - the steps, with the judgment inside each;
 - a last line that says what to hand back, such as "**Reply:** each risk with its proof".

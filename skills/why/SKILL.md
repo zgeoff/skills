@@ -10,15 +10,14 @@ description:
 
 # Why
 
-Use this skill to find out why code or a decision is the way it is. The code shows what it does,
-never why. The reason lives in what people wrote at the time: commit messages, PRs, tickets, docs,
-code comments and agent sessions. Each place that holds such writing is an evidence source. You hand
-the user one cited report, and the user uses it to decide whether to keep or change the target.
-Three mistakes make the answer wrong:
+This skill finds out why code or a decision is the way it is. The code shows what it does, never
+why. The reason lives in what people wrote at the time: commit messages, PRs, tickets, docs, code
+comments and agent sessions. Each place that holds such writing is an evidence source.
 
-- you read the latest commit and stop, but the shape comes from earlier decisions;
-- you write "because" for a reason nobody wrote down;
-- you search only the sources you can reach, and report the gaps as "no reason exists".
+The shape of code comes from many decisions, so trace past the latest commit. Write "because" only
+for a reason someone wrote down. Report a source you couldn't reach as a gap in the search, never as
+"no reason exists". You hand the user one cited report, and the user uses it to decide whether to
+keep or change the target.
 
 ## Key rules
 

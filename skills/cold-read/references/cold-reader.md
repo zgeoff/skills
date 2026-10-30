@@ -39,7 +39,7 @@ place you got stuck.
 2. Read the top of the file, down to the end of its key rules and references, and stop. Answer three
    questions yes or no, with a line on why:
    - Do you know what the job is?
-   - Do you know how it usually goes wrong?
+   - Do you know the traps to avoid?
    - Do you know what to hand back, and when you're done? Skip this one for a file in a skill's
      `references/`: its SKILL.md says what to hand back.
 3. Read the rest as if you're doing your task. Write down each place you get stuck, and each point
@@ -90,7 +90,7 @@ Stuck: <n>. Stuck, no rule: <u>. Guesses: <g>. Rule breaks: <m>.
 ### Top of the file (skill only)
 
 - The job: <yes or no>. <why>
-- How it goes wrong: <yes or no>. <why>
+- The traps: <yes or no>. <why>
 - What to hand back: <yes or no>. <why>
 
 ### Stuck

@@ -14,9 +14,9 @@ sentence with the conversation, the ticket and the diff in your head, so every s
 to you. A fresh subagent, the cold reader, reads the file without them, the way the real reader
 will, and reports each place it got stuck.
 
-A cold read goes wrong in two ways. You tell the cold reader what the file is for, and it reads with
-your context after all. Or you patch the sentences it quoted, and the section keeps the shape that
-got it stuck.
+Tell the cold reader nothing about what the file is for, or it reads with your context after all.
+When it reports, redraft the section it got stuck in. A patch to the sentences it quoted keeps the
+shape that got it stuck.
 
 You fix the file, run a second cold read on your redraft, and hand back what that second read found,
 the findings you declined and why, and any gaps in the rules.
@@ -73,7 +73,7 @@ the findings you declined and why, and any gaps in the rules.
 Unless the user asked to see the findings, act on them. A bare `/cold-read <path>` means act.
 
 For a skill, the cold reader answers three questions about the top of the file: does it give the
-job, how the job goes wrong, and what to hand back? If any answer is "no", fix the opening first,
+job, the traps to avoid, and what to hand back? If any answer is "no", fix the opening first,
 because an agent decides what to do from the top.
 
 Then make a call on every item in the report, whether the cold reader got stuck, guessed, or found a

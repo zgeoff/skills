@@ -9,13 +9,11 @@ description:
 
 # Second opinion
 
-Use this skill to get a read on your work from a model that didn't do it. You hand back what the
-model said and what you did with it; the [Reply](#after-the-answer) line gives the shape for each
-job. Three mistakes make a second opinion worthless:
-
-- you send your conclusion, so the reviewer agrees with it;
-- you ask a model of your own family, which shares your blind spots;
-- you act on a finding without reproducing it.
+This skill gets a read on your work from a model that didn't do it. Ask a model of another family,
+because one of your own family shares your blind spots. Send the work and the question, never your
+conclusion: a reviewer that sees your answer tends to agree with it. Reproduce each finding before
+you act on it. You hand back what the model said and what you did with it; the
+[Reply](#after-the-answer) line gives the shape for each job.
 
 ## Key rules
 

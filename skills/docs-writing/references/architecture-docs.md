@@ -1,10 +1,10 @@
 # Architecture docs
 
-A reader opens an architecture doc in `docs/architecture/` before they change a subsystem. An
-architecture doc goes wrong when it lists the package's parts instead of the concept, retells one
-function step by step, or gives facts without the reasons that connect them. The reader then knows
-the names but can't predict what the system does. The rules in the [docs-writing skill](../SKILL.md)
-apply throughout.
+A reader opens an architecture doc in `docs/architecture/` before they change a subsystem, and needs
+to predict what the system does in a case the doc doesn't describe. Explain the concept, and give
+the reason that connects each fact. A list of the package's parts, or one function retold step by
+step, gives the reader names without a working model. The rules in the
+[docs-writing skill](../SKILL.md) apply throughout.
 
 Contents: [working model](#give-the-reader-a-working-model) · [the concept](#open-with-the-concept)
 · [mechanisms](#describe-a-mechanism-that-spans-files) ·

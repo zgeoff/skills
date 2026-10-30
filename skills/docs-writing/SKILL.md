@@ -11,14 +11,9 @@ description:
 
 Committed prose is read by someone who wasn't there. They didn't see the conversation, the ticket or
 the diff. You can't feel where a sentence leans on that context, because you know what every word
-refers to, so check for it on purpose.
-
-Writing a doc goes wrong in four ways:
-
-- a sentence that only makes sense if you were there;
-- a copy of the code, which goes out of date without anyone noticing;
-- padding: a paragraph that defends a decision nobody attacked;
-- prose that keeps every rule and still reads like a machine wrote it.
+refers to, so check for it on purpose: a sentence that only makes sense if you were there; a copy of
+the code, which goes out of date without anyone noticing; padding, such as a paragraph that defends
+a decision nobody attacked; and prose that keeps every rule and still reads like a machine wrote it.
 
 When you're done, hand back the files you changed, the check output, and what a
 [cold read](../cold-read/SKILL.md) found.

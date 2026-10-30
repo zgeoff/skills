@@ -10,13 +10,11 @@ description:
 
 # Show me
 
-Use this skill when the user needs to see something before they can act on it: where a system
-stands, the options for a decision, the shape of a structure, or a change before and after. You hand
-back one chat message. Three mistakes stop the user from acting on it:
-
-- you show everything at once, so the user can't tell which part matters;
-- you draw each option in its own layout, so the user can't compare them;
-- you lead with your pick, so the user reads every option through it.
+This skill builds one chat message that shows the user what they need to see before they act: where
+a system stands, the options for a decision, the shape of a structure, or a change before and after.
+Build each diagram up one part at a time, so the user sees which part matters. Draw every option on
+the same base picture, so the user can compare them. Give your recommendation after the options, so
+the user reads each option on its own terms first.
 
 ## Key rules
 
