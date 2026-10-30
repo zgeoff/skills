@@ -1,8 +1,8 @@
 # The docs/ tree
 
-Use this file to decide where a doc goes in `docs/`, and how designs, decision records and spikes
-work. The tree goes wrong when research, plans and history pile up in it, or when a design stays
-after its code is built. The reader then can't tell what is true of the system today.
+A reader of `docs/` should find only what is true of the system today. Keep research, plans and
+history out of it, and delete a design once its code is built. The table below gives the place for
+each kind of doc.
 
 Contents: [where content goes](#where-each-kind-of-content-goes) · [length](#length) ·
 [designs](#designs) · [decision records](#decision-records) · [spikes](#spikes)

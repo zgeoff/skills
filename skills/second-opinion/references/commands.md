@@ -1,9 +1,8 @@
 # Commands
 
-Use this file when you run a model from another family on the command line to review, diagnose or
-judge, with the prompt that [Write the prompt](../SKILL.md#write-the-prompt) describes. The sections
-below are in the user's order of preference. To pick one, follow
-[Who to ask](../SKILL.md#who-to-ask). Three mistakes break the run:
+Each section below gives the command for one model, in the user's order of preference. To pick a
+model, follow [Who to ask](../SKILL.md#who-to-ask), and write the prompt first, under
+[Write the prompt](../SKILL.md#write-the-prompt). Three mistakes break a run:
 
 - you leave stdin open, so the command waits for input forever;
 - you let the model write, so it changes your working tree;

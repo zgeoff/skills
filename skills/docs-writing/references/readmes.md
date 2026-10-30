@@ -1,8 +1,8 @@
 # READMEs
 
-Use this file to write or review a README. A repo has five kinds of README, and each is an index or
-a landing page. A README goes wrong when it grows into a doc: flags, edge cases and history that the
-code, `--help` or `docs/` own, and that go out of date in the README.
+A repo has five kinds of README, and each is an index or a landing page. Keep each one short. Flags,
+edge cases and history belong in the code, `--help` or `docs/`, and a copy in a README goes out of
+date.
 
 Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
 [the header](#the-header) · [published package sections](#published-package-sections) ·

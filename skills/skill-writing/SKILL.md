@@ -78,8 +78,8 @@ the start of a loaded skill survives in full.
 
 Keep the detail in the section. When you change a rule, change its key rules line too.
 
-A reference opens with a sentence or two on the task it serves and how that task goes wrong. What to
-hand back stays in SKILL.md.
+A reference opens with the facts and traps its reader needs first, never with when to open it. What
+to hand back stays in SKILL.md.
 
 ## What goes in
 

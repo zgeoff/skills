@@ -1,10 +1,9 @@
 # A decision message
 
-Use this file when you write a message that asks the user to choose between options. The message
-goes wrong when the user sees your pick first, or can't see what changes between the options. The
-example is invented. Keep its order ([Order the message](../SKILL.md#order-the-message)), its bold
-labels, and its form: the frames, the caller-first code, and the table with its marks. Invent the
-content, and drop the counter ("Decision 2 of 4") when the message holds the only decision.
+The example below is invented. Keep its order ([Order the message](../SKILL.md#order-the-message)),
+its bold labels, and its form: the frames, the caller-first code, and the table with its marks.
+Invent the content, and drop the counter ("Decision 2 of 4") when the message holds the only
+decision.
 
 ````markdown
 **Decision 2 of 4: how a failed webhook gets retried**
