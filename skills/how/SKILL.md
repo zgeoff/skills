@@ -11,8 +11,8 @@ description:
 # How
 
 This skill explains how part of a codebase works, for whoever changes it next. That reader is either
-an agent, such as a builder about to change the code or a playbook step with a "how" question, or
-the user, when the user asked the question.
+an agent, such as one about to change the code or a playbook step with a "how" question, or the
+user, when the user asked the question.
 
 A good answer lets the reader predict what the code does in a case the answer never mentions. An
 answer that retells the code line by line gives them the names and leaves them unable to predict
