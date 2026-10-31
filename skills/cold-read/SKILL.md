@@ -42,7 +42,7 @@ rebuild.
 1. From the repo root, run the scripted checks, and fix what they find in your files:
 
    ```bash
-   bun x @zgeoff/chex prose length links readmes
+   bun x @zgeoff/chex prose length links readmes skill
    ```
 
    The cold reader skips what the scripts check, so anything they would catch stays in the file. In

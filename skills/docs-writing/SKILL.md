@@ -158,7 +158,7 @@ Run these from the repo root. The repo's `check:docs` script names the checks it
 the same ones.
 
 ```bash
-bun x @zgeoff/chex prose length links readmes
+bun x @zgeoff/chex prose length links readmes skill
 ```
 
 - `chex prose` fails on what a search can find, such as banned words. Under "Candidates", it also
