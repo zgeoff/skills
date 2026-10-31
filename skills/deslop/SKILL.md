@@ -1,10 +1,11 @@
 ---
 name: deslop
 description:
-  "Edits prose that already exists so it reads plainly: it leads with the reader's situation, turns
-  a described process into an instruction, cuts contrast frames, drama and explaining tails, and
-  keeps blunt lines blunt. Load it to deslop a skill, a doc, a PR description or a comment, when
-  text reads like AI wrote it, and after you fix what a cold read found."
+  "Edits prose that already exists so it reads plainly. Its edits lead with the reader's situation,
+  turn a described process into an instruction, cut contrast frames ("X, not Y"), drama and a
+  sentence that explains the line before it, and keep blunt lines blunt. Load it to deslop a skill, a doc, a PR
+  description or a comment, when text reads like AI wrote it, and after you fix what a cold read
+  found."
 ---
 
 # Deslop
@@ -13,21 +14,22 @@ Edit text that already exists, in place, until it reads like a person wrote it. 
 by line, and change only what one of [the moves](#the-moves) covers. Leave everything else as it is,
 and add no new content.
 
-- **Edit by the moves.** An imitation of a voice copies its surface and keeps its faults. When you
-  give the reason for a change, name the feature it fixes, never a persona.
+- **Edit by the moves, never "in the style of" a writer.** Copying a writer's voice copies their
+  habits, faults included. When you give the reason for a change, name the prose fault it fixes,
+  such as a contrast frame.
 - **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced.
-- **Leave a blunt line blunt.** A short, flat line is often the part that already works.
+- **Leave a blunt line blunt.** Don't pad a short, flat line: it may be the part that already works.
 
 You're done when every line has had one pass, you've reread each rewrite, and
-[`check-prose.sh`](../docs-writing/scripts/check-prose.sh) has run. Hand back each change as a
-`diff` block, and what you left as it was. Whoever asked reads each change and accepts or rejects
-it. For text outside a file, such as a PR description, hand back the changes and leave the source
-alone.
+[`check-prose.sh`](../docs-writing/scripts/check-prose.sh) passes. Write your edits into the file,
+then hand back each change as a `diff` block, and what you left as it was. Whoever asked reads each
+change, and reverts the ones they reject. For text outside a file, such as a PR description, hand
+back the changes and leave the source alone.
 
 ## Key rules
 
-- [The moves](#the-moves): lead with the job, give the instruction, and cut contrast frames, drama
-  and counted lists.
+- [The moves](#the-moves): lead with the job, give the instruction, use plain names, and cut
+  contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
 - [Check each rewrite](#check-each-rewrite): read it on its own, and run `check-prose.sh`.
@@ -37,15 +39,17 @@ alone.
 ## The moves
 
 The rules behind the moves live in the [skill-writing](../skill-writing/SKILL.md) skill, under
-"Write it plainly". Apply every move to a skill, a PR description or a code comment. In a README,
-AGENTS.md or a file in `docs/`, apply only moves 3, 5 and 6, which cut rhetoric. The
-[docs-writing](../docs-writing/SKILL.md) skill's rules govern the rest of those files.
+"Write it plainly". Apply every move to a skill or its references, a PR description, an issue, a
+commit message or a code comment. In a README, AGENTS.md, CLAUDE.md or another doc, apply only moves
+3, 5 and 6, which cut rhetoric. Leave other faults in those files alone, and list them in your
+hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them. Keep blunt lines
+blunt there too.
 
 1. **Lead with the job or the reader's situation.** Cut a stock opener, such as "This skill…", "Use
    this file when…" or "Your job is to…".
 
    ```diff
-      - This skill helps you plan a vegetable bed before planting.
+   - This skill helps you plan a vegetable bed before planting.
    + Plan the vegetable bed before planting.
    ```
 
@@ -56,11 +60,12 @@ AGENTS.md or a file in `docs/`, apply only moves 3, 5 and 6, which cut rhetoric.
    + Ask a second gardener to walk the bed and note each plant that gets too little sun.
    ```
 
-3. **Cut "X, not Y" and "X rather than Y".** State the move. When the wrong move is likely, say what
-   goes wrong with it. Keep a "not" when a reader who skipped it would pick the wrong thing.
+3. **Cut contrast frames: "X, not Y" and "X rather than Y".** Say what to do. When the text says the
+   reader is likely to do the wrong thing, keep what it says goes wrong. Keep a "not" when a reader
+   who skipped it would pick the wrong thing.
 
    ```diff
-      - Sow after the last frost, not before it.
+   - Sow after the last frost, not before it.
    + Sow after the last frost.
    ```
 
@@ -71,8 +76,8 @@ AGENTS.md or a file in `docs/`, apply only moves 3, 5 and 6, which cut rhetoric.
    + Mulch the bed in spring. Bare soil dries out by June.
    ```
 
-5. **Cut drama and explaining tails:** "critical", "worthless", "and that's the point", "has
-   failed".
+5. **Cut drama words,** such as "critical", "worthless" and "has failed", and a sentence that
+   explains the line before it, such as a closing "and that's the point".
 
    ```diff
    - Labelling each row is critical, and a bed without labels has failed.
@@ -99,11 +104,21 @@ AGENTS.md or a file in `docs/`, apply only moves 3, 5 and 6, which cut rhetoric.
    + Sow each seed at the depth on its packet.
    ```
 
-8. **Keep blunt lines blunt.** Don't explain them, qualify them or make them more formal.
+8. **Keep blunt lines blunt.** Don't explain them, qualify them or make them more formal. Cut a
+   sentence that explains the line before it.
 
    ```diff
    - Tomatoes hate frost. This means that they should not be planted out early in the season.
    + Tomatoes hate frost.
+   ```
+
+9. **Replace a made-up label with the plain name.** A made-up label is a name the writer coined for
+   a thing that developers already call something else. Search the repo for the label first. When
+   another file uses it, change both, and list the other file in your hand-back.
+
+   ```diff
+   - Check the wilt score each week.
+   + Each week, count the plants that wilted.
    ```
 
 ## Leave these alone
@@ -112,21 +127,27 @@ AGENTS.md or a file in `docs/`, apply only moves 3, 5 and 6, which cut rhetoric.
   its own output exactly. You may still edit the wording of a sentence inside a step.
 - Commands and code blocks.
 - The frontmatter. The skill-writing skill sets its form.
-- A term that a check or another file depends on. Search the repo for a term before you rename it.
+- A term that a check or a script depends on, such as a heading a script greps for. Search the repo
+  for a term before you rename it. A made-up label that only other prose uses gets move 9.
 - A line that already reads plainly.
 
-When a section still reads oddly after you rewrite it twice, its structure is the fault. Change it
-as "Write it plainly" in the [skill-writing](../skill-writing/SKILL.md) skill says. This is the one
-case where you change structure, and the formats above still stay.
+When a section still reads oddly after two rewrites, its structure is the fault. Change it as "Write
+it plainly" in the [skill-writing](../skill-writing/SKILL.md) skill says. This is the one case where
+you change structure. Numbered steps, templates, tables and report formats still keep their shape:
+change only the prose around them.
 
 ## Check each rewrite
 
-Read each rewrite on its own, as if you'd never seen the old line. Look for a new "it" with two
-meanings, a list that grew inside a sentence, and a sentence that got longer.
+Read each rewrite on its own, as if you'd never seen the old line. Look for:
+
+- a new "it" with two meanings;
+- a list that grew inside a sentence;
+- a sentence that got longer.
 
 Then run the prose check from the repo root. It sits in the docs-writing skill's `scripts/` folder,
-under `.agents/skills/` in most repos. For text outside a file, write it to a file in your scratch
-folder first:
+under `.agents/skills/` in most repos; search for `check-prose.sh` when it isn't there. The check
+must pass, so fix each failure, even one no move covers. That is the one exception to changing only
+what a move covers. For text outside a file, write it to a file in your scratch folder first:
 
 ```bash
 bash .agents/skills/docs-writing/scripts/check-prose.sh <file>
@@ -138,16 +159,17 @@ each candidate, and fix the slips.
 
 ## Show the changes
 
-Give each change its own `###` heading that names the move, one line on why, and a `diff` block with
-`-` before and `+` after, so the lines show in colour. When one change touches several places, keep
-one heading, and give each place its own `diff` block. Never show the whole file.
+Give each move you used its own `###` heading, named by the move's bold text, one line on why, and a
+`diff` block with `-` before and `+` after, so the lines show in colour. When one move changes
+several places, keep one heading, and give each place its own `diff` block. Never show the whole
+file.
 
 End with a short bulleted list of what you left as it was, and why.
 
 ## After a cold read
 
-When you fix what a cold read found, you add precision and drift back toward explaining tails,
-"because" clauses and long sentences. After you redraft a section for a cold read, run the moves
-again on that section.
+When you fix what a cold read found, you add precision and drift back toward sentences that explain
+the line before them, "because" clauses and long sentences. After you redraft a section for a cold
+read, run the moves again on that section.
 
 **Reply:** each change as a `diff` block, and what you left as it was.
