@@ -3,7 +3,7 @@ name: code-style
 description:
   "Code style for zgeoff TypeScript repos: file layout, names, state, unions, types, structure,
   errors, comments, and the function-name verb table. Load it before you write, review or rename
-  TypeScript, with the repo's project-code-style skill beside it."
+  TypeScript, with the repo's project-code-style skill beside it, which only adds stricter rules."
 metadata:
   kind: rule-set
 ---
@@ -13,7 +13,8 @@ metadata:
 ## Files and modules
 
 - One main export per file, and the file is named for it: `parse-cli-args.ts` exports
-  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` are exempt.
+  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` are exempt, and so is a side-effect-only
+  module, named for what it does: `augment-bun-test.ts`.
 - Inside a file: imports, the main export, then its helpers in the order it calls them. Each type or
   constant sits just above its first use.
 - No classes, except a custom error (`class QuotaError extends Error`). Make objects with factory
@@ -21,11 +22,11 @@ metadata:
 
 ## Names
 
-- Acronyms stay uppercase: `parseCLIArgs`, `userID`, `packageURL`. At the start of a name they are
-  all lowercase: `cliPath`, `idToken`.
+- Acronyms stay uppercase: `parseCLIArgs`, `userID`, `packageURL`. When one starts a camelCase name,
+  it is all lowercase: `cliPath`, `idToken`.
 - Name a value for what it holds, in full words: `session`, not `s`; `manager`, not `mgr`.
-- Allowed short names: `x`, `y`, `z` (zod), `$` (Bun's shell), `_` (unused), `ctx`, `id`, `db`,
-  `args`, `params`, `repo`, `info`.
+- Allowed short names: `x` and `y` (coordinates), `z` (zod), `$` (Bun's shell), `_` (unused), `ctx`,
+  `id`, `db`, `args`, `params`, `repo`, `info`.
 - A unit stays as a suffix: `timeoutMs`, never `ms` alone.
 
 ## State
@@ -60,8 +61,8 @@ metadata:
 
 - Data between processes or packages goes through the repo's typed interface: its RPC layer, a
   shared schema, or its CLI parser. Never a route matched, a body parsed, or arguments read by hand.
-- A function that does I/O and branches more than once splits in two: a pure function that decides,
-  and a thin one that acts.
+- A function that does I/O and branches heavily splits in two: a pure function that decides, and a
+  thin one that acts.
 - No wrapper that only passes its arguments on.
 - No option, parameter or extension point until a caller passes it.
 - Reach I/O through dependencies the caller passes in. Only the entry point builds real clients.
@@ -81,6 +82,8 @@ metadata:
 - Never restate what the code or a test shows.
 - No history or project state ("previously", issue numbers, "not wired yet"). That goes in the
   commit.
+- A caller-facing contract is a test whose name states it. An invariant that code in another package
+  obeys is stated in the subsystem doc as well.
 - Don't name another declaration in a comment; state the fact, so a rename can't leave it stale.
 
 ## One-off codemods
@@ -125,5 +128,5 @@ function takes any verb that fits, except a banned one.
   their prefix.
 - `make`, `with`, `use`, `on` and `to` take a suffix: `toPosixPath`.
 - Banned: `process`, `manage`, `do`, `perform`, `execute`, `compute`, `fetch`, `save`, `store`,
-  `delete`, `search`, `lookup`, and `handle` outside a callback. Avoid `resolve`, which can mean a
-  pure lookup or a filesystem search.
+  `delete`, `search`, `lookup`, and `handle` outside a callback. `resolve` is free: it names both a
+  pure lookup and a filesystem search.

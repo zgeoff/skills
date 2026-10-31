@@ -5,7 +5,8 @@ description:
   scripts, path filters, cancelling, building once, checkout depth, reruns and dependency
   exceptions. Load it before you add, change or review a workflow, a job, a trigger, a Renovate
   setting that starts CI runs, or a release-age exclude, override or audit ignore. How tests are
-  written is in the testing skill.'
+  written is in the testing skill. Load the repo's project-ci-design skill beside it; where they
+  disagree, the project skill wins.'
 metadata:
   kind: rule-set
 ---
