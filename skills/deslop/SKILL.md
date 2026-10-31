@@ -20,11 +20,10 @@ and add no new content.
 - **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced.
 - **Leave a blunt line blunt.** Don't pad a short, flat line: it may be the part that already works.
 
-You're done when every line has had one pass, you've reread each rewrite, and
-[`check-prose.sh`](../docs-writing/scripts/check-prose.sh) passes. Write your edits into the file,
-then hand back each change as a `diff` block, and what you left as it was. Whoever asked reads each
-change, and reverts the ones they reject. For text outside a file, such as a PR description, hand
-back the changes and leave the source alone.
+You're done when every line has had one pass, you've reread each rewrite, and `chex prose` passes.
+Write your edits into the file, then hand back each change as a `diff` block, and what you left as
+it was. Whoever asked reads each change, and reverts the ones they reject. For text outside a file,
+such as a PR description, hand back the changes and leave the source alone.
 
 ## Key rules
 
@@ -32,7 +31,7 @@ back the changes and leave the source alone.
   contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
-- [Check each rewrite](#check-each-rewrite): read it on its own, and run `check-prose.sh`.
+- [Check each rewrite](#check-each-rewrite): read it on its own, and run `chex prose`.
 - [Show the changes](#show-the-changes): a heading, a reason and a `diff` block per change.
 - [After a cold read](#after-a-cold-read): run the moves again on each section you redrafted.
 
@@ -144,13 +143,12 @@ Read each rewrite on its own, as if you'd never seen the old line. Look for:
 - a list that grew inside a sentence;
 - a sentence that got longer.
 
-Then run the prose check from the repo root. It sits in the docs-writing skill's `scripts/` folder,
-under `.agents/skills/` in most repos; search for `check-prose.sh` when it isn't there. The check
-must pass, so fix each failure, even one no move covers. That is the one exception to changing only
-what a move covers. For text outside a file, write it to a file in your scratch folder first:
+Then run the prose check from the repo root. The check must pass, so fix each failure, even one no
+move covers. That is the one exception to changing only what a move covers. For text outside a file,
+write it to a file in your scratch folder first:
 
 ```bash
-bash .agents/skills/docs-writing/scripts/check-prose.sh <file>
+bun x @zgeoff/chex prose <file>
 ```
 
 Apart from its failures, it prints candidates: possible faults, such as the contrast frames, counted

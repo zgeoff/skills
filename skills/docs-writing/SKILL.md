@@ -154,26 +154,22 @@ A short line that sums up a rule is fine when the rule sits next to it in full.
 
 ## Check it
 
-Run these from the repo root. CI runs the same three. When the skill sits somewhere other than
-`.agents/skills/`, search for the scripts.
+Run these from the repo root. The repo's `check:docs` script names the checks it takes, and CI runs
+the same ones.
 
 ```bash
-bash .agents/skills/docs-writing/scripts/check-length.sh
-bash .agents/skills/docs-writing/scripts/check-links.sh
-bash .agents/skills/docs-writing/scripts/check-readmes.sh
+bun x @zgeoff/chex prose length links readmes skill
 ```
 
-- [`check-length.sh`](./scripts/check-length.sh) checks each README and `docs/` file against its
-  length limit, and runs `check-prose.sh` and the skill-writing skill's
-  [`check-skill.sh`](../skill-writing/scripts/check-skill.sh).
-- [`check-prose.sh`](./scripts/check-prose.sh) fails on what a search can find, such as banned
-  words. Under "Candidates", it also prints lines that need a person's judgment. Fix each candidate
-  that's a real fault. In the check output you hand back, give the failures and the candidates you
-  fixed. To check other prose, such as AGENTS.md, run
-  `bash .agents/skills/docs-writing/scripts/check-prose.sh <path>`.
-- `check-links.sh` resolves every relative link.
-- `check-readmes.sh` fails on a README that isn't one of the five kinds in
+- `chex prose` fails on what a search can find, such as banned words. Under "Candidates", it also
+  prints lines that need a person's judgment. Fix each candidate that's a real fault. In the check
+  output you hand back, give the failures and the candidates you fixed. To check other prose, such
+  as AGENTS.md, run `bun x @zgeoff/chex prose <path>`.
+- `chex length` checks each README and `docs/` file against its length limit.
+- `chex links` resolves every relative link.
+- `chex readmes` fails on a README that isn't one of the five kinds in
   [READMEs](./references/readmes.md).
+- `chex skill` checks each skill, as the skill-writing skill describes.
 
 After the checks, run the `cold-read` skill on each doc and skill you changed, and fix what it
 finds, as that skill says.

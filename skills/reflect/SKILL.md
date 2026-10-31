@@ -80,7 +80,7 @@ the user approved. Then, for each approved lesson:
   skill from another repo, make the edit in the source repo, or ask the user which repo that is.
 - **A larger edit, or a new skill:** load the [skill-writing](../skill-writing/SKILL.md) skill
   first. For a description, write it so the skill would have loaded in this session, and run
-  `check-skill.sh` from the skill-writing skill on it.
+  `bun x @zgeoff/chex skill` on it.
 
 When the user says another session will apply the lessons, give them the lists as they stand, and
 stop.
