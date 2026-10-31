@@ -153,8 +153,10 @@ sentence is wrong, fix it.
 ## Keep it short and true
 
 Keep SKILL.md under the word limit `check-skill.sh` sets. Past it, the agent skims. When a skill
-grows, cut first, then move what only some tasks need into a reference. A reference never links to
-another reference: an agent reads a nested file only in part.
+grows, cut first, then move what only some tasks need into a reference. A rule set, such as a code
+style or a testing skill, holds the rules an agent needs on every task of its kind: mark it with
+`kind: rule-set` under `metadata` in the frontmatter, and it gets a higher limit. A reference never
+links to another reference: an agent reads a nested file only in part.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 

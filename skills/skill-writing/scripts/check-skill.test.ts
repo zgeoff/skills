@@ -862,6 +862,128 @@ test('it fails a SKILL.md body over 1,700 words, and counts no word of the front
   });
 });
 
+const buildRuleSet = (name: string, words: number) => [
+  '---',
+  `name: ${name}`,
+  'description:',
+  `  Rules for every ${name} change. Load it before writing or reviewing one.`,
+  'metadata:',
+  '  kind: rule-set',
+  '---',
+  '',
+  ...Array.from({ length: Math.floor(words / 50) }, () =>
+    'The tool reads one file. '.repeat(10).trim(),
+  ),
+  ...Array.from({ length: (words % 50) / 5 }, () => 'The tool reads one file.'),
+];
+
+test('it passes a rule set of 4,000 words', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', buildRuleSet('demo', 4000));
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 0,
+    stdout: 'check-skill: 1 skills, 0 errors, 0 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it warns on a rule set over 4,000 words and fails one over 5,000', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', buildRuleSet('demo', 4005));
+  await ctx.writePage('skills/other/SKILL.md', buildRuleSet('other', 5005));
+
+  const result = await ctx.run();
+
+  expect({
+    exitCode: result.exitCode,
+    stdout: result.stdout.toString(),
+    stderr: result.stderr.toString(),
+  }).toStrictEqual({
+    exitCode: 1,
+    stdout:
+      'skills/demo/SKILL.md: body is 4005 words, over 4000; cut it, or move what only some tasks need into a reference (warning)\n' +
+      'skills/other/SKILL.md: body is 5005 words, over the limit of 5000; cut it, or move what only some tasks need into a reference\n' +
+      'check-skill: 2 skills, 1 errors, 1 warnings\n',
+    stderr: '',
+  });
+});
+
+test('it reads a quoted rule-set kind', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', [
+    '---',
+    'name: demo',
+    'description:',
+    '  Rules for every demo change. Load it before writing or reviewing one.',
+    'metadata:',
+    '  kind: "rule-set"',
+    '---',
+    '',
+    ...Array.from({ length: 80 }, () => 'The tool reads one file. '.repeat(10).trim()),
+  ]);
+
+  const result = await ctx.run();
+
+  expect(result.stdout.toString()).toBe('check-skill: 1 skills, 0 errors, 0 warnings\n');
+});
+
+test('it keeps the plain limit when the kind line sits inside another metadata value', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', [
+    '---',
+    'name: demo',
+    'description:',
+    '  Rules for every demo change. Load it before writing or reviewing one.',
+    'metadata:',
+    '  note: |-',
+    '    kind: rule-set',
+    '---',
+    '',
+    ...Array.from({ length: 341 }, () => 'The tool reads one file.'),
+  ]);
+
+  const result = await ctx.run();
+
+  expect(result.stdout.toString()).toBe(
+    'skills/demo/SKILL.md: body is 1705 words, over the limit of 1700; cut it, or move what only some tasks need into a reference\n' +
+      'check-skill: 1 skills, 1 errors, 0 warnings\n',
+  );
+});
+
+test('it keeps the plain limit for a kind under another key than metadata', async () => {
+  const ctx = await setupTest();
+
+  await ctx.writePage('skills/demo/SKILL.md', [
+    '---',
+    'name: demo',
+    'description:',
+    '  Rules for every demo change. Load it before writing or reviewing one.',
+    'labels:',
+    '  kind: rule-set',
+    '---',
+    '',
+    ...Array.from({ length: 341 }, () => 'The tool reads one file.'),
+  ]);
+
+  const result = await ctx.run();
+
+  expect(result.stdout.toString()).toBe(
+    'skills/demo/SKILL.md: body is 1705 words, over the limit of 1700; cut it, or move what only some tasks need into a reference\n' +
+      'check-skill: 1 skills, 1 errors, 0 warnings\n',
+  );
+});
+
 test('it accepts a long reference with fewer than two headings to list', async () => {
   const ctx = await setupTest();
 

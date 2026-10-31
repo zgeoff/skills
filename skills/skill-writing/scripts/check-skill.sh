@@ -7,8 +7,9 @@
 # third-party skills in .gitattributes.
 # Fails on: a missing name or description, a name that differs from the folder or breaks the name
 # format, a description over 1,024 characters, a plain description that holds a colon YAML reads as a
-# key, a link with a line anchor outside code, and a SKILL.md body over 1,700 words.
-# Warns on: a SKILL.md body over 1,500 words, a SKILL.md over 500 lines, a reference that SKILL.md does not list under ## References,
+# key, a link with a line anchor outside code, and a SKILL.md body over 1,700 words, or over 5,000
+# for a rule set (metadata.kind: rule-set in the frontmatter).
+# Warns on: a SKILL.md body over 1,500 words, or over 4,000 for a rule set, a SKILL.md over 500 lines, a reference that SKILL.md does not list under ## References,
 # a reference over 100 lines with two or more headings and no contents list near its top, a reference that links to another
 # reference, and a code-formatted span outside a table that names an existing repo file.
 set -uo pipefail
@@ -128,14 +129,23 @@ sub check_skill {
 }
 
 # Counts the words of the body after the frontmatter, code blocks included: past the warning limit
-# an agent starts to skim, and past the error limit the skill fails the run.
+# an agent starts to skim, and past the error limit the skill fails the run. A rule set, such as a
+# code style, holds the rules an agent needs on every task of its kind, so it gets higher limits.
 sub check_words {
   my ($skill, @lines) = @_;
   my ($warn, $limit) = (1500, 1700);
-  my $start = 0;
+  my ($start, $in_metadata, $indent) = (0, 0, undef);
   if (@lines && $lines[0] eq "---") {
     for my $i (1 .. $#lines) {
-      if ($lines[$i] eq "---") { $start = $i + 1; last }
+      my $line = $lines[$i];
+      if ($line eq "---") { $start = $i + 1; last }
+      if ($line =~ /^metadata:\s*$/) { ($in_metadata, $indent) = (1, undef); next }
+      $in_metadata = 0 if $line =~ /^\S/;
+      next unless $in_metadata && $line =~ /^(\s+)(\S.*?)\s*$/;
+      # Only a key of metadata itself counts, never a deeper line, such as the text of a block value.
+      $indent //= length $1;
+      next unless length($1) == $indent && $2 =~ /^kind:\s*(.*)$/;
+      ($warn, $limit) = (4000, 5000) if unquote($1) eq "rule-set";
     }
   }
   my $words = 0;
