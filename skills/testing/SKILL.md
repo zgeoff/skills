@@ -123,6 +123,7 @@ These decide a case the rules leave open.
 - **Visible beats concise.** A reader understands a test from its body alone. Repeated literals cost
   a few lines; setup the reader can't see costs a wrong conclusion.
 - **Every test stands alone.** It passes run by itself, in any order, and beside every other test.
+- **Fix the tests you touch.** When you change code, bring its tests in line with these rules.
 - **Behaviour is the contract.** A refactor that keeps the behaviour leaves every test green.
 - **A test fails without its change.** Each behaviour a change adds gets a test that runs the
   changed path from the unit's entry and fails when the change is reverted. A test that checks only
