@@ -22,8 +22,8 @@ not a reimplementation. Each test gets a database that no other test can see, an
 Each test acquires a handle from the repo's test-database util, holds it in `setupTest()`, and
 injects the handle's connection into the code under test. Code that opens its own connection escapes
 the isolation, so thread the handle's connection through instead. The util builds the schema once
-per run into a template database, from the migrations or from a schema dump, as a
-[per-run template](../SKILL.md#per-run-templates), and the util names which source it uses.
+per run into a template database, from the migrations or from a schema dump, as a the slow-tests
+reference's Per-run templates section, and the util names which source it uses.
 
 Each worker clones the template once with `CREATE DATABASE … TEMPLATE`. The clone is named after its
 process, such as `<template>_<pid>`: the util opens the clone when it exists and clones the template
@@ -45,10 +45,10 @@ it, such as `// claimJob commits the claim before it runs the job`.
 ## SQLite isolation
 
 Each test opens a copy of a migrated template file, because a fresh database pays for every
-migration in every test. The util migrates the template once per run, as a
-[per-run template](../SKILL.md#per-run-templates), and closes it or checkpoints its write-ahead log
-before any test copies it: a copy taken while migrations still sit in the log runs them again.
-`setupTest()` opens the copy and registers its cleanup with `onTestFinished`.
+migration in every test. The util migrates the template once per run, as a the slow-tests
+reference's Per-run templates section, and closes it or checkpoints its write-ahead log before any
+test copies it: a copy taken while migrations still sit in the log runs them again. `setupTest()`
+opens the copy and registers its cleanup with `onTestFinished`.
 
 - Copy the file into the test's `mkdtemp` tree when the code opens its own connection by path, or
   when the test depends on file behaviour such as a read-only connection or write-ahead logging.
@@ -66,29 +66,24 @@ and every test both call. Tests inject only the database. A test never copies th
 configuration into its own setup, because a copy drifts from production.
 
 `setupTest()` builds the database handle and boots the service through that factory. It creates no
-data, as the [testing skill](../SKILL.md#setuptest) states. A service that refuses to start until
-its data exists boots in the test body, after the test creates that data.
+data, as the [testing skill](../SKILL.md#setup-and-cleanup) states. A service that refuses to start
+until its data exists boots in the test body, after the test creates that data.
 
 ## Persisted test data
 
-A composite or persistence helper writes rows, and it takes its defaults from the matching
-plain-data factory, so defaults live in one place. A row composite holds a `//` comment that names
-the scenario that the service's own operations cannot reach, such as another user's rows, a
-back-dated `createdAt`, or a known one-time-password secret. That comment is the test of whether a
-direct write belongs in the composite at all. A composite that cannot name one should be a call to
-the service. A composite's own test asserts the persisted row with `toMatchObject`, because the
-database computes some of its fields, and asserts that overrides apply.
+A test outside the owner seeds rows through the owner's seeds, never with its own insert, as the
+[testing skill](../SKILL.md#stored-state) states. The seeding reference covers writing one.
 
 ## Reading results back
 
-A test outside the store reads a row back through the store's read function, as
-[Stored state](../SKILL.md#stored-state) states. The store's own test queries its table directly.
+A test outside the owner reads a row back through the owner's read function, as
+[Stored state](../SKILL.md#stored-state) states. The owner's own test queries its table directly.
 With Kysely, it reads a row that must exist with `executeTakeFirstOrThrow()`, narrowing the
 selection to the one column under test when only that column matters. It asserts absence with
 `executeTakeFirst()` and `toBeUndefined()`.
 
 ```ts
-// archive-note.test.ts, in the store that writes the notes table
+// archive-note.test.ts, in the module that writes the notes table
 await archiveNote(ctx.db, note.id);
 
 const row = await ctx.db
@@ -127,15 +122,15 @@ tie gets its own test, with two rows that share the timestamp.
 
 ## Access rules
 
-Each actor in an access test comes from a composite and holds its own client. The pair of tests from
-the [testing skill](../SKILL.md#authorisation-pairs) applies: the owner succeeds, and the other
-actor is refused or sees nothing.
+Each actor in an access test comes from a seed and holds its own client. The pair of tests from the
+[testing skill](../SKILL.md#assertions) applies: the owner succeeds, and the other actor is refused
+or sees nothing.
 
 ## Configuration stored in the database
 
-A service that reads its configuration from a table resolves it with a real query. Seed the rows and
-let the real resolution run. Never stub the configuration read, because the resolution, such as the
-most specific matching row winning, is the behaviour under test.
+A service that reads its configuration from a table resolves it with a real query. Seed the rows
+through the owner's seeds and let the real resolution run. Never stub the configuration read,
+because the resolution, such as the most specific matching row winning, is the behaviour under test.
 
 ## SQL built from identifiers
 

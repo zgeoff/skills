@@ -5,7 +5,7 @@ answer from an in-memory store that holds the remote service's state, so a test 
 and lets the real client code run: its requests, serialisation, retries, and error handling.
 Per-test handlers exist only for what the store cannot express. The [testing skill](../SKILL.md)
 rules on setup, data, and assertions apply throughout. Real application and native transport cases
-follow [Real applications and transport](../SKILL.md#real-applications-and-transport).
+follow the system-tests reference's Real applications section.
 
 - [The server and its lifecycle](#the-server-and-its-lifecycle)
 - [Stateful handlers](#stateful-handlers)

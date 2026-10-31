@@ -1,9 +1,9 @@
 # Cleanup
 
-These rules cover cleanup past the common case in the [testing skill](../SKILL.md#cleanup): helpers
-that register cleanup for their callers, resources that must close in order, cleanup that runs after
-the preload's resets, finding the gap when a test fails only in the full run, and what a killed run
-leaves behind.
+These rules cover cleanup past the common case in the
+[testing skill](../SKILL.md#setup-and-cleanup): helpers that register cleanup for their callers,
+resources that must close in order, cleanup that runs after the preload's resets, finding the gap
+when a test fails only in the full run, and what a killed run leaves behind.
 
 - [Helpers that register cleanup](#helpers-that-register-cleanup)
 - [Ordered cleanup](#ordered-cleanup)
@@ -100,7 +100,6 @@ processes, temp folders, test homes, and database clones it acquired stay behind
   grandchild, such as a server that the process forks, then stops with it.
 - The repo's test script or preload sweeps at the start of each run. The sweep removes what earlier
   runs left and no live process owns: per-run folders, stale test homes, clones whose process is
-  gone, and templates of old hashes. It never removes the
-  [current template](../SKILL.md#per-run-templates) or a resource of a run that is still going, and
-  a test names what it never touches, as the testing skill's [Assertions](../SKILL.md#assertions)
-  section describes.
+  gone, and templates of old hashes. It never removes the current per-run template or a resource of
+  a run that is still going. The sweep has a test that names what it never touches, such as
+  `it never removes another owner's files`.

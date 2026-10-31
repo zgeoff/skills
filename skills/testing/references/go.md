@@ -15,8 +15,8 @@ cleanup. The Bun-specific spelling and mechanisms do not apply.
 - Keep package-local helpers in `_test.go` files. A helper that models behavior or dependency
   assumptions needs tests. Utilities shared across packages use a test-support package; no
   one-function-per-file rule applies.
-- Generated cases retain the independent-contract, case-isolation, and replay rules in
-  [property tests](../SKILL.md#property-tests). Use the native fuzzer or a property library
+- Generated cases retain the independent-contract, case-isolation, and replay rules in the
+  system-tests reference's Property tests section. Use the native fuzzer or a property library
   appropriate to the generated inputs; adopting fast-check is not a Go requirement.
 
 ## Assertions
@@ -57,8 +57,7 @@ completion signals.
 Use real temporary files, isolated databases, `httptest` servers, sockets, and processes where the
 behavior depends on them. Stand-ins take typed request and response shapes from the real contract
 and use isolated native stores for rich state. MSW and `@msw/data` are Bun/frontend mechanisms, not
-Go requirements. Follow the shared [native-timer](../SKILL.md#native-timers-and-scenario-delays) and
-[resource ownership](../SKILL.md#program-fixed-paths-and-global-resources) rules.
+Go requirements. Follow the system-tests reference's Native timers and Program-fixed paths sections.
 
 ## Reports
 

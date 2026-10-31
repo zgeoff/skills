@@ -47,8 +47,15 @@ report against the code. It tests a corpus, not one module, so it has no module 
 - A deliberate mismatch between the report and the code fails the suite. A suite that passes on a
   stale report checks nothing.
 - A test that calls a live model is not a replay. It takes the `.model-api` suffix and runs in that
-  lane, as [Lanes](../SKILL.md#lanes) describes.
+  lane, as the slow-tests reference's Lanes section describes.
 - Every other rule in the testing skill applies to an evaluation suite.
+
+A deterministic pipeline's suite opens with two tests. A frozen-golden test feeds one hand-written
+literal input and pins the full output inline. A determinism test asserts that the same input gives
+equal outputs: `expect(run(input)).toStrictEqual(run(input))`. The golden input is never a factory
+call, because regenerating snapshots must never change the input. When the repo commits a file it
+generates, such as an OpenAPI document, the frozen-golden test compares the regenerated output with
+that file.
 
 ## Property tests
 
@@ -79,7 +86,7 @@ the real mechanism. Configure startup-only settings in an isolated child process
 control that proves an unprotected operation crosses the deadline; a nominal timeout value alone
 does not prove expiry. Keep default configuration coverage separate. Wait out the real default only
 when the runtime cannot expose a shorter faithful deadline. That case stays in the unit run with the
-disable comment that [A test over its limit](../SKILL.md#a-test-over-its-limit) describes.
+disable comment that the slow-tests reference's A test over its limit section describes.
 
 When a third-party library owns a timer, runs it internally, and takes only a duration in its
 config, pass the shortest duration the library accepts and wait on the observable event, never with
@@ -142,13 +149,13 @@ the page's globals, so a test variable used in its body passes the type check an
 
 ### Time and helpers
 
-- Every browser suite keeps the lane's default timeout, the 10 s limit that
-  [Lanes](../SKILL.md#lanes) states. No browser test takes the disable comment that
-  [A test over its limit](../SKILL.md#a-test-over-its-limit) describes.
-- When a browser test runs longer, find the cause in the [Slow tests](../SKILL.md#slow-tests) table
-  and fix that. The usual causes are a dev server or a build per test, which moves to the lane's
-  command; a fixed wait, which becomes a wait for the element or the event; and a test that drives a
-  whole user flow, which becomes a test of one component or page.
+- Every browser suite keeps the lane's default timeout, the 10 s limit that the slow-tests
+  reference's Lanes section states. No browser test takes the disable comment that the slow-tests
+  reference's A test over its limit section describes.
+- When a browser test runs longer, find the cause in the slow-tests reference's cause table and fix
+  that. The usual causes are a dev server or a build per test, which moves to the lane's command; a
+  fixed wait, which becomes a wait for the element or the event; and a test that drives a whole user
+  flow, which becomes a test of one component or page.
 - A journey through the client's routes stays a browser suite, so that it keeps the one setup. A
   journey of the built product, through its bundle or binary, belongs in `e2e/`, as
   [Where a test lives](../SKILL.md#where-a-test-lives) describes.
@@ -201,6 +208,10 @@ The stand-in follows the stand-in rules in [Test data](../SKILL.md#test-data): i
 shared test utils, takes a stand-in's file name, and has its own tests. Each of those tests pins one
 behaviour the stand-in copies from the real program, such as the refusal for an evicted repository.
 
+A stand-in's derived values, such as a fake hash or a fake signature, are not contract. Assert their
+properties: their shape, that the same input gives the same output, and that different inputs give
+different outputs.
+
 ## Program-fixed paths and global resources
 
 Kernel or program contracts may impose a path inside the test environment, such as a certificate
@@ -216,9 +227,9 @@ safe after partial failure, interruption, and explicit shutdown.
 
 ## Rust lanes
 
-A Rust crate runs the [lanes](../SKILL.md#lanes) through cargo-nextest, with the same limits. A test
-path prefix names the lane, such as `e2e::` or `host::`, the way a directory or a file suffix does
-for Bun. The repo's `.config/nextest.toml` holds the lanes, in this made-up example:
+A Rust crate runs the lanes in the slow-tests reference through cargo-nextest, with the same limits.
+A test path prefix names the lane, such as `e2e::` or `host::`, the way a directory or a file suffix
+does for Bun. The repo's `.config/nextest.toml` holds the lanes, in this made-up example:
 
 ```toml
 [profile.default]

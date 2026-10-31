@@ -21,12 +21,13 @@ preloads, matcher types, and file layout do not apply.
 
 Use the NixOS test driver for boot, systemd, kernel, networking, and storage behavior. Give subtests
 behavioral names. Group dependent configuration transitions as one journey; unrelated scenarios need
-a tested baseline reset or a fresh environment. Reuse expensive infrastructure under the shared
-[journey rules](../SKILL.md#end-to-end-suites); a VM per assertion is not an isolation requirement.
+a tested baseline reset or a fresh environment. Reuse expensive infrastructure under the shared the
+system-tests reference's End-to-end suites section; a VM per assertion is not an isolation
+requirement.
 
 Use driver condition waits such as `wait_for_unit` and `wait_until_succeeds`, with bounded failure.
 A delay that guesses when a service settles is not readiness. Kernel and real-process behavior stays
-real; follow the shared [timer and pacing rules](../SKILL.md#native-timers-and-scenario-delays).
+real; follow the system-tests reference's Native timers section.
 
 Check each meaningful observation separately. Compare intended values and command results, not only
 whether a command ran or any error occurred. `machine.fail` proves a nonzero exit; a case that names
@@ -35,8 +36,8 @@ managers are native test mechanisms, not forbidden Bun branching or describe blo
 
 The driver/harness releases VMs and acquired infrastructure even after failure. Test any shared
 reset against dirty state. Fixed guest paths belong to that isolated environment; host-global
-resources follow [resource ownership](../SKILL.md#program-fixed-paths-and-global-resources).
-Unrelated cases cannot inherit tokens, files, mounts, or service settings from earlier cases.
+resources follow the system-tests reference's Program-fixed paths section. Unrelated cases cannot
+inherit tokens, files, mounts, or service settings from earlier cases.
 
 ## Reports and CI
 

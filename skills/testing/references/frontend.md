@@ -19,8 +19,8 @@ hooks. The [testing skill](../SKILL.md) rules on setup, data, and assertions app
 
 `@zgeoff/bun-test-react` registers happy-dom with Bun's own fetch stack kept, loads the jest-dom
 matchers, and after each test unmounts every rendered tree and then resets every zustand store. List
-its preloads in this order in [`bunfig.toml`](../../../../bunfig.toml), because the zustand wrapper
-must load before any store is created:
+its preloads in this order in `bunfig.toml`, because the zustand wrapper must load before any store
+is created:
 
 ```toml
 [test]
@@ -123,8 +123,8 @@ which creates a memory-history router and returns it beside the render result.
   one module graph without the `react-server` export condition. A smoke suite against the real
   runtime covers them.
 - Tests stub ambient request context through one shared util that the preload installs, which is a
-  module mock of the kind the [testing skill](../SKILL.md#module-mocks) allows. Every path that
-  relies on the stub also runs in the smoke suite.
+  module mock of the kind the [testing skill](../SKILL.md#boundaries) allows. Every path that relies
+  on the stub also runs in the smoke suite.
 - Assert a thrown redirect on the rejection itself:
   `expect(promise).rejects.toMatchObject({ options: { href: '/login' } })`. The branch without a
   redirect asserts the resolved value.

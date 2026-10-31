@@ -1,9 +1,8 @@
 # Workflow testing
 
 A GitHub Actions step's logic lives in a script, and the script's tests are the step's tests. The
-ci-design skill's [Step scripts](../../ci-design/SKILL.md#step-scripts) section owns where a script
-lives, what a `run:` may hold, and the workflow lint that checks both. This reference owns how the
-logic and the workflow files get tested.
+ci-design skill's Step scripts section owns where a script lives, what a `run:` may hold, and the
+workflow lint that checks both. This reference owns how the logic and the workflow files get tested.
 
 ## Test the step through its script
 

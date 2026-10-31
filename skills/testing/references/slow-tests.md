@@ -5,16 +5,16 @@ timeout or a sleep hides that cost without removing it. `zgeoff/max-test-timeout
 above the limit of the file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep. When a test is
 slow, find its cause in this table and make the change it names. Never raise the timeout first.
 
-| The test                                                                                    | The cause                           | The fix                                                                                                                                                                                                                                                                           |
-| ------------------------------------------------------------------------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| starts the app, a server or a CLI to call it                                                | a real process start                | Call the code in the test process: its handler, an in-memory RPC link, or an injected transport. Start a real process only in `e2e/`, from the bundle built once per run, for the jobs Where a test lives in the testing skill names.                                           |
-| waits for a deadline, an idle limit or a retry delay                                        | a real timer or deadline            | Make the deadline an option of the code that owns it, pass a short one, and wait on the event that the deadline causes. A runtime or kernel timer gets the shortest faithful value, as [Native timers](./system-tests.md#native-timers-and-scenario-delays) describes. |
-| sleeps to let something settle                                                              | no signal to wait on                | Wait on a condition with the repo's `waitFor` helper. When the code offers nothing to wait on, add an event, a log marker or a state flag.                                                                                                                                        |
-| proves that something does not happen                                                       | it waits out a timeout              | Wait for a later event that shows the thing did not happen.                                                                                                                                                                                                                       |
-| migrates a database or builds a bundle                                                      | a shared fixture build              | Use a [per-run template](#per-run-templates), built once per run and copied per test.                                                                                                                                                                                             |
-| drives a program the repo starts, such as a guest, a worker or a VM manager                 | a real process start                | Use the program's stateful stand-in from the repo's project-testing skill. When none exists, write one, as [Stateful stand-ins](./system-tests.md#stateful-stand-ins) describes.                                                                                       |
-| needs the real system, and the real system is the contract                                  | a VM, the kernel, a browser, an API | Put it in a [lane](#lanes). Its directory or file suffix names the lane.                                                                                                                                                                                                          |
-| runs a linter or checker binary over text the code builds, such as a generated shell script | a real process start                | It is not a test. Export the text and check it in a static check script that runs in the CI static job and before a push.                                                                                                                                                         |
+| The test                                                                                    | The cause                           | The fix                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| starts the app, a server or a CLI to call it                                                | a real process start                | Call the code in the test process: its handler, an in-memory RPC link, or an injected transport. Start a real process only in `e2e/`, from the bundle built once per run, for the jobs Where a test lives in the testing skill names.                |
+| waits for a deadline, an idle limit or a retry delay                                        | a real timer or deadline            | Make the deadline an option of the code that owns it, pass a short one, and wait on the event that the deadline causes. A runtime or kernel timer gets the shortest faithful value, as the system-tests reference's Native timers section describes. |
+| sleeps to let something settle                                                              | no signal to wait on                | Wait on a condition with the repo's `waitFor` helper. When the code offers nothing to wait on, add an event, a log marker or a state flag.                                                                                                           |
+| proves that something does not happen                                                       | it waits out a timeout              | Wait for a later event that shows the thing did not happen.                                                                                                                                                                                          |
+| migrates a database or builds a bundle                                                      | a shared fixture build              | Use a [per-run template](#per-run-templates), built once per run and copied per test.                                                                                                                                                                |
+| drives a program the repo starts, such as a guest, a worker or a VM manager                 | a real process start                | Use the program's stateful stand-in from the repo's project-testing skill. When none exists, write one, as the system-tests reference's Stateful stand-ins section describes.                                                                        |
+| needs the real system, and the real system is the contract                                  | a VM, the kernel, a browser, an API | Put it in a [lane](#lanes). Its directory or file suffix names the lane.                                                                                                                                                                             |
+| runs a linter or checker binary over text the code builds, such as a generated shell script | a real process start                | It is not a test. Export the text and check it in a static check script that runs in the CI static job and before a push.                                                                                                                            |
 
 The limits are CI rules, because a host that swaps or shares its cores runs the same test slower. A
 test script and the repo's Bun config never raise a lane's default timeout above its limit, and one
@@ -47,14 +47,14 @@ the workers race on one output folder.
   the templates of old hashes. It never removes the template for the current hash, which a
   concurrent run may be copying.
 
-[Database testing](./database.md) describes the template for each engine.
+The database reference describes the template for each engine.
 
 ## Lanes
 
 A lane runs the tests that need one real system. Each lane has its own `test:<lane>` script and a
 per-test limit, which the script's `--timeout` sets and `zgeoff/max-test-timeout` checks in each
-lane file. The unit run and the pre-push hook leave the lane files out by pattern. The
-[ci-design](../../ci-design/SKILL.md) skill decides where CI runs each lane.
+lane file. The unit run and the pre-push hook leave the lane files out by pattern. The the ci-design
+skill decides where CI runs each lane.
 
 | Lane      | Where                                  | Limit | The real system                                                              |
 | --------- | -------------------------------------- | ----- | ---------------------------------------------------------------------------- |
@@ -82,14 +82,14 @@ lane file. The unit run and the pre-push hook leave the lane files out by patter
 - A lane holds no test that is only slow. Before a test moves to a lane, check that no other row of
   the cause table fits it.
 
-A Rust crate runs the same lanes through cargo-nextest, as
-[Rust lanes](./system-tests.md#rust-lanes) describes.
+A Rust crate runs the same lanes through cargo-nextest, as the system-tests reference's Rust lanes
+section describes.
 
 ## A test over its limit
 
-A test whose cause the cause table above can fix gets that fix in the pull request
-that meets it, never a ticket. A test that still cannot finish within its lane's limit carries a
-disable comment that gives the measured time and one of two reasons:
+A test whose cause the cause table above can fix gets that fix in the pull request that meets it,
+never a ticket. A test that still cannot finish within its lane's limit carries a disable comment
+that gives the measured time and one of two reasons:
 
 - the ticket that tracks the fix, when the fix cannot land in this pull request, such as a fix in
   another repo;
@@ -117,3 +117,14 @@ The limit never rises to cover one test. `zgeoff/test-timeout-exception-ticket` 
 `zgeoff/max-test-timeout` whose reason after `--` holds neither a ticket nor `floor:` with text, in
 any of its forms. The test timeout check fails an oxlint config that turns either rule off or down
 to a warning, unless a comment on that setting holds a ticket or a `floor:`.
+
+## The run mode and workers
+
+- Isolation can make a suite several times slower, or cost nothing. A repo measures both modes
+  before it chooses, states its mode in its test script and its project-testing skill, and puts the
+  measurements in the pull request that sets it.
+- The test script takes its worker count from the shared worker helper, never from a bare
+  `--parallel`, which starts one worker per core and holds memory the workers need.
+- A resource each worker keeps across its files, such as a database cloned from the per-run
+  template, is named after the worker's process. The util opens it when it exists and creates it
+  when it doesn't, and no `afterAll` drops it, because that hook can run after every file.
