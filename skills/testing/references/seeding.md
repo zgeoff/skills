@@ -97,11 +97,11 @@ in the owner, and call it from both the handler and the seed.
 
 ## Publishing seeds
 
-The owner's test utils export each seed and one builder for the owner, named for it, that binds the
-seeds to deps:
+The owner's test utils export each seed and one seeder builder for the owner, named for it, that
+binds the seeds to deps:
 
 ```ts
-export const buildNoteSeeds = (deps: NotesDeps) => ({
+export const buildNoteSeeder = (deps: NotesDeps) => ({
   note: (input?: Partial<NewNote>) => seedNote(deps, input),
   archivedNote: (input?: Partial<NewNote>) => seedArchivedNote(deps, input),
 });
@@ -119,8 +119,8 @@ checks it:
 
 ```ts
 export const buildSeeder = (deps: TestDeps) => ({
-  ...buildNoteSeeds(deps),
-  ...buildAttachmentSeeds(deps),
+  ...buildNoteSeeder(deps),
+  ...buildAttachmentSeeder(deps),
 });
 ```
 
@@ -131,7 +131,7 @@ Every `setupTest()` in the package returns `seed: buildSeeder(deps)` beside the 
 both. Binding the seeds is wiring: `setupTest()` still creates no data.
 
 - **A test with two databases** puts both handles in `TestDeps`. Each builder takes the part it
-  needs, such as `buildAuditSeeds({ db: deps.auditDB, clock: deps.clock })`, and the test still
+  needs, such as `buildAuditSeeder({ db: deps.auditDB, clock: deps.clock })`, and the test still
   calls one `ctx.seed`.
 - **A test with two hosts,** such as a sync test with a source and a target, calls `buildSeeder`
   once for each host's deps: `source: { ...sourceDeps, seed: buildSeeder(sourceDeps) }`. The test
