@@ -27,7 +27,7 @@ The traps:
 - [A state no owner code makes](#a-state-no-owner-code-makes)
 - [Interrupted operations](#interrupted-operations)
 - [A seed's own test](#a-seeds-own-test)
-- [Repos that still write directly](#repos-that-still-write-directly)
+- [Direct writes](#direct-writes)
 
 ## The seeds an owner publishes
 
@@ -205,7 +205,7 @@ computes some of its fields.
 A seed's test sits in the owner, so it reads stored state directly like any other test of the owner.
 It needs its test even in a repo that has the lint rules turned off.
 
-## Repos that still write directly
+## Direct writes
 
 - The owner's own tests may write directly, but use a seed when one makes the state.
 - `seed` names a function only in test utils.
