@@ -15,16 +15,6 @@ metadata:
 
 # Testing
 
-You write tests that run real code through the unit's entry, the function or procedure its callers
-call, and check what those callers can see. Each test creates all of its own data, and uses a
-stand-in only at a boundary it can't cross. Watch for a helper that hides the scenario from the test
-body, a loose assertion that lets a broken unit pass, and a test that writes or reads another
-module's tables. When you change code, bring the tests of that code in line with these rules.
-
-Hand back the tests you added or changed, with the unit run and lint passing. For each behaviour you
-changed, name the test that fails without your change, and show it: revert the change, run the test,
-and see it fail.
-
 ## Key rules
 
 Each line links the section that explains it.
