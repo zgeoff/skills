@@ -79,7 +79,8 @@ You can't see that in the text, so leave those rules out.
 
    For a file in a skill's `references/` folder, skip the third question and write "skipped" in the
    report. Answer it when the file is a brief for a subagent, such as this one: a brief gives its
-   own return format.
+   own return format. For a rule set (`kind: rule-set` under `metadata`), skip the first and third
+   questions: a rule set opens with its key rules, not a job.
 
 4. Read the rest as if you're doing your task. Write down each place you get stuck, and each point
    where you'd have to guess what to do next. A guess counts even when the sentence reads fine. List
