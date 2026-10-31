@@ -1,9 +1,9 @@
 # Cleanup
 
-These rules cover cleanup past the common case in the
-[testing skill](../SKILL.md#setup-and-cleanup): helpers that register cleanup for their callers,
-resources that must close in order, cleanup that runs after the preload's resets, finding the gap
-when a test fails only in the full run, and what a killed run leaves behind.
+These rules cover cleanup past the common case in the [testing skill](../SKILL.md#cleanup): helpers
+that register cleanup for their callers, resources that must close in order, cleanup that runs after
+the preload's resets, finding the gap when a test fails only in the full run, and what a killed run
+leaves behind.
 
 - [Helpers that register cleanup](#helpers-that-register-cleanup)
 - [Ordered cleanup](#ordered-cleanup)

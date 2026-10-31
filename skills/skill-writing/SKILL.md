@@ -79,8 +79,8 @@ out of room, and only the start of a loaded skill survives whole:
 
 1. A paragraph or two: the job, what the agent hands back, and the main traps. Write them for this
    skill, with no stock opener, and name the traps without a count ("three traps"). A method skill
-   repeats the hand-back in a reply line at the end. A rule set has no such paragraph: it opens with
-   `## Key rules`.
+   repeats the hand-back in a reply line at the end. A rule set has none of this: it opens with its
+   first rule, one bullet and one example per rule, and its headings are the index.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Give
    `## Key rules`, `## References` and each `###` no line.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that

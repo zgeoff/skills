@@ -27,7 +27,7 @@ The traps:
 - [A state no owner code makes](#a-state-no-owner-code-makes)
 - [Interrupted operations](#interrupted-operations)
 - [A seed's own test](#a-seeds-own-test)
-- [The lint rules](#the-lint-rules)
+- [Direct writes](#direct-writes)
 
 ## The seeds an owner publishes
 
@@ -205,15 +205,9 @@ computes some of its fields.
 A seed's test sits in the owner, so it reads stored state directly like any other test of the owner.
 It needs its test even in a repo that has the lint rules turned off.
 
-## The lint rules
+## Direct writes
 
-`@zgeoff/oxlint-config` checks the mechanical parts of this reference:
-
-- `zgeoff/seed-only` fails a database write in a test file anywhere except a seed, the owner's own
-  tests, a migration test, and a test of code whose product is SQL or storage. The owner's own tests
-  may write directly, but use a seed when one makes the state.
-- `zgeoff/function-verb` allows the `seed` verb only in test utils.
-- The config also fails a `seed-<name>.ts` file with no test beside it.
-
-A repo whose tests still write directly turns these rules off in its root oxlint config, with the
-ticket that moves it to seeds as the reason.
+- The owner's own tests may write directly, but use a seed when one makes the state.
+- `seed` names a function only in test utils.
+- A repo whose tests still write directly turns the seed lint rules off in its root oxlint config,
+  with the ticket that moves it to seeds as the reason.

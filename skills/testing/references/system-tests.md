@@ -26,7 +26,7 @@ An outer harness may reuse expensive hosts and services across journeys. Each jo
 file, setup, scenario, and cleanup. Reset shared infrastructure to a clean baseline before each
 journey; test that the reset removes dirty state, including after failure or interruption. Recreate
 the environment when a reset cannot restore the baseline. The harness owns infrastructure startup
-and shutdown; test files keep the hook rules in [Setup and cleanup](../SKILL.md#setup-and-cleanup).
+and shutdown; test files keep the hook rules in [Setup and cleanup](../SKILL.md#setuptest).
 
 Keep command construction importable. Test argument and flag-position cases through the real parser
 in module tests; keep binary journeys that check the assembled program.
