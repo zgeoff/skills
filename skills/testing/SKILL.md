@@ -71,8 +71,8 @@ metadata:
 - The preload starts a shared resource, such as the MSW server, in `beforeAll` and stops it in
   `afterAll`, never at import.
 - Isolation hides a leak between files and never fixes one.
-- A failure under `--randomize` is a leak. Rerun with the printed `--seed=<seed>` and fix the cause,
-  never the order.
+- CI runs with `--randomize`. A failure under it is a leak. Rerun with the printed `--seed=<seed>`
+  and fix the cause, never the order.
 
 ## Where a test lives
 
@@ -83,21 +83,23 @@ metadata:
   signals, exit codes, crash recovery) and one happy-path journey per main user flow. Edge cases and
   denials run in process.
 - `evals/`: evaluation suites.
-- A test that needs one real system, such as a browser, goes in a lane: `<module>.browser.test.ts`.
-  The lane's harness lives in a package with its own tests.
+- A test that needs a real system the unit run can't host, such as a browser, goes in a lane:
+  `<module>.browser.test.ts`. The lane's harness lives in a package with its own tests.
 - No other `test/`, `tests/` or `__tests__` directory. A static check of config is a script, not a
   test.
 
 ## Test shape
 
 - Top-level `test()` calls, no `describe`: hooks in its scope couple the tests.
-- A title reads as verb, outcome, condition: `it rejects a title longer than 120 characters`. In a
-  file that tests several units, a prefix replaces "it": `#archiveNote rejects an archived note`.
+- A title names observable behaviour, never an internal identifier, as verb, outcome, condition:
+  `it rejects a title longer than 120 characters`. In a file that tests several units, a prefix
+  replaces "it": `#archiveNote rejects an archived note`.
 - Arrange, act, assert, with no phase comments. One act per test; two independent act-and-assert
   pairs are two tests. An earlier act the test depends on, such as saving the note it archives, is
   arrangement, with no assertion.
 - An end-to-end journey may chain dependent acts, one file per journey.
-- `test.each` only for cases that differ in values: rows of plain data or seed functions.
+- `test.each` only for cases that differ in values: rows of plain data or seed functions, and a
+  title that interpolates the value that varies.
 
 ```ts
 test.each([
@@ -123,8 +125,8 @@ test.each([
 - `setupTest()` wires and creates no data: temp directories, the database, the clock, servers,
   clients, recorders, the unit, and the seeder. No `if`, and no argument a test's outcome depends
   on.
-- Each test creates all of its data, even when every test in the file needs the same data. A test
-  whose code reads the time sets the clock.
+- Each test creates all of its data, even when every test in the file needs the same data. A wired
+  clock starts at a fixed default; a test whose code reads the time sets it.
 - The file declares nothing else at module level. A helper goes inline, becomes a matcher, or moves
   to the shared test utils.
 - Exception: a skip condition Bun needs before the test runs, such as
@@ -200,7 +202,8 @@ owner's own tests are the tests in its folder.
   [Seeding](./references/seeding.md) holds the rest.
 - The test body keeps the behaviour under test as a real call, each clock move, and each effect on
   another record.
-- A direct write lives only inside a seed, with a `//` comment naming the state no owner code makes.
+- Outside the owner, a direct write lives only inside a seed, with a `//` comment naming the state
+  no owner code makes.
 - Exceptions, and no others: a migration test, and a test of code whose product is SQL or storage,
   such as a database dialect. `integration/` and `e2e/` get none.
 - A query that only sets up a failure, such as a trigger that makes a write fail, is setup.
@@ -228,15 +231,17 @@ test('it restores an archived note', async () => {
 
 - `toStrictEqual` on the full contract. A field the test doesn't determine, such as a generated id,
   gets an asymmetric matcher inside it. `toMatchObject` only for a raw row an owner's test reads
-  back. Never `toEqual`, and never a partial match because the literal is long.
+  back, or an error's typed code. Never `toEqual`, and never a partial match because the literal is
+  long.
 - Assert each result on its own. A projection of one result, such as a command's exit code, stdout
   and stderr, stays together.
 - Derive the expected value from the contract, never with the unit's own calculation.
 - Reading stored state back after a mutation, one `toBe` on the changed field is enough.
 - A recovery test captures each faulted call's rejection as a value,
   `.then(() => null, (error: unknown) => error)`, and asserts each one beside the final state.
-- Snapshots are inline only, and only for machine output no person derives, such as generated SQL. A
-  hand-written value, such as a spec test vector, keeps an explicit matcher.
+- Snapshots are inline only, never of a component, and only for machine output no person derives,
+  such as generated SQL. A hand-written value, such as a spec test vector, keeps an explicit
+  matcher.
 - A deterministic generator gets a golden test and a same-input-twice test, as
   [System tests](./references/system-tests.md) describes.
 - A sweep that deletes leftovers has a test of what it leaves alone:
@@ -247,7 +252,8 @@ test('it restores an archived note', async () => {
 - Assert at the strictness the contract needs: `toThrow()`, `toThrowWithMessage(Error, /…/)`, or
   `toMatchObject({ code })`.
 - Each declared error gets a test. A throw that can't happen in production is no declared error:
-  delete the branch, or write `invariant()` from `tiny-invariant`.
+  delete the branch when a dependency's contract rules it out, otherwise write `invariant()` from
+  `tiny-invariant`.
 - Never assert in a `try`/`catch`: when nothing throws, nothing is asserted.
 - No `await` before `.rejects` or `.resolves`; always `await` `toResolve()` and `toReject()`.
 
@@ -323,13 +329,15 @@ Use a jest-extended matcher over a hand-written check: `toSatisfyAll(isOpen)`, n
 | A program the repo drives over its own protocol | A stateful stand-in ([System tests](./references/system-tests.md))  |
 
 - Code hard to test without a stand-in takes its I/O from its caller: test the core with values.
-- Pass every path in from the temp root. Never steer a module through `process.cwd()` or `HOME`.
+- Pass every path in from the temp root. Never steer a module through `process.cwd()` or a `HOME`
+  set after startup.
 - A failure branch runs on a real failure: an address where nothing listens, an MSW handler that
   returns the error, or a conflicting row. No spy that makes a real method reject. When nothing real
   reaches a branch, inject that dependency.
 - No `mock.module` in a test file: without isolation it leaks into every later file. Two kinds live
   in a preload, `register-<module>-mock.ts`: a stand-in for what the runtime can't host, such as
-  WebGL, and a wrapper a library documents for testing.
+  WebGL, read from a stub store that one exported setter changes; and a wrapper a library documents
+  for testing, which keeps the real behaviour and adds one hook.
 - A module you want to mock for what it imports shows a bad import graph. Fix the graph.
 
 ## Speed
