@@ -4,3 +4,7 @@ exact = true
 
 # supply-chain guard: only install versions published >= 7 days ago
 minimumReleaseAge = 604800
+
+# @zgeoff/chex 0.0.2 (published 2026-10-31) ages past the gate ~2026-11-07 — remove then
+# @zgeoff/std 0.3.1 (published 2026-10-31) ages past the gate ~2026-11-07 — remove then
+minimumReleaseAgeExcludes = ["@zgeoff/chex", "@zgeoff/std"]
