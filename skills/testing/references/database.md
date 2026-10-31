@@ -22,8 +22,8 @@ not a reimplementation. Each test gets a database that no other test can see, an
 Each test acquires a handle from the repo's test-database util, holds it in `setupTest()`, and
 injects the handle's connection into the code under test. Code that opens its own connection escapes
 the isolation, so thread the handle's connection through instead. The util builds the schema once
-per run into a template database, from the migrations or from a schema dump, as a per-run template,
-which the slow-tests reference describes, and the util names which source it uses.
+per run into a template database, as the slow-tests reference's per-run templates describe. It
+builds the template from the migrations or from a schema dump, and its name says which.
 
 Each worker clones the template once with `CREATE DATABASE … TEMPLATE`. The clone is named after its
 process, such as `<template>_<pid>`: the util opens the clone when it exists and clones the template
@@ -122,9 +122,9 @@ tie gets its own test, with two rows that share the timestamp.
 
 ## Access rules
 
-Each actor in an access test comes from a seed and holds its own client. The pair of tests from the
-[testing skill](../SKILL.md#assertions) applies: the owner succeeds, and the other actor is refused
-or sees nothing.
+Each actor in an access test comes from a seed, and the test body builds a client for each one. The
+pair of tests from the [testing skill](../SKILL.md#assertions) applies: the owner succeeds, and the
+other actor is refused or sees nothing.
 
 ## Configuration stored in the database
 

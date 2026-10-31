@@ -15,14 +15,15 @@ metadata:
 
 # Testing
 
-You write tests that run real code through the unit's entry and check what its callers can see. Each
-test creates all of its own data, and uses a stand-in only at a boundary it can't cross. Watch for a
-helper that hides the scenario from the test body, a loose assertion that lets a broken unit pass,
-and a test that writes or reads another module's tables. When you change code, bring the tests of
-that code in line with these rules.
+You write tests that run real code through the unit's entry, the function or procedure its callers
+call, and check what those callers can see. Each test creates all of its own data, and uses a
+stand-in only at a boundary it can't cross. Watch for a helper that hides the scenario from the test
+body, a loose assertion that lets a broken unit pass, and a test that writes or reads another
+module's tables. When you change code, bring the tests of that code in line with these rules.
 
-Hand back the tests you added or changed, and for each behaviour you changed, the test that fails
-without your change.
+Hand back the tests you added or changed, with the unit run and lint passing. For each behaviour you
+changed, name the test that fails without your change, and show it: revert the change, run the test,
+and see it fail.
 
 ## Key rules
 
@@ -38,8 +39,8 @@ Each line links the section that explains it.
   `e2e/`.
 - [Structure and naming](#structure-and-naming): flat `test()` calls titled "it …", one act per
   test, no `describe`, and no loop of assertions.
-- [Setup and cleanup](#setup-and-cleanup): one local `setupTest()` wires and creates no data, and
-  `onTestFinished` follows each acquisition.
+- [Setup and cleanup](#setup-and-cleanup): one local `setupTest()` wires the dependencies and
+  creates no data, and `onTestFinished` follows each acquisition.
 - [Test data](#test-data): literals stay inline, shared domain types get tested factories, and
   stand-ins hold no logic.
 - [Stored state](#stored-state): seed and check database rows and stored files through the module
@@ -95,10 +96,10 @@ Each line links the section that explains it.
 
 ## Loading the skill
 
-This skill is the shared base that repo-sync delivers from zgeoff/skills: edit it there, never in a
-downstream copy. When the repo has a `project-testing` skill, load it as well. It adds the repo's
-harnesses, lanes and stricter rules, and it never relaxes a rule here: a repo that needs an
-exception changes this skill.
+This skill is the shared base that repo-sync, the job that copies shared skills into each repo,
+delivers from zgeoff/skills: edit it there, never in a downstream copy. When the repo has a
+`project-testing` skill, load it as well. It adds the repo's harnesses, lanes and stricter rules,
+and it never relaxes a rule here: a repo that needs an exception changes this skill.
 
 Some repos run a skill gate, a hook that refuses an edit to a test file until your session has
 loaded this skill. Load it again after a compaction, and in each subagent. Edit a test file with
@@ -140,9 +141,10 @@ These decide a case the rules leave open.
   can disagree. Make it faithful: real status codes, real payload shapes, the production types.
 - **Test utilities are code.** A helper tests depend on lives in the repo's shared test utils with
   its own tests, because a broken helper fails silently in every suite that uses it.
-- **Never cut a test that checks behaviour.** When a lint rule asks for a test that checks nothing,
-  such as a test file for a module with no logic, change the rule's config with a one-line reason.
-  Never test that a shared lint rule fires in a repo that adopts it.
+- **Never cut a test that checks behaviour, and never add one that checks nothing.** When a lint
+  rule asks for a test with nothing to check, such as a test file for a module with no logic, change
+  the rule's config with a one-line reason. A repo that adopts a shared lint rule never tests that
+  the rule fires.
 
 ## Where a test lives
 
@@ -154,12 +156,13 @@ These decide a case the rules leave open.
   journey per main user flow. A flow's edge cases and denials run in process.
 - `evals/` holds the evaluation suites, in the unit run.
 - A test that drives a real browser goes in `<module>.browser.test.ts`, in the browser lane.
-- A lane's harness lives outside the lane's directory, in a package with its own unit tests.
+- A lane's harness, the code that starts the lane's real system, lives in a package with its own
+  unit tests, never beside the lane's test files.
 - The repo has no other `test/`, `tests/` or `__tests__` directory. A static check of config or
   generated text is a script, not a test.
 
-To place a test, ask where its failure points: at the wiring, it belongs in `e2e/`; at the logic, in
-the unit run.
+To place a test, ask where its failure points: at the wiring of the built product, `e2e/`; at the
+wiring between packages, `integration/`; at the logic, beside the module.
 
 ## Structure and naming
 
@@ -176,8 +179,9 @@ the unit run.
   several calls whose combined result the assertions check. Two independent act-and-assert pairs are
   two tests. An earlier act the test depends on, such as saving the note it archives, is
   arrangement, with no assertion.
-- `test.each` serves a closed decision table: rows of plain data, or of the owner's seed functions,
-  and a title that interpolates the input that varies. Any other set of cases gets a `test()` each.
+- Use `test.each` only for cases that differ in values alone: rows of plain data, or of the owner's
+  seed functions, and a title that interpolates the value that varies. Give any other set of cases a
+  `test()` each.
 - An end-to-end journey test may chain dependent act-and-assert phases, one file per journey.
 
 ```ts
@@ -219,14 +223,15 @@ Process-wide setup and cleanup belong to the preload. Per-test setup belongs to 
   has no `if`.
 - `setupTest()` creates no data. Data is any row, file, store entry or starting value the code under
   test reads. Each test creates all of its data in its arrange phase, even when every test in the
-  file needs the same data. A wired clock starts at a fixed default; a test that reads the time sets
-  it.
+  file needs the same data. A wired clock starts at a fixed default; when the code under test reads
+  the time, set the clock in the test's arrange phase.
 - A test file declares one function, `setupTest()`, and `zgeoff/setup-test-only` fails any other
   module-level declaration. A helper goes inline, becomes a registered matcher, or moves to the
   shared test utils with its own tests.
-- One exception: a test that Bun must skip before it runs, such as one that needs a binary, may keep
-  the awaited check at module level, with names derived from it, and a comment that Bun's `skipIf`
-  takes a boolean. Only `skipIf` reads them, and each repeated condition gets one name.
+- One exception: a test that Bun must skip before it runs, such as one that needs a binary the host
+  may lack. Bun's `skipIf` takes a boolean, so you may compute that boolean at module level with an
+  awaited check, such as `const hasDocker = await probeDocker()`, with a comment giving that reason.
+  Name each repeated condition once, and read those names only in `skipIf`.
 - `setupTest()` may return a closure that only calls production helpers on the runtime it built. A
   closure with a branch, a loop or state of its own moves to the shared test utils.
 - Each test file keeps its own `setupTest()`.
@@ -298,9 +303,9 @@ cleanup gap, and [Cleanup](./references/cleanup.md) holds the steps that close i
 
 ## Stored state
 
-Stored state means database rows and files on disk. Its owner is the module whose code writes them.
-Seed and check stored state through its owner, so a schema or layout change breaks only the owner
-and its tests.
+Stored state means database rows and files on disk. Its owner is the module whose code writes them,
+and the owner's own tests are the tests in that module's folder. Seed and check stored state through
+its owner, so a schema or layout change breaks only the owner and its tests.
 
 **Inside the owner.** The owner's own tests may write and read its rows and files directly. They may
 also use its seeds.
@@ -321,7 +326,7 @@ the test body:
 
 - the behaviour under test, as a real call;
 - each clock move;
-- each effect on another record.
+- each effect on another record, asserted in the test, never inside a seed.
 
 Before you write or change a seed, read [Seeding](./references/seeding.md). A direct write lives
 only inside a seed, with a `//` comment naming the state the owner's code can't make.
@@ -337,15 +342,13 @@ test('it restores an archived note', async () => {
 });
 ```
 
-Three kinds of test outside the owner may write and read stored state directly, and no others:
-
-- a migration test;
-- a seed's own test, which checks the rows and files the seed writes;
-- a test of code whose product is SQL or storage, such as a database dialect.
+Two kinds of test outside the owner may write and read stored state directly, and no others: a
+migration test, and a test of code whose product is SQL or storage, such as a database dialect. A
+seed's own test sits in the owner, so it counts as one of the owner's tests.
 
 `zgeoff/seed-only` fails a database write in any other test file. Tests under `integration/` and
-`e2e/` get no exception. A project skill may name the owner of a table that several modules write,
-and adds nothing else here.
+`e2e/` get no exception. A project skill may name the owner of a table that several modules write.
+It never adds another exception.
 
 ## Schemas and parsers
 
@@ -361,9 +364,9 @@ and adds nothing else here.
 ## Assertions
 
 - Use `toStrictEqual` when the test determines every field: the full shape is the contract. For a
-  field the test doesn't determine, such as a generated id, put an asymmetric matcher inside
-  `toStrictEqual`. Use `toMatchObject` for a row the database fills in. A partial match chosen
-  because the literal is long is a defect. `toEqual` never appears.
+  field the test doesn't determine, such as a generated id or a default timestamp, put an asymmetric
+  matcher inside `toStrictEqual`. Use `toMatchObject` only for a raw row an owner's test reads back.
+  A partial match chosen because the literal is long is a defect. `toEqual` never appears.
 - Assert each result on its own. Never gather unrelated results into one object to put them under
   one `toStrictEqual`. A normalised projection of one result, such as a command's exit code, stdout
   and stderr, stays together.
@@ -379,7 +382,8 @@ and adds nothing else here.
 - Code that turns the same input into the same output every time, such as a report generator, gets a
   test that pins one hand-written input's full output inline, and a test that runs the same input
   twice and compares the results, as [System tests](./references/system-tests.md) describes.
-- A sweep that deletes resources has a test naming what it never touches.
+- A sweep, code that deletes leftover resources, has a test asserting what it leaves alone, such as
+  `it never removes another owner's files`.
 
 **Errors.**
 
@@ -471,7 +475,7 @@ included.
 | A database                                      | The real engine, isolated per test                                              |
 | A remote HTTP or RPC service                    | MSW handlers                                                                    |
 | A service with a cheap container                | The real service in a container                                                 |
-| An SDK with a command layer                     | A stand-in at the command layer                                                 |
+| An SDK that sends command objects               | A stand-in for its send call                                                    |
 | A program the repo drives over its own protocol | A stateful stand-in, as [System tests](./references/system-tests.md) describes  |
 
 A module that is hard to test without a stand-in takes its I/O from its caller: test the pure core

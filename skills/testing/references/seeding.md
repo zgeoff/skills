@@ -1,18 +1,20 @@
 # Seeding
 
 A seed puts stored state in place for a test by calling the code that owns that state. The owner is
-the module whose code writes those rows or files. When every test outside the owner seeds through
-it, a schema or layout change breaks only the owner and its tests.
+the module whose code writes those rows or files. A concept is one kind of record the owner stores,
+such as a note. The owner's test utils are the folder of test helpers its package exports for other
+packages' tests, such as `src/test-utils/` exported as `<package>/test-utils`. When every test
+outside the owner seeds through it, a schema or layout change breaks only the owner and its tests.
 
-Write seeds this way even in a repo whose older tests still call `insertInto`. Leave those tests as
-they are unless you work on their code.
+Write seeds this way even in a repo whose older tests still call `insertInto`. When you change code,
+move that code's tests onto seeds; leave other tests as they are.
 
 The traps:
 
 - **A seed that branches on a state.** The branch copies the owner's state machine, and the copy
   goes wrong when the owner changes. Write one seed per state, each a straight line of calls.
 - **A seed for a bundle of records,** such as `seedUserWithTwoNotes`. It hides the scenario. Call
-  `user` and `note` in the test instead.
+  `user` and `note` in the test instead, and pass the user's id into the note's input.
 - **A direct write because the owner's writer isn't exported.** Export the writer from the owner. An
   unexported writer, an awkward import or a slow call is never a reason to write directly.
 
@@ -34,7 +36,8 @@ Take the owner's state type, such as `type NoteStatus = 'draft' | 'archived'`.
 - The base seed, `seedNote`, makes the record in the state the owner's create call gives it, here
   `draft`.
 - Each other value of the state type gets one more seed, here `seedArchivedNote`.
-- A concept with no state type gets only its base seed.
+- A concept with no state type gets only its base seed. When the owner has a status column but no
+  union type, each value of the column is a state.
 - Every other difference, such as a title or a timestamp, is input to a seed, never a new seed.
 
 So the state type fixes the list, and you never decide whether a variant is worth adding. Never
@@ -43,25 +46,27 @@ Its branches copy the owner's transitions.
 
 ## Writing a seed
 
-Put each seed in its own file in the owner's test utils, the folder its `test-utils` entry exports:
-`seed-note.ts` exports `seedNote`, and `seed-archived-note.ts` exports `seedArchivedNote`.
+Put each seed in its own file in the owner's test utils: `seed-note.ts` exports `seedNote`, and
+`seed-archived-note.ts` exports `seedArchivedNote`.
 
 A seed takes two arguments:
 
 - the owner's deps, the handles its code already takes, such as `{ db, clock }`;
-- a partial of the owner's input type, built into a full input by the matching `buildMock<Type>`
-  factory.
+- a partial of the owner's input type, built into a full input by the type's `buildMock<Type>`
+  factory. Write the factory first when it's missing, as the testing skill's
+  [Test data](../SKILL.md#test-data) section says.
 
 Inside, it calls the owner's writes in a straight line:
 
 - The base seed calls the owner's create.
-- A variant calls the base seed, then the owner's transition.
+- A variant calls the seed of the state just before it, then the owner's transition. For draft,
+  published, archived, `seedArchivedNote` calls `seedPublishedNote`, then `archiveNote`.
 - When the owner's write returns a wider type than the seed promises, the seed narrows it with
   `invariant()` from `tiny-invariant`. An owner write can act on a different record than the one you
-  meant, such as a claim that takes whichever task is due first, and the `invariant()` call catches
+  meant, such as a write that takes the oldest note in a queue, and the `invariant()` call catches
   that.
-- The time comes from `deps.clock`. A test that needs a fixed timestamp passes it in the input,
-  where the owner's input type has the field.
+- The time comes from `deps.clock`. A test that needs a fixed timestamp passes it in the input when
+  the owner's input type has the field, and otherwise moves the clock before it calls the seed.
 
 ```ts
 // seed-note.ts
@@ -92,7 +97,8 @@ in the owner, and call it from both the handler and the seed.
 
 ## Publishing seeds
 
-The owner's `test-utils` entry exports each seed and one builder that binds the seeds to deps:
+The owner's test utils export each seed and one builder for the owner, named for it, that binds the
+seeds to deps:
 
 ```ts
 export const buildNoteSeeds = (deps: NotesDeps) => ({
@@ -106,8 +112,9 @@ stores each concept, so two owners never publish the same key.
 
 ## `buildSeed` and `setupTest`
 
-Each package that seeds has one `buildSeed(deps)` in its test utils. It spreads the builder of each
-owner whose state the package's tests need:
+Each package that seeds has one `buildSeed(deps)` in `build-seed.ts` in its test utils. It spreads
+the builder of each owner whose state the package's tests need, and needs no test of its own,
+because TypeScript checks it:
 
 ```ts
 export const buildSeed = (deps: TestDeps) => ({
@@ -144,8 +151,9 @@ archiving does to a note's search entry archives the note with a real call, not 
 
 ## Table-driven tests
 
-A test over several states passes the unbound seed functions as case data. `ctx` spreads the deps,
-so it satisfies the owner's deps type. Never map a label to a seed in a lookup of your own.
+A test over several states puts the unbound seed functions in its rows, and calls each with `ctx`,
+which spreads the deps. In a test with two databases, pass the deps the owner's seeds take in place
+of `ctx`. Never look a seed up by its label in a map you build: put the function in the row.
 
 ```ts
 test.each([
@@ -155,7 +163,7 @@ test.each([
   const ctx = await setupTest();
   const note = await seed(ctx, { title: 'Groceries' });
 
-  expect(await ctx.client.searchNotes({ query: 'Groceries' })).toPartiallyContain({ id: note.id });
+  expect(await ctx.service.searchNotes({ query: 'Groceries' })).toPartiallyContain({ id: note.id });
 });
 ```
 
@@ -163,7 +171,8 @@ test.each([
 
 Some states no code in the repo produces today, such as a row an older version wrote before a column
 became required. Write such a row directly, only inside a seed, with a `//` comment that names the
-exact state. This seed is the one extra beyond the state type's list.
+exact state. Each such state gets its own seed, published in the owner's builder beside the others,
+and these are the only seeds beyond the state type's list.
 
 ```ts
 export async function seedNoteWithoutTitle(deps: NotesDeps, input: Partial<NoteRow> = {}) {
@@ -177,7 +186,7 @@ export async function seedNoteWithoutTitle(deps: NotesDeps, input: Partial<NoteR
 ```
 
 `buildMockNoteRow` builds the table's insert shape, where `buildMockNewNote` builds the owner's
-input. When you can't name a state that no owner code makes, call the owner.
+input. If you can't name the exact state, call the owner.
 
 ## Interrupted operations
 
@@ -192,16 +201,16 @@ Each `seed-<name>.ts` file has a `seed-<name>.test.ts` beside it. It asserts the
 seed writes, and that input overrides apply. Use `toMatchObject` on a row, because the database
 computes some of its fields.
 
-A seed's own test is one of the three kinds of test outside the owner that may read stored state
-directly. The other two are a migration test and a test of code whose product is SQL or storage,
-such as a database dialect.
+A seed's test sits in the owner, so it reads stored state directly like any other test of the owner.
+It needs its test even in a repo that has the lint rules turned off.
 
 ## The lint rules
 
 `@zgeoff/oxlint-config` checks the mechanical parts of this reference:
 
 - `zgeoff/seed-only` fails a database write in a test file anywhere except a seed, the owner's own
-  tests, and the three kinds of test above.
+  tests, a migration test, and a test of code whose product is SQL or storage. The owner's own tests
+  may write directly, but use a seed when one makes the state.
 - `zgeoff/function-verb` allows the `seed` verb only in test utils.
 - The config also fails a `seed-<name>.ts` file with no test beside it.
 
