@@ -42,10 +42,10 @@ subfolders by area, so a reader can scan the folder. Link `docs/reference/` from
 
 ## Length
 
-Keep each doc under its cap. The [`check-length.sh`](../scripts/check-length.sh) script sets the
-caps, and warns when a doc goes over one, without failing the run. Past the cap, cut paragraphs
-first, then split the doc at a concept boundary. If the doc is still over, say so in the PR body.
-Don't fit it under the cap by any of these:
+Keep each doc under its cap. `chex length` sets the caps, and warns when a doc goes over one,
+without failing the run. Past the cap, cut paragraphs first, then split the doc at a concept
+boundary. If the doc is still over, say so in the PR body. Don't fit it under the cap by any of
+these:
 
 - compressing sentences, meaning dropping their articles and connecting words;
 - moving the overflow into a README or code comments;
@@ -118,5 +118,5 @@ The README has these sections, in this order:
 5. `## Results`: one line that links `results.md` and each `<run>.md`.
 6. `## Untested`: 1 to 2 lines, with a link to the `## Untested` section of `results.md`.
 
-Give only the landing page the name `README.md`, because `check-length.sh` applies a README limit to
+Give only the landing page the name `README.md`, because `chex length` applies a README limit to
 every file with that name. `results.md` and the other files have no length cap.

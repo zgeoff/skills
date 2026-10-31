@@ -14,7 +14,7 @@ one, because the file you edit may be the one that changes the rules.
 ## Repo structure
 
 ```text
-skills/<name>/      one skill per folder: SKILL.md, plus any references/ and scripts/ it uses
+skills/<name>/      one skill per folder: SKILL.md, plus any references/ and helper scripts/ it uses
 ```
 
 The skills CLI finds a skill at `skills/<name>/SKILL.md`, and the folder name matches the `name` in
@@ -31,14 +31,15 @@ bun run check
 bun run test
 ```
 
-- `bun run check` runs `check-length.sh`, which runs `check-prose.sh` and `check-skill.sh` in turn,
-  then `check-links.sh` and `check-readmes.sh`.
-- `bun run test` runs the test beside each script.
+- `bun run check` runs `chex prose length links readmes skill`, the docs checks that
+  [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex) ships.
+- `bun run test` runs the test beside each script that a skill keeps in its `scripts/` folder.
 - `bun run format` rewraps Markdown at 100 columns. The pre-commit hook runs it on the staged files,
   so write each paragraph as one line.
 
-The skills tell an agent to run `bash .agents/skills/<skill>/scripts/<script>`, the path in a repo
-that installs them. In this repo the scripts sit under `skills/`.
+The skills tell an agent to run a check as `bun x @zgeoff/chex <check>`, and a skill's own script as
+`bash .agents/skills/<skill>/scripts/<script>`, the path in a repo that installs them. In this repo
+those scripts sit under `skills/`.
 
 ## Commits
 

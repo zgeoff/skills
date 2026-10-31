@@ -37,7 +37,7 @@ and the rule it breaks, quoted.
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): `check-length.sh` and `check-links.sh`, then a cold read.
+- [Check it](#check-it): `chex prose`, `chex links` and `chex skill`, then a cold read.
 
 ## Write it plainly
 
@@ -101,7 +101,7 @@ A machinery skill covers one repo's tools, such as its migrations. Write:
 - the traps, each with what to do about it.
 
 Add a trap only if an agent with the source open would still lose time to it. The invented trap
-below has a link, so it sits in a code block: `check-links.sh` fails an invented link anywhere else.
+below has a link, so it sits in a code block: `chex links` fails an invented link anywhere else.
 Write your real traps as plain bullets.
 
 ```markdown
@@ -132,7 +132,7 @@ open the file, or doesn't know the word.
 ## Point at the code, don't copy it
 
 When you need a name, link the file, in a sentence that says what the code doesn't: a trap, a reason
-or a choice. When someone renames the file, `check-links.sh` fails.
+or a choice. When someone renames the file, `chex links` fails.
 
 Four kinds of copy:
 
@@ -144,19 +144,18 @@ Four kinds of copy:
   script.
 - **A quote.** A copied error message teaches the old text once the code changes. Quote only when
   the exact words are the point. Otherwise invent the example.
-- **A line anchor.** `#L42` points at the wrong line after the next edit.
-  [`check-skill.sh`](./scripts/check-skill.sh) fails on one, so link the file and name what to look
-  for in it.
+- **A line anchor.** `#L42` points at the wrong line after the next edit. `chex skill` fails on one,
+  so link the file and name what to look for in it.
 
 When a review asks for one of these copies, decline it and name this section. When a review shows a
 sentence is wrong, fix it.
 
 ## Keep it short and true
 
-Keep SKILL.md under the word limit `check-skill.sh` sets. Past it, the agent skims. When a skill
-grows, cut first, then move what only some tasks need into a reference. A rule set, such as a code
-style, gets a higher limit: mark it with `kind: rule-set` under `metadata`. A reference never links
-to another reference: an agent reads a nested file only in part.
+Keep SKILL.md under the word limit `chex skill` sets. Past it, the agent skims. When a skill grows,
+cut first, then move what only some tasks need into a reference. A rule set, such as a code style,
+gets a higher limit: mark it with `kind: rule-set` under `metadata`. A reference never links to
+another reference: an agent reads a nested file only in part.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
@@ -175,12 +174,10 @@ Leave out anything time-bound, like "until the next release": it goes false unno
 From the repo root:
 
 ```bash
-bash .agents/skills/docs-writing/scripts/check-length.sh
-bash .agents/skills/docs-writing/scripts/check-links.sh
+bun x @zgeoff/chex prose links skill
 ```
 
-`check-length.sh` also runs `check-prose.sh` and `check-skill.sh`. For one skill, run
-`bash .agents/skills/skill-writing/scripts/check-skill.sh .agents/skills/<skill>`.
+For one skill, run `bun x @zgeoff/chex skill .agents/skills/<skill>`.
 
 Then run the `cold-read` skill on SKILL.md and each reference. It fixes, then reads once more.
 

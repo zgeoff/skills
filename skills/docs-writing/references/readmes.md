@@ -25,8 +25,7 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    `docs/design/`, the folder that holds them gets a README too, as an index of the spikes.
 
 Any other README is a mistake. Put its content in `docs/`, or in a code comment beside the code it
-explains. [`check-readmes.sh`](../scripts/check-readmes.sh) fails on a README that isn't one of
-these kinds.
+explains. `chex readmes` fails on a README that isn't one of these kinds.
 
 ## Root README
 
@@ -98,8 +97,8 @@ and a link to the architecture doc that covers it, when one exists.
 
 ## Length
 
-[`check-length.sh`](../scripts/check-length.sh) sets each README's target and limit from its kind,
-and prints both. Cut a README to its target. The limit is where the run fails.
+`chex length` sets each README's target and limit from its kind, and prints both. Cut a README to
+its target. The limit is where the run fails.
 
 ## What stays out
 
