@@ -21,7 +21,7 @@ The traps:
 - [The seeds an owner publishes](#the-seeds-an-owner-publishes)
 - [Writing a seed](#writing-a-seed)
 - [Publishing seeds](#publishing-seeds)
-- [`buildSeed` and `setupTest`](#buildseed-and-setuptest)
+- [`buildSeeder` and `setupTest`](#buildseeder-and-setuptest)
 - [What the test keeps visible](#what-the-test-keeps-visible)
 - [Table-driven tests](#table-driven-tests)
 - [A state no owner code makes](#a-state-no-owner-code-makes)
@@ -110,14 +110,15 @@ export const buildNoteSeeds = (deps: NotesDeps) => ({
 Each key is the seed's name without `seed`, so a test calls `ctx.seed.archivedNote(…)`. One owner
 stores each concept, so two owners never publish the same key.
 
-## `buildSeed` and `setupTest`
+## `buildSeeder` and `setupTest`
 
-Each package that seeds has one `buildSeed(deps)` in `build-seed.ts` in its test utils. It spreads
-the builder of each owner whose state the package's tests need, and needs no test of its own,
-because TypeScript checks it:
+Each package that seeds has one `buildSeeder(deps)` in `build-seeder.ts` in its test utils. It
+builds the seeder, the object of bound seeds a test reaches as `ctx.seed`. It spreads the builder of
+each owner whose state the package's tests need, and needs no test of its own, because TypeScript
+checks it:
 
 ```ts
-export const buildSeed = (deps: TestDeps) => ({
+export const buildSeeder = (deps: TestDeps) => ({
   ...buildNoteSeeds(deps),
   ...buildAttachmentSeeds(deps),
 });
@@ -126,15 +127,15 @@ export const buildSeed = (deps: TestDeps) => ({
 `TestDeps` is the type of the deps the package's `setupTest()` wires. When a builder needs a handle
 that `TestDeps` lacks, TypeScript fails, so add the handle to the wiring.
 
-Every `setupTest()` in the package returns `seed: buildSeed(deps)` beside the deps, so `ctx` holds
+Every `setupTest()` in the package returns `seed: buildSeeder(deps)` beside the deps, so `ctx` holds
 both. Binding the seeds is wiring: `setupTest()` still creates no data.
 
 - **A test with two databases** puts both handles in `TestDeps`. Each builder takes the part it
   needs, such as `buildAuditSeeds({ db: deps.auditDB, clock: deps.clock })`, and the test still
   calls one `ctx.seed`.
-- **A test with two hosts,** such as a sync test with a source and a target, calls `buildSeed` once
-  for each host's deps: `source: { ...sourceDeps, seed: buildSeed(sourceDeps) }`. The test then
-  calls `ctx.source.seed.note(…)` and `ctx.target.seed.note(…)`.
+- **A test with two hosts,** such as a sync test with a source and a target, calls `buildSeeder`
+  once for each host's deps: `source: { ...sourceDeps, seed: buildSeeder(sourceDeps) }`. The test
+  then calls `ctx.source.seed.note(…)` and `ctx.target.seed.note(…)`.
 
 ## What the test keeps visible
 

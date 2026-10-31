@@ -48,7 +48,7 @@ Each line links the section that explains it.
 
 ## References
 
-- [Seeding](./references/seeding.md): writing or changing a seed, a package's `buildSeed`, a test
+- [Seeding](./references/seeding.md): writing or changing a seed, a package's `buildSeeder`, a test
   over several states, and a state no owner code makes.
 - [Slow tests and lanes](./references/slow-tests.md): a slow test, a per-run template, the run mode,
   and a lane.
@@ -236,7 +236,7 @@ async function setupTest() {
   const db = await createTestDatabase();
   const deps = { db, clock: buildStubClock() };
 
-  return { ...deps, service: createNotesService(deps), seed: buildSeed(deps) };
+  return { ...deps, service: createNotesService(deps), seed: buildSeeder(deps) };
 }
 
 test('it lists the notes of a user with none as empty', async () => {
