@@ -24,7 +24,8 @@ visibility.
 | Private | `checks`, with each of those as a named step          | the sum of the test steps |
 
 - `checks` is the required check in both. GitHub counts a skipped required check as a pass, so
-  `checks` always runs, and fails when a job it needs failed or was cancelled.
+  `checks` always runs. In a public repo it needs every other job, and fails when one failed or was
+  cancelled; a job skipped by design, such as the lanes of a repo without lanes, passes.
 - Public: split work into its own job only when that saves 60 s of wall time. Start at most 10 jobs
   at once. Shard tests only when the repo is still over budget.
 - Private: add a second job only for another runner (KVM, macOS) or another trigger. Run an
