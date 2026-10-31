@@ -28,7 +28,7 @@ follow the system-tests reference's Real applications section.
   for the other's.
 - The preload calls `server.enable()` in `beforeAll`, `server.resetHandlers()` after each test, and
   `server.disable()` in `afterAll`, never `enable()` at import. The
-  [testing skill](../SKILL.md#testing) says why the pair holds in every run mode.
+  [testing skill](../SKILL.md#the-test-run) says why the pair holds in every run mode.
 - The server starts with `onUnhandledFrame: 'error'`. A request that no handler matches rejects, and
   MSW prints its URL.
 - A suite that sends real requests to a server it started on the loopback interface passes a
