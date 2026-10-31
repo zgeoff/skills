@@ -15,11 +15,14 @@ metadata:
 
 # Testing
 
-A test runs real code through the unit's entry and checks what callers can see. It reaches for a
-stand-in only at a boundary it can't cross, and it creates all of its own data. Watch for a helper
-that hides the scenario from the test body, a loose assertion that lets a broken unit pass, and a
-test that writes or reads another module's tables. Align existing tests with these rules while you
-work on their code.
+You write tests that run real code through the unit's entry and check what its callers can see. Each
+test creates all of its own data, and uses a stand-in only at a boundary it can't cross. Watch for a
+helper that hides the scenario from the test body, a loose assertion that lets a broken unit pass,
+and a test that writes or reads another module's tables. When you change code, bring the tests of
+that code in line with these rules.
+
+Hand back the tests you added or changed, and for each behaviour you changed, the test that fails
+without your change.
 
 ## Key rules
 
@@ -48,15 +51,14 @@ Each line links the section that explains it.
 - [Matchers](#matchers): use a jest-extended matcher in place of a hand-written check.
 - [Time and waiting](#time-and-waiting): control time by argument, then injected clock, then fake
   timers, and wait on a condition, never a sleep.
-- [Boundaries](#boundaries): a package's furthest edge picks its regime, a stand-in replaces a
-  boundary and never the code inside it, a failure branch runs on a real failure, and `mock.module`
-  lives only in a preload.
+- [Boundaries](#boundaries): pick the package's regime by its furthest edge, replace only a
+  boundary, fail on a real failure, and keep `mock.module` in a preload.
 - [Speed](#speed): a unit test finishes in under 5 s; fix the cause, never the timeout.
 
 ## References
 
 - [Seeding](./references/seeding.md): writing or changing a seed, a package's `buildSeed`, a test
-  that needs a state no owner makes, and the seed lint rules.
+  over several states, and a state no owner code makes.
 - [Slow tests and lanes](./references/slow-tests.md): a slow test, a per-run template, the run mode,
   and a lane.
 - [Factories](./references/factories.md): writing or changing a factory.
@@ -98,26 +100,30 @@ downstream copy. When the repo has a `project-testing` skill, load it as well. I
 harnesses, lanes and stricter rules, and it never relaxes a rule here: a repo that needs an
 exception changes this skill.
 
-In a repo with the skill gate, load the skills again after a compaction, load them in each subagent,
-and change a test file with Edit or Write, never through Bash.
+Some repos run a skill gate, a hook that refuses an edit to a test file until your session has
+loaded this skill. Load it again after a compaction, and in each subagent. Edit a test file with
+Edit or Write, never through Bash: the gate checks a Bash command only after it has changed the
+file.
 
 The rules describe Bun tests. A reference for another runner maps them to that runner.
 
 ## The test run
 
-- The repo's `bunfig.toml` preload registers the matchers and every reset that returns shared state
-  to a clean baseline after each test. Those resets keep each file independent. A test overrides an
-  environment variable through the repo's env util, never by assigning `process.env`.
+The unit run is the repo's plain `bun test` script: every test file outside a lane, run on each pull
+request and before each push. A lane is a separate script for tests that need one real system, such
+as a browser, with its own time limit, as [Speed](#speed) describes.
+
+- The repo's `bunfig.toml` preload registers the matchers and the resets that return shared state to
+  a clean baseline after each test. When your change adds module-level state, such as a cache, add
+  its reset to the preload.
+- Override an environment variable through the repo's env util in the shared test utils, never by
+  assigning `process.env`. The preload restores each override.
 - The preload starts a shared resource, such as the MSW server, in `beforeAll` and stops it in
-  `afterAll`, never at import, so start and stop pair up in every run mode. A test process has one
-  MSW server, and each package adds its handlers to it.
+  `afterAll`, never at import, so start and stop pair up in every run mode.
 - Isolation (`--isolate`, or `--parallel` without `--no-isolate`) gives each file a fresh global and
-  module registry. It hides a leak between files and never fixes one. The slow-tests reference
-  covers choosing the mode and the worker count.
+  module registry. It hides a leak between files and never fixes one.
 - CI passes `--randomize`, and Bun prints the `--seed=<seed>` it used. A failure under `--randomize`
   is a leak: rerun with the printed seed and fix the leak at its cause, never by pinning the order.
-- Never write a test only to satisfy a lint rule, or to check that a shared rule fires: change the
-  rule's config, with a one-line reason.
 
 ## Principles
 
@@ -134,18 +140,21 @@ These decide a case the rules leave open.
   can disagree. Make it faithful: real status codes, real payload shapes, the production types.
 - **Test utilities are code.** A helper tests depend on lives in the repo's shared test utils with
   its own tests, because a broken helper fails silently in every suite that uses it.
+- **Never cut a test that checks behaviour.** When a lint rule asks for a test that checks nothing,
+  such as a test file for a module with no logic, change the rule's config with a one-line reason.
+  Never test that a shared lint rule fires in a repo that adopts it.
 
 ## Where a test lives
 
 - `<package>/src/<file>.test.ts` holds the unit suite of one source file, beside it, so `src/`
   mirrors its tests. A program's entry module, such as `cli.ts`, keeps its test beside it too.
-- `integration/` holds one flow across several packages, in one process. It runs in the unit run
-  under every unit rule.
+- `integration/` holds one flow across several packages, in one process, in the unit run.
 - `e2e/` drives the built product from outside, through its binary, CLI, HTTP or a socket. It holds
   tests of the process itself (start-up, signals, exit codes, crash recovery) and one happy-path
   journey per main user flow. A flow's edge cases and denials run in process.
-- `evals/` holds the evaluation suites, in the unit run. A browser test is
-  `<module>.browser.test.ts`, in its own lane.
+- `evals/` holds the evaluation suites, in the unit run.
+- A test that drives a real browser goes in `<module>.browser.test.ts`, in the browser lane.
+- A lane's harness lives outside the lane's directory, in a package with its own unit tests.
 - The repo has no other `test/`, `tests/` or `__tests__` directory. A static check of config or
   generated text is a script, not a test.
 
@@ -154,8 +163,8 @@ the unit run.
 
 ## Structure and naming
 
-- Write each test as a top-level `test(…)` call. `describe` is banned: its scope invites shared
-  hooks that couple tests.
+- Write each test as a top-level `test(…)` call. Never use `describe`: shared hooks in its scope
+  couple the tests.
 - A title starts with "it" and reads as verb, outcome, then condition:
   `it rejects a title longer than 120 characters`. It names observable behaviour, never an internal
   identifier.
@@ -164,11 +173,11 @@ the unit run.
 - `zgeoff/test-shape` refuses `describe`, `it`, the four hooks, `toEqual`, and a title that starts
   with neither "it " nor a `#<unit> ` prefix.
 - A body arranges, acts, then asserts, with no phase comments. A test acts once; its act may hold
-  several calls whose combined result the assertions check, such as the two runs a determinism test
-  compares. Two independent act-and-assert pairs are two tests. An earlier act the test depends on,
-  such as saving the note it archives, is arrangement, with no assertion.
-- `test.each` serves a closed decision table: rows of plain data, and a title that interpolates the
-  input that varies. Any other set of cases gets a `test()` each.
+  several calls whose combined result the assertions check. Two independent act-and-assert pairs are
+  two tests. An earlier act the test depends on, such as saving the note it archives, is
+  arrangement, with no assertion.
+- `test.each` serves a closed decision table: rows of plain data, or of the owner's seed functions,
+  and a title that interpolates the input that varies. Any other set of cases gets a `test()` each.
 - An end-to-end journey test may chain dependent act-and-assert phases, one file per journey.
 
 ```ts
@@ -187,18 +196,22 @@ A loop that asserts once per input hides which input failed and stops at the fir
 expect(listOpenNotes(store)).toSatisfyAll((note: Note) => note.archivedAt === null);
 ```
 
-Two loops stay legal: a completeness loop over a module's own registry, and a conformance loop that
-awaits `expect(conformanceCase.run(app)).toResolve()`. Neither computes its expectation with the
-transformation it checks. A loop that only arranges holds no assertion.
+Two kinds of loop may assert, as long as neither computes its expectation with the code it checks:
 
-Use fast-check for generated inputs or operation sequences whose combinations matter, as
+- a loop over a module's own registry that checks each entry is complete, such as every exported
+  renderer having a preview;
+- a loop that awaits each generated case of a conformance suite:
+  `await expect(conformanceCase.run(app)).toResolve()`.
+
+A loop that only arranges, such as inserting 51 rows to cross a page limit, holds no assertion. For
+generated inputs or operation sequences, use fast-check, as
 [System tests](./references/system-tests.md) describes.
 
 ## Setup and cleanup
 
 Process-wide setup and cleanup belong to the preload. Per-test setup belongs to one local function,
-`setupTest()`, that each test calls. `beforeAll`, `beforeEach`, `afterEach` and `afterAll` never
-appear in a test file.
+`setupTest()`, that each test calls. A file with nothing to wire has no `setupTest()`. `beforeAll`,
+`beforeEach`, `afterEach` and `afterAll` never appear in a test file.
 
 - `setupTest()` holds only wiring: temp directories, the database, the clock, servers, clients,
   recorders, the unit built through its factory, and the seeds bound to them. It takes no argument,
@@ -210,29 +223,31 @@ appear in a test file.
   it.
 - A test file declares one function, `setupTest()`, and `zgeoff/setup-test-only` fails any other
   module-level declaration. A helper goes inline, becomes a registered matcher, or moves to the
-  shared test utils with its own tests. One exception: a collection-time skip gate may keep its
-  awaited probe at module level, with a comment, because Bun's `skipIf` takes a boolean.
+  shared test utils with its own tests.
+- One exception: a test that Bun must skip before it runs, such as one that needs a binary, may keep
+  the awaited check at module level, with names derived from it, and a comment that Bun's `skipIf`
+  takes a boolean. Only `skipIf` reads them, and each repeated condition gets one name.
 - `setupTest()` may return a closure that only calls production helpers on the runtime it built. A
   closure with a branch, a loop or state of its own moves to the shared test utils.
 - Each test file keeps its own `setupTest()`.
 - Hold the result in one `const`, and never destructure it. The binding names are fixed: `ctx` for
   `setupTest()`, `hook` for `renderHook(…)`, `rendered` for `render(…)`.
 
-Here `setupTest()` wires the client and the seeds, and the test seeds its own user:
+Here `setupTest()` wires the service and the seeds, and the test seeds its own user:
 
 ```ts
 async function setupTest() {
   const db = await createTestDatabase();
   const deps = { db, clock: buildStubClock() };
 
-  return { ...deps, client: createNotesClient(deps), seed: buildSeed(deps) };
+  return { ...deps, service: createNotesService(deps), seed: buildSeed(deps) };
 }
 
 test('it lists the notes of a user with none as empty', async () => {
   const ctx = await setupTest();
   const user = await ctx.seed.user({ name: 'ada' });
 
-  expect(await ctx.client.listNotes({ userID: user.id })).toStrictEqual([]);
+  expect(await ctx.service.listNotes({ userID: user.id })).toStrictEqual([]);
 });
 ```
 
@@ -255,80 +270,82 @@ function setupTest() {
 | Process state the test body changes                     | `onTestFinished(…)` immediately after the change  |
 | State that a preload reset covers                       | Nothing                                           |
 
-A test never relies on a unique key to avoid another test's rows. A test that passes alone and fails
-beside others has found a cleanup gap, and [Cleanup](./references/cleanup.md) holds the steps that
-close it.
+Random values are fine as data, but never count on one to keep a test apart from another test's
+rows: the resets keep tests apart. A test that passes alone and fails beside others has found a
+cleanup gap, and [Cleanup](./references/cleanup.md) holds the steps that close it.
 
 ## Test data
 
 - Plain inputs stay inline at the call site: arguments, options, config values. Write the literal
   again in the next test. A module-level fixture, a shared baseline object, or a constant that only
   names a literal never appears in a test file.
-- A domain type that crosses a module boundary gets a tested `build<Type>` factory in the shared
+- A domain type that crosses a module boundary gets a tested `buildMock<Type>` factory in the shared
   test utils as soon as a test needs one. A type another package owns, such as an SDK result,
   crosses a boundary on its first use. A type private to the module under test stays inline.
   [Factories](./references/factories.md) holds how to write one.
 - A factory builds plain data and writes nothing. Stored state comes from a seed, as
   [Stored state](#stored-state) describes.
 - A stand-in's data stays inline: a fixed answer, a recorder (`mock()`), a no-op, an answer table
-  read by one key, or a list of scripted answers passed to the tested answer-queue util. Any other
-  code in a stand-in is logic, such as counting calls, keeping state or branching, and it moves to a
-  tested util in the shared test utils.
+  read by one key, or a list of scripted answers passed to the answer-queue util in the shared test
+  utils. Any other code in a stand-in is logic, such as counting calls, keeping state or branching,
+  and it moves to a tested util in the shared test utils.
 - A stand-in util is named for what it impersonates: `start-stub-<thing>.ts` for one that starts
   something long-running, `create-stub-<thing>.ts` for one that creates a resource, and
-  `build-stub-<thing>.ts` for the rest. Its tests pin what it assumes about the real thing.
-- A chain of `mockReturnValueOnce` never appears: a call past the last answer returns the default
-  without failing, where the answer-queue util throws.
+  `build-stub-<thing>.ts` for the rest. An executable stand-in script is `run-stub-<thing>.ts`. The
+  util's tests pin what it assumes about the real thing.
+- A chain of `mockReturnValueOnce` or `mockResolvedValueOnce` never appears: a call past the last
+  answer returns the default without failing, where the answer-queue util throws.
 
 ## Stored state
 
 Stored state means database rows and files on disk. Its owner is the module whose code writes them.
-A test seeds stored state and checks it through its owner, so a schema or layout change breaks only
-the owner and its tests.
+Seed and check stored state through its owner, so a schema or layout change breaks only the owner
+and its tests.
 
-**Checking.**
+**Inside the owner.** The owner's own tests may write and read its rows and files directly. They may
+also use its seeds.
 
-- The owner's own tests read its rows and files directly.
-- Every other test reads them only through the owner's code: a read function for rows, a path helper
-  for files. It never writes its own query and never builds a stored path by hand.
+**Outside the owner, checking.**
+
+- Read rows and files only through the owner's code: a read function for rows, a path helper for
+  files. Never write your own query or build a stored path by hand.
 - If the unit under test already returns the fact, check its result. If the owner has no read
   function for the fact, add one to the owner, with its own test.
 - A query that only sets up a failure, such as a trigger that makes a write fail, is setup, not a
   check.
 
-**Seeding.**
+**Outside the owner, seeding.** Never write stored state yourself. Call the owner's seeds through
+`ctx.seed`: one per concept, plus one per value of the owner's state type, such as `archivedNote`.
+Pass every other difference as input, and call one seed per concept the test needs. Keep these in
+the test body:
 
-- A test outside the owner never writes stored state itself. It calls the owner's seeds through
-  `ctx.seed`: one per concept, plus one per value of the owner's state type, such as
-  `seedArchivedNote`. Every other difference is input, and the test composes several concepts
-  itself.
-- The test keeps visible the behaviour under test (as a real call), clock moves, and side effects on
-  other records.
-- A direct write lives only inside a seed, beside a `//` comment naming the exact state the owner's
-  code can't make. `zgeoff/seed-only` fails any other write in a test file.
+- the behaviour under test, as a real call;
+- each clock move;
+- each effect on another record.
 
-Before you write or change a seed, read [Seeding](./references/seeding.md).
+Before you write or change a seed, read [Seeding](./references/seeding.md). A direct write lives
+only inside a seed, with a `//` comment naming the state the owner's code can't make.
 
 ```ts
 test('it restores an archived note', async () => {
   const ctx = await setupTest();
   const note = await ctx.seed.archivedNote({ title: 'Groceries' });
 
-  await ctx.client.restoreNote({ noteID: note.id });
+  await ctx.service.restoreNote({ noteID: note.id });
 
   expect((await readNote(ctx.db, note.id))?.status).toBe('draft');
 });
 ```
 
-Three kinds of test outside the owner may check stored state directly, and no others:
+Three kinds of test outside the owner may write and read stored state directly, and no others:
 
 - a migration test;
-- the own test of a seed, which checks the rows and files it writes;
-- a test of code whose product is SQL or storage, such as a database dialect, which uses tables as
-  its input.
+- a seed's own test, which checks the rows and files the seed writes;
+- a test of code whose product is SQL or storage, such as a database dialect.
 
-Tests under `integration/` and `e2e/` get no exception. A new case changes this skill. A project
-skill may name the owner of a table that several modules write, and adds nothing else here.
+`zgeoff/seed-only` fails a database write in any other test file. Tests under `integration/` and
+`e2e/` get no exception. A project skill may name the owner of a table that several modules write,
+and adds nothing else here.
 
 ## Schemas and parsers
 
@@ -343,23 +360,25 @@ skill may name the owner of a table that several modules write, and adds nothing
 
 ## Assertions
 
-- Use `toStrictEqual` when the test determines every field: the full shape is the contract. For
-  fields the test doesn't determine, such as generated ids or timestamps, use asymmetric matchers
-  inside `toStrictEqual`, or `toMatchObject`. A partial match chosen because the literal is long is
-  a defect. `toEqual` never appears.
+- Use `toStrictEqual` when the test determines every field: the full shape is the contract. For a
+  field the test doesn't determine, such as a generated id, put an asymmetric matcher inside
+  `toStrictEqual`. Use `toMatchObject` for a row the database fills in. A partial match chosen
+  because the literal is long is a defect. `toEqual` never appears.
 - Assert each result on its own. Never gather unrelated results into one object to put them under
   one `toStrictEqual`. A normalised projection of one result, such as a command's exit code, stdout
   and stderr, stays together.
 - Derive an expected value from the contract, never with the unit's own calculation.
-- After a mutation, one `toBe` on the field that changed is enough.
+- When a test reads back stored state after a mutation, one `toBe` on the field that changed is
+  enough.
 - A recovery test injects faults, then acts to recover. Each faulted call is arrangement: capture
   its rejection as a value with `.then(() => null, (error: unknown) => error)`, and assert each one
   at the end beside the final state.
-- Snapshots are inline only. `toMatchInlineSnapshot` pins a golden value: machine output no person
-  derives by reading the code, such as a generated SQL string. A hand-written value, such as a spec
-  test vector, keeps an explicit matcher. File and component snapshots never appear.
-- A deterministic pipeline's suite opens with a frozen-golden test and a determinism test, as the
-  evaluation suites in [System tests](./references/system-tests.md) describe.
+- Snapshots are inline only. `toMatchInlineSnapshot` pins machine output no person derives by
+  reading the code, such as a generated SQL string. A hand-written value, such as a spec test
+  vector, keeps an explicit matcher. File and component snapshots never appear.
+- Code that turns the same input into the same output every time, such as a report generator, gets a
+  test that pins one hand-written input's full output inline, and a test that runs the same input
+  twice and compares the results, as [System tests](./references/system-tests.md) describes.
 - A sweep that deletes resources has a test naming what it never touches.
 
 **Errors.**
@@ -368,7 +387,8 @@ skill may name the owner of a table that several modules write, and adds nothing
   `toThrowWithMessage(Error, /…/)` when the message is contract, or `toMatchObject({ code })` for a
   typed code.
 - Each error a unit declares has its own test. A throw that can't occur in production declares no
-  error: delete the branch when a dependency's contract rules it out, otherwise write `invariant()`.
+  error: delete the branch when a dependency's contract rules it out, otherwise write `invariant()`
+  from `tiny-invariant`.
 - A `try`/`catch` never asserts an error: when nothing throws, the assertion never runs.
 - Write `.rejects` and `.resolves` chains without `await`, because Bun settles them inside the
   matcher. Always `await` `toResolve()` and `toReject()`.
@@ -385,9 +405,10 @@ runs: copy the value out and assert after the call returns.
 
 ## Matchers
 
-The `@zgeoff/bun-test-extended` preload registers the jest-extended matchers, with types. When a
-matcher checks the property a test asserts, use it in place of a hand-written check such as
-`expect(items.every(isOpen)).toBe(true)`, because the matcher reports the received value on failure.
+The `@zgeoff/bun-test-extended` preload registers the jest-extended matchers, and each package's
+`augment-bun-test.ts` import gives `tsc` their types. When a matcher checks the property a test
+asserts, use it in place of a hand-written check such as `expect(items.every(isOpen)).toBe(true)`,
+because the matcher reports the received value on failure.
 
 | Value             | Matchers                                                                                                          |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -409,25 +430,37 @@ so any non-empty array passes. To find an element by a matcher, use
 
 Control time in the most explicit form the code allows:
 
-1. **A time argument:** `scheduler.advance(30_000)`.
-2. **An injected clock:** code with its own loop or timers takes a `now` function or a clock, and
-   the test steps it.
-3. **Fake timers:** for code the repo doesn't own, `setSystemTime()` and fake timers, restored in
+1. **A time argument.** Code that works out what is due takes the time as a parameter, and the test
+   passes it: `expireSessions(store, { now: new Date('2026-01-01T12:00:00Z') })`.
+2. **An injected clock.** Code with its own loop or timers takes a clock in its deps, and the test
+   steps it: `ctx.clock.advance(30_000)`.
+3. **Fake timers.** For code the repo doesn't own, `setSystemTime()` and fake timers, restored in
    `onTestFinished`.
 
 A value that depends on the wall clock is built relative to `Date.now()` and asserted with range
 matchers such as `toBeAfter` and `toBeWithin`, never an exact timestamp.
 
-A test waits on a condition with a polling `waitFor`, never a sleep: a sleep costs its full length
-on every run and still fails on a slow machine. When the code offers nothing to wait on, add a
-signal, such as an event, a log marker or a state flag. A native or library timer, and a deliberate
-fault delay, follow [System tests](./references/system-tests.md).
+Wait on a condition with a polling `waitFor`, never a sleep: a sleep costs its full length on every
+run and still fails on a slow machine. When the code offers nothing to wait on, add a signal, such
+as an event, a log marker or a state flag. A native or library timer, and a deliberate fault delay,
+follow [System tests](./references/system-tests.md).
 
 ## Boundaries
 
-Stand-ins replace a boundary, never the code inside it. A test never stubs `fetch`, an HTTP client,
-or a method of the unit's own services: the path to the boundary runs for real, serialisation and
-error handling included.
+Pick a package's regime by the furthest edge its code reaches:
+
+- **Pure:** return values, temp directories and a spawned binary.
+- **HTTP-mocked:** MSW handlers over an in-memory store, as [HTTP mocking](./references/http.md)
+  describes.
+- **Real database:** the real engine, isolated per test, as [Database](./references/database.md)
+  describes.
+
+Code that records metrics, spans, error reports or logs also follows
+[Observability](./references/observability.md).
+
+Replace a boundary, never the code inside it. Never stub `fetch`, an HTTP client, or a method of the
+unit's own services: the path to the boundary runs for real, serialisation and error handling
+included.
 
 | Boundary                                        | The test uses                                                                   |
 | ----------------------------------------------- | ------------------------------------------------------------------------------- |
@@ -441,21 +474,14 @@ error handling included.
 | An SDK with a command layer                     | A stand-in at the command layer                                                 |
 | A program the repo drives over its own protocol | A stateful stand-in, as [System tests](./references/system-tests.md) describes  |
 
-A package's regime is the furthest edge its code reaches: pure (return values, temp directories, a
-spawned binary), HTTP-mocked (MSW over an in-memory store, in [HTTP mocking](./references/http.md)),
-or real database (the real engine isolated per test, in [Database](./references/database.md)). Code
-that records metrics, spans, error reports or logs also follows
-[Observability](./references/observability.md).
-
 A module that is hard to test without a stand-in takes its I/O from its caller: test the pure core
 with values, and the I/O edge against the real boundary. Take every path from the temp root and pass
 it in; never steer a module through `process.cwd()` or a `HOME` set after startup.
 
-**Infrastructure failures.** A failure branch runs on a real failure: a driver pointed at an address
+**Infrastructure failures.** Run a failure branch on a real failure: a driver pointed at an address
 where nothing listens, an MSW handler that returns the error status, or real state that makes one
-statement fail, such as a conflicting row. A spy that makes a method of a real object reject never
-appears. A branch nothing real can reach shows a missing injection point: put that dependency behind
-an injected boundary.
+statement fail, such as a conflicting row. Never use a spy that makes a method of a real object
+reject. When nothing real reaches a branch, put that dependency behind an injected boundary.
 
 **Module mocks.** `mock.module` never appears in a test file: without isolation, a module mock in
 one file applies to every file loaded after it. Two kinds are legal, each in a preload module named
@@ -465,12 +491,12 @@ one file applies to every file loaded after it. Two kinds are legal, each in a p
   that one exported setter changes;
 - a wrapper a library documents for testing, which keeps the real behaviour and adds one hook.
 
-A module mocked because of what it imports shows a defect in the import graph: fix the graph.
+When you want to mock a module because of what it imports, fix the import graph instead.
 
 ## Speed
 
-A unit test finishes in under 5 s on CI. `zgeoff/max-test-timeout` refuses a timeout above the
-file's lane limit, and `zgeoff/no-test-sleep` refuses a fixed sleep. When a test is slow, find its
+A unit test finishes in under 5 s on CI. `zgeoff/max-test-timeout` refuses a timeout above the limit
+of the file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep. When a test is slow, find its
 cause in [Slow tests and lanes](./references/slow-tests.md) and make the fix it names; never raise
-the timeout first. A lane holds only a test whose real system is the contract, never a test that is
-only slow.
+the timeout first. Move a test to a lane only when the real system it needs, such as a browser or a
+VM, can't run in the unit run. A test that is only slow stays in the unit run and gets fixed.

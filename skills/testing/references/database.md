@@ -22,8 +22,8 @@ not a reimplementation. Each test gets a database that no other test can see, an
 Each test acquires a handle from the repo's test-database util, holds it in `setupTest()`, and
 injects the handle's connection into the code under test. Code that opens its own connection escapes
 the isolation, so thread the handle's connection through instead. The util builds the schema once
-per run into a template database, from the migrations or from a schema dump, as a the slow-tests
-reference's Per-run templates section, and the util names which source it uses.
+per run into a template database, from the migrations or from a schema dump, as a per-run template,
+which the slow-tests reference describes, and the util names which source it uses.
 
 Each worker clones the template once with `CREATE DATABASE … TEMPLATE`. The clone is named after its
 process, such as `<template>_<pid>`: the util opens the clone when it exists and clones the template
@@ -45,10 +45,10 @@ it, such as `// claimJob commits the claim before it runs the job`.
 ## SQLite isolation
 
 Each test opens a copy of a migrated template file, because a fresh database pays for every
-migration in every test. The util migrates the template once per run, as a the slow-tests
-reference's Per-run templates section, and closes it or checkpoints its write-ahead log before any
-test copies it: a copy taken while migrations still sit in the log runs them again. `setupTest()`
-opens the copy and registers its cleanup with `onTestFinished`.
+migration in every test. The util migrates the template once per run, as a per-run template, which
+the slow-tests reference describes, and closes it or checkpoints its write-ahead log before any test
+copies it: a copy taken while migrations still sit in the log runs them again. `setupTest()` opens
+the copy and registers its cleanup with `onTestFinished`.
 
 - Copy the file into the test's `mkdtemp` tree when the code opens its own connection by path, or
   when the test depends on file behaviour such as a read-only connection or write-ahead logging.
@@ -62,8 +62,8 @@ production's setting and asks for it by name.
 ## Booting a service
 
 A service exposes one factory, such as `createNotesService({ db })`, that the production entrypoint
-and every test both call. Tests inject only the database. A test never copies the service's
-configuration into its own setup, because a copy drifts from production.
+and every test both call. Tests inject only the edges, such as the database and the clock. A test
+never copies the service's configuration into its own setup, because a copy drifts from production.
 
 `setupTest()` builds the database handle and boots the service through that factory. It creates no
 data, as the [testing skill](../SKILL.md#setup-and-cleanup) states. A service that refuses to start
@@ -84,7 +84,7 @@ selection to the one column under test when only that column matters. It asserts
 
 ```ts
 // archive-note.test.ts, in the module that writes the notes table
-await archiveNote(ctx.db, note.id);
+await archiveNote(ctx.db, note.id, ctx.clock.now());
 
 const row = await ctx.db
   .selectFrom('notes')
