@@ -4,7 +4,7 @@ This repo, `zgeoff/skills`, holds every agent skill of the zgeoff GitHub account
 install them with `npx skills add zgeoff/skills`, and
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) in
 `zgeoff/tools` copies some of them into other repos. Treat every skill here as one a reader in
-another repo may load: invent each example, and use no term only one repo knows.
+another repo may load: invent each example, and use no term that only one repo uses.
 
 When you change a skill here, repo-sync carries the change to the other repos in its own PRs. You
 open none of them.
@@ -25,8 +25,8 @@ When you write or edit a skill, do every step in skill-writing's "Check it" sect
 proof in the PR description under three `##` headings: "Skill checks", "Cold read" and "Deslop". The
 repo has no PR template.
 
-Under "Skill checks", give the output of `bun run check`. It runs the checks skill-writing names,
-and the README checks.
+Under "Skill checks", give the output of `bun run check`. It runs the checks in skill-writing's
+"Check it" section, and the README checks.
 
 ## Repo structure
 
