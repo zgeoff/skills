@@ -40,8 +40,9 @@ the repo's only skill.
 
 ## Checks
 
-Run `bun install` once in each new worktree. It installs the pre-commit hook, which formats the
-staged files, so write each paragraph as one line.
+Run `bun install` once in each new worktree. It installs the pre-commit hook, which runs oxfmt on
+the staged files. The formatter rewraps each Markdown paragraph at 100 columns, so you need not wrap
+prose by hand.
 
 Run these from the repo root. CI runs the same three on each pull request and each push to `main`:
 
