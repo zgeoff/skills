@@ -29,14 +29,17 @@ visibility.
   cancelled; a job skipped by design, such as the lanes of a repo without lanes, passes.
 - Public: split work into its own job only when that saves 60 s of wall time. Start at most 10 jobs
   at once. Shard tests only when the repo is still over budget.
-- Private: add a second job only for another runner (KVM, macOS) or another trigger. Run an
-  expensive check nightly or on demand. Skip a lane's step when the pull request can't affect it.
-- The workflow lint, `bun x @zgeoff/chex workflows`, holds a private repo to that rule: a heavy
-  check never runs on `pull_request` or `pull_request_target`. A heavy check is a job on any runner
-  but a GitHub-hosted Ubuntu label, or a job that sets up KVM. The lint skips the rule in a public
-  repo. In CI it reads the profile from `CHECKS_PROFILE`. In a pre-push hook, where CI sets nothing,
-  it asks `gh repo view` whether the repo is private. When `gh` can't answer, the lint applies the
-  rule and prints why.
+- Private: add a second job only for another runner (KVM, macOS) or another trigger. Run a heavy
+  check nightly or on demand. Skip a lane's step when the pull request can't affect it.
+- A heavy check is a job on any runner but a GitHub-hosted Ubuntu label, such as macOS, Windows or a
+  self-hosted runner, or a job that sets up KVM. In a private repo, never trigger one on
+  `pull_request` or `pull_request_target`.
+- `bun x @zgeoff/chex workflows` flags a heavy check on a pull request trigger in a private repo. In
+  a workflow you write by hand, set `CHECKS_PROFILE` to `public` or `private` in the job's `env:`;
+  `bun-checks.yml` sets it for you. When `CHECKS_PROFILE` is unset, as in a pre-push hook, chex runs
+  `gh repo view` to read the visibility, and treats the repo as private when that fails. The lookup
+  is in
+  [`read-checks-profile.ts`](https://github.com/zgeoff/tools/blob/main/packages/chex/src/read-checks-profile.ts).
 
 ## Timeouts
 
