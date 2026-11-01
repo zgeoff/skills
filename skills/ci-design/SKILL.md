@@ -29,8 +29,22 @@ visibility.
   cancelled; a job skipped by design, such as the lanes of a repo without lanes, passes.
 - Public: split work into its own job only when that saves 60 s of wall time. Start at most 10 jobs
   at once. Shard tests only when the repo is still over budget.
-- Private: add a second job only for another runner (KVM, macOS) or another trigger. Run an
-  expensive check nightly or on demand. Skip a lane's step when the pull request can't affect it.
+- A heavy check is a job on any runner but a GitHub-hosted `ubuntu-*` label, such as macOS, Windows,
+  a self-hosted runner or a runner group. A job on an Ubuntu runner that sets up KVM is a heavy
+  check too.
+- Private: add a second job only for a heavy check or another trigger. Skip a lane's step when the
+  pull request can't affect it.
+- Private: run a heavy check in a workflow that runs on `schedule` or `workflow_dispatch`. Never put
+  it in a workflow that runs on `pull_request` or `pull_request_target`. Each pull request would pay
+  for the heavy check's runner minutes.
+- `bun x @zgeoff/chex workflows` warns about a heavy check in a workflow with a pull request
+  trigger, and doesn't fail. It reads the workflow's `on:`, so an `if:` on the job doesn't clear the
+  warning. It applies the rule only in a private repo.
+- Set `CHECKS_PROFILE` to `public` or `private` on the step that runs `chex workflows`.
+  `bun-checks.yml` sets it on its own step. In a pre-push hook, leave it unset: chex reads the
+  visibility with `gh repo view`, which needs `gh` signed in. When that fails, chex applies every
+  rule, so a public repo can get a warning that CI doesn't give
+  ([`read-checks-profile.ts`](https://github.com/zgeoff/tools/blob/main/packages/chex/src/read-checks-profile.ts)).
 
 ## Timeouts
 
