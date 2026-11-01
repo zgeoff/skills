@@ -21,10 +21,10 @@ So give it what the code can't:
 Link the code instead of copying it, because a copy goes stale and nobody tells the agent. Keep it
 short, or the agent skims.
 
-When you write one, hand back the skill's path, the [check](#check-it) output, what a
-[cold read](../cold-read/SKILL.md) found and what [deslop](../deslop/SKILL.md) changed, and put the
-same proof in the PR description. When you review one, hand back each finding with its line and the
-rule it breaks, quoted.
+When you write or edit one, hand back the skill's path and its proof: the [check](#check-it) output,
+each [cold-read](../cold-read/SKILL.md) finding with how you answered it, and what
+[deslop](../deslop/SKILL.md) changed. Put the same proof in the PR description. When you review one,
+hand back each finding with its line and the rule it breaks, quoted.
 
 ## Key rules
 
@@ -32,14 +32,14 @@ rule it breaks, quoted.
   rhetoric.
 - [Open with the job and the key rules](#open-with-the-job-and-the-key-rules): the same opening in
   every skill.
-- [What goes in](#what-goes-in): commands and traps for machinery; stance, steps and a reply for a
-  method.
+- [What goes in](#what-goes-in): the parts each kind of skill needs, a description that says when to
+  load it, and invented examples.
 - [Point at the code, don't copy it](#point-at-the-code-dont-copy-it): link the file and say what
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): `chex prose`, `chex links` and `chex skill`, then deslop and a cold read,
-  with the proof in the PR description.
+- [Check it](#check-it): the `chex` checks, deslop and a cold read, with their proof in the PR
+  description.
 
 ## References
 
@@ -73,16 +73,19 @@ skill, this skill wins.
 Every skill opens the same way, because Claude Code and Codex summarise a long session when it runs
 out of room, and only the start of a loaded skill survives whole:
 
-1. A paragraph or two: the job, what the agent hands back, and the main traps. Write them for this
-   skill, with no stock opener, and name the traps without a count ("three traps"). A method skill
-   repeats the hand-back in a reply line at the end. A rule set has none of this: it opens with its
-   first rule, one bullet and one example per rule, and its headings are the index.
-2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Give
-   `## Key rules`, `## References` and each `###` no line.
+1. A paragraph or two: the job, what the agent hands back, if anything, and the main traps. Write
+   them for this skill, with no stock opener, and name the traps without a count ("three traps"). A
+   method skill repeats the hand-back in a reply line at the end.
+2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
+   `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
 Keep a rule's detail in its section, and change its key rules line when you change the rule.
+
+A rule set, such as a code style, opens differently. It starts with its first rule, and has no
+paragraph and no `## Key rules`: its headings are the index. Give each rule one bullet and one
+example.
 
 A reference opens with the facts and traps its reader needs first, never with when to open it. What
 to hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
@@ -90,18 +93,15 @@ subagent's return format.
 
 ## What goes in
 
-A machinery skill covers one repo's tools, such as its migrations: write its commands and its traps.
-A method skill teaches a way of working, such as finding out why code is the way it is: write its
-stance, its steps and a reply line. [Machinery and method skills](./references/skill-kinds.md) lists
-the parts of each.
+For the parts of a skill that covers a repo's tools or teaches a way of working, read
+[Machinery and method skills](./references/skill-kinds.md).
 
 Write the `description` in the third person: the agent reads it as a label, not an order. It's all
 the agent sees when it picks a skill, so say what the skill does and when to load it, in the words a
-task would use. The `name` matches the folder, `.agents/skills/<name>/`.
+task would use. The `name` matches the name of the skill's folder.
 
-A shared skill is one a sync copies into several repos, such as every skill in `zgeoff/skills`.
-Invent every example, and never use a term only one repo or team knows. A reader elsewhere can't
-open the file, or doesn't know the word.
+When a skill is copied into several repos, invent every example, and never use a term only one repo
+or team knows. A reader elsewhere can't open the file, or doesn't know the word.
 
 ## Point at the code, don't copy it
 
@@ -128,8 +128,8 @@ sentence is wrong, fix it.
 
 Keep SKILL.md under the word limit `chex skill` sets. Past it, the agent skims. When a skill grows,
 cut first, then move what only some tasks need into a reference. A rule set, such as a code style,
-gets a higher limit: mark it with `kind: rule-set` under `metadata`. A reference never links to
-another reference: an agent reads a nested file only in part.
+gets a higher limit: mark it with `kind: rule-set` under a `metadata` key in its frontmatter. A
+reference never links to another reference: an agent reads a nested file only in part.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
@@ -156,16 +156,15 @@ For one skill, run `bun x @zgeoff/chex skill .agents/skills/<skill>`.
 When a check flags a sentence you like, rewrite it so the check passes, and tell your caller which
 sentence and which check. The check may be wrong.
 
-Then run the `deslop` skill on each section you wrote or changed, and the `cold-read` skill on
-SKILL.md and each reference. The cold read fixes, then reads once more.
+Then run the `deslop` skill on each section you wrote or changed. Run the `cold-read` skill on each
+file of the skill you wrote or changed, fix what it finds, and read again as that skill says.
 
-In the PR description of a skill change, give the proof under these headings, so the reviewer sees
-each step ran:
+Give the proof in the PR description of a skill change. The reviewer then sees each step ran. Use
+these headings:
 
-- **Skill checks:** the `chex` output.
-- **Cold read:** each cold-read finding, and how you answered it: fixed, declined with the reason,
-  or reported as a gap in the rules.
-- **Deslop:** each change the deslop pass made, as a `diff` block, or "none".
+- **Skill checks:** the check output.
+- **Cold read:** each cold-read finding, from both reads, and how you answered it: fixed, declined
+  with the reason, or reported as a gap in the rules.
+- **Deslop:** each change deslop made, as a `diff` block, or "none".
 
-**Reply:** the skill's path, the check output, what the second cold read found, and what deslop
-changed.
+**Reply:** the skill's path and its proof, as the PR description gives it.
