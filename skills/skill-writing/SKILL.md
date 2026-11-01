@@ -18,12 +18,14 @@ So give it what the code can't:
 - the traps that cost an hour;
 - the reasons behind rules that look arbitrary.
 
-Link the code instead of copying it, because a copy goes stale and nobody tells the agent. Keep it
+Link the code instead of copying it: a copy goes stale without the agent knowing. Keep the skill
 short, or the agent skims.
 
-When you write one, hand back the skill's path, the [check](#check-it) output, and what a
-[cold read](../cold-read/SKILL.md) found. When you review one, hand back each finding with its line
-and the rule it breaks, quoted.
+When you write or edit one, hand back the skill's path and its proof: the [check](#check-it) output,
+each [cold-read](../cold-read/SKILL.md) finding with how you answered it, and what
+[deslop](../deslop/SKILL.md) changed. Put the same proof in the PR description, or in your reply
+when there is no PR. When you review one, hand back each finding with its line and the rule it
+breaks, quoted.
 
 ## Key rules
 
@@ -31,13 +33,19 @@ and the rule it breaks, quoted.
   rhetoric.
 - [Open with the job and the key rules](#open-with-the-job-and-the-key-rules): the same opening in
   every skill.
-- [What goes in](#what-goes-in): commands and traps for machinery; stance, steps and a reply for a
-  method.
+- [What goes in](#what-goes-in): the parts each kind of skill needs, a description that says when to
+  load it, and invented examples in a shared skill.
 - [Point at the code, don't copy it](#point-at-the-code-dont-copy-it): link the file and say what
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): `chex prose`, `chex links` and `chex skill`, then a cold read.
+- [Check it](#check-it): the `@zgeoff/chex` checks, deslop and a cold read, with their proof in the
+  PR description.
+
+## References
+
+- [Machinery and method skills](./references/skill-kinds.md): writing a new skill, or adding a
+  command, a trap, a step or a reply line to one.
 
 ## Write it plainly
 
@@ -45,29 +53,18 @@ The agent copies how you write as well as what you say.
 
 - **Say "you", and say what to do.** An agent fed a list of don'ts writes a list of don'ts.
 - **Put the reason next to any rule that needs one.** Then the agent can handle a case you didn't
-  foresee. "MUST" and "CRITICAL" can't, and agents over-apply them.
+  foresee. "MUST" and "CRITICAL" give it no reason to work from, and agents over-apply them.
 - **Make a person or the agent the subject.** "Add a trap only if…", never "a trap earns its place".
   A thing as the actor hides who does the work.
-- **Keep short lines short.** "Worth nothing on its own." Don't pad a blunt line with an
-  explanation, a qualifier or tidier grammar. The padding is what reads as machine-written.
+- **Keep short lines short.** "Slow, but right." Don't pad a blunt line with an explanation, a
+  qualifier or tidier grammar. The padding is what reads as machine-written.
 - **Cut the rhetoric.** No "X is not the job. The job is Y", no aphorisms, no drama words
   ("worthless", "critical"), no point made three ways. Say the instruction and its reason once.
 - **Put a list the agent acts on in bullets.** A list inside a sentence is hard to scan, and it
   grows one item at a time.
 
-When a section still reads oddly after two rewrites, change its structure. Cut the list or the
-numbered levels it's built on, and say the plain instruction. An invented before and after:
-
-```markdown
-<!-- before -->
-
-Guessing is not the job: anyone can guess. Take each fix as far down these levels as is cheap: 1.
-Said. 2. Pointed. 3. Ran.
-
-<!-- after -->
-
-Run the failing case again after the fix. If you can't, say how far you got.
-```
+When a section still reads oddly after two rewrites, change its structure. Drop the list it's built
+on, and say the plain instruction.
 
 The prose rules in [docs-writing](../docs-writing/SKILL.md) apply too. Where they disagree about a
 skill, this skill wins.
@@ -77,16 +74,19 @@ skill, this skill wins.
 Every skill opens the same way, because Claude Code and Codex summarise a long session when it runs
 out of room, and only the start of a loaded skill survives whole:
 
-1. A paragraph or two: the job, what the agent hands back, and the main traps. Write them for this
-   skill, with no stock opener, and name the traps without a count ("three traps"). A method skill
-   repeats the hand-back in a reply line at the end. A rule set has none of this: it opens with its
-   first rule, one bullet and one example per rule, and its headings are the index.
-2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Give
-   `## Key rules`, `## References` and each `###` no line.
+1. A paragraph or two: the job, what the agent hands back, if anything, and the main traps. Write
+   them for this skill, with no stock opener, and name the traps without a count ("three traps"). A
+   method skill repeats the hand-back in a reply line at the end.
+2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
+   `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
 Keep a rule's detail in its section, and change its key rules line when you change the rule.
+
+A rule set, such as a code style, opens differently. It starts with its first rule, and has no
+paragraph and no `## Key rules`: its headings are the index. Give each rule one bullet and one
+example.
 
 A reference opens with the facts and traps its reader needs first, never with when to open it. What
 to hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
@@ -94,45 +94,20 @@ subagent's return format.
 
 ## What goes in
 
-A machinery skill covers one repo's tools, such as its migrations. Write:
+For the parts of a skill that covers a repo's tools or teaches a way of working, read
+[Machinery and method skills](./references/skill-kinds.md).
 
-- a line on what it covers;
-- the commands, with what each needs, in a table when there's more than one;
-- the traps, each with what to do about it.
+Write the `description` in the third person: the agent reads it as a label, not an order. The
+description is all the agent sees when it picks a skill, so say what the skill does and when to load
+it, in the words a task would use. The `name` matches the name of the skill's folder.
 
-Add a trap only if an agent with the source open would still lose time to it. The invented trap
-below has a link, so it sits in a code block: `chex links` fails an invented link anywhere else.
-Write your real traps as plain bullets.
-
-```markdown
-- **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
-  process, so a test that changes a theme file calls `resetThemes()` first.
-```
-
-A method skill teaches a way of working, such as finding out why code is the way it is. Write:
-
-- the stance, and its traps;
-- who reads the agent's output, and what they do with it;
-- when both agents and the user call the skill: write for the agent by default, and put what the
-  user sees in its own section, such as "When the user asked the question";
-- the steps, with the judgment inside each;
-- a reply line, such as "**Reply:** each risk with its proof".
-
-A machinery skill says who reads its output, and ends with a reply line, only when it produces
-something, such as a report.
-
-Write the `description` in the third person: the agent reads it as a label, not an order. It's all
-the agent sees when it picks a skill, so say what the skill does and when to load it, in the words a
-task would use. The `name` matches the folder, `.agents/skills/<name>/`.
-
-A shared skill is one a sync copies into several repos, such as every skill in `zgeoff/skills`.
-Invent every example, and never use a term only one repo or team knows. A reader elsewhere can't
-open the file, or doesn't know the word.
+When a skill is copied into several repos, invent every example, and never use a term only one repo
+or team knows. A reader elsewhere can't open the file, or doesn't know the word.
 
 ## Point at the code, don't copy it
 
-When you need a name, link the file, in a sentence that says what the code doesn't: a trap, a reason
-or a choice. When someone renames the file, `chex links` fails.
+When the skill names a file, a function or a setting, link the file, in a sentence that says what
+the code doesn't: a trap, a reason or a choice. When someone renames the file, `chex links` fails.
 
 Four kinds of copy:
 
@@ -147,15 +122,14 @@ Four kinds of copy:
 - **A line anchor.** `#L42` points at the wrong line after the next edit. `chex skill` fails on one,
   so link the file and name what to look for in it.
 
-When a review asks for one of these copies, decline it and name this section. When a review shows a
-sentence is wrong, fix it.
+When a review asks for one of these copies, decline it and name this section.
 
 ## Keep it short and true
 
 Keep SKILL.md under the word limit `chex skill` sets. Past it, the agent skims. When a skill grows,
 cut first, then move what only some tasks need into a reference. A rule set, such as a code style,
-gets a higher limit: mark it with `kind: rule-set` under `metadata`. A reference never links to
-another reference: an agent reads a nested file only in part.
+gets a higher limit: mark it with `kind: rule-set` under a `metadata` key in its frontmatter. A
+reference never links to another reference: an agent reads a nested file only in part.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
@@ -171,17 +145,26 @@ Leave out anything time-bound, like "until the next release": it goes false unno
 
 ## Check it
 
-From the repo root:
+1. From the repo root, run the checks from
+   [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex):
 
-```bash
-bun x @zgeoff/chex prose links skill
-```
+   ```bash
+   bun x @zgeoff/chex prose links skill
+   ```
 
-For one skill, run `bun x @zgeoff/chex skill .agents/skills/<skill>`.
+   While you draft, `bun x @zgeoff/chex skill <skill folder>` checks one skill. When a check flags a
+   sentence you like, rewrite it so the check passes, and tell the user or your caller which
+   sentence and which check. The check may be wrong.
 
-Then run the `cold-read` skill on SKILL.md and each reference. It fixes, then reads once more.
+2. Run the `deslop` skill on each section you wrote or changed.
+3. Run the `cold-read` skill on each file of the skill you wrote or changed. Follow it through its
+   second read.
+4. Run the checks again, and give the proof in the PR description of the skill change. Add these as
+   `##` headings, after the sections of the repo's PR template:
+   - **Skill checks:** the full output of the last check run, in a code block.
+   - **Cold read:** each finding from every cold read, and how you answered it: fixed, declined with
+     the reason, or reported as a gap in the rules.
+   - **Deslop:** each change deslop made, as a `diff` block, or "none".
 
-When a check flags a sentence you like, rewrite it so the check passes. Tell the user or your caller
-which sentence and which check, because the check may be wrong.
-
-**Reply:** the skill's path, the check output, and what the second cold read found.
+**Reply:** for a skill you wrote or edited, its path and its proof; for a review, each finding with
+its line and the quoted rule.
