@@ -21,9 +21,10 @@ So give it what the code can't:
 Link the code instead of copying it, because a copy goes stale and nobody tells the agent. Keep it
 short, or the agent skims.
 
-When you write one, hand back the skill's path, the [check](#check-it) output, and what a
-[cold read](../cold-read/SKILL.md) found. When you review one, hand back each finding with its line
-and the rule it breaks, quoted.
+When you write one, hand back the skill's path, the [check](#check-it) output, what a
+[cold read](../cold-read/SKILL.md) found and what [deslop](../deslop/SKILL.md) changed, and put the
+same proof in the PR description. When you review one, hand back each finding with its line and the
+rule it breaks, quoted.
 
 ## Key rules
 
@@ -37,7 +38,13 @@ and the rule it breaks, quoted.
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): `chex prose`, `chex links` and `chex skill`, then a cold read.
+- [Check it](#check-it): `chex prose`, `chex links` and `chex skill`, then deslop and a cold read,
+  with the proof in the PR description.
+
+## References
+
+- [Machinery and method skills](./references/skill-kinds.md): writing a new skill, or adding a
+  command, a trap, a step or a reply line to one.
 
 ## Write it plainly
 
@@ -56,18 +63,7 @@ The agent copies how you write as well as what you say.
   grows one item at a time.
 
 When a section still reads oddly after two rewrites, change its structure. Cut the list or the
-numbered levels it's built on, and say the plain instruction. An invented before and after:
-
-```markdown
-<!-- before -->
-
-Guessing is not the job: anyone can guess. Take each fix as far down these levels as is cheap: 1.
-Said. 2. Pointed. 3. Ran.
-
-<!-- after -->
-
-Run the failing case again after the fix. If you can't, say how far you got.
-```
+numbered levels it's built on, and say the plain instruction.
 
 The prose rules in [docs-writing](../docs-writing/SKILL.md) apply too. Where they disagree about a
 skill, this skill wins.
@@ -94,32 +90,10 @@ subagent's return format.
 
 ## What goes in
 
-A machinery skill covers one repo's tools, such as its migrations. Write:
-
-- a line on what it covers;
-- the commands, with what each needs, in a table when there's more than one;
-- the traps, each with what to do about it.
-
-Add a trap only if an agent with the source open would still lose time to it. The invented trap
-below has a link, so it sits in a code block: `chex links` fails an invented link anywhere else.
-Write your real traps as plain bullets.
-
-```markdown
-- **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
-  process, so a test that changes a theme file calls `resetThemes()` first.
-```
-
-A method skill teaches a way of working, such as finding out why code is the way it is. Write:
-
-- the stance, and its traps;
-- who reads the agent's output, and what they do with it;
-- when both agents and the user call the skill: write for the agent by default, and put what the
-  user sees in its own section, such as "When the user asked the question";
-- the steps, with the judgment inside each;
-- a reply line, such as "**Reply:** each risk with its proof".
-
-A machinery skill says who reads its output, and ends with a reply line, only when it produces
-something, such as a report.
+A machinery skill covers one repo's tools, such as its migrations: write its commands and its traps.
+A method skill teaches a way of working, such as finding out why code is the way it is: write its
+stance, its steps and a reply line. [Machinery and method skills](./references/skill-kinds.md) lists
+the parts of each.
 
 Write the `description` in the third person: the agent reads it as a label, not an order. It's all
 the agent sees when it picks a skill, so say what the skill does and when to load it, in the words a
@@ -179,9 +153,19 @@ bun x @zgeoff/chex prose links skill
 
 For one skill, run `bun x @zgeoff/chex skill .agents/skills/<skill>`.
 
-Then run the `cold-read` skill on SKILL.md and each reference. It fixes, then reads once more.
+When a check flags a sentence you like, rewrite it so the check passes, and tell your caller which
+sentence and which check. The check may be wrong.
 
-When a check flags a sentence you like, rewrite it so the check passes. Tell the user or your caller
-which sentence and which check, because the check may be wrong.
+Then run the `deslop` skill on each section you wrote or changed, and the `cold-read` skill on
+SKILL.md and each reference. The cold read fixes, then reads once more.
 
-**Reply:** the skill's path, the check output, and what the second cold read found.
+In the PR description of a skill change, give the proof under these headings, so the reviewer sees
+each step ran:
+
+- **Skill checks:** the `chex` output.
+- **Cold read:** each cold-read finding, and how you answered it: fixed, declined with the reason,
+  or reported as a gap in the rules.
+- **Deslop:** each change the deslop pass made, as a `diff` block, or "none".
+
+**Reply:** the skill's path, the check output, what the second cold read found, and what deslop
+changed.
