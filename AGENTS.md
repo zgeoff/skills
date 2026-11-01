@@ -1,7 +1,7 @@
 # Agent Guidelines
 
-This repo is skills, the one home for Geoff's agent skills: his own user-level skills, the leaf
-skills that the fleet's playbooks call, and the shared skills that repo-sync in zgeoff/tools
+This repo is skills, the one home for the owner's agent skills: their own user-level skills, the
+leaf skills that the fleet's playbooks call, and the shared skills that repo-sync in zgeoff/tools
 delivers to other repos. People and agents install them with `npx skills add zgeoff/skills`.
 
 ## Required reading
@@ -10,6 +10,10 @@ Before you write or edit any skill or any prose in this repo, read
 [skills/skill-writing/SKILL.md](skills/skill-writing/SKILL.md) and
 [skills/docs-writing/SKILL.md](skills/docs-writing/SKILL.md). Read these copies, not an installed
 one, because the file you edit may be the one that changes the rules.
+
+Before you edit a skill, load the skill-writing, docs-writing, cold-read and deslop skills. Run the
+checks, the deslop pass and the cold read that skill-writing's "Check it" section names, and put
+their proof in the PR description under "Skill checks", "Cold read" and "Deslop".
 
 ## Repo structure
 
@@ -23,7 +27,7 @@ the repo's only skill.
 
 ## Checks
 
-Run these from the repo root. CI runs the same three on each push to `main`:
+Run these from the repo root. CI runs the same three on each pull request and each push to `main`:
 
 ```bash
 bun run format:check
@@ -43,5 +47,6 @@ those scripts sit under `skills/`.
 
 ## Commits
 
-Commit straight to `main`; this repo takes no pull requests. Write each message as a Conventional
-Commit in the imperative mood ("add X", never "added X"), with no attribution lines.
+Work on a branch and open a pull request into `main`. Write each commit message and the PR title as
+a Conventional Commit in the imperative mood ("add X", never "added X"), with no attribution lines.
+A squash merge makes the PR title the commit subject.
