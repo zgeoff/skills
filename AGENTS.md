@@ -1,10 +1,11 @@
 # Agent Guidelines
 
-This repo, `zgeoff/skills`, holds every agent skill of the zgeoff GitHub account. People and agents
-install them with `npx skills add zgeoff/skills`, and
+This repo, `zgeoff/skills`, holds every agent skill of the zgeoff GitHub account.
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) in
-`zgeoff/tools` copies some of them into other repos. Treat every skill here as one a reader in
-another repo may load: invent each example, and use no term that only one repo uses.
+`zgeoff/tools` copies some of them into the zgeoff repos, at the commit of this repo that
+`zgeoff/tools` pins. A person outside those repos installs them with `npx skills add zgeoff/skills`.
+Treat every skill here as one a reader in another repo may load: invent each example, and use no
+term that only one repo uses.
 
 When you change a skill here, repo-sync carries the change to the other repos in its own PRs. You
 open none of them.
