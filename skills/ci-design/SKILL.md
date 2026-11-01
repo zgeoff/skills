@@ -31,6 +31,12 @@ visibility.
   at once. Shard tests only when the repo is still over budget.
 - Private: add a second job only for another runner (KVM, macOS) or another trigger. Run an
   expensive check nightly or on demand. Skip a lane's step when the pull request can't affect it.
+- The workflow lint, `bun x @zgeoff/chex workflows`, holds a private repo to that rule: a heavy
+  check never runs on `pull_request` or `pull_request_target`. A heavy check is a job on any runner
+  but a GitHub-hosted Ubuntu label, or a job that sets up KVM. The lint skips the rule in a public
+  repo. In CI it reads the profile from `CHECKS_PROFILE`. In a pre-push hook, where CI sets nothing,
+  it asks `gh repo view` whether the repo is private. When `gh` can't answer, the lint applies the
+  rule and prints why.
 
 ## Timeouts
 
