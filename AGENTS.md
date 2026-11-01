@@ -1,19 +1,28 @@
 # Agent Guidelines
 
-This repo is skills, the one home for the owner's agent skills: their own user-level skills, the
-leaf skills that the fleet's playbooks call, and the shared skills that repo-sync in zgeoff/tools
-delivers to other repos. People and agents install them with `npx skills add zgeoff/skills`.
+This repo, `zgeoff/skills`, holds every agent skill of the zgeoff GitHub account. People and agents
+install them with `npx skills add zgeoff/skills`. A skill here is one of these:
+
+- a user-level skill, which a person or an agent installs for their own use;
+- a skill that the playbooks in [`zgeoff/hq`](https://github.com/zgeoff/hq) tell an agent to load;
+- a shared skill, which
+  [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) in
+  `zgeoff/tools` copies into other repos. A change to one reaches those repos only after repo-sync
+  opens its PR in each of them.
 
 ## Required reading
 
-Before you write or edit any skill or any prose in this repo, read
-[skills/skill-writing/SKILL.md](skills/skill-writing/SKILL.md) and
-[skills/docs-writing/SKILL.md](skills/docs-writing/SKILL.md). Read these copies, not an installed
-one, because the file you edit may be the one that changes the rules.
+Before you write or edit any skill or any prose in this repo, read the copies in this repo, not an
+installed one. The file you edit may be the one that changes the rules.
 
-Before you edit a skill, load the skill-writing, docs-writing, cold-read and deslop skills. Run the
-checks, the deslop pass and the cold read that skill-writing's "Check it" section names, and put
-their proof in the PR description under "Skill checks", "Cold read" and "Deslop".
+- For any prose: [skills/docs-writing/SKILL.md](skills/docs-writing/SKILL.md).
+- For a skill, also: [skills/skill-writing/SKILL.md](skills/skill-writing/SKILL.md),
+  [skills/cold-read/SKILL.md](skills/cold-read/SKILL.md) and
+  [skills/deslop/SKILL.md](skills/deslop/SKILL.md).
+
+When you write or edit a skill, do every step in skill-writing's "Check it" section. Under "Skill
+checks" in the PR description, give the output of `bun run check`. The repo has no PR template, so
+add "Skill checks", "Cold read" and "Deslop" as `##` headings.
 
 ## Repo structure
 
@@ -41,12 +50,13 @@ bun run test
 - `bun run format` rewraps Markdown at 100 columns. The pre-commit hook runs it on the staged files,
   so write each paragraph as one line.
 
-The skills tell an agent to run a check as `bun x @zgeoff/chex <check>`, and a skill's own script as
-`bash .agents/skills/<skill>/scripts/<script>`, the path in a repo that installs them. In this repo
-those scripts sit under `skills/`.
+The skills give paths for a repo that installs them, under `.agents/skills/`. In this repo, the same
+files sit under `skills/`, so run `bun x @zgeoff/chex skill skills/<skill>` in place of
+`bun x @zgeoff/chex skill .agents/skills/<skill>`.
 
 ## Commits
 
-Work on a branch and open a pull request into `main`. Write each commit message and the PR title as
-a Conventional Commit in the imperative mood ("add X", never "added X"), with no attribution lines.
-A squash merge makes the PR title the commit subject.
+Work on a branch, and open a pull request into `main`. The repo merges each PR by squash.
+
+Write each commit message and each PR title as a Conventional Commit in the imperative mood, such as
+"add X", never "added X". Add no attribution lines.
