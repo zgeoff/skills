@@ -51,10 +51,10 @@ Hand back:
    bun x @zgeoff/chex prose length links readmes skill
    ```
 
-   Expect: each check prints `cleared: <name>`. Fix each failure in a file you changed, and each
-   candidate that `chex prose` lists under "Candidates" that you judge a real fault. The cold reader
-   skips what the scripts check, so anything they would catch stays in the file. Outside a repo,
-   skip this step, and say so in your reply.
+   Fix each failure in a file you changed, and each candidate that `chex prose` lists under
+   "Candidates" that you judge a real fault. The cold reader skips what the scripts check, so
+   anything they would catch stays in the file. Outside a repo, skip this step, and say so in your
+   reply.
 
 2. Collect the rules files, and pass all of them, for a doc as well as a skill:
    - [docs-writing](../docs-writing/SKILL.md);
