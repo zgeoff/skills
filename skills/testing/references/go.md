@@ -39,7 +39,7 @@ The traps:
   packages use in a test-support package, such as `internal/testsupport`, and test it.
 - Generate byte and string inputs with Go's native fuzzer, `testing.F`. Generate operation sequences
   with a property library, such as `pgregory.net/rapid`. Keep each generated case apart, and replay
-  a failure, as the Property tests section of `references/system-tests.md` describes.
+  a failure, as [Property tests](./system-tests.md#property-tests) describes.
 
 ## Assertions
 
@@ -90,8 +90,9 @@ Control time in this order:
    `sync.Cond`. The clock stays put while a goroutine waits on real network or file I/O, on a mutex,
    or on a goroutine started outside `synctest.Test`.
 
-For a timer in another program or a path the host fixes, see the Native timers and scenario delays
-section and the Program-fixed paths and global resources section of `references/system-tests.md`.
+For a timer in another program or a path the host fixes, see
+[Native timers and scenario delays](./system-tests.md#native-timers-and-scenario-delays) and
+[Program-fixed paths and global resources](./system-tests.md#program-fixed-paths-and-global-resources).
 
 ## Real boundaries
 

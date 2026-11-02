@@ -5,6 +5,16 @@ module's own functions. Keep the seeds in the `test-utils/` folder of the module
 export them so other packages' tests can import them. When every test outside the module seeds
 through it, a schema or layout change breaks only the module and its tests.
 
+- [The seeds a module publishes](#the-seeds-a-module-publishes)
+- [Writing a seed](#writing-a-seed)
+- [Publishing seeds](#publishing-seeds)
+- [`buildSeeder` and `setupTest`](#buildseeder-and-setuptest)
+- [Calls that stay in the test](#calls-that-stay-in-the-test)
+- [Table-driven tests](#table-driven-tests)
+- [A state no code in the module makes](#a-state-no-code-in-the-module-makes)
+- [Interrupted operations](#interrupted-operations)
+- [A seed's own test](#a-seeds-own-test)
+
 Write seeds this way even in a repo whose older tests still write rows themselves, such as with
 Kysely's `insertInto`. When you change a module, move its tests onto seeds, and leave other tests as
 they are.
@@ -18,21 +28,15 @@ they are.
 - Never write rows or files directly because the module doesn't export its write function. Export
   the function from the module. An awkward import or a slow call is no reason either.
 
-Write directly in only 2 places:
+Write directly only in these places, and never in `integration/` or `e2e/`:
 
 - inside a seed, for a state that no code in the module makes, as in
   [A state no code in the module makes](#a-state-no-code-in-the-module-makes);
-- in the module's own tests, when no seed makes the state.
+- in the module's own tests, when no seed makes the state;
+- in a migration test, and in a test of code whose product is SQL or storage, such as a database
+  dialect.
 
-- [The seeds a module publishes](#the-seeds-a-module-publishes)
-- [Writing a seed](#writing-a-seed)
-- [Publishing seeds](#publishing-seeds)
-- [`buildSeeder` and `setupTest`](#buildseeder-and-setuptest)
-- [Calls that stay in the test](#calls-that-stay-in-the-test)
-- [Table-driven tests](#table-driven-tests)
-- [A state no code in the module makes](#a-state-no-code-in-the-module-makes)
-- [Interrupted operations](#interrupted-operations)
-- [A seed's own test](#a-seeds-own-test)
+You may also run a query that only sets up a failure, such as a trigger that makes a write fail.
 
 ## The seeds a module publishes
 

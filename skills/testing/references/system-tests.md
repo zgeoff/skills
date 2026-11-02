@@ -21,6 +21,11 @@ Jump to the section for your test:
 
 ## End-to-end suites
 
+Put a flow across several packages, run in one process, in `integration/`. Put tests that drive the
+built product from outside in `e2e/`: tests of the process itself, such as start-up, signals, exit
+codes and crash recovery, and one happy-path journey per main user flow. Test edge cases and denials
+in process.
+
 Give each user journey its own file in `e2e/`, such as `e2e/checkout.test.ts` beside
 `e2e/refund.test.ts`, with its own setup, scenario and cleanup. Inside a journey, you may chain acts
 and the assertions on them, because each step needs the state that the step before it left. Outside
@@ -43,9 +48,9 @@ Test a client that the repo ships, such as a CLI or an SDK, against the real ser
 repo. Give each test data that only it uses. Use a stand-in only for a host boundary that the
 runtime can't run.
 
-In the unit run, call the service in the test's process, as the cause table of
-`references/slow-tests.md` says. When the client runs as a child process, start the service on a
-real port, so the child reaches it, and put the test in `e2e/`.
+In the unit run, call the service in the test's process, as
+[the cause table](./slow-tests.md#causes-and-fixes) says. When the client runs as a child process,
+start the service on a real port, so the child reaches it, and put the test in `e2e/`.
 
 For a remote HTTP service, use MSW, as in [Boundaries](../SKILL.md#boundaries). Write a stand-in
 server on a real socket only when MSW can't intercept the call, such as:
@@ -138,10 +143,10 @@ the type checker and the linter check it.
 
 - Keep the browser lane's 10 s limit in every browser suite. Never give a browser test the disable
   comment for a test over its limit.
-- When a browser test runs longer, find its cause in the cause table of `references/slow-tests.md`.
-  Move a build out of the test and into the lane's `build:browser` script. Replace a fixed wait with
-  a wait for the element or the event. Split a test of a whole user flow into a test per component
-  or page.
+- When a browser test runs longer, find its cause in
+  [the cause table](./slow-tests.md#causes-and-fixes). Move a build out of the test and into the
+  lane's `build:browser` script. Replace a fixed wait with a wait for the element or the event.
+  Split a test of a whole user flow into a test per component or page.
 - Test a journey through the client's routes in a browser suite. Test a journey of the built
   product, through its bundle or binary, in `e2e/`, as
   [Where a test lives](../SKILL.md#where-a-test-lives) describes.
@@ -163,7 +168,7 @@ Find which kind of timer your test waits on, then follow the rules under its hea
 - Test the default value in its own test. Wait out the real default only when the runtime has no
   shorter setting that behaves the same. Wait for the timeout's event with `waitFor`, and keep the
   test in the unit run with the disable comment that the "A test over its limit" section of
-  `references/slow-tests.md` gives.
+  [Slow tests and lanes](./slow-tests.md) gives.
 
 ### A timer inside a library
 
@@ -194,6 +199,9 @@ the elapsed time is part of the contract.
 
 ## Property tests
 
+You may assert in a loop over a list the module exports, such as a table of commands, to check that
+each entry is complete, and await each case that fast-check generates in a loop.
+
 Use fast-check when the combinations of generated inputs or of operation sequences matter. For a
 fixed list of cases, use `test.each`. Await an async `fc.assert`, so a failed property fails the
 test.
@@ -212,8 +220,8 @@ test still follows the testing skill's rules on loops, branches and one act per 
 - When a property fails, fast-check prints the seed, the path and the shrunk counterexample. Replay
   the failure by passing that `seed` and `path` to `fc.assert`. When the counterexample shows
   behaviour the suite must keep, add a fixed test with it.
-- Never cut generated cases to make a suite faster. Fix the cause from the cause table of
-  `references/slow-tests.md`.
+- Never cut generated cases to make a suite faster. Fix the cause from
+  [the cause table](./slow-tests.md#causes-and-fixes).
 
 ## Evaluation suites
 
@@ -231,9 +239,13 @@ pull request, under the 5 s limit.
   code in the test and comparing it with the committed one. A suite that passes on a stale report
   checks nothing.
 - Give a test that calls a live model the `.model-api` suffix, because it replays nothing. It then
-  runs in that lane, as the Lanes section of `references/slow-tests.md` describes.
+  runs in that lane, as [Lanes](./slow-tests.md#lanes) describes.
 
 ## Golden tests
+
+Use only inline snapshots, never of a component, and only for machine output that no person works
+out, such as generated SQL. Check a hand-written value, such as a spec test vector, with an explicit
+matcher.
 
 For any pipeline whose output depends only on its input, in `evals/` or beside its module, write a
 golden test and a determinism test:
@@ -265,10 +277,9 @@ point, name the program or the spec that fixes it in a comment.
 
 ## Rust lanes
 
-Run a Rust crate's lanes through cargo-nextest, with the limits in the Lanes section of
-`references/slow-tests.md`. Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a
-folder or a file suffix does for Bun. Define the lanes in the repo's `.config/nextest.toml`, as in
-this made-up example:
+Run a Rust crate's lanes through cargo-nextest, with the limits in [Lanes](./slow-tests.md#lanes).
+Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a folder or a file suffix does
+for Bun. Define the lanes in the repo's `.config/nextest.toml`, as in this made-up example:
 
 ```toml
 [profile.default]
@@ -292,6 +303,6 @@ slow-timeout = { period = "60s", terminate-after = 1 }
   `cargo nextest run --profile <lane>`.
 - Give a test over its limit an override in its profile, with a comment that gives the time it takes
   on CI and a ticket, or `floor:` and its evidence, as the "A test over its limit" section of
-  `references/slow-tests.md` says.
+  [Slow tests and lanes](./slow-tests.md) says.
 - Never mark a lane test with `#[ignore]`. nextest runs an ignored test only with `--run-ignored`,
   which no lane's command passes, so the test stops running and no one sees.

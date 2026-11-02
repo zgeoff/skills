@@ -102,7 +102,8 @@ Separate workers and CI jobs can still run in parallel.
 ## A test that fails only in the full run
 
 When a test passes alone and fails beside others, another test leaves state behind. Find that test.
-Run each step with the flags of the repo's test script:
+When it fails only under CI's `--randomize`, rerun with the printed `--seed=<seed>` first. Run each
+step with the flags of the repo's test script:
 
 1. Run the failing test file alone, and confirm it passes.
 2. Run it with half of the other test files. Keep the half that still makes it fail, and halve it
@@ -110,7 +111,7 @@ Run each step with the flags of the repo's test script:
 3. In that file, find the state it never restores, such as a module cache, a singleton, a store or
    an override.
 4. For module state, add its reset to the test preload. For a stored row or a file, give each test
-   its own copy, as `references/database.md` describes.
+   its own copy, as [Database testing](./database.md) describes.
 
 Never reorder the tests. Never give each test unique IDs to dodge the shared state. Either one hides
 the leak until a later test fails on it.
@@ -126,10 +127,10 @@ sweep runs once per run. Remove each leftover whose PID no longer runs. `process
 throws when the process is gone. The sweep removes:
 
 - temp folders, such as a test's `HOME`;
-- the database clones that the test-database helper makes, as the Postgres isolation section of
-  `references/database.md` describes;
-- templates whose hash no longer matches their inputs, as the Per-run templates section of
-  `references/slow-tests.md` describes.
+- the database clones that the test-database helper makes, as
+  [Postgres isolation](./database.md#postgres-isolation) describes;
+- templates whose hash no longer matches their inputs, as
+  [Per-run templates](./slow-tests.md#per-run-templates) describes.
 
 Never remove the template for the current hash, or anything a run that is still going uses. Test the
 sweep on what it must keep, such as `it never removes the files of a run that is still going`.

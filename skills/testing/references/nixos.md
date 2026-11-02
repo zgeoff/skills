@@ -51,12 +51,14 @@ behaviour it checks, such as `with subtest("api restarts after a config switch")
 - Before a subtest that doesn't depend on the one before it, reset the machine to its starting
   state, or boot a fresh one. Give the reset its own subtest: dirty the state, run the reset and
   check the starting state.
-- Share an expensive VM between subtests, as the End-to-end suites section of
-  `references/system-tests.md` describes. You don't need a VM per subtest to keep them apart.
+- Share an expensive VM between subtests, as
+  [End-to-end suites](./system-tests.md#end-to-end-suites) describes. You don't need a VM per
+  subtest to keep them apart.
 - Pass `timeout=` to each driver wait, such as `wait_for_unit` or `wait_until_succeeds`. The default
   is 15 minutes, so a hang holds the run that long.
 - Run the real service, systemd and kernel in the guest. Never stub the thing under test. For
-  timers, see the Native timers and scenario delays section of `references/system-tests.md`.
+  timers, see
+  [Native timers and scenario delays](./system-tests.md#native-timers-and-scenario-delays).
 - Read each value with its own `machine.succeed` call, and compare it with the value you expect.
   Never check only that a command exited with 0.
 - When a subtest expects a refusal, run the command with `machine.execute`, and check both its exit
@@ -65,8 +67,8 @@ behaviour it checks, such as `with subtest("api restarts after a config switch")
   body cover only Bun tests.
 - The driver shuts down the VMs it starts. Wrap anything else the test script starts, such as a
   process on the host, in `try`/`finally`.
-- You may use a fixed path inside a guest. For a resource that the whole host shares, see the
-  Program-fixed paths and global resources section of `references/system-tests.md`.
+- You may use a fixed path inside a guest. For a resource that the whole host shares, see
+  [Program-fixed paths and global resources](./system-tests.md#program-fixed-paths-and-global-resources).
 
 ## CI
 

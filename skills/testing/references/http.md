@@ -11,7 +11,7 @@ never opens, so its handlers miss every request
 
 This file covers a client inside the package under test. To test a whole program, such as a CLI or a
 server, against an application in the same repo, or a call MSW can't reach, such as one from a child
-process, see the Real applications and transport section of `references/system-tests.md`.
+process, see [Real applications and transport](./system-tests.md#real-applications-and-transport).
 
 - [The server and its lifecycle](#the-server-and-its-lifecycle)
 - [Stateful handlers](#stateful-handlers)

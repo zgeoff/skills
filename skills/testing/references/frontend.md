@@ -3,8 +3,8 @@
 Render React code with React Testing Library (RTL) on happy-dom, and drive it the way a user does:
 find elements by what a user perceives, interact through `userEvent`, and assert on what the user
 sees or on the store the interaction changes. Serve server data through MSW handlers, as
-`references/http.md` describes, never through stubbed hooks. Follow the [testing skill](../SKILL.md)
-rules on setup, data and assertions throughout.
+[HTTP mocking](./http.md) describes, never through stubbed hooks. Follow the
+[testing skill](../SKILL.md) rules on setup, data and assertions throughout.
 
 Never expect a `findBy*` to reject: it waits out its whole timeout, like a sleep. To assert that an
 element stays absent, see [Queries](#queries). `bun test` can't run the React Server Components

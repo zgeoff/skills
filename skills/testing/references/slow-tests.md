@@ -35,16 +35,17 @@ Each fix in more detail:
   built once per run.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
-  kernel, which the repo's code can't set, follow the Native timers and scenario delays section of
-  `references/system-tests.md`. When that test is still over its limit, keep it in the unit run,
-  with the disable comment from [A test over its limit](#a-test-over-its-limit).
+  kernel, which the repo's code can't set, follow
+  [Native timers and scenario delays](./system-tests.md#native-timers-and-scenario-delays). When
+  that test is still over its limit, keep it in the unit run, with the disable comment from
+  [A test over its limit](#a-test-over-its-limit).
 - When the code has nothing to wait on, add an event, a log marker or a state flag, and wait on
   that.
 - To prove that something does not happen, wait for an event that comes only after it could have
   happened, such as the reply to a second request sent after the first.
 - Look for a stateful stand-in in `test-utils/` and in the repo's project-testing skill, when the
-  repo has one. When none exists, write one, as the Stateful stand-ins section of
-  `references/system-tests.md` describes.
+  repo has one. When none exists, write one, as
+  [Stateful stand-ins](./system-tests.md#stateful-stand-ins) describes.
 - To check text that a linter or a checker reads, such as a generated shell script, export the
   function that builds the text. Write a script in `scripts/` that calls the function and runs the
   binary on its output, and run the script in CI and in the pre-push hook. Never run the binary in a
@@ -81,11 +82,11 @@ place in each test that only reads it.
 - Keep it in a git-ignored folder inside the repo, such as `node_modules/.cache/`, never in `/tmp`.
   `/tmp` is tmpfs on many hosts, so it holds every file in RAM.
 - At the start of each run, remove the folders, clones and old templates that earlier runs left, as
-  the Leftovers of a killed run section of `references/cleanup.md` describes. Never remove the
+  [Leftovers of a killed run](./cleanup.md#leftovers-of-a-killed-run) describes. Never remove the
   template for the current hash, because a run that is still going may be copying it.
 
 For each engine's template, see the Postgres isolation and SQLite isolation sections of
-`references/database.md`.
+[Database testing](./database.md).
 
 ## Lanes
 
@@ -97,6 +98,8 @@ does the pre-push hook.
 In a repo that uses [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig),
 `rig init` writes the `test:<lane>` scripts, and `rig unit` leaves out every lane's files. Declare
 each lane the repo adds in `rig.config.ts`, with its suffix and limit.
+
+Put a lane's harness, such as the code that starts the browser, in a package with its own tests.
 
 In a repo without rig, do these for each lane:
 
@@ -135,8 +138,8 @@ For where CI runs each lane, see the ci-design skill.
   system and its limit, in the repo's project-testing skill. Declare it with rig or in the oxlint
   config, as above, and put the measured test times in the pull request that adds it.
 
-Run a Rust crate's lanes through cargo-nextest, as the Rust lanes section of
-`references/system-tests.md` describes.
+Run a Rust crate's lanes through cargo-nextest, as [Rust lanes](./system-tests.md#rust-lanes)
+describes.
 
 ## A test over its limit
 
