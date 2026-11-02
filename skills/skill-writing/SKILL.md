@@ -127,14 +127,19 @@ When a review asks for one of these copies, decline it and name this section.
 
 ## Keep it short and true
 
-Keep SKILL.md under the word limit `chex skill` sets. Past it, the agent skims. When a skill grows,
-cut first, then move what only some tasks need into a reference. A rule set gets a higher limit, as
-[A rule set](./references/skill-kinds.md#a-rule-set) says.
+Keep SKILL.md under the word limit `chex skill` sets, a rule set included. After a compaction,
+Claude Code brings back only the first 5,000 tokens of each skill the session loaded, and the limit
+keeps the whole skill inside that. When a skill grows, cut first, then move what only some tasks
+need into a reference. In a rule set, move only what the common task doesn't need.
 
-A reference never links to another reference, because an agent reads a nested file only in part.
-When a reference needs a fact from another one, write the other file's path and heading as plain
-text, such as "the Lanes section of `references/slow-tests.md`", so the agent opens it on purpose.
-Use the terms SKILL.md sets up without explaining them again: the agent reads SKILL.md first.
+Link a reference to a sibling's heading with a Markdown link, such as
+`[Lanes](./slow-tests.md#lanes)`, so `chex links` fails when someone renames the heading. Keep such
+links few, because an agent may read a file it reached through another reference only in part. Put a
+fact that most tasks need in SKILL.md.
+
+In a reference the main agent opens, use the terms SKILL.md sets up without explaining them again:
+the agent reads SKILL.md first. In a reference that is a subagent's brief, define every term you
+use, because the subagent never sees SKILL.md.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 

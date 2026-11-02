@@ -46,10 +46,10 @@ the user in its own section, such as "When the user asked the question".
 
 ## A rule set
 
-Mark it with `kind: rule-set` under a `metadata` key in its frontmatter, which raises its word
-limit. Keep the `#` title. Then put `## References`, when it has any, and the rule sections, one
-`##` per topic. Leave out the opening paragraph, `## Key rules`, the hand-back and the reply line:
-the agent reads a rule set for the rule that fits what it is writing, and hands nothing back.
+Mark it with `kind: rule-set` under a `metadata` key in its frontmatter. Keep the `#` title. Then
+put `## References`, when it has any, and the rule sections, one `##` per topic. Leave out the
+opening paragraph, `## Key rules`, the hand-back and the reply line: the agent reads a rule set for
+the rule that fits what it is writing, and hands nothing back.
 
 In its SKILL.md:
 
