@@ -35,8 +35,8 @@ committed prose by these rules, whatever style you use in chat.
   for one reading per sentence.
 - [What goes in](#what-goes-in): the present system, nothing a reader can get from the code, one doc
   per fact.
-- [House rules](#house-rules): name the actor, use plain names, and cut the tells of machine-written
-  prose.
+- [House rules](#house-rules): lead with what the reader does, name the actor, use plain names, and
+  cut the tells of machine-written prose.
 - [Shape the doc](#shape-the-doc): a list, a table or numbered steps where each fits.
 - [Check it](#check-it): three scripts, then a cold read.
 
@@ -108,6 +108,10 @@ rules apply to it.
 
 **Say who does what.** Name the actor. Don't make a thing act like a person ("the field says", "the
 reason does the work"). That hides who acts.
+
+**Lead with what the reader does.** Open a paragraph or a bullet with the instruction or the fact
+the reader acts on. A definition first ("A heavy check is a job that…") or a label and a colon
+("Private:") leaves the reader to work out what to do.
 
 **Use the plain name.** Call a thing what the reader already calls it. A label you made up, such as
 "a negative" for a failed check, reads as a term they should know.

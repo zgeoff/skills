@@ -28,11 +28,11 @@ Don't change any file. Run only read-only commands, such as `grep` or `git log`.
    simple: trace the flow yourself, with no subagents. Start from the function the question names,
    or the first caller of its main term.
 2. Check each claim in the caller's docs that your answer relies on against the code. Put each doc
-   the code contradicts under Traps.
+   the code contradicts under Surprises.
 3. When you can't trace a stage of the flow after reading the files where it should live, stop
-   tracing it. List it under Traps as untraced, and put a line at the top of the answer: "Untraced:
-   <the stage>". Write the rest of the answer anyway. Your caller reruns the question with that
-   stage as its own slice.
+   tracing it. List it under Surprises as untraced, and put a line at the top of the answer:
+   "Untraced: <the stage>". Write the rest of the answer anyway. Your caller reruns the question
+   with that stage as its own slice.
 
 ## The answer
 
@@ -48,8 +48,8 @@ Write these sections, in this order, each as a `##` heading. Leave out any that 
 5. **Placement**, only when your caller says the question asks where new code should live: the
    module that should own the new code, and the reason, from the owning doc or from where the code
    puts similar things.
-6. **Traps:** behaviour that surprises a reader, each doc the code contradicts, and each untraced
-   part.
+6. **Surprises:** behaviour that surprises a reader, each doc the code contradicts, and each
+   untraced part.
 
 ## Write for an agent
 
@@ -74,4 +74,4 @@ sections. The rules for an agent apply too, except prose for the flow. These cha
   line on what it adds. Put the real names on the boxes.
 - Under the frames, show the 2 or 3 snippets that hold the key steps, each in a code block.
 - **Where things live** drops out, unless your caller says the user asked for it.
-- Overview, Key concepts, Placement and Traps stay in prose.
+- Overview, Key concepts, Placement and Surprises stay in prose.

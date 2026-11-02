@@ -1,7 +1,7 @@
 # Commands
 
 One section per model, in the user's order of preference. Each section gives the model's family, its
-command and its traps. Skip a model of your own family.
+command and the mistakes to avoid with it. Skip a model of your own family.
 
 For every model:
 
@@ -60,7 +60,7 @@ Ask the user where the new model goes in the order, and add its section there. G
   `/dev/null`;
 - how the command keeps the model read-only;
 - how to set its strongest model and its effort;
-- its traps, and how long it takes to answer, once you've measured it.
+- the mistakes to avoid with it, and how long it takes to answer, once you've measured it.
 
 When the model can't run read-only, run it with its tools turned off, as its CLI help says. Put the
 diff and the files in the prompt, and ask for the command that would prove each finding.

@@ -78,7 +78,7 @@ rebuild.
 Unless the user asked to see the findings, act on them. A bare `/cold-read <path>` means act.
 
 For a skill, the cold reader answers three questions about the top of the file: does it give the
-job, the traps to avoid, and what to hand back? If any answer is "no", fix the opening first. An
+job, the mistakes to avoid, and what to hand back? If any answer is "no", fix the opening first. An
 agent decides what to do from the top.
 
 Then make a call on every item in the report, whether the cold reader got stuck, guessed, or found a
