@@ -101,9 +101,10 @@ metadata:
 - In a repo with several packages, keep `test-utils/`, `e2e/` and `integration/` out of the root. In
   a repo that is one package at the root, put all three at the root.
 - Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
-  `package.json`, with a check script that CI runs, never with a test file. A test file tests the
-  module beside it, and a config file is no module. A test may read a config file only to check it
-  against the module beside the test, as [Workflows](./references/workflows.md) shows.
+  `package.json`, on its own with a check script that CI runs, never with a test file: a test file
+  tests the module beside it. A test may still read a config file to check it against that module,
+  such as a CI matrix against the list of suites a script defines, as
+  [Workflows](./references/workflows.md) shows.
 
 ## Test shape
 
@@ -233,10 +234,12 @@ tests may write them directly, when no seed makes the state.
 ## Narrowing
 
 - No branch in a test body. Give each path its own test.
-- To check a field of a value that may be missing with a matcher that passes on `undefined` (any
-  `.not`, `toBeUndefined`, `toBeFalsy`, `toBeNil`), narrow the value with `invariant(value)` first.
-  Before any other matcher, `?.` is safe. To check that the value itself is absent, assert on it
-  directly, with no `invariant`.
+- When a value may be missing, `value?.field` reads `undefined`, and some matchers pass on
+  `undefined` without checking anything: `toBeUndefined`, `toBeFalsy`, `toBeNil`, and a `.not`
+  matcher such as `.not.toBe('archived')`. Before one of these, narrow the value with
+  `invariant(value)`, then assert on `value.field`.
+- Before any other matcher, write `value?.field`. A missing value fails that matcher.
+- To check that the value itself is absent, assert on the value, with no `invariant`.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.
 
