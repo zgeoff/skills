@@ -23,8 +23,7 @@ metadata:
 - [Boundaries](./references/boundaries.md): the stand-in for each boundary, and module mocks.
 - [Database](./references/database.md): a package that owns a schema.
 - [HTTP mocking](./references/http.md): a package that calls a remote service.
-- [Cleanup](./references/cleanup.md): cleanup helpers, cleanup order, and a test that fails only in
-  the full run.
+- [Cleanup](./references/cleanup.md): cleanup order, and a test that fails only in the full run.
 - [Observability](./references/observability.md): code that records telemetry.
 - [System tests](./references/system-tests.md): end-to-end, evaluation, property and golden tests,
   native timers, and stateful stand-ins.
@@ -57,10 +56,10 @@ metadata:
 - Give each behaviour you add or change a test through the unit's entry, the function its callers
   call, that fails when you revert the change.
 - Test the behaviour, so a refactor that keeps it leaves every test green.
-- When you change code, bring its tests in line with these rules.
+- When you change code, bring the tests you touch in line with these rules.
 - Never cut a test that checks behaviour. Never add one that checks nothing.
-- Put a helper that tests share in the package's `test-utils/` folder, with its own tests. Search
-  there before you write one.
+- Put a helper that tests share in the package's `test-utils/`, with its own tests, and search there
+  first.
 
 ## The test run
 
@@ -69,8 +68,8 @@ metadata:
 - Override an environment variable through the env helper in `test-utils/`, never by assigning
   `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
-- Pass `--no-isolate` in the test script, with every `--parallel=<N>`. Never run tests with
-  isolation.
+- Run the test script with `--parallel=<N>` and `--no-isolate`, so the files share each worker's
+  process. Never turn Bun's per-file isolation back on.
 
 ## Where a test lives
 
@@ -78,19 +77,19 @@ metadata:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
 - Put a flow across several packages in `integration/`, a test of the built product in `e2e/`, and a
   test that needs a real system, such as a browser, in a [lane](./references/slow-tests.md#lanes).
-- No other `test/`, `tests/` or `__tests__` directory. Check a config file, such as `package.json`,
-  with a script in `scripts/`, never with a test.
+- No other `test/`, `tests/` or `__tests__` directory. Check the contents of a config file, such as
+  `package.json`, with a script in `scripts/`, never with a test.
 
 ## Test shape
 
 - Write top-level `test()` calls, with no `describe`. Hooks in a `describe` couple its tests.
 - Name the behaviour a caller sees in each title, as verb, outcome, condition:
   `it rejects a title longer than 120 characters`. In a file that tests several units, start the
-  title with the unit in place of "it": `#archiveNote rejects an archived note`.
+  title with the unit: `#archiveNote rejects …`.
 - Arrange, act, assert, with no phase comments. Write one act per test. Treat an earlier act the
   test depends on, such as saving the note it archives, as arrangement, and don't assert on it.
-- Use `test.each` only for cases that differ in values, with rows of plain data or seed functions.
-  Put the value that varies in the title.
+- Use `test.each` only for cases that differ in values, with rows of plain data or seed calls. Put
+  the value that varies in the title.
 - No loop of assertions. Use `test.each`, or one collection matcher:
   `expect(listOpenNotes(store)).toSatisfyAll((note: Note) => note.archivedAt === null)`.
 
@@ -103,11 +102,10 @@ metadata:
   there. Give it no `if`, and no argument that a test's outcome depends on.
 - Create all of a test's data in the test, even when every test needs the same data. Set the time in
   each test whose code reads it.
-- Declare nothing else at module level. Inline a helper, make it a matcher, or move it to
-  `test-utils/`.
-- Keep each function that `setupTest()` returns to calls of production code, such as
-  `readNotes: () => listNotes(db)`.
-- One `setupTest()` per file, never shared.
+- Declare nothing else at module level.
+- Keep each function that `setupTest()` returns, other than the seeder, to calls of production code,
+  such as `readNotes: () => listNotes(db)`.
+- Write one `setupTest()` per file, and never share it.
 - Bind the result to one `const ctx`, never destructured.
 
 ```ts
@@ -139,24 +137,26 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 
 - When a test changes process state, register `onTestFinished` right after the change. Skip it for
   state that the preload already resets.
-- Keep tests apart with the test database's isolation and a folder per test, never a random ID.
+- Keep tests apart with the [test-database helper](./references/database.md) and a folder per test.
+  A random ID still leaves another test's rows in each list.
 
 ## Test data
 
 - Keep plain inputs inline: write the literal again in the next test, never a shared fixture or a
-  constant that only names a literal.
+  named constant.
 - Give a type that crosses a module boundary, such as an SDK result, a tested `buildMock<Type>`
   [factory](./references/factories.md) in `test-utils/` on first use. Build only plain data in a
   factory, and write nothing.
-- Give a stand-in data only: a fixed answer, `mock()`, a no-op, an answer table, or the answer-queue
-  helper in `test-utils/`. Move any logic to a tested helper there.
+- Give a stand-in, the fake that takes a boundary's place, data only: a fixed answer, `mock()`, a
+  no-op, an answer table, or the answer-queue helper in `test-utils/`. Move any logic to a tested
+  helper there.
 - No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
   default silently, where the answer-queue helper throws.
 
 ## Stored state
 
 Reach database rows and files on disk through the module that writes them. Only that module's own
-tests may write and read them directly.
+tests may write them directly, when no seed makes the state.
 
 - Read through the module's code: a read function for rows, a path helper for files. When none
   exists, add one to the module, with a test.
@@ -177,12 +177,12 @@ tests may write and read them directly.
 
 - Assert the full contract with `toStrictEqual`, with an asymmetric matcher for a field the test
   doesn't decide, such as a generated ID. Never use `toEqual`. Use `toMatchObject` only for an
-  error's code, or a raw row in the writing module's own test. After a change to stored state, one
-  `toBe` on the changed field is enough.
+  error's code, or a raw row in the writing module's own test. When you read stored state back after
+  a change, one `toBe` on the changed field is enough.
 - Assert each result on its own. Assert the parts of one result together, such as a command's exit
   code, stdout and stderr.
 - Derive the expected value from the contract, never with the unit's own calculation.
-- Never take a snapshot of a component.
+- Never take a snapshot of a component: once updated, it passes whatever renders.
 
 ## Errors
 
@@ -204,7 +204,7 @@ tests may write and read them directly.
 
 - No branch in a test body. Give each path its own test.
 - Before a matcher that passes on `undefined` (any `.not`, `toBeUndefined`, `toBeFalsy`, `toBeNil`),
-  narrow with `invariant(value)`. Elsewhere `?.` is safe. When unsure, narrow.
+  narrow with `invariant(value)`. Before any other matcher, `?.` is safe. When unsure, narrow.
 - Copy a value out of a callback and assert after the call returns: an assertion inside a callback
   that never runs passes.
 
@@ -219,18 +219,17 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
   1. an argument: `expireSessions(store, { now })`;
   2. an injected clock: `ctx.clock.advance(30_000)`;
   3. fake timers, for code the repo doesn't own, restored in `onTestFinished`.
-- When the code reads the real time and you can't pass the time in, build the expected value from
-  `Date.now()`, and assert it with a range, such as `toBeWithin`.
+- When you can't pass the time in, assert a range around `Date.now()`, such as `toBeWithin`.
 - Wait on a condition with the `waitFor` helper in `test-utils/`, never a sleep. When the code has
-  nothing to wait on, add a signal: an event, a log marker or a state flag.
+  nothing to wait on, add a signal, such as an event.
 
 ## Boundaries
 
 - Test a package against the outermost boundary it talks to: pure, with
-  [HTTP mocked](./references/http.md), or with a [real database](./references/database.md). Replace
-  the boundary, never the code inside it, such as `fetch` or the unit's own services.
-- Pass every path in from the temp root. Never steer a module through `process.cwd()` or a `HOME`
-  set after startup.
+  [HTTP mocked](./references/http.md), or with a [real database](./references/database.md). Never
+  stub `fetch`, an HTTP client or the unit's own services.
+- Pass every path in from the test's `mkdtemp` folder. Never steer a module through `process.cwd()`
+  or a `HOME` set after startup.
 - Reach a failure branch with a real failure, such as an address where nothing listens or an MSW
   handler that returns the error. Never use a spy that makes a real method reject.
 - Never call `mock.module` in a test file. It leaks into every later file in the worker.
