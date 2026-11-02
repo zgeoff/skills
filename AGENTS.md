@@ -1,29 +1,25 @@
 # Agent Guidelines
 
 This repo holds every agent skill of the zgeoff GitHub account. Write each skill for a reader in
-another repo: invent each example, and use no term that only one repo uses.
+another repo: invent each example, and never use a term that only one repo uses. Hand back a pull
+request into `main` with green CI, and for a skill change, its proof in the PR description, as
+[Skill pull requests](#skill-pull-requests) says.
 
+Never open a pull request in another repo to deliver your change.
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) in
-`zgeoff/tools` copies some of the skills into the zgeoff repos, at the commit of this repo that
-`zgeoff/tools` pins. It opens its own PRs in those repos, so open none yourself. Anyone else
-installs the skills with `npx skills add zgeoff/skills`.
+`zgeoff/tools` copies the skills each repo takes, from the commit of this repo that `zgeoff/tools`
+pins, and opens those pull requests itself. Anyone outside the zgeoff repos installs the skills with
+`npx skills add zgeoff/skills`.
 
 ## Required reading
 
-Before you write or edit any prose in this repo, read [docs-writing](skills/docs-writing/SKILL.md).
-Before you write or edit a skill, also read [skill-writing](skills/skill-writing/SKILL.md),
-[cold-read](skills/cold-read/SKILL.md) and [deslop](skills/deslop/SKILL.md). Read the copies in this
-repo. An installed copy may be out of date, and the file you edit may be the one that changes the
-rules.
+Read the copies in this repo, never an installed copy. An installed copy may be out of date, and the
+file you edit may be the one that changes the rules.
 
-## Skill pull requests
-
-When you write or edit a skill, do every step in skill-writing's "Check it" section. Then give the
-proof in the PR description under three `##` headings: "Skill checks", "Cold read" and "Deslop". The
-repo has no PR template.
-
-Under "Skill checks", give the output of `bun run check`. It runs the checks in skill-writing's
-"Check it" section, and the README checks.
+- Before you write or edit any prose, read [docs-writing](skills/docs-writing/SKILL.md).
+- Before you write or edit a skill, also read [skill-writing](skills/skill-writing/SKILL.md).
+- Before you check a skill change, read [deslop](skills/deslop/SKILL.md) and
+  [cold-read](skills/cold-read/SKILL.md). The "Check it" section of skill-writing runs both.
 
 ## Repo structure
 
@@ -35,11 +31,15 @@ The skills CLI finds a skill at `skills/<name>/SKILL.md`, and the folder name ma
 its frontmatter. Keep `SKILL.md` out of the repo root, because the CLI reads a root `SKILL.md` as
 the repo's only skill.
 
+The skills give paths for a repo that installs them, under `.agents/skills/`. In this repo the same
+files sit under `skills/`, so run `bun x @zgeoff/chex skill skills/<skill>` in place of
+`bun x @zgeoff/chex skill .agents/skills/<skill>`.
+
 ## Checks
 
-Run `bun install` once in each new worktree. It installs the pre-commit hook, which runs oxfmt on
-the staged files. The formatter rewraps each Markdown paragraph at 100 columns, so you need not wrap
-prose by hand.
+Work in a git worktree, and run `bun install` once in it. That installs the pre-commit hook, which
+runs oxfmt on the staged files and rewraps each Markdown paragraph at 100 columns. Write each
+paragraph as one line, and let the hook wrap it.
 
 Run these from the repo root. CI runs the same three on each pull request and each push to `main`:
 
@@ -49,19 +49,21 @@ bun run check
 bun run test
 ```
 
-- `bun run check` runs the [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex)
-  docs checks that [package.json](package.json) lists.
-- `bun run test` runs the test beside each script that a skill keeps in its `scripts/` folder.
+`bun run check` runs the [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex)
+checks that [package.json](package.json) lists. `bun run test` runs the test beside each script in a
+skill's `scripts/` folder.
 
-The skills give paths for a repo that installs them, under `.agents/skills/`. In this repo, the same
-files sit under `skills/`, so run `bun x @zgeoff/chex skill skills/<skill>` in place of
-`bun x @zgeoff/chex skill .agents/skills/<skill>`.
+## Skill pull requests
 
-## Commits
+When you write or edit a skill, do every step in the "Check it" section of skill-writing. In this
+repo, give the full output of `bun run check` under "Skill checks": it runs every check that section
+names. A pull request that changes no skill needs only green CI.
 
-Work on a branch, and open a pull request into `main`. Your work is done when CI is green and the PR
-description holds its proof. The repo owner reviews and merges each PR by squash.
+## Commits and pull requests
+
+Work on a branch, and open a pull request into `main`. The repo owner reviews it and squash-merges
+it.
 
 Write each commit message and each PR title as a Conventional Commit in the imperative mood, such as
 "add X", never "added X". Use the skill's folder name as the scope, or `skills` for a change to
-several skills. Add no attribution lines.
+several skills. Never add attribution lines.
