@@ -31,8 +31,9 @@ Add CI work as a package script, so `bun-checks.yml` runs it:
   each job at least a minute. In a public repo, it runs the tests in their own jobs.
 
 Look up the repo's test budget in its project-ci-design skill. The budget is the median time the CI
-tests take on a run with an empty cache: the slowest test job in a public repo, and the sum of the
-test steps in a private one. When the repo has no budget, skip each rule below that uses one.
+tests take on a run that restores no `actions/cache` entry: the slowest test job in a public repo,
+and the sum of the test steps in a private one. When the repo has no budget, skip each rule below
+that uses one.
 
 - In a public repo, write a job of your own only when it saves 60 s of wall time over a script in
   `bun-checks.yml`. Shard tests only when the repo is still over its test budget.
@@ -44,8 +45,12 @@ test steps in a private one. When the repo has no budget, skip each rule below t
 
 ## Timeouts
 
-Set `timeout-minutes` on every job. GitHub refuses the key on a job that calls a reusable workflow,
-so set the timeout of `bun-checks.yml` with the repo variable `BUN_CHECK_TIMEOUT_MINUTES`.
+Set `timeout-minutes` on every job that runs steps. GitHub refuses the key on a job that calls a
+reusable workflow, such as the `changes` job under [Path filters](#path-filters), so the called
+workflow sets its own timeouts. Set the timeout of `bun-checks.yml` with the repo variable
+`BUN_CHECK_TIMEOUT_MINUTES`. In the repo's CI workflow, pass that variable to the `timeout-minutes`
+input of `bun-checks.yml`:
+`timeout-minutes: ${{ fromJSON(vars.BUN_CHECK_TIMEOUT_MINUTES || '20') }}` under `with:`.
 
 Set the timeout to 20 minutes while the repo has no test budget, and until its tests have stayed
 within the budget for a week. Then set the timeout to twice the budget, plus the job's median time
@@ -55,14 +60,15 @@ tab. For a job with no tests, use twice its median time.
 ## Reusable workflows
 
 Share steps as a reusable workflow. A composite action's failure shows as one red line, with no step
-to point at. Check zgeoff/tools for a shared one before you write setup steps by hand, and pin it to
-the latest commit on `main`:
+to point at. Check zgeoff/tools for a shared one before you write setup steps by hand. When you add
+the call, pin it to the latest commit on `main`:
 
 ```yaml
 uses: zgeoff/tools/.github/workflows/<name>.yml@<commit> # main
 ```
 
-Never move the pin by hand. zgeoff/tools opens a pull request in each repo that moves it.
+After that, never move the pin by hand. repo-sync in zgeoff/tools opens a pull request in each repo,
+and that pull request moves the pin to the new commit.
 
 ## Step scripts
 
