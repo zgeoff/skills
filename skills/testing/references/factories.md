@@ -16,10 +16,9 @@ Watch for these mistakes:
 
 ## Writing a factory
 
-- Keep the factory in `test-utils/` of the package whose tests use it, with its own test file. When
-  the tests of another package need the same factory, copy the factory and its test file into that
-  package's `test-utils/`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Never
-  import a factory from another package.
+- Keep the factory, with its own test file, in `test-utils/` of the package whose tests use it. When
+  the tests of a second package need it, copy both files into that package's `test-utils/`, as
+  [Where a test lives](../SKILL.md#where-a-test-lives) says.
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
   `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
   resource.
@@ -67,8 +66,8 @@ Watch for these mistakes:
   }
   ```
 
-- Write one factory for a table's insert shape and another for the API type, each in the package
-  that defines its shape.
+- When a record has a database row type and a different type that the API returns, write one factory
+  for each type.
 - Call the factory in the test that uses its value. A seed may set the state its name gives, such as
   the status in `archivedNote`; no other helper presets overrides.
 
