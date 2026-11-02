@@ -158,8 +158,8 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 Reach database rows and files on disk through the module that writes them. Only that module's own
 tests may write them directly, when no seed makes the state.
 
-- Read through the module's code: a read function for rows, a path helper for files. When none
-  exists, add one to the module, with a test.
+- Outside the module's tests, read through its code: a read function for rows, a path helper for
+  files. When none exists, add one, with a test.
 - Seed through the module: `ctx.seed.archivedNote({ title: 'Groceries' })`. Write a base seed per
   kind of record, such as `note`, and one per other state, such as `archivedNote`, as
   [Seeding](./references/seeding.md) says.

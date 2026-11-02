@@ -1,8 +1,10 @@
 # Matchers
 
 Use a jest-extended matcher in place of a hand-written check, so a failure prints the received
-value. Pick one by the kind of value it checks. If `tsc` doesn't know a matcher, add
-`@zgeoff/bun-test-extended` to `compilerOptions.types` in `tsconfig.json`.
+value. Pick one by the kind of value it checks. The matchers come from `@zgeoff/bun-test-extended`.
+When a matcher throws `TypeError` at run time, list that package first in the `preload` array of
+`bunfig.toml`. When `tsc` doesn't know a matcher, add the package to `compilerOptions.types` in
+`tsconfig.json`.
 
 | Value             | Matchers                                                                                                          |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------- |

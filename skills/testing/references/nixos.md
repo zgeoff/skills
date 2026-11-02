@@ -73,8 +73,10 @@ behaviour it checks, such as `with subtest("api restarts after a config switch")
 ## CI
 
 - Build a flake check in CI by its name, with `nix build .#checks.<system>.<name>`.
-- Make the required GitHub check a job that runs on every pull request. Inside the job, pick which
-  VM tests to build, such as from the changed paths, and fail the job when one of them fails.
+- In a public repo, make the required GitHub check a job that runs on every pull request. Inside the
+  job, pick which VM tests to build, such as from the changed paths, and fail the job when one of
+  them fails. In a private repo, run VM tests on `schedule` or `workflow_dispatch`, and never make
+  them a required check, as the [ci-design](../../ci-design/SKILL.md) skill says.
 - Keep the build log of each VM test, from `nix log`, as a CI artifact. The driver writes how long
   each subtest took into the log.
 
