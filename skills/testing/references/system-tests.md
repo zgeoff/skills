@@ -21,26 +21,24 @@ Jump to the section for your test:
 
 ## End-to-end suites
 
-Put a flow across several packages, run in one process, in `integration/`. Put tests that drive the
-built product from outside in `e2e/`: tests of the process itself, such as start-up, signals, exit
-codes and crash recovery, and one happy-path journey per main user flow. Test edge cases and denials
-in process.
+[Where a test lives](../SKILL.md#where-a-test-lives) sets which tests an `e2e/` suite holds. This
+section covers the file of each `e2e/` test, and a host or service that several of them share.
 
-Give each user journey its own file in `e2e/`, such as `e2e/checkout.test.ts` beside
-`e2e/refund.test.ts`, with its own setup, scenario and cleanup. Inside a journey, you may chain acts
-and the assertions on them, because each step needs the state that the step before it left. Outside
-`e2e/`, a test still acts once.
+Give each `e2e/` test its own file, such as `e2e/checkout.test.ts` beside
+`e2e/checkout-declined.test.ts`, with its own `setupTest` and cleanup. Inside an `e2e/` test, you
+may chain acts, and assert after each one, because each act needs the state that the act before it
+left. Outside `e2e/`, a test still has one act.
 
-- To share an expensive host or service across journeys, start and stop it in an outer harness. Wire
-  everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
-- Reset the shared host or service to its starting state before each journey. When a reset can't do
-  that, build the host or service again.
-- Test the reset in the harness package's own tests. Dirty the state, run the reset, and check the
-  starting state. Do it again after a failed journey and after an interrupt, such as a `SIGINT` to
-  the process that runs the journey.
-- Test each argument and flag of a CLI through its real parser in a module test, and keep the code
-  that builds the CLI's commands importable for it. Run the built binary only in the `e2e/`
-  journeys.
+- To share an expensive host or service across `e2e/` tests, start it in the test preload's
+  `beforeAll` and stop it in `afterAll`. Wire everything else in each file's own `setupTest`, as
+  [setupTest](../SKILL.md#setuptest) says.
+- Reset the shared host or service to its starting state from each file's `setupTest`. When the host
+  or service has no reset, build it again there instead.
+- Give the reset helper its own test file in `test-utils/`. In it, dirty the state, run the reset,
+  and check the starting state. Check it the same way after an `e2e/` test that failed midway, and
+  after a `SIGINT` to the test process.
+- Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
+  that builds the CLI's commands importable for it.
 
 ## Real applications and transport
 
@@ -147,9 +145,7 @@ the type checker and the linter check it.
   [the cause table](./slow-tests.md#causes-and-fixes). Move a build out of the test and into the
   lane's `build:browser` script. Replace a fixed wait with a wait for the element or the event.
   Split a test of a whole user flow into a test per component or page.
-- Test a journey through the client's routes in a browser suite. Test a journey of the built
-  product, through its bundle or binary, in `e2e/`, as
-  [Where a test lives](../SKILL.md#where-a-test-lives) describes.
+- Test navigation across the web app's routes in a browser suite.
 - Give each browser helper of the repo's own, such as one that opens a view, its own test file.
 - Keep every test that needs no page out of a browser suite, so it runs in the fast unit run.
 

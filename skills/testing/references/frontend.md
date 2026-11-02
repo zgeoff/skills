@@ -153,9 +153,15 @@ returns a plain object by calling the handler. Test only the other branches thro
 `@tanstack/react-start/server` once, in a `register-<module>-mock.ts` preload whose stand-in reads
 from a stub store that one exported setter changes, as [Boundaries](../SKILL.md#boundaries) allows.
 
-Test the React Server Components pipeline only in a smoke suite in `e2e/` against the built app.
-`bun test` loads one module graph without the `react-server` export condition, so it can't run that
-pipeline. Run each handler path that relies on the request stub in that smoke suite too.
+React Server Components need a server module graph that is built with the `react-server` export
+condition. `bun test` builds no such graph, so no unit test can render a Server Component. When the
+app renders through Server Components, write one `e2e/` test against the built app. Load a route
+that the server renders, and check its text. This test is one of the paths that only the built
+product can run, in the smoke set that [Where a test lives](../SKILL.md#where-a-test-lives) sets.
+
+Load a route whose handler reads the request in that same `e2e/` test. The unit tests read the
+request through the stand-in above, so this test is the one place where a real request reaches the
+handler.
 
 Assert a thrown redirect on the rejection itself, with no `await`, as in the testing skill's
 [Errors](../SKILL.md#errors):
