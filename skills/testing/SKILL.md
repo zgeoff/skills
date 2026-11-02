@@ -27,7 +27,7 @@ metadata:
 - [Observability](./references/observability.md): code that records telemetry.
 - [System tests](./references/system-tests.md): end-to-end, evaluation, property and golden tests,
   native timers, and stateful stand-ins.
-- [Shell scripts](./references/shell.md): a shell script's test.
+- [Shell scripts](./references/shell.md): a script's test.
 - [Workflows](./references/workflows.md): a GitHub Actions step's logic.
 - [Claude Code mod checks](./references/claude-code-mods.md): a mod's hooks.
 
@@ -52,11 +52,11 @@ metadata:
 ## Principles
 
 - Write each test so a reader understands it from its body alone.
-- Make each test pass alone, in any order, and beside every other test.
-- Give each behaviour you add or change a test through the unit's entry, the function its callers
-  call, that fails when you revert the change.
+- Make each test pass alone and in any order.
+- Give each behaviour you add or change a test through the function the unit's callers call. The
+  test fails when you revert the change.
 - Test the behaviour, so a refactor that keeps it leaves every test green.
-- When you change code, bring the tests you touch in line with these rules.
+- Bring each test you touch in line with these rules.
 - Never cut a test that checks behaviour. Never add one that checks nothing.
 - Put a helper that tests share in the package's `test-utils/`, with its own tests, and search there
   first.
@@ -77,8 +77,8 @@ metadata:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
 - Put a flow across several packages in `integration/`, a test of the built product in `e2e/`, and a
   test that needs a real system, such as a browser, in a [lane](./references/slow-tests.md#lanes).
-- No other `test/`, `tests/` or `__tests__` directory. Check the contents of a config file, such as
-  `package.json`, with a script in `scripts/`, never with a test.
+- No other `test/`, `tests/` or `__tests__` directory. Check a config file, such as `package.json`,
+  with a script in `scripts/`, never with a test: a test needs a module beside it.
 
 ## Test shape
 
@@ -100,9 +100,9 @@ metadata:
 - In `setupTest()`, wire the temp directories, the database, the clock, servers, clients, recorders,
   the unit, and the [seeder](./references/seeding.md#buildseeder-and-setuptest). Create no data
   there. Give it no `if`, and no argument that a test's outcome depends on.
-- Create all of a test's data in the test, even when every test needs the same data. Set the time in
-  each test whose code reads it.
-- Declare nothing else at module level.
+- Create each test's data in the test, even when every test needs the same. Set the time in each
+  test whose code reads it.
+- Declare nothing at module level but imports, `setupTest()` and tests.
 - Keep each function that `setupTest()` returns, other than the seeder, to calls of production code,
   such as `readNotes: () => listNotes(db)`.
 - Write one `setupTest()` per file, and never share it.
@@ -137,8 +137,8 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 
 - When a test changes process state, register `onTestFinished` right after the change. Skip it for
   state that the preload already resets.
-- Keep tests apart with the [test-database helper](./references/database.md) and a folder per test.
-  A random ID still leaves another test's rows in each list.
+- Keep tests apart with the [test-database helper](./references/database.md) and a folder per test,
+  never with random IDs: a list query still returns the other test's rows.
 
 ## Test data
 
@@ -146,10 +146,10 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
   named constant.
 - Give a type that crosses a module boundary, such as an SDK result, a tested `buildMock<Type>`
   [factory](./references/factories.md) in `test-utils/` on first use. Build only plain data in a
-  factory, and write nothing.
-- Give a stand-in, the fake that takes a boundary's place, data only: a fixed answer, `mock()`, a
-  no-op, an answer table, or the answer-queue helper in `test-utils/`. Move any logic to a tested
-  helper there.
+  factory, and write no rows or files.
+- Give a fake that replaces a boundary data only: a fixed answer, `mock()`, a no-op, a map from
+  input to answer, or the answer-queue helper in `test-utils/`. Move any logic to a tested helper
+  there.
 - No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
   default silently, where the answer-queue helper throws.
 
@@ -179,8 +179,8 @@ tests may write them directly, when no seed makes the state.
   doesn't decide, such as a generated ID. Never use `toEqual`. Use `toMatchObject` only for an
   error's code, or a raw row in the writing module's own test. When you read stored state back after
   a change, one `toBe` on the changed field is enough.
-- Assert each result on its own. Assert the parts of one result together, such as a command's exit
-  code, stdout and stderr.
+- Assert each result in its own `expect`, and the parts of one result in one `expect`, such as a
+  command's exit code, stdout and stderr.
 - Derive the expected value from the contract, never with the unit's own calculation.
 - Never take a snapshot of a component: once updated, it passes whatever renders.
 
@@ -196,7 +196,7 @@ tests may write them directly, when no seed makes the state.
 
 ## Access rules
 
-- Test that the allowed caller succeeds and that another caller is refused, named in the title:
+- Test that the allowed caller succeeds, and that another caller is refused, named in its title:
   `it rejects a note owned by another user`.
 - When a read hides a record, assert the hidden result, such as `toBeNull()`.
 
@@ -204,9 +204,9 @@ tests may write them directly, when no seed makes the state.
 
 - No branch in a test body. Give each path its own test.
 - Before a matcher that passes on `undefined` (any `.not`, `toBeUndefined`, `toBeFalsy`, `toBeNil`),
-  narrow with `invariant(value)`. Before any other matcher, `?.` is safe. When unsure, narrow.
-- Copy a value out of a callback and assert after the call returns: an assertion inside a callback
-  that never runs passes.
+  narrow with `invariant(value)`. Before any other matcher, `?.` is safe.
+- Copy a value out of a callback and assert after the call returns: an assertion in a callback that
+  never runs passes.
 
 ## Matchers
 
@@ -225,7 +225,7 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 
 ## Boundaries
 
-- Test a package against the outermost boundary it talks to: pure, with
+- Test a package at the outermost boundary it talks to: with no I/O, with
   [HTTP mocked](./references/http.md), or with a [real database](./references/database.md). Never
   stub `fetch`, an HTTP client or the unit's own services.
 - Pass every path in from the test's `mkdtemp` folder. Never steer a module through `process.cwd()`
