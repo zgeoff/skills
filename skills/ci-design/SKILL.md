@@ -137,28 +137,38 @@ if: >-
 
 ## First-party packages
 
-Exclude each package under `@zgeoff/`, `@impz/`, `@wringer/` or `@heynixie/` from the release-age
-wait in `bunfig.toml`, by its full name, such as `@zgeoff/std`. These are the scopes in
+Add each package under `@zgeoff/`, `@impz/`, `@wringer/` or `@heynixie/` to the
+`minimumReleaseAgeExcludes` list in `bunfig.toml`, by its full name, such as `@zgeoff/std`. These
+are the scopes in
 [`first-party-scopes.ts`](https://github.com/zgeoff/tools/blob/main/packages/chex/src/dependency-gates/first-party-scopes.ts).
-Renovate bumps these packages as soon as they publish, and `bun install` refuses each new release
-that has no exclude. A repo that sets no `minimumReleaseAge` needs no exclude.
+`minimumReleaseAge` in the same file makes `bun install` refuse each release younger than that age,
+and an excluded package skips that wait. Renovate bumps these packages as soon as they publish, so
+each new release fails to install without an exclude. A repo that sets no `minimumReleaseAge` skips
+this section.
 
 - Exclude each one the lock file installs, even one that only another package depends on.
   `chex dependency-gates` names each one that has no exclude.
-- Never write a scope, such as `@zgeoff/*`. Bun accepts it with no warning, and it lets no package
-  through.
-- Give the exclude no removal comment. The audit-fix workflow deletes an exclude on the date in its
-  comment.
+- Never write a scope, such as `@zgeoff/*`. Bun accepts a scope entry with no warning, and the entry
+  lets no package through.
+- Never put a dated removal comment above a first-party exclude. The audit-fix workflow deletes an
+  exclude on the date in that comment.
 - Add a missing exclude in its own pull request on `main`, because Renovate rebuilds its own branch
   and drops your commit. After it merges, tick the rebase checkbox in each red Renovate pull
   request.
 
 ## Dependency exceptions
 
-For any other package, add a release-age exclude in `bunfig.toml`, or an override or an audit ignore
-in `package.json`, only for a named reason, such as a fix the repo needs. If an older release works,
-pin the newest one that is older than the `minimumReleaseAge` in `bunfig.toml` instead. Scope each
-exception to one package and one exact version.
+For any other package, add an exception only for a named reason, such as a fix the repo needs. If an
+older release works, pin the newest one that is older than `minimumReleaseAge`, and add no
+exception. An exception is one of these:
+
+- A release-age exclude: the package's name in `minimumReleaseAgeExcludes`, for one exact version
+  that the catalog or the override pins.
+- An override: an entry in the `overrides` of `package.json`, pinned to one exact version. It needs
+  no comment.
+- An audit ignore: an `--ignore` flag on the `audit` script in `package.json`, for one advisory ID.
+  Give it an entry in the root `audit-ignores.json`, keyed by that advisory ID, with its `package`,
+  its `reason` and an ISO `expires` date, so the audit-fix workflow audits it again.
 
 Before you add a release-age exclude, check that the release has npm provenance:
 
@@ -167,13 +177,21 @@ npm view <package>@<version> dist.attestations.provenance
 ```
 
 If it prints nothing, the release has no provenance. Don't exclude it: pin an older release, or wait
-until this one is older than `minimumReleaseAge`. Above the exclude, add the removal comment that
-the [audit-fix workflow](https://github.com/zgeoff/tools/blob/main/.github/workflows/audit-fix.yml)
-writes for the excludes it adds, with the date the release passes `minimumReleaseAge`:
+until this one is older than `minimumReleaseAge`.
+
+Above a release-age exclude, add the dated removal comment that the
+[audit-fix workflow](https://github.com/zgeoff/tools/blob/main/.github/workflows/audit-fix.yml)
+writes. Give the date the release passes `minimumReleaseAge`. Keep the comment's wording as it is,
+"ages past the gate" included, because the audit-fix workflow and the check match it exactly:
 
 ```toml
 # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then
 ```
 
-`chex dependency-gates` runs in `bun-checks.yml`, and fails on an exclude past its date, an override
-the lock file already meets, or an audit ignore that no locked package needs.
+`chex dependency-gates` runs in `bun-checks.yml`. It fails on each of these:
+
+- A release-age exclude past its date, or with no removal comment. A first-party exclude passes with
+  no comment.
+- A first-party package with no exclude.
+- An override that changes nothing, because every locked version already meets it.
+- An audit ignore that no locked package needs.
