@@ -79,69 +79,36 @@ Write it as a rule set: `kind: rule-set` under `metadata`, the `#` title, `## Re
 has any, and the bullet rules in [A rule set](#a-rule-set). Then write these sections, in this
 order:
 
-1. `## Facts`: a table with the columns Fact and Value. Give it the rows that
-   [Facts rows](#facts-rows) lists for the shared skill, in the same order. Write "none" in a row
-   that doesn't apply, so the reader sees the gap. When a row holds several items, such as two
-   lanes, separate them with semicolons in its one cell. Link the file that holds a value, from
-   `../../../`, the repo root. Leave a value that lives in GitHub's settings, such as a repo
-   variable, unlinked.
+1. `## Facts`, in project-ci-design and project-testing only: a table with the columns Fact and
+   Where, and the rows below, in that order. Write "none" in a row that doesn't apply.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
    every rule. In project-code-style, put each stricter rule in a topic section, because
    [code-style](../../code-style/SKILL.md) lets a repo add rules. List a departure only for code
    whose shape another tool sets, such as a plugin that a host's API shapes.
 3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
-   test harness or a test helper. When a fact in the table needs more than its cell, such as how to
-   start a lane's real system, explain it here.
+   test harness or a test helper.
 
 Never repeat a rule the shared skill states. The agent reads both, and two copies drift apart.
 
 ### Facts rows
 
-The Values below say what to write, and hold no links to copy. The terms come from the shared
-skills: a test budget and a heavy check from [Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and
-a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing. Beside a rule set this
-section leaves out, add its rows here first, in a pull request to this repo.
+Give a row a value only when no file in the repo holds it, such as the test budget. Otherwise say
+where the fact lives: link the file, from `../../../`, the repo root, and name the key or the
+command that shows it. A pointer stays true when the value changes, and `chex links` fails when the
+file moves.
 
-project-ci-design:
+Leave out a fact the agent finds in one step, such as a script in `package.json` or a command in
+AGENTS.md. The terms come from the shared skills: a test budget from
+[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and a lane from
+[Lanes](../../testing/references/slow-tests.md#lanes) in testing.
 
-| Fact                        | Value                                                                                       |
-| --------------------------- | ------------------------------------------------------------------------------------------- |
-| Visibility                  | public or private                                                                           |
-| Test budget                 | the median CI test time, as ci-design defines it                                            |
-| `BUN_CHECK_TIMEOUT_MINUTES` | the repo variable that sets the timeout of `bun-checks.yml`                                 |
-| `BUN_CHECK_SCRIPTS`         | the repo variable that lists the scripts `bun-checks.yml` runs                              |
-| Required checks             | the checks the branch ruleset of `main` requires                                            |
-| Heavy checks                | each heavy check, with its runner and its trigger                                           |
-| Reusable workflow pin       | how the repo pins the reusable workflows; name the file, never the commit, which goes stale |
-
-project-testing:
-
-| Fact         | Value                                                              |
-| ------------ | ------------------------------------------------------------------ |
-| Test command | the command that runs the unit tests                               |
-| Test timeout | the per-test timeout of the unit run                               |
-| Lanes        | each lane's suffix or folder, its real system and its test timeout |
-| Test preload | the `preload` entries in `bunfig.toml`                             |
-| Test utils   | the folder to search before you write a test helper                |
-| Isolation    | `--isolate` or `--no-isolate`, as the test command passes it       |
-
-project-code-style:
-
-| Fact               | Value                                                                         |
-| ------------------ | ----------------------------------------------------------------------------- |
-| Lint command       | the command to lint locally, and each lint CI runs that you don't run locally |
-| Lint config        | the lint config file                                                          |
-| Format command     | the command that formats the repo                                             |
-| Type-check command | the command that type-checks the repo                                         |
-
-project-docs-writing:
-
-| Fact        | Value                                    |
-| ----------- | ---------------------------------------- |
-| Docs index  | the file that lists the repo's docs      |
-| Design docs | the folder that holds design docs        |
-| Prose check | the command that checks the repo's prose |
+| Project skill     | Fact            | Where                                                                    |
+| ----------------- | --------------- | ------------------------------------------------------------------------ |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                       |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires            |
+| project-testing   | Lanes           | the config that declares each lane's suffix or folder and its time limit |
+| project-testing   | Test utils      | the folder to search before you write a test helper                      |
 
 A made-up project-ci-design skill:
 
@@ -159,15 +126,10 @@ metadata:
 
 ## Facts
 
-| Fact                        | Value                                                                                               |
-| --------------------------- | --------------------------------------------------------------------------------------------------- |
-| Visibility                  | private                                                                                             |
-| Test budget                 | 90 s                                                                                                |
-| `BUN_CHECK_TIMEOUT_MINUTES` | 10                                                                                                  |
-| `BUN_CHECK_SCRIPTS`         | `check test`                                                                                        |
-| Required checks             | `checks`                                                                                            |
-| Heavy checks                | [`tide-e2e`](../../../.github/workflows/tide-e2e.yml): KVM runner, nightly                          |
-| Reusable workflow pin       | a commit on `main`, in [`checks.yml`](../../../.github/workflows/checks.yml); zgeoff/tools moves it |
+| Fact            | Where                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------- |
+| Test budget     | 90 s                                                                                  |
+| Required checks | `gh api repos/acme/ledgerlark/rules/branches/main`, the `required_status_checks` rule |
 
 ## Departures
 
