@@ -2,10 +2,10 @@
 name: how
 description:
   "Explains how a subsystem, a flow or a piece of code works, at the level a senior engineer needs
-  before changing it: what it is, its parts, the flow step by step, where each part lives, and the
-  traps. Reads the repo's docs first and reports where they differ from the code. Load it for 'how
-  does X work', a walkthrough before a change, and 'where should this live' or 'which layer owns
-  this'. For why something is built a certain way, load the why skill."
+  before changing it: what it is, its parts, the flow step by step, where each part lives, and
+  the  surprises. Reads the repo's docs first and reports where they differ from the code. Load it
+  for 'how does X work', a walkthrough before a change, and 'where should this live' or 'which layer
+  owns this'. For why something is built a certain way, load the why skill."
 ---
 
 # How
@@ -29,7 +29,7 @@ answer, written for the agent or for the user, as [Answer](#answer) and
 - [Simple or complex](#simple-or-complex): one explainer for a simple question; 2 to 4 explorers,
   then one explainer, for a complex one.
 - [Answer](#answer): up to six sections, real names and paths, with stale docs and untraced stages
-  under Traps.
+  under Surprises.
 - [When the user asked the question](#when-the-user-asked-the-question): tell the explainer, which
   then draws the flow in frames, and keeps "Where things live" only when the user asked for it.
 - [Asked twice](#asked-twice): when the question came up before, offer to put the answer in the

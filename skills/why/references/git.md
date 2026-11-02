@@ -6,7 +6,7 @@ your return, such as Gaps and Leads.
 Commits and PRs hold the written reason closest to the code. Run steps 3 to 5 on the anchor's
 commits and PRs first. Then go back to the commit that added the target.
 
-Traps:
+Mistakes to avoid:
 
 - **The first commit listed is the newest.** `git log` lists newest first, and the newest commit may
   only move or rename the code. Add `--reverse` and read from the top.

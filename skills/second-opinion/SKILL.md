@@ -32,8 +32,8 @@ a diagnosis and a judge, and the **Reply** line at the end gives the shape for e
 
 ## References
 
-- [Commands](./references/commands.md): the command for each model you can ask, its traps, and how
-  to add a model.
+- [Commands](./references/commands.md): the command for each model you can ask, the mistakes to
+  avoid with it, and how to add a model.
 
 ## When to ask
 

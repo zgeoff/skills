@@ -18,10 +18,10 @@ Write:
 - a line on what it covers;
 - the commands, in a table when there's more than one, each with what it needs to run, such as a
   running database or an environment variable;
-- the traps, each as a bullet that gives the fact and then what to do about it.
+- the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
 
-Add a trap only if an agent with the source open would still lose time to it. A made-up example of a
-trap worth adding:
+Add a mistake only if an agent with the source open would still lose time to it. A made-up example
+of a mistake worth adding:
 
 ```markdown
 - **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per

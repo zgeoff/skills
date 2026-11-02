@@ -15,7 +15,7 @@ So give it what the code can't:
 
 - when to reach for the skill;
 - which commands to run, and what each needs;
-- the traps that cost an hour;
+- the mistakes that cost an hour;
 - the reasons behind rules that look arbitrary.
 
 Link the code instead of copying it: a copy goes stale without the agent knowing. Keep the skill
@@ -45,7 +45,7 @@ line and the rule it breaks, quoted.
 ## References
 
 - [Kinds of skill](./references/skill-kinds.md): writing a new skill, writing a rule set, or adding
-  a command, a trap, a step or a reply line to any skill.
+  a command, a mistake to avoid, a step or a reply line to any skill.
 
 ## Write it plainly
 
@@ -54,8 +54,8 @@ The agent copies how you write as well as what you say.
 - **Say "you", and say what to do.** An agent fed a list of don'ts writes a list of don'ts.
 - **Put the reason next to any rule that needs one.** Then the agent can handle a case you didn't
   foresee. "MUST" and "CRITICAL" give it no reason to work from, and agents over-apply them.
-- **Make a person or the agent the subject.** "Add a trap only if…", never "a trap earns its place".
-  A thing as the actor hides who does the work.
+- **Make a person or the agent the subject.** "Add a mistake only if…", never "a mistake earns its
+  place". A thing as the actor hides who does the work.
 - **Use the plain name.** Don't coin a label and then define it ("the owner is the module that…").
   Say the plain thing each time.
 - **Keep short lines short.** "Slow, but right." Don't pad a blunt line with an explanation, a
@@ -76,9 +76,9 @@ skill, this skill wins.
 Every skill but a rule set opens the same way, because the agent decides what to do from the top of
 a skill:
 
-1. A paragraph or two: the job, what the agent hands back, if anything, and the main traps. Write
-   them for this skill, with no stock opener, and name the traps without a count, never "three
-   traps". When a skill hands something back, repeat it in a reply line at the end.
+1. A paragraph or two: the job, what the agent hands back, if anything, and the main mistakes to
+   avoid. Write them for this skill, with no stock opener, and name the mistakes without a count,
+   never "three mistakes". When a skill hands something back, repeat it in a reply line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
@@ -89,9 +89,9 @@ Keep a rule's detail in its section, and change its key rules line when you chan
 Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
 says. It holds rules the agent applies during other work, so it has no job to open with.
 
-Open a reference with the facts and traps the agent needs first, never with when to open it. What to
-hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
-subagent's return format.
+Open a reference with the facts and the mistakes to avoid, never with when to open it. What to hand
+back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that subagent's
+return format.
 
 ## What goes in
 
@@ -108,7 +108,8 @@ knows. A reader elsewhere can't open a file the example names, or doesn't know t
 ## Point at the code, don't copy it
 
 When the skill names a file, a function or a setting, link the file, in a sentence that says what
-the code doesn't: a trap, a reason or a choice. When someone renames the file, `chex links` fails.
+the code doesn't: a mistake to avoid, a reason or a choice. When someone renames the file,
+`chex links` fails.
 
 Four kinds of copy:
 

@@ -71,7 +71,7 @@ at any time.
   applies to it, such as a `patch-package` or `bun patch` file. The docs and the code don't always
   agree.
 - **Timing.** What runs in a microtask, on teardown or on unmount, and in what order. When the repo
-  has skills on its framework, load them for the timing traps.
+  has skills on its framework, load them for the timing mistakes to avoid.
 - **What a symbol search misses.** The JSON an API returns, a database column, a wire format,
   another language reading the same bytes, a feature flag and a config key. Search for each one's
   string form, such as a JSON key or a column name, across every file type.
