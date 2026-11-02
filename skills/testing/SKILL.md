@@ -67,7 +67,8 @@ metadata:
   test, never by assigning `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
 - Run the test script with `--parallel=<N>` and `--no-isolate`, so the files share each worker's
-  process. Never turn Bun's per-file isolation back on.
+  process. `<N>` is the worker count that the host's cores and memory allow; in a repo that runs its
+  tests with the `rig` runner, `rig unit` sets it. Never turn Bun's per-file isolation back on.
 
 ## Where a test lives
 
@@ -164,9 +165,13 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 - Give a type that crosses a module boundary, such as an SDK result, a tested `buildMock<Type>`
   [factory](./references/factories.md) in `test-utils/` on first use. Build only plain data in a
   factory, and write no rows or files.
-- Give a fake that replaces a boundary data only: a fixed answer, `mock()`, a no-op, a map from
-  input to answer, or the answer-queue helper in `test-utils/`. Move any logic to a tested helper
-  there.
+- Build a stand-in for a boundary from data only. Use one of these:
+  - a fixed answer;
+  - `mock()`;
+  - a no-op;
+  - a map from input to answer;
+  - the answer-queue helper in `test-utils/`.
+- Move any logic in a stand-in to a tested helper in `test-utils/`.
 - No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
   default silently, where the answer-queue helper throws.
 
@@ -209,7 +214,8 @@ tests may write them directly, when no seed makes the state.
   or write `invariant()` from `tiny-invariant`.
 - Never assert in a `try`/`catch`: when nothing throws, nothing is asserted.
 - Write `.rejects` and `.resolves` without `await`, because Bun settles them inside the matcher.
-  Always `await` `toResolve()` and `toReject()`.
+  Always `await` `toResolve()` and `toReject()`: they return a promise, and a test that doesn't
+  await it ends before the check runs.
 
 ## Access rules
 
@@ -242,9 +248,12 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 
 ## Boundaries
 
-- Test a package at the outermost boundary it talks to: with no I/O, with
-  [HTTP mocked](./references/http.md), or with a [real database](./references/database.md). Never
-  stub `fetch`, an HTTP client or the unit's own services.
+- Pick the setup by what the code under test reaches:
+  - When it does no I/O, pass it plain values.
+  - When it calls a remote service, answer the requests with MSW, as
+    [HTTP mocking](./references/http.md) describes.
+  - When it uses a database, run it against a [real database](./references/database.md).
+- Never stub `fetch`, an HTTP client or the unit's own services.
 - Pass every path in from the test's `mkdtemp` folder. Never steer a module through `process.cwd()`
   or a `HOME` set after startup.
 - Reach a failure branch with a real failure, such as an address where nothing listens or an MSW
@@ -254,4 +263,5 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 ## Speed
 
 - Keep each unit test under 5 s on CI. When one is slower, fix its cause from the
-  [slow-tests table](./references/slow-tests.md). Never raise the timeout or move it to a lane.
+  [slow-tests table](./references/slow-tests.md). Never raise the timeout. Never move a test to a
+  lane only because it is slow.
