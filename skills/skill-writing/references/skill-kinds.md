@@ -87,9 +87,9 @@ order:
    variable, unlinked.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
-   every rule. In project-code-style, always write "None.": the
-   [code-style](../../code-style/SKILL.md) skill lets a repo add stricter rules but never replace
-   one, so put each stricter rule in a topic section.
+   every rule. In project-code-style, put each stricter rule in a topic section, because
+   [code-style](../../code-style/SKILL.md) lets a repo add rules. List a departure only for code
+   whose shape another tool sets, such as a plugin that a host's API shapes.
 3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
    test harness or a test helper. When a fact in the table needs more than its cell, such as how to
    start a lane's real system, explain it here.
