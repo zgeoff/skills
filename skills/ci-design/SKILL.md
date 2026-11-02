@@ -30,10 +30,10 @@ Add CI work as a package script, so `bun-checks.yml` runs it:
 - In a private repo, it runs every script as a step of the one `checks` job, because GitHub bills
   each job at least a minute. In a public repo, it runs the tests in their own jobs.
 
-Look up the repo's test budget in its project-ci-design skill. The budget is the median time the CI
-tests take on a run that restores no `actions/cache` entry: the slowest test job in a public repo,
-and the sum of the test steps in a private one. When the repo has no budget, skip each rule below
-that uses one.
+Look up the repo's test budget in the Facts table of its project-ci-design skill. The budget is the
+median time the CI tests take on a run that restores no `actions/cache` entry: the slowest test job
+in a public repo, and the sum of the test steps in a private one. When the repo has no budget, skip
+each rule below that uses one.
 
 - In a public repo, write a job of your own only when it saves 60 s of wall time over a script in
   `bun-checks.yml`. Shard tests only when the repo is still over its test budget.

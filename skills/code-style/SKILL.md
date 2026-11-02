@@ -3,7 +3,8 @@ name: code-style
 description:
   "Code style for zgeoff TypeScript repos: file layout, names, state, unions, types, structure,
   errors, comments, and the function-name verb table. Load it before you write, review or rename
-  TypeScript, with the repo's project-code-style skill beside it, which only adds stricter rules."
+  TypeScript, with the repo's project-code-style skill beside it, for its stricter rules and its
+  departures."
 metadata:
   kind: rule-set
 ---

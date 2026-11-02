@@ -135,8 +135,9 @@ For where CI runs each lane, see the ci-design skill.
   such as a made-up `.kvm` for a test that boots a VM.
 - Add a lane of the repo's own only for a real system from the list in
   [A real system in the unit run](#a-real-system-in-the-unit-run). List the lane, with its real
-  system and its limit, in the repo's project-testing skill. Declare it with rig or in the oxlint
-  config, as above, and put the measured test times in the pull request that adds it.
+  system and its limit, in the Facts table of the repo's project-testing skill. Declare it with rig
+  or in the oxlint config, as above, and put the measured test times in the pull request that adds
+  it.
 
 Run a Rust crate's lanes through cargo-nextest, as [Rust lanes](./system-tests.md#rust-lanes)
 describes.

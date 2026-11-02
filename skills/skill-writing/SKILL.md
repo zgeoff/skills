@@ -44,8 +44,8 @@ line and the rule it breaks, quoted.
 
 ## References
 
-- [Kinds of skill](./references/skill-kinds.md): writing a new skill, writing a rule set, or adding
-  a command, a mistake to avoid, a step or a reply line to any skill.
+- [Kinds of skill](./references/skill-kinds.md): writing a new skill, a rule set or a project skill,
+  or adding a command, a mistake to avoid, a step or a reply line to any skill.
 
 ## Write it plainly
 
@@ -95,8 +95,8 @@ return format.
 
 ## What goes in
 
-For the parts of a skill that covers a repo's tools or teaches a way of working, read
-[Kinds of skill](./references/skill-kinds.md).
+For the parts of a skill that covers a repo's tools, teaches a way of working or is a project skill,
+read [Kinds of skill](./references/skill-kinds.md).
 
 Write the `description` in the third person: the agent reads it as a label, not an order. The
 description is all the agent sees when it picks a skill, so say what the skill does and when to load

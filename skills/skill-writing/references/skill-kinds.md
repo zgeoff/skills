@@ -2,11 +2,16 @@
 
 Pick the kind before you write. A machinery skill and a method skill keep the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. A
-rule set leaves that opening out.
+rule set and a project skill leave that opening out.
 
-- A machinery skill covers one repo's tools, such as its migrations or its deploy scripts.
-- A method skill teaches a way of working, such as finding out why code is the way it is.
-- A rule set, such as a code style, holds rules the agent applies while it writes something else.
+- [A machinery skill](#a-machinery-skill) covers one repo's tools, such as its migrations or its
+  deploy scripts.
+- [A method skill](#a-method-skill) teaches a way of working, such as finding out why code is the
+  way it is.
+- [A rule set](#a-rule-set), such as a code style, holds rules the agent applies while it writes
+  something else.
+- [A project skill](#a-project-skill) holds one repo's facts for a rule set from this skills repo,
+  and the rules the repo replaces, such as project-testing beside testing.
 
 When a skill has a reply line, make it the last line. It starts with "**Reply:**" and names what the
 agent hands back, such as "**Reply:** each risk with its proof".
@@ -35,8 +40,8 @@ something for a reader, such as a report, say who reads it, and end with a reply
 
 Write:
 
-- the stance: the attitude you want the agent to take to the work, such as "treat a comment as stale
-  until the code agrees with it", and the mistakes it keeps the agent from;
+- the attitude you want the agent to take to the work, such as "treat a comment as stale until the
+  code agrees with it", and the mistakes it keeps the agent from;
 - who reads the agent's output, and what they do with it;
 - numbered steps, each with the decision the agent makes in it, such as when to stop;
 - a reply line.
@@ -60,3 +65,78 @@ In its SKILL.md:
   and a noun, such as "A factory builds…".
 - Give an example when the agent would otherwise guess the shape, such as a file name or a call.
 - Write a short paragraph and a code block for a rule that needs more than a bullet.
+
+## A project skill
+
+Write a project skill in the repo it describes, at `.claude/skills/project-<name>/SKILL.md`, where
+`<name>` is the shared rule set it sits beside, such as `project-testing` beside testing.
+[Repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) copies the
+shared skills from this repo into the same `.claude/skills/` folder, and never touches a `project-`
+folder. The agent loads both, and where they disagree, the project skill wins. Read the shared skill
+before you write, so you know which rules the repo replaces and which it follows.
+
+Write it as a rule set: `kind: rule-set` under `metadata`, the `#` title, `## References` when it
+has any, and the bullet rules in [A rule set](#a-rule-set). Then write these sections, in this
+order:
+
+1. `## Facts`, in project-ci-design and project-testing only: a table with the columns Fact and
+   Where, and the rows below, in that order. Write "none" in a row that doesn't apply.
+2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
+   does, link the shared rule's section, and give the reason. Write "None." when the repo follows
+   every rule. In project-code-style, put each stricter rule in a topic section, because
+   [code-style](../../code-style/SKILL.md) lets a repo add rules. List a departure only for code
+   whose shape another tool sets, such as a plugin that a host's API shapes.
+3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
+   test harness or a test helper.
+
+Never repeat a rule the shared skill states. The agent reads both, and two copies drift apart.
+
+### Facts rows
+
+Give a row a value only when no file in the repo holds it, such as the test budget. Otherwise say
+where the fact lives: link the file, from `../../../`, the repo root, and name the key or the
+command that shows it. A pointer stays true when the value changes, and `chex links` fails when the
+file moves.
+
+Leave out a fact the agent finds in one step, such as a script in `package.json` or a command in
+AGENTS.md. The terms come from the shared skills: a test budget from
+[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and a lane from
+[Lanes](../../testing/references/slow-tests.md#lanes) in testing.
+
+| Project skill     | Fact            | Where                                                                    |
+| ----------------- | --------------- | ------------------------------------------------------------------------ |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                       |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires            |
+| project-testing   | Lanes           | the config that declares each lane's suffix or folder and its time limit |
+| project-testing   | Test utils      | the folder to search before you write a test helper                      |
+
+A made-up project-ci-design skill:
+
+```markdown
+---
+name: project-ci-design
+description:
+  'The CI facts of the Ledgerlark repo, and the ci-design rules it replaces. Load it beside
+  ci-design before you change a workflow or a job.'
+metadata:
+  kind: rule-set
+---
+
+# Ledgerlark CI design
+
+## Facts
+
+| Fact            | Where                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------- |
+| Test budget     | 90 s                                                                                  |
+| Required checks | `gh api repos/acme/ledgerlark/rules/branches/main`, the `required_status_checks` rule |
+
+## Departures
+
+- Run `build` as a job of its own, though [Jobs](../ci-design/SKILL.md#jobs) puts every script in
+  `checks`: its artifact upload needs a second runner.
+
+## Release builds
+
+- Run `build` on a tag push only, with `fetch-depth: 0`, so the changelog step sees every commit.
+```
