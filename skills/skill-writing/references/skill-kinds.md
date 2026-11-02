@@ -128,12 +128,12 @@ project-testing:
 
 project-code-style:
 
-| Fact               | Value                                 |
-| ------------------ | ------------------------------------- |
-| Lint command       | the command CI runs to lint           |
-| Lint config        | the lint config file                  |
-| Format command     | the command that formats the repo     |
-| Type-check command | the command that type-checks the repo |
+| Fact               | Value                                                                         |
+| ------------------ | ----------------------------------------------------------------------------- |
+| Lint command       | the command to lint locally, and each lint CI runs that you don't run locally |
+| Lint config        | the lint config file                                                          |
+| Format command     | the command that formats the repo                                             |
+| Type-check command | the command that type-checks the repo                                         |
 
 project-docs-writing:
 
