@@ -32,9 +32,9 @@ breaks, quoted.
 - [Write it plainly](#write-it-plainly): "you", short blunt lines, the reason beside the rule, no
   rhetoric.
 - [Open with the job and the key rules](#open-with-the-job-and-the-key-rules): the same opening in
-  every skill.
+  every skill but a rule set.
 - [What goes in](#what-goes-in): the parts each kind of skill needs, a description that says when to
-  load it, and invented examples in a shared skill.
+  load it, and invented examples in a skill that several repos use.
 - [Point at the code, don't copy it](#point-at-the-code-dont-copy-it): link the file and say what
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
@@ -44,8 +44,8 @@ breaks, quoted.
 
 ## References
 
-- [Machinery and method skills](./references/skill-kinds.md): writing a new skill, or adding a
-  command, a trap, a step or a reply line to one.
+- [Kinds of skill](./references/skill-kinds.md): writing a new skill, writing a rule set, or adding
+  a command, a trap, a step or a reply line to one.
 
 ## Write it plainly
 
@@ -56,6 +56,8 @@ The agent copies how you write as well as what you say.
   foresee. "MUST" and "CRITICAL" give it no reason to work from, and agents over-apply them.
 - **Make a person or the agent the subject.** "Add a trap only if…", never "a trap earns its place".
   A thing as the actor hides who does the work.
+- **Use the plain name.** Don't coin a label and then define it ("the owner is the module that…").
+  Say the plain thing each time.
 - **Keep short lines short.** "Slow, but right." Don't pad a blunt line with an explanation, a
   qualifier or tidier grammar. The padding is what reads as machine-written.
 - **Cut the rhetoric.** No "X is not the job. The job is Y", no aphorisms, no drama words
@@ -71,12 +73,12 @@ skill, this skill wins.
 
 ## Open with the job and the key rules
 
-Every skill opens the same way, because Claude Code and Codex summarise a long session when it runs
-out of room, and only the start of a loaded skill survives whole:
+Every skill but a rule set opens the same way, because Claude Code and Codex summarise a long
+session when it runs out of room, and only the start of a loaded skill survives whole:
 
 1. A paragraph or two: the job, what the agent hands back, if anything, and the main traps. Write
    them for this skill, with no stock opener, and name the traps without a count ("three traps"). A
-   method skill repeats the hand-back in a reply line at the end.
+   skill that hands something back repeats it in a reply line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
@@ -84,25 +86,24 @@ out of room, and only the start of a loaded skill survives whole:
 
 Keep a rule's detail in its section, and change its key rules line when you change the rule.
 
-A rule set, such as a code style, opens differently. It starts with its first rule, and has no
-paragraph and no `## Key rules`: its headings are the index. Give each rule one bullet and one
-example.
+A rule set, such as a code style, holds rules the agent applies during other work, so it has no job
+to open with. Shape it as [A rule set](./references/skill-kinds.md#a-rule-set) says.
 
-A reference opens with the facts and traps its reader needs first, never with when to open it. What
+A reference opens with the facts and traps the agent needs first, never with when to open it. What
 to hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
 subagent's return format.
 
 ## What goes in
 
 For the parts of a skill that covers a repo's tools or teaches a way of working, read
-[Machinery and method skills](./references/skill-kinds.md).
+[Kinds of skill](./references/skill-kinds.md).
 
 Write the `description` in the third person: the agent reads it as a label, not an order. The
 description is all the agent sees when it picks a skill, so say what the skill does and when to load
 it, in the words a task would use. The `name` matches the name of the skill's folder.
 
-When a skill is copied into several repos, invent every example, and never use a term only one repo
-or team knows. A reader elsewhere can't open the file, or doesn't know the word.
+When several repos may use a skill, invent every example, and never use a term only one repo or team
+knows. A reader elsewhere can't open the file, or doesn't know the word.
 
 ## Point at the code, don't copy it
 
@@ -127,13 +128,18 @@ When a review asks for one of these copies, decline it and name this section.
 ## Keep it short and true
 
 Keep SKILL.md under the word limit `chex skill` sets. Past it, the agent skims. When a skill grows,
-cut first, then move what only some tasks need into a reference. A rule set, such as a code style,
-gets a higher limit: mark it with `kind: rule-set` under a `metadata` key in its frontmatter. A
-reference never links to another reference: an agent reads a nested file only in part.
+cut first, then move what only some tasks need into a reference. A rule set gets a higher limit, as
+[A rule set](./references/skill-kinds.md#a-rule-set) says.
+
+A reference never links to another reference, because an agent reads a nested file only in part.
+When a reference needs a fact from another one, write the other file's path and heading as plain
+text, such as "the Lanes section of `references/slow-tests.md`", so the agent opens it on purpose.
+Use the terms SKILL.md sets up without explaining them again: the agent reads SKILL.md first.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
-When a script or a lint can check a rule, delete the prose and say which check runs. Put a
+When a script or a lint can check a rule, delete the prose and say which check runs. In a rule set,
+keep a short bullet for a rule the lint enforces, so the agent writes it right the first time. Put a
 mechanical step in a script in the skill's `scripts/` folder, with a test beside it that the repo's
 test command runs. Tell the agent to run the script, not read it.
 
@@ -157,8 +163,8 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    sentence and which check. The check may be wrong.
 
 2. Run the `deslop` skill on each section you wrote or changed.
-3. Run the `cold-read` skill on each file of the skill you wrote or changed. Follow it through its
-   second read.
+3. Run the `cold-read` skill on each file of the skill you wrote or changed. Follow it to the end:
+   one cold read, your fixes, then one more cold read on the sections you redrafted.
 4. Run the checks again, and give the proof in the PR description of the skill change. Add these as
    `##` headings, after the sections of the repo's PR template:
    - **Skill checks:** the full output of the last check run, in a code block.

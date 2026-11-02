@@ -1,15 +1,15 @@
-# Machinery and method skills
+# Kinds of skill
 
-Pick the kind before you write: the kind decides which parts go after the opening that SKILL.md
-gives every skill.
+Pick the kind before you write. A machinery skill and a method skill keep the opening that
+[SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. A
+rule set leaves that opening out.
 
 - A machinery skill covers one repo's tools, such as its migrations or its deploy scripts.
 - A method skill teaches a way of working, such as finding out why code is the way it is.
-- A rule set, such as a code style, is neither. SKILL.md's "Open with the job and the key rules"
-  gives its shape.
+- A rule set, such as a code style, holds rules the agent applies while it writes something else.
 
-A reply line is the last line of a skill. It starts with "**Reply:**" and names what the agent hands
-back, such as "**Reply:** each risk with its proof".
+When a skill has a reply line, make it the last line. It starts with "**Reply:**" and names what the
+agent hands back, such as "**Reply:** each risk with its proof".
 
 ## A machinery skill
 
@@ -43,3 +43,20 @@ Write:
 
 When both the user and agents load the skill, write it for the agent. Put how to word the answer for
 the user in its own section, such as "When the user asked the question".
+
+## A rule set
+
+Mark it with `kind: rule-set` under a `metadata` key in its frontmatter, which raises its word
+limit. Keep the `#` title. Then put `## References`, when it has any, and the rule sections, one
+`##` per topic. Leave out the opening paragraph, `## Key rules`, the hand-back and the reply line:
+the agent reads a rule set for the rule that fits what it is writing, and hands nothing back.
+
+In its SKILL.md:
+
+- Start each bullet with what the agent does, with a ban, or with the condition the rule applies
+  under: "Name a value for what it holds", "No classes, except a custom error", "When a test changes
+  process state, …".
+- Never start a bullet with a label and a colon, such as "Exception:", or with "A", "The" or "Each"
+  and a noun, such as "A factory builds…".
+- Give an example when the agent would otherwise guess the shape, such as a file name or a call.
+- Write a short paragraph and a code block for a rule that needs more than a bullet.
