@@ -109,7 +109,7 @@ in the module. Call that function from both the handler and the seed.
 ## Publishing seeds
 
 Export the package's `test-utils/` folder in the `exports` of its `package.json`, such as
-`"./test-utils/*": "./src/test-utils/*.ts"`. Another package then imports
+`"./test-utils/*": "./test-utils/*.ts"`. Another package then imports
 `<package>/test-utils/seed-note`.
 
 For each module, also export one function that binds the module's seeds to its deps. Name it for the

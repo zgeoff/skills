@@ -58,15 +58,13 @@ metadata:
 - Test the behaviour, so a refactor that keeps it leaves every test green.
 - Bring each test you touch in line with these rules.
 - Never cut a test that checks behaviour. Never add one that checks nothing.
-- Put a helper that tests share in the package's `test-utils/`, with its own tests, and search there
-  first.
 
 ## The test run
 
 - Reset shared state after each test in the test preload, the file that `bunfig.toml` names under
   `[test] preload`. When you add module-level state, such as a cache, add its reset there.
-- Override an environment variable through the env helper in `test-utils/`, never by assigning
-  `process.env`.
+- Override an environment variable through a helper in `test-utils/` that restores it after the
+  test, never by assigning `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
 - Run the test script with `--parallel=<N>` and `--no-isolate`, so the files share each worker's
   process. Never turn Bun's per-file isolation back on.
@@ -75,10 +73,29 @@ metadata:
 
 - Put a unit test beside its module, one test file per module, entry modules included:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
-- Put a flow across several packages in `integration/`, a test of the built product in `e2e/`, and a
-  test that needs a real system, such as a browser, in a [lane](./references/slow-tests.md#lanes).
-- No other `test/`, `tests/` or `__tests__` directory. Check a config file, such as `package.json`,
-  with a script in `scripts/`, never with a test: a test needs a module beside it.
+- Put each test helper, with its own test file, in the `test-utils/` folder at the top of the
+  package whose tests use it, such as `packages/<name>/test-utils/`. A top-level folder outside the
+  packages that holds tests, such as `scripts/`, gets its own `test-utils/` the same way. In a repo
+  that is one package at the root, use the root `test-utils/`. Every other mention of `test-utils/`
+  in this skill means this folder.
+- Search that `test-utils/` before you write a helper. When another package's `test-utils/` already
+  holds it, copy the helper and its test file into yours. Never import a helper from another
+  package's `test-utils/`, except a seed of stored state, as [Seeding](./references/seeding.md)
+  describes.
+- Put a flow across several packages in `packages/<name>/integration/`, in the package that owns the
+  contract the flow checks.
+- Put a test that drives the built product from outside, such as a CLI started as a process, in
+  `packages/<name>/e2e/`, in the package that builds it. It runs in the e2e
+  [lane](./references/slow-tests.md#lanes), outside the unit run.
+- Keep each `e2e/` suite small: one test in which the product succeeds, and one test for each
+  command or entry point in which the product exits with an error. Test every other error branch,
+  edge case and refused request as a unit test of the code it reaches.
+- Put a test that needs another real system, such as a browser, in its own
+  [lane](./references/slow-tests.md#lanes).
+- In a repo with several packages, keep `test-utils/`, `e2e/` and `integration/` out of the root.
+- Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
+  `package.json`, with a script that CI runs, never with a test file: a test file sits beside the
+  module it tests.
 
 ## Test shape
 

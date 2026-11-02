@@ -112,15 +112,15 @@ In a repo without rig, do these for each lane:
 
 For where CI runs each lane, see the ci-design skill.
 
-| Lane      | Where                                  | Limit | The real system                                                  |
-| --------- | -------------------------------------- | ----- | ---------------------------------------------------------------- |
-| unit      | every other test file                  | 5 s   | none: code in process, per-run templates, and stateful stand-ins |
-| e2e       | `e2e/` at the repo root or an app root | 15 s  | the built product, driven from outside                           |
-| browser   | `<name>.browser.test.ts`               | 10 s  | a real browser                                                   |
-| docker    | `<name>.docker.test.ts`                | 15 s  | a container engine                                               |
-| host      | `<name>.host.test.ts`                  | 15 s  | the host kernel, root, or the network stack                      |
-| agent-sdk | `<name>.agent-sdk.test.ts`             | 5 s   | the Claude Agent SDK subprocess, against a scripted model        |
-| model-api | `<name>.model-api.test.ts`             | 120 s | a live model API                                                 |
+| Lane      | Where                                         | Limit | The real system                                                  |
+| --------- | --------------------------------------------- | ----- | ---------------------------------------------------------------- |
+| unit      | every other test file                         | 5 s   | none: code in process, per-run templates, and stateful stand-ins |
+| e2e       | `e2e/` in the package that builds the product | 15 s  | the built product, driven from outside                           |
+| browser   | `<name>.browser.test.ts`                      | 10 s  | a real browser                                                   |
+| docker    | `<name>.docker.test.ts`                       | 15 s  | a container engine                                               |
+| host      | `<name>.host.test.ts`                         | 15 s  | the host kernel, root, or the network stack                      |
+| agent-sdk | `<name>.agent-sdk.test.ts`                    | 5 s   | the Claude Agent SDK subprocess, against a scripted model        |
+| model-api | `<name>.model-api.test.ts`                    | 120 s | a live model API                                                 |
 
 - In an `agent-sdk` test, never call the live API. Start a scripted model: a local server that
   answers the model API with the replies the test queues. Point the SDK at it with
