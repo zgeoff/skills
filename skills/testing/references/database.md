@@ -118,9 +118,28 @@ const row = await ctx.db.selectFrom('notes').selectAll().executeTakeFirst();
 expect(row).toBeUndefined();
 ```
 
-In a test of how code recovers after several calls fail, turn each call's rejection into a value
-instead, with `.then(() => null, (error: unknown) => error)`. Then assert the list of errors and the
-final state in the same test.
+To test how code recovers after several calls fail, such as a job that gives up after its third
+failed run, make the calls one after another in one test. Turn each outcome into a value: `null`
+when the call resolves, and the error when it rejects. A rejection left as a rejection stops the
+test at the first failed call. Then read the stored state, and assert the outcomes and the state:
+
+```ts
+const runJobOnce = () =>
+  ctx.service.runJob({ jobID: 'job_1' }).then(
+    () => null,
+    (error: unknown) => error,
+  );
+
+const outcomes = [await runJobOnce(), await runJobOnce(), await runJobOnce()];
+const job = await ctx.service.readJob({ jobID: 'job_1' });
+
+expect(outcomes).toMatchObject([
+  { code: 'WRITE_FAILED' },
+  { code: 'WRITE_FAILED' },
+  { code: 'GAVE_UP' },
+]);
+expect(job.status).toBe('failed');
+```
 
 ## Timestamps and order
 
