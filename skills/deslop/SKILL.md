@@ -38,6 +38,8 @@ leave the source alone.
   the reader does, use plain names, and cut contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
+- [Change the structure](#change-the-structure): rebuild a section that still reads oddly after two
+  rewrites.
 - [Check each rewrite](#check-each-rewrite): read it on its own, and run the prose check.
 - [Show the changes](#show-the-changes): a heading and a reason per kind of fault, and a `diff`
   block per place.
@@ -160,10 +162,9 @@ hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them
 
 ## Change the structure
 
-When a section still reads oddly after you rewrote it twice, change its structure. Drop the list it
-is built on, and say the plain instruction, as "Write it plainly" in the
-[skill-writing](../skill-writing/SKILL.md) skill says. Keep the shape of numbered steps, templates,
-tables and report formats, and change only the prose around them.
+When a section still reads oddly after you rewrote it twice, change its structure. Rebuild it in a
+new order, and say the plain instruction, as "Write it plainly" in the
+[skill-writing](../skill-writing/SKILL.md) skill says.
 
 ## Check each rewrite
 
