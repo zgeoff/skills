@@ -32,7 +32,8 @@ Each fix in more detail:
 
 - To call the code in the test process, call its handler, its main function with a test argv, an
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, from the bundle
-  built once per run.
+  built once per run. A test of a shell script, or of a script that a CI step runs, is the one
+  exception: it runs the real script, beside the script.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow
