@@ -13,16 +13,16 @@ description:
 Edit text that already exists, in place, until it reads like a person wrote it. Work through it line
 by line, and change only these:
 
-- what one of [the moves](#the-moves) covers;
-- each failure of the prose check, even one no move covers;
+- each fault in [What to fix](#what-to-fix);
+- each failure of the prose check, even one that list leaves out;
 - the structure of a section that still reads oddly after you rewrote it twice, as
   [Change the structure](#change-the-structure) says.
 
 Leave everything else as it is, and add no new content.
 
-- **Edit by the moves, even when someone asks for a writer's style.** Copying a writer's voice
-  copies their habits, faults included. When you give the reason for a change, name the prose fault
-  it fixes, such as a contrast frame.
+- **Fix the faults in the list, even when someone asks for a writer's style.** Copying a writer's
+  voice copies their habits, faults included. When you give the reason for a change, name the prose
+  fault it fixes, such as a contrast frame.
 - **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced.
 - **Leave a blunt line blunt.** Don't pad a short, flat line: it may be the part that already works.
 
@@ -34,23 +34,23 @@ leave the source alone.
 
 ## Key rules
 
-- [The moves](#the-moves): lead with the job, give the instruction, open each bullet with what the
-  reader does, use plain names, and cut contrast frames, drama and counted lists.
+- [What to fix](#what-to-fix): lead with the job, give the instruction, open each bullet with what
+  the reader does, use plain names, and cut contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
 - [Check each rewrite](#check-each-rewrite): read it on its own, and run the prose check.
-- [Show the changes](#show-the-changes): a heading and a reason per move, and a `diff` block per
-  place.
-- [After a cold read](#after-a-cold-read): run the moves again on each section you redrafted.
+- [Show the changes](#show-the-changes): a heading and a reason per kind of fault, and a `diff`
+  block per place.
+- [After a cold read](#after-a-cold-read): deslop each section you redrafted again.
 
-## The moves
+## What to fix
 
-The rules behind the moves live in the [skill-writing](../skill-writing/SKILL.md) skill, under
-"Write it plainly". Apply every move to a skill or its references, a PR description, an issue, a
-commit message or a code comment. In a README, AGENTS.md, CLAUDE.md or another doc, apply only moves
-3, 5, 6 and 8, which cut rhetoric. Leave other faults in those files alone, except a failure of the
-prose check, and list them in your hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's
-rules cover them.
+The rules behind this list live in the [skill-writing](../skill-writing/SKILL.md) skill, under
+"Write it plainly". Fix every fault in the list in a skill or its references, a PR description, an
+issue, a commit message or a code comment. In a README, AGENTS.md, CLAUDE.md or another doc, fix
+only the rhetoric: contrast frames, drama words, counted lists, aphorisms and explained blunt lines.
+Leave other faults in those files alone, except a failure of the prose check, and list them in your
+hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them.
 
 1. **Lead with the job or the reader's situation.** Cut a stock opener, such as "This skill…", "Use
    this file when…" or "Your job is to…".
@@ -154,7 +154,8 @@ rules cover them.
 - Commands and code blocks.
 - The frontmatter. The skill-writing skill sets its form.
 - A term that a check or a script depends on, such as a heading a script greps for. Search the repo
-  for a term before you rename it. Rename a made-up label that only other prose uses, by move 9.
+  for a term before you rename it. Rename a made-up label that only other prose uses, as
+  [What to fix](#what-to-fix) says.
 - A line that already reads plainly.
 
 ## Change the structure
@@ -172,8 +173,8 @@ Read each rewrite on its own, as if you'd never seen the old line. Look for:
 - a list that grew inside a sentence;
 - a sentence that got longer.
 
-Then run the prose check from the repo root. The check must pass, so fix each failure, even one no
-move covers. For text outside a file, write it to a file in your scratch folder first:
+Then run the prose check from the repo root. The check must pass, so fix each failure, even one the
+list leaves out. For text outside a file, write it to a file in your scratch folder first:
 
 ```bash
 bun x @zgeoff/chex prose <file>
@@ -185,10 +186,10 @@ each candidate, and fix the slips.
 
 ## Show the changes
 
-Give each move you used one `###` heading, named in a few words, such as "Cut drama words". Under
-it, write one line on why. Then give each place the move changed its own `diff` block, with `-`
-before and `+` after, so the lines show in colour. Head a change no move covers "Prose check" or
-"Structure". Never show the whole file.
+Give each kind of fault you fixed one `###` heading, named in a few words, such as "Cut drama
+words". Under it, write one line on why. Then give each place you changed its own `diff` block, with
+`-` before and `+` after, so the lines show in colour. Head a change for a fault outside the list
+"Prose check" or "Structure". Never show the whole file.
 
 End with short bulleted lists, each with its reasons:
 
@@ -200,7 +201,7 @@ End with short bulleted lists, each with its reasons:
 
 When you fix what a cold read found, you add precision and drift back toward sentences that explain
 the line before them, "because" clauses and long sentences. After you redraft a section for a cold
-read, run the moves again on that section.
+read, deslop that section again.
 
 **Reply:** each change as a `diff` block, then what you left as it was, the faults left for
 docs-writing, and the other files a renamed label touches.
