@@ -6,7 +6,7 @@ do nothing else: write no database row and no file. For stored state, call the s
 that writes it, as in [Stored state](../SKILL.md#stored-state). Those seeds build their input with
 these factories.
 
-Watch for these traps:
+Watch for these mistakes:
 
 - Never spread `{ note: undefined }` over the defaults to leave out a field. The key stays, and
   `toStrictEqual` fails against a value with no such key.

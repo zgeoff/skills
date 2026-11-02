@@ -9,7 +9,7 @@ the parts that only Bun has:
 - the test preload;
 - the file layout.
 
-The traps:
+The mistakes to avoid:
 
 - Never sleep to let a service settle. Wait on a condition of the NixOS test driver, such as
   `wait_for_unit`.

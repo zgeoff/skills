@@ -8,7 +8,7 @@ tests as they stand: [Principles](../SKILL.md#principles), [Test data](../SKILL.
 the rest of it for Go. The Bun-only parts don't apply: `setupTest`, the test preload, the
 jest-extended matchers, lanes and the `bun test` flags.
 
-The traps:
+The mistakes to avoid:
 
 - Never pass mutable state from a parent test to its subtests. A subtest that changes it breaks the
   ones after it.
