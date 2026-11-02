@@ -105,15 +105,15 @@ section leaves out, add its rows here first, in a pull request to this repo.
 
 project-ci-design:
 
-| Fact                        | Value                                                                           |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| Visibility                  | public or private                                                               |
-| Test budget                 | the median CI test time, as ci-design defines it                                |
-| `BUN_CHECK_TIMEOUT_MINUTES` | the repo variable that sets the timeout of `bun-checks.yml`                     |
-| `BUN_CHECK_SCRIPTS`         | the repo variable that lists the scripts `bun-checks.yml` runs                  |
-| Required checks             | the checks the branch ruleset of `main` requires                                |
-| Heavy checks                | each heavy check, with its runner and its trigger                               |
-| Reusable workflow pin       | the ref the repo's workflows use for the reusable workflows from `zgeoff/tools` |
+| Fact                        | Value                                                                                       |
+| --------------------------- | ------------------------------------------------------------------------------------------- |
+| Visibility                  | public or private                                                                           |
+| Test budget                 | the median CI test time, as ci-design defines it                                            |
+| `BUN_CHECK_TIMEOUT_MINUTES` | the repo variable that sets the timeout of `bun-checks.yml`                                 |
+| `BUN_CHECK_SCRIPTS`         | the repo variable that lists the scripts `bun-checks.yml` runs                              |
+| Required checks             | the checks the branch ruleset of `main` requires                                            |
+| Heavy checks                | each heavy check, with its runner and its trigger                                           |
+| Reusable workflow pin       | how the repo pins the reusable workflows; name the file, never the commit, which goes stale |
 
 project-testing:
 
@@ -159,15 +159,15 @@ metadata:
 
 ## Facts
 
-| Fact                        | Value                                                                      |
-| --------------------------- | -------------------------------------------------------------------------- |
-| Visibility                  | private                                                                    |
-| Test budget                 | 90 s                                                                       |
-| `BUN_CHECK_TIMEOUT_MINUTES` | 10                                                                         |
-| `BUN_CHECK_SCRIPTS`         | `check test build`                                                         |
-| Required checks             | `checks`                                                                   |
-| Heavy checks                | [`tide-e2e`](../../../.github/workflows/tide-e2e.yml): KVM runner, nightly |
-| Reusable workflow pin       | `sync-v12`                                                                 |
+| Fact                        | Value                                                                                               |
+| --------------------------- | --------------------------------------------------------------------------------------------------- |
+| Visibility                  | private                                                                                             |
+| Test budget                 | 90 s                                                                                                |
+| `BUN_CHECK_TIMEOUT_MINUTES` | 10                                                                                                  |
+| `BUN_CHECK_SCRIPTS`         | `check test`                                                                                        |
+| Required checks             | `checks`                                                                                            |
+| Heavy checks                | [`tide-e2e`](../../../.github/workflows/tide-e2e.yml): KVM runner, nightly                          |
+| Reusable workflow pin       | a commit on `main`, in [`checks.yml`](../../../.github/workflows/checks.yml); zgeoff/tools moves it |
 
 ## Departures
 
