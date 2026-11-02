@@ -29,11 +29,13 @@ Give each `e2e/` test its own file, such as `e2e/checkout.test.ts` beside
 may chain acts, and assert after each one, because each act needs the state that the act before it
 left. Outside `e2e/`, a test still has one act.
 
-- To share an expensive host or service across `e2e/` tests, start it in the `beforeAll` of a
-  preload that only the e2e lane loads, and stop it in its `afterAll`. The lane's test command
-  passes that file with `--preload`. Never start it in the `[test] preload` of `bunfig.toml`: the
-  unit run loads that file too, and fails where the host or service is missing. Wire everything else
-  in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
+- To share a slow host or service, such as a VM or a database container, across the `e2e/` tests of
+  a package, start it in the `beforeAll` of an e2e preload and stop it in its `afterAll`. Add that
+  file to the package's `test:e2e` script with `--preload`. Bun then loads it as well as the
+  `[test] preload` of `bunfig.toml`. Never start it in the `[test] preload` itself. Every unit run
+  loads that file too, and would start the host or service for nothing, or fail on a machine without
+  it. Wire everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest)
+  says.
 - Reset the shared host or service to its starting state from each file's `setupTest`. When the host
   or service has no reset, build it again there instead.
 - Give the reset helper its own test file in `test-utils/`. In it, dirty the state, run the reset,
