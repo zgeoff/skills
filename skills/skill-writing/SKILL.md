@@ -23,9 +23,9 @@ short, or the agent skims.
 
 When you write or edit one, hand back the skill's path and its proof: the [check](#check-it) output,
 each [cold-read](../cold-read/SKILL.md) finding with how you answered it, and what
-[deslop](../deslop/SKILL.md) changed. Put the same proof in the PR description, or in your reply
-when there is no PR. When you review one, hand back each finding with its line and the rule it
-breaks, quoted.
+[deslop](../deslop/SKILL.md) changed. Put the proof in the PR description, and link the PR in your
+reply. With no PR, put the proof in your reply. When you review one, hand back each finding with its
+line and the rule it breaks, quoted.
 
 ## Key rules
 
@@ -45,7 +45,7 @@ breaks, quoted.
 ## References
 
 - [Kinds of skill](./references/skill-kinds.md): writing a new skill, writing a rule set, or adding
-  a command, a trap, a step or a reply line to one.
+  a command, a trap, a step or a reply line to any skill.
 
 ## Write it plainly
 
@@ -65,20 +65,20 @@ The agent copies how you write as well as what you say.
 - **Put a list the agent acts on in bullets.** A list inside a sentence is hard to scan, and it
   grows one item at a time.
 
-When a section still reads oddly after two rewrites, change its structure. Drop the list it's built
-on, and say the plain instruction.
+When a section still reads oddly after two rewrites, change its structure. Rebuild it in a new
+order, and say the plain instruction.
 
 The prose rules in [docs-writing](../docs-writing/SKILL.md) apply too. Where they disagree about a
 skill, this skill wins.
 
 ## Open with the job and the key rules
 
-Every skill but a rule set opens the same way, because Claude Code and Codex summarise a long
-session when it runs out of room, and only the start of a loaded skill survives whole:
+Every skill but a rule set opens the same way, because the agent decides what to do from the top of
+a skill:
 
 1. A paragraph or two: the job, what the agent hands back, if anything, and the main traps. Write
-   them for this skill, with no stock opener, and name the traps without a count ("three traps"). A
-   skill that hands something back repeats it in a reply line at the end.
+   them for this skill, with no stock opener, and name the traps without a count, never "three
+   traps". When a skill hands something back, repeat it in a reply line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
@@ -86,11 +86,11 @@ session when it runs out of room, and only the start of a loaded skill survives 
 
 Keep a rule's detail in its section, and change its key rules line when you change the rule.
 
-A rule set, such as a code style, holds rules the agent applies during other work, so it has no job
-to open with. Shape it as [A rule set](./references/skill-kinds.md#a-rule-set) says.
+Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
+says. It holds rules the agent applies during other work, so it has no job to open with.
 
-A reference opens with the facts and traps the agent needs first, never with when to open it. What
-to hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
+Open a reference with the facts and traps the agent needs first, never with when to open it. What to
+hand back stays in SKILL.md, unless the reference is a subagent's brief: then it gives that
 subagent's return format.
 
 ## What goes in
@@ -100,10 +100,10 @@ For the parts of a skill that covers a repo's tools or teaches a way of working,
 
 Write the `description` in the third person: the agent reads it as a label, not an order. The
 description is all the agent sees when it picks a skill, so say what the skill does and when to load
-it, in the words a task would use. The `name` matches the name of the skill's folder.
+it, in the words a task would use. Make the `name` match the name of the skill's folder.
 
 When several repos may use a skill, invent every example, and never use a term only one repo or team
-knows. A reader elsewhere can't open the file, or doesn't know the word.
+knows. A reader elsewhere can't open a file the example names, or doesn't know the word.
 
 ## Point at the code, don't copy it
 
@@ -114,7 +114,8 @@ Four kinds of copy:
 
 - **A list of members,** one row per file, function or option. Instead, give the rule that defines
   the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
-  search there before you write one". A table of commands is fine.
+  search there before you write one". A table of commands is fine: each row says what the command
+  needs to run.
 - **A retelling.** "The script builds, tags, pushes, then rolls out" goes stale with the script.
   Keep the fact the agent acts on ("a failed push leaves the old version serving") and link the
   script.
@@ -127,15 +128,16 @@ When a review asks for one of these copies, decline it and name this section.
 
 ## Keep it short and true
 
-Keep SKILL.md under the word limit `chex skill` sets, a rule set included. After a compaction,
-Claude Code brings back only the first 5,000 tokens of each skill the session loaded, and the limit
-keeps the whole skill inside that. When a skill grows, cut first, then move what only some tasks
-need into a reference. In a rule set, move only what the common task doesn't need.
+Keep SKILL.md under the word limit `chex skill` sets, a rule set included: it warns at 1,500 words
+and fails at 1,700. After a compaction, Claude Code brings back only the first 5,000 tokens of each
+skill the session loaded, and the limit keeps the whole skill inside that. When a skill grows, cut
+first, then move what only some tasks need into a reference. In a rule set, keep every rule the
+common task needs in SKILL.md, and move only the rest.
 
-Link a reference to a sibling's heading with a Markdown link, such as
+In a file in `references/`, link to a heading in another such file with a Markdown link, such as
 `[Lanes](./slow-tests.md#lanes)`, so `chex links` fails when someone renames the heading. Keep such
-links few, because an agent may read a file it reached through another reference only in part. Put a
-fact that most tasks need in SKILL.md.
+links few: an agent may read only part of a file it reached through another reference. Put a fact
+that most tasks need in SKILL.md.
 
 In a reference the main agent opens, use the terms SKILL.md sets up without explaining them again:
 the agent reads SKILL.md first. In a reference that is a subagent's brief, define every term you
