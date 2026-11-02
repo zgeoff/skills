@@ -66,8 +66,8 @@ Watch for these mistakes:
   }
   ```
 
-- When a record has a database row type and a different type that the API returns, write one factory
-  for each type.
+- When a domain type has one shape as a database row and another in the API, write a factory for
+  each shape. Each factory still only builds a value.
 - Call the factory in the test that uses its value. A seed may set the state its name gives, such as
   the status in `archivedNote`; no other helper presets overrides.
 
