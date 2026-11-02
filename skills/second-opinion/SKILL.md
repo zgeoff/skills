@@ -1,10 +1,10 @@
 ---
 name: second-opinion
 description:
-  'Gets an independent read on your work from another model family: a review of a change, a
+  "Gets an independent read on your work from another model family: a review of a change, a
   diagnosis after fixes fail, or a judge between sketches. Covers when to ask, who to ask, the blind
   prompt, the reply to ask for, and what to do with the answer. Load it before a review gate, before
-  you ask another model about a bug, and before you have a bake-off's sketches judged.'
+  you ask another model about a bug, and before you have a bake-off's sketches judged."
 ---
 
 # Second opinion

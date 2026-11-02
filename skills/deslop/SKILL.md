@@ -2,10 +2,10 @@
 name: deslop
 description:
   "Edits prose that already exists so it reads plainly. Its edits lead with the reader's situation,
-  turn a described process into an instruction, cut contrast frames ("X, not Y"), drama and a
-  sentence that explains the line before it, and keep blunt lines blunt. Load it to deslop a skill, a doc, a PR
-  description or a comment, when text reads like AI wrote it, and after you fix what a cold read
-  found."
+  turn a described process into an instruction, cut contrast frames ('X, not Y'), drama and a
+  sentence that explains the line before it, and keep blunt lines blunt. Load it to deslop a skill,
+  a doc, a PR description or a comment, when text reads like AI wrote it, and after you fix what a
+  cold read found."
 ---
 
 # Deslop
