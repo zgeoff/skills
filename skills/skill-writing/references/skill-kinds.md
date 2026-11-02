@@ -2,11 +2,16 @@
 
 Pick the kind before you write. A machinery skill and a method skill keep the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. A
-rule set leaves that opening out.
+rule set and a project skill leave that opening out.
 
-- A machinery skill covers one repo's tools, such as its migrations or its deploy scripts.
-- A method skill teaches a way of working, such as finding out why code is the way it is.
-- A rule set, such as a code style, holds rules the agent applies while it writes something else.
+- [A machinery skill](#a-machinery-skill) covers one repo's tools, such as its migrations or its
+  deploy scripts.
+- [A method skill](#a-method-skill) teaches a way of working, such as finding out why code is the
+  way it is.
+- [A rule set](#a-rule-set), such as a code style, holds rules the agent applies while it writes
+  something else.
+- [A project skill](#a-project-skill) holds one repo's facts for a rule set from this skills repo,
+  and the rules the repo replaces, such as project-testing beside testing.
 
 When a skill has a reply line, make it the last line. It starts with "**Reply:**" and names what the
 agent hands back, such as "**Reply:** each risk with its proof".
@@ -35,8 +40,8 @@ something for a reader, such as a report, say who reads it, and end with a reply
 
 Write:
 
-- the stance: the attitude you want the agent to take to the work, such as "treat a comment as stale
-  until the code agrees with it", and the mistakes it keeps the agent from;
+- the attitude you want the agent to take to the work, such as "treat a comment as stale until the
+  code agrees with it", and the mistakes it keeps the agent from;
 - who reads the agent's output, and what they do with it;
 - numbered steps, each with the decision the agent makes in it, such as when to stop;
 - a reply line.
@@ -60,3 +65,116 @@ In its SKILL.md:
   and a noun, such as "A factory builds…".
 - Give an example when the agent would otherwise guess the shape, such as a file name or a call.
 - Write a short paragraph and a code block for a rule that needs more than a bullet.
+
+## A project skill
+
+Write a project skill in the repo it describes, at `.claude/skills/project-<name>/SKILL.md`, where
+`<name>` is the shared rule set it sits beside, such as `project-testing` beside testing.
+[Repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) copies the
+shared skills from this repo into the same `.claude/skills/` folder, and never touches a `project-`
+folder. The agent loads both, and where they disagree, the project skill wins. Read the shared skill
+before you write, so you know which rules the repo replaces and which it follows.
+
+Write it as a rule set: `kind: rule-set` under `metadata`, the `#` title, `## References` when it
+has any, and the bullet rules in [A rule set](#a-rule-set). Then write these sections, in this
+order:
+
+1. `## Facts`: a table with the columns Fact and Value. Give it the rows that
+   [Facts rows](#facts-rows) lists for the shared skill, in the same order. Write "none" in a row
+   that doesn't apply, so the reader sees the gap. When a row holds several items, such as two
+   lanes, separate them with semicolons in its one cell. Link the file that holds a value, from
+   `../../../`, the repo root. Leave a value that lives in GitHub's settings, such as a repo
+   variable, unlinked.
+2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
+   does, link the shared rule's section, and give the reason. Write "None." when the repo follows
+   every rule. In project-code-style, always write "None.": the
+   [code-style](../../code-style/SKILL.md) skill lets a repo add stricter rules but never replace
+   one, so put each stricter rule in a topic section.
+3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
+   test harness or a test helper. When a fact in the table needs more than its cell, such as how to
+   start a lane's real system, explain it here.
+
+Never repeat a rule the shared skill states. The agent reads both, and two copies drift apart.
+
+### Facts rows
+
+The Values below say what to write, and hold no links to copy. The terms come from the shared
+skills: a test budget and a heavy check from [Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and
+a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing. Beside a rule set this
+section leaves out, add its rows here first, in a pull request to this repo.
+
+project-ci-design:
+
+| Fact                        | Value                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| Visibility                  | public or private                                                               |
+| Test budget                 | the median CI test time, as ci-design defines it                                |
+| `BUN_CHECK_TIMEOUT_MINUTES` | the repo variable that sets the timeout of `bun-checks.yml`                     |
+| `BUN_CHECK_SCRIPTS`         | the repo variable that lists the scripts `bun-checks.yml` runs                  |
+| Required checks             | the checks the branch ruleset of `main` requires                                |
+| Heavy checks                | each heavy check, with its runner and its trigger                               |
+| Reusable workflow pin       | the ref the repo's workflows use for the reusable workflows from `zgeoff/tools` |
+
+project-testing:
+
+| Fact         | Value                                                              |
+| ------------ | ------------------------------------------------------------------ |
+| Test command | the command that runs the unit tests                               |
+| Test timeout | the per-test timeout of the unit run                               |
+| Lanes        | each lane's suffix or folder, its real system and its test timeout |
+| Test preload | the `preload` entries in `bunfig.toml`                             |
+| Test utils   | the folder to search before you write a test helper                |
+| Isolation    | `--isolate` or `--no-isolate`, as the test command passes it       |
+
+project-code-style:
+
+| Fact               | Value                                 |
+| ------------------ | ------------------------------------- |
+| Lint command       | the command CI runs to lint           |
+| Lint config        | the lint config file                  |
+| Format command     | the command that formats the repo     |
+| Type-check command | the command that type-checks the repo |
+
+project-docs-writing:
+
+| Fact        | Value                                    |
+| ----------- | ---------------------------------------- |
+| Docs index  | the file that lists the repo's docs      |
+| Design docs | the folder that holds design docs        |
+| Prose check | the command that checks the repo's prose |
+
+A made-up project-ci-design skill:
+
+```markdown
+---
+name: project-ci-design
+description:
+  'The CI facts of the Ledgerlark repo, and the ci-design rules it replaces. Load it beside
+  ci-design before you change a workflow or a job.'
+metadata:
+  kind: rule-set
+---
+
+# Ledgerlark CI design
+
+## Facts
+
+| Fact                        | Value                                                                      |
+| --------------------------- | -------------------------------------------------------------------------- |
+| Visibility                  | private                                                                    |
+| Test budget                 | 90 s                                                                       |
+| `BUN_CHECK_TIMEOUT_MINUTES` | 10                                                                         |
+| `BUN_CHECK_SCRIPTS`         | `check test build`                                                         |
+| Required checks             | `checks`                                                                   |
+| Heavy checks                | [`tide-e2e`](../../../.github/workflows/tide-e2e.yml): KVM runner, nightly |
+| Reusable workflow pin       | `sync-v12`                                                                 |
+
+## Departures
+
+- Run `build` as a job of its own, though [Jobs](../ci-design/SKILL.md#jobs) puts every script in
+  `checks`: its artifact upload needs a second runner.
+
+## Release builds
+
+- Run `build` on a tag push only, with `fetch-depth: 0`, so the changelog step sees every commit.
+```

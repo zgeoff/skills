@@ -6,8 +6,8 @@ description:
   matchers, time, boundaries and speed. References cover seeding, slow tests and lanes, factories,
   databases, HTTP mocking, cleanup, observability, system tests, shell scripts, workflows and Claude
   Code mods, plus frontend, Go and NixOS where a repo uses them. Load it before you write or review
-  a test. Load the repo's project-testing skill beside it, for the repo's lanes, utils and
-  stand-ins; where they disagree, the project skill wins.
+  a test. Load the repo's project-testing skill beside it, for the lanes and utils in its Facts
+  table, and for its stand-ins; where they disagree, the project skill wins.
 metadata:
   kind: rule-set
 ---
