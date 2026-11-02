@@ -118,8 +118,9 @@ const row = await ctx.db.selectFrom('notes').selectAll().executeTakeFirst();
 expect(row).toBeUndefined();
 ```
 
-In a test of how code recovers after several calls fail, capture each rejection as a value instead,
-as the testing skill's [Assertions](../SKILL.md#assertions) describe.
+In a test of how code recovers after several calls fail, turn each call's rejection into a value
+instead, with `.then(() => null, (error: unknown) => error)`. Then assert the list of errors and the
+final state in the same test.
 
 ## Timestamps and order
 
