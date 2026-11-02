@@ -232,8 +232,10 @@ tests may write them directly, when no seed makes the state.
 ## Narrowing
 
 - No branch in a test body. Give each path its own test.
-- Before a matcher that passes on `undefined` (any `.not`, `toBeUndefined`, `toBeFalsy`, `toBeNil`),
-  narrow with `invariant(value)`. Before any other matcher, `?.` is safe.
+- To check a field of a value that may be missing with a matcher that passes on `undefined` (any
+  `.not`, `toBeUndefined`, `toBeFalsy`, `toBeNil`), narrow the value with `invariant(value)` first.
+  Before any other matcher, `?.` is safe. To check that the value itself is absent, assert on it
+  directly, with no `invariant`.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.
 
