@@ -102,7 +102,8 @@ metadata:
   a repo that is one package at the root, put all three at the root.
 - Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
   `package.json`, with a check script that CI runs, never with a test file. A test file tests the
-  module beside it, and a config file is no module.
+  module beside it, and a config file is no module. A test may read a config file only to check it
+  against the module beside the test, as [Workflows](./references/workflows.md) shows.
 
 ## Test shape
 
