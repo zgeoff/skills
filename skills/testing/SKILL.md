@@ -105,9 +105,8 @@ packages/ledger/
 
 Put a shared helper in the package that owns what it starts, builds or fakes.
 
-[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex), the
-[zgeoff lint rules](https://github.com/zgeoff/tools/tree/main/packages/oxlint-config) and rig fail a
-test outside this layout.
+[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) and rig fail a test
+outside this layout.
 
 ## Test shape
 
