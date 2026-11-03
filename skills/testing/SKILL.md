@@ -66,16 +66,17 @@ metadata:
 - Override an environment variable through a helper in `src/test-utils/` that restores it after the
   test, never by assigning `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
-- Run the unit tests with `rig unit --no-isolate`. rig sets `--parallel` from the host's cores and
-  memory, and `--no-isolate` lets the files share each worker's process. Never turn Bun's per-file
-  isolation back on.
+- Run the unit tests with `rig unit --no-isolate`, from
+  [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig). rig sets `--parallel`
+  from the host's cores and memory, and `--no-isolate` lets the files share each worker's process.
+  Never turn Bun's per-file isolation back on.
 
 ## Where a test lives
 
 - Put a unit test beside its module, one test file per module, entry modules included:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
 - Put each test helper, with its own test file, in `src/test-utils/` of its package. Search there
-  before you write a helper.
+  and in the other packages' `src/test-utils/` before you write a helper.
 - When several packages need one helper, put it in the package that owns what it starts, builds or
   fakes, such as a server harness in the server's package. Put a general helper, such as `waitFor`,
   in a package that every package using it already depends on.
@@ -85,13 +86,13 @@ metadata:
   [Publishing seeds](./references/seeding.md#publishing-seeds) shows.
 - Never import from another package's `src/` by a relative path. Never import `test-utils` from
   production code.
-- Put a test in the package that exports the function its act calls. When the test imports runtime
-  code from a workspace package that its package doesn't list under `dependencies`, put it in that
-  package's `integration/`, named for the flow it checks. Runtime code is any import but a type
-  import or a `test-utils` import. Otherwise, put the test beside the module it acts on. Both run in
-  the unit run.
-- When listing an imported package as a dev dependency would make a cycle, put the test in a package
-  that already depends on every package the test imports.
+- Put a test in the package that exports the function its act calls, beside the module it acts on.
+  Runtime code is any import but a type import or a `test-utils` import. When the test imports
+  runtime code from a workspace package that its own package doesn't list under `dependencies`, put
+  the test in its own package's `integration/`, and list the imported package as a `workspace:*` dev
+  dependency. Both kinds run in the unit run.
+- When that dev dependency would make a cycle, put the test in `integration/` of a package that
+  already depends on every package the test imports.
 - Put a test that starts a program as a process in `e2e/` of the package that builds the program.
   Start the program with `runProgram` or `startProgram`, and start the file name with the prefix of
   what the test checks, such as `start-` or `runtime-`, as
@@ -99,7 +100,8 @@ metadata:
   script and the test of a script that a CI step runs are the exceptions: each sits beside its
   script and runs in the unit run.
 - Put an evaluation suite in `evals/<name>/`, and a benchmark of a running program in `bench/`, of
-  the package whose code they measure, as [System tests](./references/system-tests.md) describes.
+  the package whose code they measure, as [System tests](./references/system-tests.md) describes. A
+  benchmark of one module sits beside it, as `src/<module>.bench.ts`.
 - Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`, with no
   subfolders. There are two exceptions:
   - `evals/` holds one folder per evaluation;
@@ -111,10 +113,11 @@ metadata:
     give related tests the same prefix.
   - Add a lane's suffix, such as `.browser`, when the test needs that lane's real system. Only that
     [lane](./references/slow-tests.md#lanes) runs the file, wherever it sits.
-- Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
-  `package.json`, on its own with a check script that CI runs, never with a test file: a unit test
-  tests the module beside it. A test may still read a config file to check it against that module,
-  such as a CI matrix against the list of suites a script defines, as
+- Keep tests only in `src/`, `integration/`, `e2e/`, `evals/` and `bench/`: no `test/`, `tests/` or
+  `__tests__`.
+- Check a config file, such as `package.json`, on its own with a check script that CI runs, never
+  with a test file: a unit test tests the module beside it. A test may still read a config file to
+  check it against that module, such as a CI matrix against the list of suites a script defines, as
   [Workflows](./references/workflows.md) shows.
 
 ## Test shape

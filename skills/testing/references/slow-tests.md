@@ -34,8 +34,8 @@ Each fix in more detail:
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
   `startProgram` or `runProgram`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two
   kinds of test start a real script outside `e2e/`: the test of a shell script, and the test of a
-  TypeScript script that a CI step runs. Put each in the file beside its script. It starts the
-  script itself, and it runs in the unit run, within the unit limit.
+  TypeScript script that a CI step runs. Put each in the file beside its script. The test starts the
+  script directly, and it runs in the unit run, within the unit limit.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow
@@ -93,10 +93,10 @@ For each engine's template, see the Postgres isolation and SQLite isolation sect
 
 ## Lanes
 
-Put the tests that need one real system in a lane. Mark each file with the lane's suffix or folder,
-run the lane with its own `test:<lane>` script, and give its tests the lane's per-test limit. The
-unit run is the `unit` lane in the table below, and it leaves out the files of every other lane, as
-does the pre-push hook.
+Put the tests that need one real system in a lane. Mark each file with the lane's suffix, or put it
+in `e2e/` for the e2e lane. Run the lane with its own `test:<lane>` script, and give its tests the
+lane's per-test limit. The unit run is the `unit` lane in the table below, and it leaves out the
+files of every other lane, as does the pre-push hook.
 
 [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) runs the lanes. `rig init`
 writes the `test:<lane>` scripts, and `rig unit` leaves out every lane's files. Declare each lane
@@ -185,4 +185,5 @@ ticket or `floor:`.
 - Name a resource that each worker keeps across its files, such as a database cloned from the
   per-run template, after the worker's process ID. In the helper that hands it out, open it when it
   exists and create it when it doesn't. Never drop it in `afterAll`, because that hook can run after
-  every file. The sweep at the start of the next run removes it.
+  every file. The cleanup at the start of the next run, in [Per-run templates](#per-run-templates),
+  removes it.

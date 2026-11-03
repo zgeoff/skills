@@ -1,28 +1,32 @@
 # Factories
 
-Write a `buildMock<Type>` factory for each domain type that crosses a module boundary, as
-[Test data](../SKILL.md#test-data) in the testing skill sets. The factory returns the value and does
-nothing else: it writes no database row and no file. A test that needs stored state calls the seeds
-of the module that writes it, as [Stored state](../SKILL.md#stored-state) says, and those seeds
-build their input with these factories.
+Write a `buildMock<Type>` factory for each domain type that crosses a module boundary, as the
+testing skill's [Test data](../SKILL.md#test-data) section says. The factory returns the value and
+does nothing else: it writes no database row and no file. A test that needs stored state calls the
+seeds of the module that writes it, as [Stored state](../SKILL.md#stored-state) says, and those
+seeds build their input with these factories.
+
+- [Writing a factory](#writing-a-factory)
+- [A factory's own test](#a-factorys-own-test)
 
 Watch for these mistakes:
 
 - A plain `...overrides` spread keeps a key whose override is `undefined`, and `toStrictEqual` then
   fails against a value with no such key. Drop those keys in the factory, as the example below does.
 - Faker's values follow the order of its calls, so one new faker call elsewhere changes them. In a
-  package with a golden test, one that pins output in an inline snapshot or compares it with a
-  committed file, default every field to a literal value in place of faker.
-- Never write a helper that presets overrides. The reader can't see its defaults. Only a seed named
-  for a state, such as `archivedNote`, sets a field for the test, and only the field its name gives.
+  package with a test that pins output in an inline snapshot or compares it with a committed file,
+  default every field of every factory to a literal value in place of faker, foreign keys included.
+- Never write a helper that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
+  its defaults. A seed named for a state, such as `archivedNote`, may set the one field its name
+  gives. Nothing else presets a field.
 
 ## Writing a factory
 
 - Keep the factory, with its own test file, in `src/test-utils/` of the package that defines the
   type. For a type from a third-party package, such as an SDK result, keep it in the package that
   wraps that package. When no package wraps it, keep it in the package whose tests use it. Another
-  package imports the factory by package name, through the `exports` entry that
-  [Where a test lives](../SKILL.md#where-a-test-lives) describes.
+  package imports the factory by package name. Add the `exports` entry that
+  [Where a test lives](../SKILL.md#where-a-test-lives) describes when it's missing.
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
   `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
   resource.
@@ -47,39 +51,43 @@ Watch for these mistakes:
   }
   ```
 
-- Default a field to a `@faker-js/faker` value when no test depends on its value. The reader then
-  sees that the value doesn't matter. When the package has no `@faker-js/faker` dev dependency, add
-  it.
+- Outside a package with a snapshot test, default a field to a `@faker-js/faker` value when no test
+  depends on its value. The reader then sees that the value doesn't matter. When the package has no
+  `@faker-js/faker` dev dependency, add it.
 - Call `faker.seed()` with a fixed number in the test preload of each package that uses faker, so a
-  failing run gives the same values again. The test preload is the file that `bunfig.toml` names
-  under `[test] preload`.
+  rerun of the same files gives the same values again. The test preload is the file that
+  `bunfig.toml` names under `[test] preload`.
 - Default an enum or a discriminator to the value most tests need.
 - Default each foreign key to a new `faker.string.uuid()`, and never require a parent. When a test
   needs a real parent, seed the parent and pass its ID.
-- When the type is a class, pass the merged fields to its constructor and return the instance, so
-  `toStrictEqual` against a real instance passes.
-- Build a nested object with its own factory, and pass it the nested override. Take a list field's
-  override as the whole list.
+- When the type is a class, pass the merged fields, without the `undefined` keys, to its constructor
+  and return the instance, so `toStrictEqual` against a real instance passes.
+- Build a nested object with its own factory, and pass it the nested override. An override of a list
+  field replaces the whole default list.
 
   ```ts
   type ShipmentOverrides = Partial<Omit<Shipment, 'address'>> & { address?: Partial<Address> };
 
   export function buildMockShipment(overrides: ShipmentOverrides = {}): Shipment {
     const { address, ...rest } = overrides;
-
-    return {
+    const shipment = {
       id: faker.string.uuid(),
       carrier: 'post',
       address: buildMockAddress(address),
       ...rest,
     };
+
+    return Object.fromEntries(
+      Object.entries(shipment).filter(([, value]) => value !== undefined),
+    ) as Shipment;
   }
   ```
 
 - When a domain type has one shape as a database row and another in the API, write a factory for
   each shape, named for its type, such as `buildMockOrderLineRow` and `buildMockOrderLine`. Each
   factory still only builds a value.
-- Call the factory in the test that uses its value, never in a shared constant or a hook.
+- In a test file, call the factory in the test that uses its value, never in a shared constant or a
+  hook. The reader then sees each value next to the assertion that uses it.
 
 ## A factory's own test
 

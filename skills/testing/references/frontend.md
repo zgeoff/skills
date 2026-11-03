@@ -82,7 +82,7 @@ that event in a comment.
 ```tsx
 test('it saves a note from the editor', async () => {
   const user = userEvent.setup();
-  const rendered = render(<NoteEditor />); // the project's render helper from test-utils/
+  const rendered = render(<NoteEditor />); // the project's render helper from src/test-utils/
 
   await user.type(await rendered.findByLabelText('Title'), 'groceries');
   await user.click(rendered.getByRole('button', { name: 'Save' }));
@@ -159,9 +159,10 @@ app renders through Server Components, write one `e2e/` test against the built a
 `runtime-` prefix, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Load a route that
 the server renders, and check its text.
 
-Also load a route whose handler reads the request in an `e2e/` test: the `runtime-` test when the
-app has one, or a `runtime-` test of its own when it doesn't. The unit tests read the request
-through the stand-in above, so this test is the one place where a real request reaches the handler.
+Also write an `e2e/` test that loads a route whose handler reads the request. Add it to the app's
+`runtime-` test, or write a new `runtime-` test when the app has none. The unit tests read the
+request through the stand-in above, so this test is the one place where a real request reaches the
+handler.
 
 Assert a thrown redirect on the rejection itself, with no `await`, as in the testing skill's
 [Errors](../SKILL.md#errors):

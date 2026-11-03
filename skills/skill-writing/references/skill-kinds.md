@@ -103,7 +103,9 @@ AGENTS.md. The terms come from the shared skills: a test budget from
 [Jobs](../../ci-design/SKILL.md#jobs) in ci-design, a lane from
 [Lanes](../../testing/references/slow-tests.md#lanes) in testing, and a journey, a guarantee and a
 supported version from
-[End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing.
+[End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing. List the
+journeys, guarantees and supported versions in their rows, even when test files name them: each
+`e2e/` test must match an entry in the row.
 
 | Project skill     | Fact               | Where                                                                    |
 | ----------------- | ------------------ | ------------------------------------------------------------------------ |

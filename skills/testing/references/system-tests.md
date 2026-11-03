@@ -28,13 +28,15 @@ An `e2e/` test starts a program that its package builds, as a process, and drive
 
 - Declare each program in `programs` in `rig.config.ts`: its package, its source entry, its build
   command and its artifact.
-- In an `e2e/` test, start a program only with `runProgram` or `startProgram` from
-  `@zgeoff/rig/e2e`, or with a helper in `src/test-utils/` that calls one of them. Never build the
-  program's command in the test.
+- In an `e2e/` test, start a program only with `runProgram` or `startProgram` from `@zgeoff/rig/e2e`
+  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)), or with a helper in
+  `src/test-utils/` that calls one of them. `runProgram` runs the program to its exit, for a `cli-`
+  or `build-` test. `startProgram` leaves it running and returns a handle that stops it. Never build
+  the program's command in the test.
 - Run the lane with `bun run test:e2e`. The script that `rig init` writes calls `rig e2e`, which
   builds each program once, and the tests run the artifact. When you run an `e2e/` file with
-  `bun test` on your machine, it runs the source. In CI, the helpers throw when `rig e2e` didn't
-  build the program, so CI never tests the source.
+  `bun test` on your machine, the helpers start the program from its source. In CI, the helpers
+  throw when `rig e2e` didn't build the program, so CI never tests the source.
 
 ```ts
 // packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo
@@ -50,7 +52,8 @@ test('it exits 0 on SIGTERM', async () => {
 ### What an e2e test checks
 
 Start each `e2e/` file name with the prefix of what it checks. Test anything else as a unit or
-`integration/` test of the code it reaches.
+`integration/` test of the code it reaches. Guarantees, Supported versions and Journeys are rows of
+the Facts table in the repo's project-testing skill, as the list below the table says.
 
 | Prefix     | What the test checks                                                          | How many tests                                       |
 | ---------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -68,7 +71,9 @@ Start each `e2e/` file name with the prefix of what it checks. Test anything els
 - Give each `crash-` and `fault-` test its own named fault point: a point in the program's code,
   such as `queue.after-commit`, where the program stops or fails when a test asks it to. The program
   reads the request from an option that the test passes to `startProgram`, such as an environment
-  variable. Test a second case at the same point, with other input, in `integration/`.
+  variable. A `fault-` test makes the program's call to the service fail at its fault point, and
+  leaves the real service running. Test a second case at the same point, with other input, in
+  `integration/`.
 - List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
   project-testing skill. When the product gains a journey, a guarantee or a version it supports, add
   the entry and its test in one pull request. Never add an entry only to make room for a test.
@@ -85,10 +90,11 @@ state that the act before it left. Outside `e2e/`, a test still has one act.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
   start it in the `start` hook of the e2e lane in `rig.config.ts`, and stop it in the lane's `stop`
-  hook. rig runs these hooks once per lane run, outside the test files. Never start it in the
-  `[test] preload`. Every unit run loads that file too, and would start the host or service for
-  nothing, or fail on a machine without it. Wire everything else in each file's own `setupTest`, as
-  [setupTest](../SKILL.md#setuptest) says.
+  hook. rig runs these hooks once per lane run, outside the test files. Pass the address that the
+  tests need, such as a connection string, through an environment variable that the `start` hook
+  sets. Never start it in the `[test] preload`. Every unit run loads that file too, and would start
+  the host or service for nothing, or fail on a machine without it. Wire everything else in each
+  file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
 - Reset the shared host or service to its starting state from each file's `setupTest`. When the host
   or service has no reset, rebuild its state there, such as by recreating the database.
 - Give the reset helper its own test file in `src/test-utils/`. Test that the reset reaches the
