@@ -28,8 +28,8 @@ Watch for these mistakes:
 - Keep the factory, with its own test file, in `src/test-utils/` of the package that defines the
   type. For a type from a third-party package, such as an SDK result, keep it in the package that
   wraps that package. When no package wraps it, keep it in the package whose tests use it. Another
-  package imports the factory by package name, as
-  [Where a test lives](../SKILL.md#where-a-test-lives) says.
+  package imports the factory by package name, through the package's `"./test-utils/*"` export, with
+  a `workspace:*` dev dependency.
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
   `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
   resource.

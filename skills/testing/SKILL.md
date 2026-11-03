@@ -96,46 +96,26 @@ packages/ledger/
     └── import-statement.bench.ts   benchmark of the running program
 ```
 
-| The test                                                     | Put it                                                                                                                                                                                           |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| starts a program that `rig.config.ts` declares, as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites)                                                   |
-| scores a corpus                                              | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows                                                             |
-| measures a running program                                   | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                                                                               |
-| does anything else                                           | beside the module or script it tests, one test file per module, a program's main module included. The test of a shell script, or of a script a CI step runs, starts its script itself, beside it |
+| The test                                                     | Put it                                                                                                                                         |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| starts a program that `rig.config.ts` declares, as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites) |
+| scores a corpus                                              | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows           |
+| measures a running program                                   | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                             |
+| does anything else                                           | beside the module or script it tests                                                                                                           |
 
-- In a test, import runtime code from another workspace package only when the test's package lists
-  that package under `dependencies`. Runtime code is any import but a type import or a `test-utils`
-  import. When a test needs two packages that don't depend on each other, put it in the package that
-  wires them together in production, beside the module that does the wiring.
-- Put a helper in `src/test-utils/` of the package that owns what it starts, builds or fakes, such
-  as a server harness in the server's package. Put a general helper, such as `waitFor`, in a package
-  that every package using it depends on. Search each package's `src/test-utils/` before you write a
-  helper.
-- Import another package's helper by package name, such as `@acme/server/test-utils/start-server`,
-  and list that package as a `workspace:*` dev dependency. When the package has no `exports` entry
-  for its `src/test-utils/`, add the one that
-  [Publishing seeds](./references/seeding.md#publishing-seeds) shows.
-- In `e2e/`, name each file with its prefix, then the behaviour a caller sees:
-  `stop-on-signal.test.ts` is the `stop-` prefix and the `on-signal` behaviour.
-- Add a lane's suffix, as in `render-pdf.browser.test.ts`, when the test needs that lane's real
-  system. Only that [lane](./references/slow-tests.md#lanes) runs the file.
-- In a repo that is one package at the root, put `e2e/`, `evals/` and `bench/` at the root.
-- Check a config file, such as `package.json`, on its own with a check script that CI runs, never
-  with a test file: a unit test tests the module beside it. A test may still read a config file to
-  check it against that module, such as a CI matrix against the list of suites a script defines, as
-  [Workflows](./references/workflows.md) shows.
+- When a test needs two packages that don't depend on each other, put it beside the module that
+  wires them together in production.
+- Put a shared helper in the package that owns what it starts, builds or fakes.
+- In a single-package repo, put `e2e/`, `evals/` and `bench/` at the repo root.
 
-CI checks this layout:
-
-- [`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails a test folder
-  or a test file outside this layout.
-- The [zgeoff lint rules](https://github.com/zgeoff/tools/tree/main/packages/oxlint-config) fail a
-  test's runtime import from a workspace package outside its package's `dependencies`, a relative
-  import into another package's `src/`, and a `test-utils` import in production code.
-- rig fails a test file whose lane suffix `rig.config.ts` doesn't declare.
+[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex), the
+[zgeoff lint rules](https://github.com/zgeoff/tools/tree/main/packages/oxlint-config) and rig fail a
+test outside this layout, and each error names the fix.
 
 ## Test shape
 
+- Check a config file, such as `package.json`, with a check script that CI runs, never with a test
+  file, except as [Workflows](./references/workflows.md) shows.
 - Write top-level `test()` calls, with no `describe`. Hooks in a `describe` couple its tests.
 - Name the behaviour a caller sees in each title, as verb, outcome, condition:
   `it rejects a title longer than 120 characters`. In a file that tests several units, start the
