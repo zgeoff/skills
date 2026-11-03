@@ -66,40 +66,43 @@ metadata:
 - Override an environment variable through a helper in `test-utils/` that restores it after the
   test, never by assigning `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
-- Run the test script with `--parallel=<N>` and `--no-isolate`, so the files share each worker's
-  process. `<N>` is the worker count that the host's cores and memory allow; in a repo that runs its
-  tests with the `rig` runner, `rig unit` sets it. Never turn Bun's per-file isolation back on.
+- Run the unit tests with `rig unit`. It runs `bun test` with `--no-isolate`, so the files share
+  each worker's process, and sets `--parallel` from the host's cores and memory. Never turn Bun's
+  per-file isolation back on.
 
 ## Where a test lives
 
 - Put a unit test beside its module, one test file per module, entry modules included:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
-- Put each test helper, with its own test file, in the `test-utils/` folder at the top of the
-  package whose tests use it, such as `packages/<name>/test-utils/`. A top-level folder outside the
-  packages that holds tests, such as `scripts/`, gets its own `test-utils/` the same way. In a repo
-  that is one package at the root, use the root `test-utils/`. Every other mention of `test-utils/`
-  in this skill means this folder.
-- Search your package's `test-utils/` before you write a helper, then the other packages'
-  `test-utils/` folders. When another package already holds the helper, copy it and its test file
-  into yours. Never import a helper from another package's `test-utils/`: the import ties your tests
-  to code that the other package changes for its own tests. A seed of stored state is the one
-  exception, as [Seeding](./references/seeding.md) describes.
-- Put a test of a flow across several packages in `packages/<name>/integration/`, in the package
-  that owns the contract the flow checks. It runs in the unit run.
-- Put a test that drives the built product from outside, such as a CLI started as a process, in
-  `packages/<name>/e2e/`, in the package that builds it. It runs in the e2e
-  [lane](./references/slow-tests.md#lanes), outside the unit run.
-- Keep each `e2e/` suite to a smoke set, whatever number of user flows the product has:
-  - one test in total in which the product succeeds;
-  - one test for each command or entry point, in which the product exits with an error;
-  - one test for each path that only the built product can run, such as start-up, a signal, crash
-    recovery, or a rendering pipeline that the unit run can't load.
-- Test every other flow, error branch, edge case and refused request as a unit test of the code it
-  reaches.
-- Put a test that needs a real system other than the built product, such as a browser, in that
-  system's [lane](./references/slow-tests.md#lanes).
-- In a repo with several packages, keep `test-utils/`, `e2e/` and `integration/` out of the root. In
-  a repo that is one package at the root, put all three at the root.
+- Put each test helper, with its own test file, in `src/test-utils/` of its package. Put a helper
+  that several packages use in the package that owns what it starts or builds, such as a server
+  harness in the server's package. Search your own package's `src/test-utils/` before you write a
+  helper, then that of the package that owns what you need.
+- To use another package's helper, import it by package name, such as
+  `@acme/server/test-utils/start-server`, and list that package as a `workspace:*` dev dependency.
+  The package that holds the helper exports its `test-utils/`, as
+  [Publishing seeds](./references/seeding.md#publishing-seeds) shows. Never import from another
+  package's `src/` by a relative path. Never import `test-utils` from production code.
+- Put a test in the package that exports the function its act calls.
+- When the test imports runtime code from a workspace package that its own package doesn't list in
+  `dependencies`, put it in its package's `integration/` folder, named for the flow it checks.
+  Otherwise it is a unit test of the module it acts on. Both run in the unit run. When the dev
+  dependency would make a cycle, put the test in a package that already depends on every package it
+  imports.
+- Put a test that starts a program as a process in `e2e/` of the package that builds the program.
+  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets what an `e2e/` test may
+  check, and how it starts the program.
+- Put an evaluation suite in `evals/<name>/`, and a benchmark of a running program in `bench/`, of
+  the package whose code they measure, as [System tests](./references/system-tests.md) describes.
+- Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`. Give them
+  no subfolders, except one folder per eval in `evals/`, and `e2e/fixtures/` for inputs that aren't
+  code, such as a Dockerfile. In a repo that is one package at the root, the root is that package.
+- Name each test file `<subject>[.<lane>].test.ts`:
+  - In `src/`, the subject is the module's file name.
+  - In `integration/` and `e2e/`, the subject names the behaviour a caller sees, such as
+    `stop-on-signal`. Give related tests the same prefix.
+  - A lane tag, such as `.browser`, names the one extra real system the test needs. Only that
+    [lane](./references/slow-tests.md#lanes) runs the file, wherever it sits.
 - Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
   `package.json`, on its own with a check script that CI runs, never with a test file: a test file
   tests the module beside it. A test may still read a config file to check it against that module,

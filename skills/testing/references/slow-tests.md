@@ -31,10 +31,11 @@ Never raise the timeout first, and never move a test to a lane only because it i
 Each fix in more detail:
 
 - To call the code in the test process, call its handler, its main function with a test argv, an
-  in-memory RPC link or an injected transport. Start a real process only in `e2e/`, from the bundle
-  built once per run. Two tests start a real script outside `e2e/`: the test of a shell script, and
-  the test of a TypeScript script that a CI step runs. Put each in the file beside its script. It
-  starts the script itself, and it runs in the unit run, within the unit limit.
+  in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
+  `startProgram` or `runProgram`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two
+  tests start a real script outside `e2e/`: the test of a shell script, and the test of a TypeScript
+  script that a CI step runs. Put each in the file beside its script. It starts the script itself,
+  and it runs in the unit run, within the unit limit.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow
@@ -97,49 +98,41 @@ run the lane with its own `test:<lane>` script, and give its tests the lane's pe
 unit run is the `unit` lane in the table below, and it leaves out the files of every other lane, as
 does the pre-push hook.
 
-In a repo that uses [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig),
-`rig init` writes the `test:<lane>` scripts, and `rig unit` leaves out every lane's files. Declare
-each lane the repo adds in `rig.config.ts`, with its suffix and limit.
+[`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) runs the lanes. `rig init`
+writes the `test:<lane>` scripts, and `rig unit` leaves out every lane's files. Declare each lane
+the repo adds in `rig.config.ts`, with its suffix and limit. The repo's lint rules read each lane's
+limit from there.
 
 Put a lane's harness, such as the code that starts the browser, in a package with its own tests.
-
-In a repo without rig, do these for each lane:
-
-- Set its limit with `--timeout` in its `test:<lane>` script.
-- Leave its files out of the unit test script.
-- Declare it in the root oxlint config, in the `lanes` option of `zgeoff/max-test-timeout`, which
-  checks each test's timeout against the lane's limit, and of `zgeoff/test-beside-module`, which
-  lets a lane's test file sit beside the module it tests. Key the lane by its suffix without the
-  dot, with its limit in milliseconds: `{ "lanes": { "kvm": 60000 } }`.
 
 For where CI runs each lane, see the ci-design skill.
 
 | Lane      | Where                                         | Limit | The real system                                                  |
 | --------- | --------------------------------------------- | ----- | ---------------------------------------------------------------- |
 | unit      | every other test file                         | 5 s   | none: code in process, per-run templates, and stateful stand-ins |
-| e2e       | `e2e/` in the package that builds the product | 15 s  | the built product, driven from outside                           |
+| e2e       | `e2e/` in the package that builds the program | 15 s  | the program, run as a process and driven from outside            |
 | browser   | `<name>.browser.test.ts`                      | 10 s  | a real browser                                                   |
 | docker    | `<name>.docker.test.ts`                       | 15 s  | a container engine                                               |
 | host      | `<name>.host.test.ts`                         | 15 s  | the host kernel, root, or the network stack                      |
 | agent-sdk | `<name>.agent-sdk.test.ts`                    | 5 s   | the Claude Agent SDK subprocess, against a scripted model        |
 | model-api | `<name>.model-api.test.ts`                    | 120 s | a live model API                                                 |
 
+- Run a file with a lane's suffix only in that lane, wherever it sits, `e2e/` and `integration/`
+  included. A `.restic` test in `e2e/` runs in the `restic` lane, not the e2e lane.
 - In an `agent-sdk` test, never call the live API. Start a scripted model: a local server that
   answers the model API with the replies the test queues. Point the SDK at it with
   `ANTHROPIC_BASE_URL` in the SDK's `env` option.
 - Run the `model-api` lane nightly, on `workflow_dispatch`, and on a pull request that bumps the
   Agent SDK. Never run it on every pull request.
-- Give each test that calls a live model the `.model-api` suffix, wherever it lives, `evals/`
-  included.
+- Give each test that calls a live model the `.model-api` suffix, wherever it lives.
 - Give a test that calls another live API its own lane, with a suffix named for that API, such as a
   made-up `.payments`.
 - Name one real system in a suffix, never a speed. Prefer a specific suffix to the generic `.host`,
   such as a made-up `.kvm` for a test that boots a VM.
 - Add a lane of the repo's own only for a real system from the list in
   [A real system in the unit run](#a-real-system-in-the-unit-run). List the lane, with its real
-  system and its limit, in the Facts table of the repo's project-testing skill. Declare it with rig
-  or in the oxlint config, as above, and put the measured test times in the pull request that adds
-  it.
+  system and its limit, in the Facts table of the repo's project-testing skill. Declare it in
+  `rig.config.ts`, as above, and put the measured test times in the pull request that adds it.
 
 Run a Rust crate's lanes through cargo-nextest, as [Rust lanes](./system-tests.md#rust-lanes)
 describes.
@@ -185,9 +178,9 @@ ticket or `floor:`.
 - Pass `--no-isolate` with every `--parallel=<N>`. `--parallel` implies `--isolate`, which runs each
   test file in a fresh global object. Isolation slows the suite and hides a leak between files. The
   resets in the test preload and `--randomize` catch that leak instead.
-- In a repo with rig, run the unit tests with `rig unit`. It sets `--parallel` from the host's cores
-  and memory, and `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts
-  one worker per core and takes memory the workers need.
+- Run the unit tests with `rig unit`. It sets `--parallel` from the host's cores and memory, and
+  `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts one worker per
+  core and takes memory the workers need.
 - Name a resource that each worker keeps across its files, such as a database cloned from the
   per-run template, after the worker's process ID. In the helper that hands it out, open it when it
   exists and create it when it doesn't. Never drop it in `afterAll`, because that hook can run after

@@ -15,32 +15,79 @@ Jump to the section for your test:
 - [Native timers and scenario delays](#native-timers-and-scenario-delays)
 - [Property tests](#property-tests)
 - [Evaluation suites](#evaluation-suites)
+- [Benchmarks](#benchmarks)
 - [Golden tests](#golden-tests)
 - [Program-fixed paths and global resources](#program-fixed-paths-and-global-resources)
 - [Rust lanes](#rust-lanes)
 
 ## End-to-end suites
 
-[Where a test lives](../SKILL.md#where-a-test-lives) sets which tests an `e2e/` suite holds. This
-section covers the file of each `e2e/` test, and a host or service that several of them share.
+An `e2e/` test starts a program that its package builds, as a process, and drives it from outside.
 
-Give each `e2e/` test its own file, such as `e2e/checkout.test.ts` beside
-`e2e/checkout-declined.test.ts`, with its own `setupTest` and cleanup. Inside an `e2e/` test, you
-may chain acts, and assert after each one, because each act needs the state that the act before it
-left. Outside `e2e/`, a test still has one act.
+### Start the program through rig
 
-- To share a slow host or service, such as a VM or a database container, across the `e2e/` tests of
-  a package, start it in the `beforeAll` of an e2e preload and stop it in its `afterAll`. Add that
-  file to the package's `test:e2e` script with `--preload`. Bun then loads it as well as the
-  `[test] preload` of `bunfig.toml`. Never start it in the `[test] preload` itself. Every unit run
-  loads that file too, and would start the host or service for nothing, or fail on a machine without
-  it. Wire everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest)
-  says.
+- Declare each program in `programs` in `rig.config.ts`: its package, its source entry, its build
+  command and its artifact.
+- In an `e2e/` test, start a program only with `runProgram` or `startProgram` from
+  `@zgeoff/rig/e2e`, or with a helper in `src/test-utils/` that calls one of them. Never build the
+  program's command in the test.
+- Run the lane with `rig e2e`. It builds each program once, and the tests run the artifact. When you
+  run an `e2e/` file with `bun test` on your machine, it runs the source. In CI, the helpers throw
+  when `rig e2e` didn't build the program, so CI never tests the source by mistake.
+
+```ts
+// packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo
+import { startProgram } from '@zgeoff/rig/e2e';
+
+test('it exits 0 on SIGTERM', async () => {
+  const ledger = await startProgram('ledger', { ready: { url: '/health' } });
+
+  expect(await ledger.stop('SIGTERM')).toBe(0);
+});
+```
+
+### What an e2e test checks
+
+Start each `e2e/` file name with the prefix of what it checks. Test anything else as a unit or
+`integration/` test of the code it reaches.
+
+| Prefix     | What the test checks                                                          | How many tests                                       |
+| ---------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `start-`   | the program starts and reports ready, or refuses a bad config                 | per program, 1 ready and 1 refused config            |
+| `stop-`    | a signal or a shutdown command, then a clean exit                             | 1 per signal or shutdown command the program handles |
+| `crash-`   | the program is killed mid-work, and the next start recovers                   | 1 per named fault point                              |
+| `fault-`   | a service the program uses fails, and the program recovers when it comes back | 1 per named fault point                              |
+| `cli-`     | a command's wiring: its exit code and output                                  | per command, 1 success and 1 failure                 |
+| `build-`   | the artifact itself: it runs from a clean folder, with its assets             | 1 per artifact                                       |
+| `runtime-` | a code path the unit run can't load, such as React Server Components          | 1 per such path                                      |
+| `enforce-` | a guarantee that only the real environment enforces, such as a memory limit   | 1 per entry in Guarantees                            |
+| `compat-`  | two versions meet, such as an older client and a newer server                 | 1 per entry in Supported versions                    |
+| `journey-` | one core user journey, such as signing in, on its success path                | 1 per entry in Journeys                              |
+
+- A named fault point is a point in the program's code that a test arms by name, such as
+  `queue.after-commit`. Give each `crash-` and `fault-` test its own point. A second test at the
+  same point with other input is an `integration/` test.
+- List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
+  project-testing skill. Add an entry when the product gains a journey, a guarantee or a version it
+  supports, never to make room for a test.
+- Test each other case of a journey, such as a wrong password, as a unit or `integration/` test.
+
+### Files and shared hosts
+
+Give each `e2e/` test file its own `setupTest` and cleanup, such as `e2e/journey-checkout.test.ts`.
+Inside an `e2e/` test, you may chain acts, and assert after each one, because each act needs the
+state that the act before it left. Outside `e2e/`, a test still has one act.
+
+- To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
+  start it in the `start` hook of the e2e lane in `rig.config.ts`, and stop it in the lane's `stop`
+  hook. Never start it in the `[test] preload`. Every unit run loads that file too, and would start
+  the host or service for nothing, or fail on a machine without it. Wire everything else in each
+  file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
 - Reset the shared host or service to its starting state from each file's `setupTest`. When the host
   or service has no reset, build it again there instead.
-- Give the reset helper its own test file in `test-utils/`. In it, dirty the state, run the reset,
-  and check the starting state. Check it the same way after an `e2e/` test that failed midway, and
-  after a `SIGINT` to the test process.
+- Give the reset helper its own test file in `src/test-utils/`. In it, dirty the state, run the
+  reset, and check the starting state. Check it the same way after an `e2e/` test that failed
+  midway, and after a `SIGINT` to the test process.
 - Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
   that builds the CLI's commands importable for it.
 
@@ -225,21 +272,54 @@ test still follows the testing skill's rules on loops, branches and one act per 
 
 ## Evaluation suites
 
-Put a suite in `evals/` when it replays a committed corpus of recorded traffic through the
-production path, or checks a committed evaluation report against the code. The suite tests a corpus,
-so it has no module to sit beside. `evals/` isn't a lane, so the suite runs in the unit run on every
-pull request, under the 5 s limit.
+Give each evaluation its own folder, `evals/<name>/`, in the package whose code it scores. The
+folder holds:
+
+- `corpus.json`, or a `corpus/` folder: the committed cases or recorded traffic;
+- `report.json`: the committed results of the last scoring run;
+- `<name>.test.ts`: replays the corpus through the production path, or checks the report against the
+  code. It runs in the unit run, under the 5 s limit.
+- `run-<name>-eval.ts`: scores the code, such as a model's answers, and writes `report.json`.
+  `rig eval <name>` runs it, and no test run does.
 
 - Read the committed corpus or report through one tested loader. Never copy its cases into the test
   as literals.
-- Keep helpers in a workspace package outside `evals/`, with tests of their own.
+- Keep an evaluation's helpers in `src/test-utils/`. Put measurement code that several packages use,
+  such as a confidence interval or a report writer, in a package of its own that exports it.
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the code host's API,
   and inject it into the production path.
-- Make the suite fail when the report and the code disagree, such as by building the report from the
-  code in the test and comparing it with the committed one. A suite that passes on a stale report
+- Make the test fail when the report and the code disagree, such as by building the report from the
+  code in the test and comparing it with the committed one. A test that passes on a stale report
   checks nothing.
-- Give a test that calls a live model the `.model-api` suffix, because it replays nothing. It then
-  runs in that lane, as [Lanes](./slow-tests.md#lanes) describes.
+- Keep a test that calls a live API out of `evals/`, such as a test that pins how a model SDK
+  behaves. Give it the `.model-api` suffix, beside its module or in `integration/`, as
+  [Lanes](./slow-tests.md#lanes) describes.
+
+## Benchmarks
+
+- Put a benchmark of one module beside it, as `src/<module>.bench.ts`.
+- Put a benchmark of a running program in `bench/<name>.bench.ts` of the package that builds the
+  program, and start the program with `startProgram`. Keep only these entry files in `bench/`. Put
+  their logic, with its tests, in `src/test-utils/`.
+- Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a budget for each number
+  it records. Run benchmarks with `rig bench`, never in a test run. It builds each program once,
+  starts the lane that `bench.lane` in `rig.config.ts` names, and fails when a number breaks its
+  budget.
+
+```ts
+// packages/ledger/bench/import-statement.bench.ts, in a made-up repo
+import { defineBench, startProgram } from '@zgeoff/rig/bench';
+import { timeImport } from '../src/test-utils/time-import.ts';
+
+export default defineBench({
+  budget: { importMs: { max: 800 } },
+  run: async () => {
+    const ledger = await startProgram('ledger');
+
+    return { importMs: await timeImport(ledger, 'statement.csv') };
+  },
+});
+```
 
 ## Golden tests
 
