@@ -117,9 +117,8 @@ For where CI runs each lane, see the ci-design skill.
 | agent-sdk | `<name>.agent-sdk.test.ts`                    | 5 s   | the Claude Agent SDK subprocess, against a scripted model        |
 | model-api | `<name>.model-api.test.ts`                    | 120 s | a live model API                                                 |
 
-- Run a file with a lane's suffix only in that lane, wherever it sits, `e2e/` and `integration/`
-  included. A test in `e2e/` with a made-up `.kvm` suffix runs in the `kvm` lane, and the e2e lane
-  skips it.
+- Run a file with a lane's suffix only in that lane, wherever it sits, `e2e/` included. A test in
+  `e2e/` with a made-up `.kvm` suffix runs in the `kvm` lane, and the e2e lane skips it.
 - In an `agent-sdk` test, never call the live API. Start a scripted model: a local server that
   answers the model API with the replies the test queues. Point the SDK at it with
   `ANTHROPIC_BASE_URL` in the SDK's `env` option.

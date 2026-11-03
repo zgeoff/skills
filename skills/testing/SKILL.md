@@ -73,48 +73,59 @@ metadata:
 
 ## Where a test lives
 
-- Put a unit test beside its module, one test file per module, entry modules included:
-  `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
-- Put each test helper, with its own test file, in `src/test-utils/` of its package. Search there
-  and in the other packages' `src/test-utils/` before you write a helper.
-- When several packages need one helper, put it in the package that owns what it starts, builds or
-  fakes, such as a server harness in the server's package. Put a general helper, such as `waitFor`,
-  in a package that every package using it already depends on.
-- To use another package's helper, import it by package name, such as
-  `@acme/server/test-utils/start-server`, and list that package as a `workspace:*` dev dependency.
-  When that package doesn't export its `src/test-utils/` yet, add the `exports` entry that
+Lay out each package like this made-up one:
+
+```text
+packages/ledger/
+├── package.json                    exports "./test-utils/*"
+├── src/
+│   ├── post-entry.ts
+│   ├── post-entry.test.ts          unit test, beside its module
+│   ├── post-entry.bench.ts         benchmark of one module
+│   ├── render-pdf.browser.test.ts  unit test in the browser lane
+│   └── test-utils/
+│       ├── start-ledger.ts         helper, with its own test
+│       └── start-ledger.test.ts
+├── e2e/
+│   ├── start-ready.test.ts         the built program, run as a process
+│   ├── journey-checkout.test.ts
+│   └── fixtures/Dockerfile
+├── evals/
+│   └── categorise/                 one folder per evaluation
+└── bench/
+    └── import-statement.bench.ts   benchmark of the running program
+```
+
+| The test                      | Put it                                                                                                                                         |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| starts a program as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites) |
+| scores a corpus               | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows           |
+| measures a running program    | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                             |
+| does anything else            | beside the module or script it tests, one test file per module, entry modules included: `src/post-entry.test.ts` beside `src/post-entry.ts`    |
+
+- Import runtime code in a test only from its own package and the packages its package lists under
+  `dependencies`. Runtime code is any import but a type import or a `test-utils` import. When a test
+  needs two packages that don't depend on each other, put it in the package that wires them together
+  in production, beside the module that does the wiring.
+- Put a helper in `src/test-utils/` of the package that owns what it starts, builds or fakes, such
+  as a server harness in the server's package. Put a general helper, such as `waitFor`, in a package
+  that every package using it depends on. Search each package's `src/test-utils/` before you write a
+  helper.
+- Import another package's helper by package name, such as `@acme/server/test-utils/start-server`,
+  and list that package as a `workspace:*` dev dependency. When the package has no `exports` entry
+  for its `src/test-utils/`, add the one that
   [Publishing seeds](./references/seeding.md#publishing-seeds) shows.
-- Never import from another package's `src/` by a relative path. Never import `test-utils` from
-  production code.
-- Put a test in the package that exports the function its act calls, beside the module it acts on.
-  Runtime code is any import but a type import or a `test-utils` import. When the test imports
-  runtime code from a workspace package that its own package doesn't list under `dependencies`, put
-  the test in its own package's `integration/`, and list the imported package as a `workspace:*` dev
-  dependency. Both kinds run in the unit run.
-- When that dev dependency would make a cycle, put the test in `integration/` of a package that
-  already depends on every package the test imports.
-- Put a test that starts a program as a process in `e2e/` of the package that builds the program.
-  Start the program with `runProgram` or `startProgram`, and start the file name with the prefix of
-  what the test checks, such as `start-` or `runtime-`, as
-  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets.
-- Put the test of a shell script, or of a script that a CI step runs, beside its script, in the unit
-  run.
-- Put an evaluation suite in `evals/<name>/`, and a benchmark of a running program in `bench/`, of
-  the package whose code they measure, as [System tests](./references/system-tests.md) describes. A
-  benchmark of one module sits beside it, as `src/<module>.bench.ts`.
-- Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`, with no
-  subfolders, except these:
-  - `evals/` holds one folder per evaluation;
-  - `e2e/fixtures/` holds inputs that aren't code, such as a Dockerfile.
-- In a repo that is one package at the root, put these folders at the root.
-- Name each test file `<subject>[.<lane>].test.ts`:
-  - In `src/`, use the module's file name as the subject.
-  - In `integration/` and `e2e/`, name the behaviour a caller sees, such as `stop-on-signal`, and
-    give related tests the same prefix.
-  - Add a lane's suffix, such as `.browser`, when the test needs that lane's real system. Only that
-    [lane](./references/slow-tests.md#lanes) runs the file, wherever it sits.
-- Keep tests only in `src/`, `integration/`, `e2e/`, `evals/` and `bench/`: no `test/`, `tests/` or
-  `__tests__`.
+- In `e2e/`, name each file for the behaviour a caller sees, after its prefix, such as
+  `stop-on-signal.test.ts`.
+- Add a lane's suffix, as in `render-pdf.browser.test.ts`, when the test needs that lane's real
+  system. Only that [lane](./references/slow-tests.md#lanes) runs the file.
+- In a repo that is one package at the root, put `e2e/`, `evals/` and `bench/` at the root.
+
+`chex test-layout` fails a test folder or a test file outside this layout. The zgeoff lint rules
+fail a test's runtime import from outside its package's `dependencies`, a relative import into
+another package's `src/`, and a `test-utils` import in production code. rig fails a test file whose
+lane suffix `rig.config.ts` doesn't declare.
+
 - Check a config file, such as `package.json`, on its own with a check script that CI runs, never
   with a test file: a unit test tests the module beside it. A test may still read a config file to
   check it against that module, such as a CI matrix against the list of suites a script defines, as

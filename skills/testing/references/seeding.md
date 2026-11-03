@@ -28,7 +28,7 @@ they are.
 - Never write rows or files directly because the module doesn't export its write function. Export
   the function from the module. An awkward import or a slow call is no reason either.
 
-Write directly only in these places, and never in `integration/` or `e2e/`:
+Write directly only in these places, and never in `e2e/`:
 
 - inside a seed, for a state that no code in the module makes, as in
   [A state no code in the module makes](#a-state-no-code-in-the-module-makes);

@@ -98,11 +98,9 @@ where the fact lives: link the file, from `../../../`, the repo root, and name t
 command that shows it. A pointer stays true when the value changes, and `chex links` fails when the
 file moves.
 
-Leave out a fact the agent finds in one step, such as a script in `package.json` or a command in
-AGENTS.md. The terms come from the shared skills: a test budget from
-[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, a lane from
-[Lanes](../../testing/references/slow-tests.md#lanes) in testing, and a journey, a guarantee and a
-supported version from
+The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
+ci-design, a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing, and a
+journey, a guarantee and a supported version from
 [End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing. List the
 journeys, guarantees and supported versions in their rows, even when test files name them: each
 `journey-`, `enforce-` and `compat-` test must match an entry in its row.

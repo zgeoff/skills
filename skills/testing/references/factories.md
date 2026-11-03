@@ -11,8 +11,10 @@ seeds build their input with these factories.
 
 Watch for these mistakes:
 
-- A plain `...overrides` spread keeps a key whose override is `undefined`, and `toStrictEqual` then
-  fails against a value with no such key. Drop those keys in the factory, as the example below does.
+- Never pass `undefined` as an override to leave a field out. To leave an optional field out, take
+  it off the factory's result: `const { note, ...line } = buildMockOrderLine();`. With
+  `exactOptionalPropertyTypes` on, as in the shared tsconfig, an `undefined` override is a type
+  error.
 - Faker's values follow the order of its calls, so one new faker call elsewhere changes them. In a
   package with a test that pins output in an inline snapshot or compares it with a committed file,
   default every field of every factory to a literal value in place of faker, foreign keys included.
@@ -30,13 +32,12 @@ Watch for these mistakes:
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
   `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
   resource.
-- Take one argument of overrides. Return a complete value, with every optional field filled, and
-  drop each key whose override is `undefined`. A test then leaves an optional field out with
-  `{ note: undefined }`:
+- Take one argument of overrides, and return a complete value, with every optional field filled.
+  Return the object literal itself, so the return type checks each field with no cast:
 
   ```ts
   export function buildMockOrderLine(overrides: Partial<OrderLine> = {}): OrderLine {
-    const line = {
+    return {
       id: faker.string.uuid(),
       orderID: faker.string.uuid(),
       status: 'open',
@@ -44,10 +45,6 @@ Watch for these mistakes:
       note: faker.lorem.sentence(),
       ...overrides,
     };
-
-    return Object.fromEntries(
-      Object.entries(line).filter(([, value]) => value !== undefined),
-    ) as OrderLine;
   }
   ```
 
@@ -60,8 +57,8 @@ Watch for these mistakes:
 - Default an enum or a discriminator to the value most tests need.
 - Default each foreign key to a new `faker.string.uuid()`, and never require a parent. When a test
   needs a real parent, seed the parent and pass its ID.
-- When the type is a class, pass the merged fields, without the `undefined` keys, to its constructor
-  and return the instance, so `toStrictEqual` against a real instance passes.
+- When the type is a class, pass the merged fields to its constructor and return the instance, so
+  `toStrictEqual` against a real instance passes.
 - Build a nested object with its own factory, and pass it the nested override. An override of a list
   field replaces the whole default list.
 
@@ -70,16 +67,13 @@ Watch for these mistakes:
 
   export function buildMockShipment(overrides: ShipmentOverrides = {}): Shipment {
     const { address, ...rest } = overrides;
-    const shipment = {
+
+    return {
       id: faker.string.uuid(),
       carrier: 'post',
       address: buildMockAddress(address),
       ...rest,
     };
-
-    return Object.fromEntries(
-      Object.entries(shipment).filter(([, value]) => value !== undefined),
-    ) as Shipment;
   }
   ```
 
@@ -100,7 +94,6 @@ Put the test beside the factory, as `build-mock-<type>.test.ts`, with these 2 te
 Add a test for each branch of the factory that those 2 can't reach, and check that it fails when you
 delete the branch:
 
-- the removal of a key whose override is `undefined`;
 - a field that the factory works out from another field;
 - a nested object or a list that the factory builds with another factory.
 

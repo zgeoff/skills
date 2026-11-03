@@ -49,11 +49,11 @@ test('it exits 0 on SIGTERM', async () => {
 });
 ```
 
-### What an e2e test checks
+### E2e prefixes
 
-Start each `e2e/` file name with the prefix of what it checks. Test anything else as a unit or
-`integration/` test of the code it reaches. Guarantees, Supported versions and Journeys are rows of
-the Facts table in the repo's project-testing skill, as the list below the table says.
+Start each `e2e/` file name with one of these prefixes. Test anything else as a unit test of the
+code it reaches. Guarantees, Supported versions and Journeys are rows of the Facts table in the
+repo's project-testing skill.
 
 | Prefix     | What the test checks                                                          | How many tests                                       |
 | ---------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -72,13 +72,12 @@ the Facts table in the repo's project-testing skill, as the list below the table
   such as `queue.after-commit`, where the program stops or fails when a test asks it to. The program
   reads the request from an option that the test passes to `startProgram`, such as an environment
   variable. A `fault-` test makes the program's call to the service fail at its fault point, and
-  leaves the real service running. Test a second case at the same point, with other input, in the
-  test process, where [Where a test lives](../SKILL.md#where-a-test-lives) puts it: beside its
-  module, or in `integration/`.
+  leaves the real service running. Test a second case at the same point, with other input, as a unit
+  test, where [Where a test lives](../SKILL.md#where-a-test-lives) puts it.
 - List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
   project-testing skill. When the product gains a journey, a guarantee or a version it supports, add
   the entry and its test in one pull request. Never add an entry only to make room for a test.
-- Test each other case of a journey, such as a wrong password, as a unit or `integration/` test.
+- Test each other case of a journey, such as a wrong password, as a unit test.
 - Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
   that builds the CLI's commands importable for it. The `cli-` tests check only each command's
   wiring.
@@ -305,8 +304,8 @@ that passes on a stale report checks nothing.
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the code host's API,
   and inject it into the production path.
 - Keep a test that calls a live API out of `evals/`, such as a test that pins how a model SDK
-  behaves. Give it the `.model-api` suffix, beside its module or in `integration/`, as
-  [Lanes](./slow-tests.md#lanes) describes.
+  behaves. Give it the `.model-api` suffix, beside its module, as [Lanes](./slow-tests.md#lanes)
+  describes.
 
 ## Benchmarks
 
