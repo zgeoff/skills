@@ -96,14 +96,14 @@ metadata:
 - Put a test that starts a program as a process in `e2e/` of the package that builds the program.
   Start the program with `runProgram` or `startProgram`, and start the file name with the prefix of
   what the test checks, such as `start-` or `runtime-`, as
-  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets. The test of a shell
-  script and the test of a script that a CI step runs are the exceptions: each sits beside its
-  script and runs in the unit run.
+  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets.
+- Put the test of a shell script, or of a script that a CI step runs, beside its script, in the unit
+  run.
 - Put an evaluation suite in `evals/<name>/`, and a benchmark of a running program in `bench/`, of
   the package whose code they measure, as [System tests](./references/system-tests.md) describes. A
   benchmark of one module sits beside it, as `src/<module>.bench.ts`.
 - Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`, with no
-  subfolders. There are two exceptions:
+  subfolders, except these:
   - `evals/` holds one folder per evaluation;
   - `e2e/fixtures/` holds inputs that aren't code, such as a Dockerfile.
 - In a repo that is one package at the root, put these folders at the root.
@@ -269,8 +269,8 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
   2. an injected clock: `ctx.clock.advance(30_000)`;
   3. fake timers, for code the repo doesn't own, restored in `onTestFinished`.
 - When you can't pass the time in, assert a range around `Date.now()`, such as `toBeWithin`.
-- Wait on a condition with the `waitFor` helper in `src/test-utils/`, never a sleep. When the code
-  has nothing to wait on, add a signal, such as an event.
+- Wait on a condition with the repo's `waitFor` helper, never a sleep. When the code has nothing to
+  wait on, add a signal, such as an event.
 
 ## Boundaries
 
