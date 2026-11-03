@@ -103,8 +103,6 @@ packages/ledger/
 | measures a running program                                   | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                             |
 | does anything else                                           | beside the module or script it tests                                                                                                           |
 
-- When a test needs two packages that don't depend on each other, put it beside the module that
-  wires them together in production.
 - Put a shared helper in the package that owns what it starts, builds or fakes.
 - In a single-package repo, put `e2e/`, `evals/` and `bench/` at the repo root.
 
