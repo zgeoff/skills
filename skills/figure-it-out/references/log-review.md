@@ -22,9 +22,9 @@ the log misses, from what you remember. Send the reviewer the log alone, and say
 
 ## Check your entries
 
-Your entries start at the `resume` entry whose evidence names your transcript. When the log has no
-such entry, you started the log, and your entries start at the top. They end at the next `resume`
-entry, or at the end of the log.
+Your entries start at the `resume` entry whose evidence holds your transcript's path. When the log
+has no such entry, you started the log, and your entries start at the top. They end at the next
+`resume` entry, or at the end of the log.
 
 Check each of your entries against the transcript:
 

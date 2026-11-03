@@ -18,11 +18,11 @@ Mistakes to avoid:
   Report it as indirect evidence at most, with that note.
 
 Reach Linear with the tools your session has. Search by keyword in the team that the
-`## Evidence sources` section of the repo's AGENTS.md names. When it names none, search every team
+`## Evidence sources` section of the repo's AGENTS.md lists. When it lists none, search every team
 you can reach. Fetch a ticket by its ID from any team. Include closed, cancelled and archived
 tickets in every search.
 
-1. List the ticket IDs in the anchor. When the anchor names none, search for the anchor's terms. Add
+1. List the ticket IDs in the anchor. When the anchor has none, search for the anchor's terms. Add
    each ticket that mentions the target in its title, body or comments.
 2. For each ticket on the list, read it and every comment on it.
 3. When someone marked the ticket as a duplicate of another, add the other ticket.

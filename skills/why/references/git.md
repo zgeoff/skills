@@ -29,7 +29,7 @@ Mistakes to avoid:
    whose changed lines match a pattern, such as `MAX_RETRIES\s*=\s*3`. `-G` also catches a changed
    value. Run both, with the target's name and with its whole line. Run each command once for each
    of the target's files. Skip a commit that only moves, renames or formats the code. When the
-   history stops at a move, `git show --stat <hash>` on the move names the old path. Search again
+   history stops at a move, `git show --stat <hash>` on the move shows the old path. Search again
    there.
 
 3. Read each commit with `git show <hash>`. The other files it changed, and the names of its tests,

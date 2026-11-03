@@ -80,7 +80,7 @@ candidate, and check it like any other.
 
 ## Sources
 
-Read the `## Evidence sources` section of the repo's AGENTS.md. It names each source the project has
+Read the `## Evidence sources` section of the repo's AGENTS.md. It lists each source the project has
 and how to reach it. An invented example:
 
 ```markdown
@@ -134,8 +134,8 @@ investigator to look for an incident in the 2 weeks before and after the date it
 landed.
 
 Each investigator returns Leads: links into other sources, such as a ticket ID found in a PR. When a
-lead names an item that the investigator for its source didn't read, start a new investigator with
-the same inputs, and the lead as its anchor. Skip a lead into a gap or a skip. Do one round of
+lead points at an item that the investigator for its source didn't read, start a new investigator
+with the same inputs, and the lead as its anchor. Skip a lead into a gap or a skip. Do one round of
 leads, then go on to the weigher.
 
 ## Weigh
