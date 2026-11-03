@@ -72,8 +72,9 @@ the Facts table in the repo's project-testing skill, as the list below the table
   such as `queue.after-commit`, where the program stops or fails when a test asks it to. The program
   reads the request from an option that the test passes to `startProgram`, such as an environment
   variable. A `fault-` test makes the program's call to the service fail at its fault point, and
-  leaves the real service running. Test a second case at the same point, with other input, in
-  `integration/`.
+  leaves the real service running. Test a second case at the same point, with other input, in the
+  test process, where [Where a test lives](../SKILL.md#where-a-test-lives) puts it: beside its
+  module, or in `integration/`.
 - List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
   project-testing skill. When the product gains a journey, a guarantee or a version it supports, add
   the entry and its test in one pull request. Never add an entry only to make room for a test.
@@ -285,12 +286,12 @@ test still follows the testing skill's rules on loops, branches and one act per 
 Give each evaluation its own folder, `evals/<name>/`, in the package whose code it scores, with
 these files:
 
-| File                                 | What it holds or does                                                                    |
-| ------------------------------------ | ---------------------------------------------------------------------------------------- |
-| `corpus.json`, or a `corpus/` folder | the committed cases or recorded traffic                                                  |
-| `report.json`                        | the committed results of the last scoring run                                            |
-| `<name>.test.ts`                     | the test, in the unit run, under the 5 s limit                                           |
-| `run-<name>-eval.ts`                 | scores the code, such as a model's answers, and writes `report.json`; `rig eval` runs it |
+| File                 | What it holds or does                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| `corpus.json`        | the committed cases or recorded traffic                                                  |
+| `report.json`        | the committed results of the last scoring run                                            |
+| `<name>.test.ts`     | the test, in the unit run, under the 5 s limit                                           |
+| `run-<name>-eval.ts` | scores the code, such as a model's answers, and writes `report.json`; `rig eval` runs it |
 
 When the scoring runs offline, make the test replay the corpus through the production path and
 compare the result with `report.json`. When the scoring needs a live model, the test can't replay

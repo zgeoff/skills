@@ -105,7 +105,7 @@ AGENTS.md. The terms come from the shared skills: a test budget from
 supported version from
 [End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing. List the
 journeys, guarantees and supported versions in their rows, even when test files name them: each
-`e2e/` test must match an entry in the row.
+`journey-`, `enforce-` and `compat-` test must match an entry in its row.
 
 | Project skill     | Fact               | Where                                                                    |
 | ----------------- | ------------------ | ------------------------------------------------------------------------ |
