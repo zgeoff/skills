@@ -27,6 +27,11 @@ file you edit may be the one that changes the rules.
 skills/<name>/      one skill per folder: SKILL.md, plus any references/ and helper scripts/ it uses
 ```
 
+A Claude Code hook refuses an edit of a skill's `SKILL.md`, or of a file under its `references/`,
+until the session loads `skill-writing`, `docs-writing` and `deslop`. `.claude/skill-gate.json`
+holds that rule, and `.claude/skills` links to `skills/`, so the hook finds the three skills. Run
+`bun install` before you edit a skill: the hook refuses every edit while its package is missing.
+
 The skills CLI finds a skill at `skills/<name>/SKILL.md`, and the folder name matches the `name` in
 its frontmatter. Keep `SKILL.md` out of the repo root, because the CLI reads a root `SKILL.md` as
 the repo's only skill.

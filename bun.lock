@@ -6,6 +6,7 @@
       "name": "skills",
       "devDependencies": {
         "@zgeoff/chex": "0.0.2",
+        "@zgeoff/skill-gate": "0.2.13",
         "lefthook": "2.2.2",
         "oxfmt": "0.72.0",
       },
@@ -50,7 +51,11 @@
 
     "@oxfmt/binding-win32-x64-msvc": ["@oxfmt/binding-win32-x64-msvc@0.72.0", "", { "os": "win32", "cpu": "x64" }, "sha512-uhooIN+DCzWX5uH7mQkSVCsODqsGluGJ4n3ch4+mITtWKpESMDjUJUSDBAVFuYQDwqY2McPDKdKJbM0oZVW/Qw=="],
 
+    "@zgeoff/agent-hooks": ["@zgeoff/agent-hooks@0.1.3", "", { "bin": { "agent-hooks": "dist/cli.js" } }, "sha512-rKJC1ibr8B/tLwWKZqgp3i/YHxCUytsWd9wAQlZOOdtBDOgG0gvtiUDYtJNpiDNerkbINz/PuvLlKHqcxPYm8g=="],
+
     "@zgeoff/chex": ["@zgeoff/chex@0.0.2", "", { "dependencies": { "@zgeoff/std": "0.3.1", "ts-pattern": "5.9.2" }, "bin": { "chex": "src/cli.ts" } }, "sha512-BhrGevO43DBElilWJol4YrFHTgTcjrx/PFxz/azxxWrw8JSd0I2CaRdOWoXmk+zEw2JgC4meSAbwiKNpmVwZIg=="],
+
+    "@zgeoff/skill-gate": ["@zgeoff/skill-gate@0.2.13", "", { "dependencies": { "@zgeoff/agent-hooks": "0.1.3" } }, "sha512-f1u2sjPsVztlX6oqliRGucq/6wm4oltzWhk44vP5qTgayUBqTD/RGjC9oN35Q8Qr6//qVX48bUo3jTI+8AsKIw=="],
 
     "@zgeoff/std": ["@zgeoff/std@0.3.1", "", {}, "sha512-6HLaUW2v2mbvY2gnS563TsXQ3Xtzc71nR2HmtE8cnZsnp8pvNuom+W3VMSCpX6fRfBC2OZ0/xgxt4JPgzuxyHQ=="],
 
