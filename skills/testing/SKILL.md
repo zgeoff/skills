@@ -96,12 +96,12 @@ packages/ledger/
     └── import-statement.bench.ts   benchmark of the running program
 ```
 
-| The test                      | Put it                                                                                                                                         |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| starts a program as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites) |
-| scores a corpus               | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows           |
-| measures a running program    | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                             |
-| does anything else            | beside the module or script it tests, one test file per module, a program's main module and a shell script included                            |
+| The test                                                     | Put it                                                                                                                                                                                           |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| starts a program that `rig.config.ts` declares, as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites)                                                   |
+| scores a corpus                                              | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows                                                             |
+| measures a running program                                   | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                                                                               |
+| does anything else                                           | beside the module or script it tests, one test file per module, a program's main module included. The test of a shell script, or of a script a CI step runs, starts its script itself, beside it |
 
 - In a test, import runtime code from another workspace package only when the test's package lists
   that package under `dependencies`. Runtime code is any import but a type import or a `test-utils`

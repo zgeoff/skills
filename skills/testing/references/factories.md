@@ -12,8 +12,10 @@ seeds build their input with these factories.
 Watch for these mistakes:
 
 - Never pass `undefined` as an override to leave a field out. To leave an optional field out, take
-  it off the factory's result: `const { note, ...line } = buildMockOrderLine();`. Turn on
-  `exactOptionalPropertyTypes` in the tsconfig, and an `undefined` override becomes a type error.
+  it off the factory's result: `const { note, ...line } = buildMockOrderLine();`. Lint
+  `no-unused-vars` with `ignoreRestSiblings: true`, as `@zgeoff/oxlint-config` does, so the unused
+  `note` passes. Turn on `exactOptionalPropertyTypes`, as `@zgeoff/tsconfig` does, and an
+  `undefined` override becomes a type error.
 - Faker's values follow the order of its calls, so one new faker call elsewhere changes them. A
   golden test pins output in an inline snapshot or compares it with a committed file. In a package
   with a golden test, default every field of the package's own factories to a literal value.
@@ -54,8 +56,8 @@ Watch for these mistakes:
   rerun of the same files gives the same values again. The test preload is the file that
   `bunfig.toml` names under `[test] preload`.
 - Default an enum or a discriminator to the value most tests need.
-- Default each foreign key to a new `faker.string.uuid()`, and never require a parent. When a test
-  needs a real parent, seed the parent and pass its ID.
+- Outside a package with a golden test, default each foreign key to a new `faker.string.uuid()`.
+  Never require a parent. When a test needs a real parent, seed the parent and pass its ID.
 - When the type is a class, pass the merged fields to its constructor and return the instance, so
   `toStrictEqual` against a real instance passes.
 - Build a nested object with its own factory, and pass it the nested override. An override of a list
