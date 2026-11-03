@@ -307,8 +307,8 @@ that passes on a stale report checks nothing.
   their logic, with its tests, in `src/test-utils/`.
 - Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a budget for each number
   it records. Run benchmarks with `rig bench`, never in a test run. It builds each program once,
-  runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` names, so the benchmarks
-  get that lane's shared services, and fails when a number breaks its budget.
+  runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` sets, so the benchmarks get
+  that lane's shared services, and fails when a number breaks its budget.
 
 ```ts
 // packages/ledger/bench/import-statement.bench.ts, in a made-up repo

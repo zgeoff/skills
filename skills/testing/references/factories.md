@@ -54,7 +54,7 @@ Watch for these mistakes:
   `@faker-js/faker` dev dependency, add it.
 - Call `faker.seed()` with a fixed number in the test preload of each package that uses faker, so a
   rerun of the same files gives the same values again. The test preload is the file that
-  `bunfig.toml` names under `[test] preload`.
+  `bunfig.toml` lists under `[test] preload`.
 - Default an enum or a discriminator to the value most tests need.
 - Outside a package with a golden test, default each foreign key to a new `faker.string.uuid()`.
   Never require a parent. When a test needs a real parent, seed the parent and pass its ID.
