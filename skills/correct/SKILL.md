@@ -3,7 +3,7 @@ name: correct
 description:
   "Finds the mistakes agents keep repeating in a repo, from evidence such as review comments,
   reverts and the user's corrections, and changes the repo so the next agent can't repeat them: a
-  better architecture first, then types, then a lint rule whose error names the fix, then a test,
+  better architecture first, then types, then a lint rule whose error gives the fix, then a test,
   and a written rule last. Proves each new check fails on a real past mistake. Load it for regular
   repo cleanup, for 'correct this repo', and when the user corrects a mistake a written rule already
   covers."
@@ -76,7 +76,7 @@ For each repeated mistake, search the repo's skills, AGENTS.md and docs for a ru
   check to cover it.
 
 Some repos hold a copy of a skill that a sync workflow writes from another repo. When the rule lives
-in such a copy, change the rule in a PR to the repo the sync workflow names as its source, and put
+in such a copy, change the rule in a PR to the repo the sync workflow lists as its source, and put
 any check in this repo. Link both PRs in your report. A change to the local copy is lost at the next
 sync.
 
@@ -89,7 +89,7 @@ When a fix would change more than about 20 files, use the next one, and say why 
    module's internals behind its package `exports` or its public entry file. Derive a list from its
    source instead of keeping two by hand. Delete the old way and the dead code an agent would copy.
 2. **Types.** Make the wrong state impossible to write.
-3. **A lint rule or a CI check,** whose error names what to use instead, such as "use `loadSettings`
+3. **A lint rule or a CI check,** whose error gives what to use instead, such as "use `loadSettings`
    from `config/settings.ts`". When the mistake is already in more places than you can fix in this
    PR, list the existing ones in the linter's own baseline or suppression file, or a plain list of
    paths next to the check, and fail only on a new one.

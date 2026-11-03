@@ -107,7 +107,7 @@ knows. A reader elsewhere can't open a file the example names, or doesn't know t
 
 ## Point at the code, don't copy it
 
-When the skill names a file, a function or a setting, link the file, in a sentence that says what
+When the skill mentions a file, a function or a setting, link the file, in a sentence that says what
 the code doesn't: a mistake to avoid, a reason or a choice. When someone renames the file,
 `chex links` fails.
 

@@ -86,9 +86,9 @@ publishes only what's left. After the last publish (and `trust`, if it ran):
 
 ## What goes wrong
 
-- **`ENEEDAUTH` in CI:** the trusted publisher names another file or repo, lacks `--allow-publish`,
-  or expired. The publisher runs `npx -y npm@latest trust list <name>`, revokes it with
-  `npx -y npm@latest trust revoke`, and runs `npm-first-publish trust`.
+- **`ENEEDAUTH` in CI:** the trusted publisher is set to another file or repo, lacks
+  `--allow-publish`, or expired. The publisher runs `npx -y npm@latest trust list <name>`, revokes
+  it with `npx -y npm@latest trust revoke`, and runs `npm-first-publish trust`.
 - **`E404` or `E403` on the first CI publish:** `npm view <name>`. A 404 means the manual publish
   never happened; otherwise no trusted publisher exists, so run `trust`.
 - **`E402 Payment Required`:** a scoped publish without public access; add `publishConfig` through a

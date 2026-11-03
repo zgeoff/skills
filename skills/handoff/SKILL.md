@@ -49,8 +49,8 @@ that the next session must run here.
 
 ## The sections
 
-Start the doc with a `#` title that names the work. Then write these in order, each under its own
-`##` heading. Under a section with nothing in it, write "None".
+Start the doc with a `#` title that gives the work in a few words. Then write these in order, each
+under its own `##` heading. Under a section with nothing in it, write "None".
 
 1. **Goal.** What the work is for, and why, in two or three sentences. Name a ticket by what it
    does, with its ID after.
