@@ -45,10 +45,10 @@ test, for stores from zustand's `create` and `createStore` alike.
 
 ## Rendering
 
-- Mount through the project's `render` and `renderHook` helpers in `test-utils/`, which wrap every
-  provider the app needs, such as a new query client per render. When the repo has none, write them
-  there. Hold the results as `rendered` and `hook`, and query through `rendered`, never through the
-  global `screen`.
+- Mount through the project's `render` and `renderHook` helpers in `src/test-utils/`, which wrap
+  every provider the app needs, such as a new query client per render. When the repo has none, write
+  them there. Hold the results as `rendered` and `hook`, and query through `rendered`, never through
+  the global `screen`.
 - When a test needs one provider with a different value, call RTL's `render` with a `wrapper` that
   holds the app's providers and that one. Still query through the returned `rendered`.
 - Never write a helper function in a test file that renders the component under test, such as
@@ -117,7 +117,7 @@ hook.rerender();
 ## Routing
 
 Mount a component that reads or changes the route through the project's router-aware render helper
-in `test-utils/`. It builds a router on memory history and returns it on the render result, as
+in `src/test-utils/`. It builds a router on memory history and returns it on the render result, as
 `rendered.router`. When the repo has no such helper, write one there that does this.
 
 Give the helper each destination the test expects, with a fixed text for each, such as its path. The
@@ -159,9 +159,9 @@ app renders through Server Components, write one `e2e/` test against the built a
 `runtime-` prefix, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Load a route that
 the server renders, and check its text.
 
-Load a route whose handler reads the request in that same `e2e/` test. The unit tests read the
-request through the stand-in above, so this test is the one place where a real request reaches the
-handler.
+Also load a route whose handler reads the request in an `e2e/` test: the `runtime-` test when the
+app has one, or a `runtime-` test of its own when it doesn't. The unit tests read the request
+through the stand-in above, so this test is the one place where a real request reaches the handler.
 
 Assert a thrown redirect on the rejection itself, with no `await`, as in the testing skill's
 [Errors](../SKILL.md#errors):

@@ -33,9 +33,9 @@ Each fix in more detail:
 - To call the code in the test process, call its handler, its main function with a test argv, an
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
   `startProgram` or `runProgram`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two
-  tests start a real script outside `e2e/`: the test of a shell script, and the test of a TypeScript
-  script that a CI step runs. Put each in the file beside its script. It starts the script itself,
-  and it runs in the unit run, within the unit limit.
+  kinds of test start a real script outside `e2e/`: the test of a shell script, and the test of a
+  TypeScript script that a CI step runs. Put each in the file beside its script. It starts the
+  script itself, and it runs in the unit run, within the unit limit.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow
@@ -46,8 +46,8 @@ Each fix in more detail:
   that.
 - To prove that something does not happen, wait for an event that comes only after it could have
   happened, such as the reply to a second request sent after the first.
-- Look for a stateful stand-in in `test-utils/` and in the repo's project-testing skill, when the
-  repo has one. When none exists, write one, as
+- Look for a stateful stand-in in `src/test-utils/` and in the repo's project-testing skill, when
+  the repo has one. When none exists, write one, as
   [Stateful stand-ins](./system-tests.md#stateful-stand-ins) describes.
 - To check text that a linter or a checker reads, such as a generated shell script, export the
   function that builds the text. Write a script in `scripts/` that calls the function and runs the
@@ -118,7 +118,8 @@ For where CI runs each lane, see the ci-design skill.
 | model-api | `<name>.model-api.test.ts`                    | 120 s | a live model API                                                 |
 
 - Run a file with a lane's suffix only in that lane, wherever it sits, `e2e/` and `integration/`
-  included. A `.restic` test in `e2e/` runs in the `restic` lane, and the e2e lane skips it.
+  included. A test in `e2e/` with a made-up `.kvm` suffix runs in the `kvm` lane, and the e2e lane
+  skips it.
 - In an `agent-sdk` test, never call the live API. Start a scripted model: a local server that
   answers the model API with the replies the test queues. Point the SDK at it with
   `ANTHROPIC_BASE_URL` in the SDK's `env` option.
@@ -178,9 +179,9 @@ ticket or `floor:`.
 - Pass `--no-isolate` with every `--parallel=<N>`. `--parallel` implies `--isolate`, which runs each
   test file in a fresh global object. Isolation slows the suite and hides a leak between files. The
   resets in the test preload and `--randomize` catch that leak instead.
-- Run the unit tests with `rig unit`. It sets `--parallel` from the host's cores and memory, and
-  `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts one worker per
-  core and takes memory the workers need.
+- Run the unit tests with `rig unit --no-isolate`. rig sets `--parallel` from the host's cores and
+  memory, and `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts one
+  worker per core and takes memory the workers need.
 - Name a resource that each worker keeps across its files, such as a database cloned from the
   per-run template, after the worker's process ID. In the helper that hands it out, open it when it
   exists and create it when it doesn't. Never drop it in `afterAll`, because that hook can run after

@@ -63,48 +63,56 @@ metadata:
 
 - Reset shared state after each test in the test preload, the file that `bunfig.toml` names under
   `[test] preload`. When you add module-level state, such as a cache, add its reset there.
-- Override an environment variable through a helper in `test-utils/` that restores it after the
+- Override an environment variable through a helper in `src/test-utils/` that restores it after the
   test, never by assigning `process.env`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
-- Run the unit tests with `rig unit`. It runs `bun test` with `--no-isolate`, so the files share
-  each worker's process, and sets `--parallel` from the host's cores and memory. Never turn Bun's
-  per-file isolation back on.
+- Run the unit tests with `rig unit --no-isolate`. rig sets `--parallel` from the host's cores and
+  memory, and `--no-isolate` lets the files share each worker's process. Never turn Bun's per-file
+  isolation back on.
 
 ## Where a test lives
 
 - Put a unit test beside its module, one test file per module, entry modules included:
   `src/parse-entry.test.ts` beside `src/parse-entry.ts`.
-- Put each test helper, with its own test file, in `src/test-utils/` of its package. Put a helper
-  that several packages use in the package that owns what it starts or builds, such as a server
-  harness in the server's package. Search your own package's `src/test-utils/` before you write a
-  helper, then the `src/test-utils/` of the package that owns what you need.
+- Put each test helper, with its own test file, in `src/test-utils/` of its package. Search there
+  before you write a helper.
+- When several packages need one helper, put it in the package that owns what it starts, builds or
+  fakes, such as a server harness in the server's package. Put a general helper, such as `waitFor`,
+  in a package that every package using it already depends on.
 - To use another package's helper, import it by package name, such as
   `@acme/server/test-utils/start-server`, and list that package as a `workspace:*` dev dependency.
-  The package that holds the helper exports its `test-utils/`, as
-  [Publishing seeds](./references/seeding.md#publishing-seeds) shows. Never import from another
-  package's `src/` by a relative path. Never import `test-utils` from production code.
-- Put a test in the package that exports the function its act calls.
-- When a test imports runtime code from a workspace package that its own package doesn't list under
-  `dependencies`, put the test in `integration/` of its own package, named for the flow it checks.
-  Otherwise it is a unit test of the module it acts on. Both run in the unit run. When the dev
-  dependency would make a cycle, put the test in a package that already depends on every package it
-  imports.
+  When that package doesn't export its `src/test-utils/` yet, add the `exports` entry that
+  [Publishing seeds](./references/seeding.md#publishing-seeds) shows.
+- Never import from another package's `src/` by a relative path. Never import `test-utils` from
+  production code.
+- Put a test in the package that exports the function its act calls. When the test imports runtime
+  code from a workspace package that its package doesn't list under `dependencies`, put it in that
+  package's `integration/`, named for the flow it checks. Runtime code is any import but a type
+  import or a `test-utils` import. Otherwise, put the test beside the module it acts on. Both run in
+  the unit run.
+- When listing an imported package as a dev dependency would make a cycle, put the test in a package
+  that already depends on every package the test imports.
 - Put a test that starts a program as a process in `e2e/` of the package that builds the program.
-  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets what an `e2e/` test may
-  check, and how it starts the program.
+  Start the program with `runProgram` or `startProgram`, and start the file name with the prefix of
+  what the test checks, such as `start-` or `runtime-`, as
+  [End-to-end suites](./references/system-tests.md#end-to-end-suites) sets. The test of a shell
+  script and the test of a script that a CI step runs are the exceptions: each sits beside its
+  script and runs in the unit run.
 - Put an evaluation suite in `evals/<name>/`, and a benchmark of a running program in `bench/`, of
   the package whose code they measure, as [System tests](./references/system-tests.md) describes.
-- Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`. Give them
-  no subfolders, except one folder per eval in `evals/`, and `e2e/fixtures/` for inputs that aren't
-  code, such as a Dockerfile. In a repo that is one package at the root, the root is that package.
+- Keep `integration/`, `e2e/`, `evals/` and `bench/` at the package root, beside `src/`, with no
+  subfolders. There are two exceptions:
+  - `evals/` holds one folder per evaluation;
+  - `e2e/fixtures/` holds inputs that aren't code, such as a Dockerfile.
+- In a repo that is one package at the root, put these folders at the root.
 - Name each test file `<subject>[.<lane>].test.ts`:
-  - In `src/`, the subject is the module's file name.
-  - In `integration/` and `e2e/`, the subject names the behaviour a caller sees, such as
-    `stop-on-signal`. Give related tests the same prefix.
-  - A lane tag, such as `.browser`, names the one extra real system the test needs. Only that
+  - In `src/`, use the module's file name as the subject.
+  - In `integration/` and `e2e/`, name the behaviour a caller sees, such as `stop-on-signal`, and
+    give related tests the same prefix.
+  - Add a lane's suffix, such as `.browser`, when the test needs that lane's real system. Only that
     [lane](./references/slow-tests.md#lanes) runs the file, wherever it sits.
 - Use only the folders above: no `test/`, `tests/` or `__tests__`. Check a config file, such as
-  `package.json`, on its own with a check script that CI runs, never with a test file: a test file
+  `package.json`, on its own with a check script that CI runs, never with a test file: a unit test
   tests the module beside it. A test may still read a config file to check it against that module,
   such as a CI matrix against the list of suites a script defines, as
   [Workflows](./references/workflows.md) shows.
@@ -174,15 +182,15 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 - Keep plain inputs inline: write the literal again in the next test, never a shared fixture or a
   named constant.
 - Give a type that crosses a module boundary, such as an SDK result, a tested `buildMock<Type>`
-  [factory](./references/factories.md) in `test-utils/` on first use. Build only plain data in a
+  [factory](./references/factories.md) in `src/test-utils/` on first use. Build only plain data in a
   factory, and write no rows or files.
 - Build a stand-in for a boundary from data only. Use one of these:
   - a fixed answer;
   - `mock()`;
   - a no-op;
   - a map from input to answer;
-  - the answer-queue helper in `test-utils/`.
-- Move any logic in a stand-in to a tested helper in `test-utils/`.
+  - the answer-queue helper in `src/test-utils/`.
+- Move any logic in a stand-in to a tested helper in `src/test-utils/`.
 - No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
   default silently, where the answer-queue helper throws.
 
@@ -258,8 +266,8 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
   2. an injected clock: `ctx.clock.advance(30_000)`;
   3. fake timers, for code the repo doesn't own, restored in `onTestFinished`.
 - When you can't pass the time in, assert a range around `Date.now()`, such as `toBeWithin`.
-- Wait on a condition with the `waitFor` helper in `test-utils/`, never a sleep. When the code has
-  nothing to wait on, add a signal, such as an event.
+- Wait on a condition with the `waitFor` helper in `src/test-utils/`, never a sleep. When the code
+  has nothing to wait on, add a signal, such as an event.
 
 ## Boundaries
 

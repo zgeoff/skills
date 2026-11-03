@@ -31,9 +31,10 @@ An `e2e/` test starts a program that its package builds, as a process, and drive
 - In an `e2e/` test, start a program only with `runProgram` or `startProgram` from
   `@zgeoff/rig/e2e`, or with a helper in `src/test-utils/` that calls one of them. Never build the
   program's command in the test.
-- Run the lane with `rig e2e`. It builds each program once, and the tests run the artifact. When you
-  run an `e2e/` file with `bun test` on your machine, it runs the source. In CI, the helpers throw
-  when `rig e2e` didn't build the program, so CI never tests the source.
+- Run the lane with `bun run test:e2e`. The script that `rig init` writes calls `rig e2e`, which
+  builds each program once, and the tests run the artifact. When you run an `e2e/` file with
+  `bun test` on your machine, it runs the source. In CI, the helpers throw when `rig e2e` didn't
+  build the program, so CI never tests the source.
 
 ```ts
 // packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo
@@ -64,32 +65,35 @@ Start each `e2e/` file name with the prefix of what it checks. Test anything els
 | `compat-`  | two versions meet, such as an older client and a newer server                 | 1 per entry in Supported versions                    |
 | `journey-` | one core user journey, such as signing in, on its success path                | 1 per entry in Journeys                              |
 
-- A named fault point is a point in the program's code that a test arms by name, such as
-  `queue.after-commit`. Give each `crash-` and `fault-` test its own point. A second test at the
-  same point with other input is an `integration/` test.
+- Give each `crash-` and `fault-` test its own named fault point: a point in the program's code,
+  such as `queue.after-commit`, where the program stops or fails when a test asks it to. The program
+  reads the request from an option that the test passes to `startProgram`, such as an environment
+  variable. Test a second case at the same point, with other input, in `integration/`.
 - List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
-  project-testing skill. Add an entry when the product gains a journey, a guarantee or a version it
-  supports, never to make room for a test.
+  project-testing skill. When the product gains a journey, a guarantee or a version it supports, add
+  the entry and its test in one pull request. Never add an entry only to make room for a test.
 - Test each other case of a journey, such as a wrong password, as a unit or `integration/` test.
+- Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
+  that builds the CLI's commands importable for it. The `cli-` tests check only each command's
+  wiring.
 
 ### Files and shared hosts
 
-Give each `e2e/` test file its own `setupTest` and cleanup, such as `e2e/journey-checkout.test.ts`.
+Give each `e2e/` test file, such as `e2e/journey-checkout.test.ts`, its own `setupTest` and cleanup.
 Inside an `e2e/` test, you may chain acts, and assert after each one, because each act needs the
 state that the act before it left. Outside `e2e/`, a test still has one act.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
   start it in the `start` hook of the e2e lane in `rig.config.ts`, and stop it in the lane's `stop`
-  hook. Never start it in the `[test] preload`. Every unit run loads that file too, and would start
-  the host or service for nothing, or fail on a machine without it. Wire everything else in each
-  file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
+  hook. rig runs these hooks once per lane run, outside the test files. Never start it in the
+  `[test] preload`. Every unit run loads that file too, and would start the host or service for
+  nothing, or fail on a machine without it. Wire everything else in each file's own `setupTest`, as
+  [setupTest](../SKILL.md#setuptest) says.
 - Reset the shared host or service to its starting state from each file's `setupTest`. When the host
-  or service has no reset, build it again there instead.
-- Give the reset helper its own test file in `src/test-utils/`. In it, dirty the state, run the
-  reset, and check the starting state. Check it the same way after an `e2e/` test that failed
-  midway, and after a `SIGINT` to the test process.
-- Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
-  that builds the CLI's commands importable for it.
+  or service has no reset, rebuild its state there, such as by recreating the database.
+- Give the reset helper its own test file in `src/test-utils/`. Test that the reset reaches the
+  starting state from what a test changed, from what a test left when it failed midway, and from
+  what the test process left when it got a `SIGINT`.
 
 ## Real applications and transport
 
@@ -154,7 +158,7 @@ test('it checks a repository out again after the worker evicts it', async () => 
 A scripted worker answers the second `build` with whatever its script holds, so a host that never
 sends the second `checkout` still passes.
 
-Keep the stand-in in `test-utils/` as `start-stub-<program>.ts`, with its own tests, as in
+Keep the stand-in in `src/test-utils/` as `start-stub-<program>.ts`, with its own tests, as in
 [Test data](../SKILL.md#test-data). In each of those tests, check one behaviour the stand-in copies
 from the real program, such as the refusal for an evicted repository.
 
@@ -272,15 +276,20 @@ test still follows the testing skill's rules on loops, branches and one act per 
 
 ## Evaluation suites
 
-Give each evaluation its own folder, `evals/<name>/`, in the package whose code it scores. The
-folder holds:
+Give each evaluation its own folder, `evals/<name>/`, in the package whose code it scores, with
+these files:
 
-- `corpus.json`, or a `corpus/` folder: the committed cases or recorded traffic;
-- `report.json`: the committed results of the last scoring run;
-- `<name>.test.ts`: replays the corpus through the production path, or checks the report against the
-  code. It runs in the unit run, under the 5 s limit.
-- `run-<name>-eval.ts`: scores the code, such as a model's answers, and writes `report.json`.
-  `rig eval <name>` runs it, and no test run does.
+| File                                 | What it holds or does                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `corpus.json`, or a `corpus/` folder | the committed cases or recorded traffic                                                  |
+| `report.json`                        | the committed results of the last scoring run                                            |
+| `<name>.test.ts`                     | the test, in the unit run, under the 5 s limit                                           |
+| `run-<name>-eval.ts`                 | scores the code, such as a model's answers, and writes `report.json`; `rig eval` runs it |
+
+When the scoring runs offline, make the test replay the corpus through the production path and
+compare the result with `report.json`. When the scoring needs a live model, the test can't replay
+it: make the test build the parts of the report that the code decides, and compare those. A test
+that passes on a stale report checks nothing.
 
 - Read the committed corpus or report through one tested loader. Never copy its cases into the test
   as literals.
@@ -288,9 +297,6 @@ folder holds:
   such as a confidence interval or a report writer, in a package of its own that exports it.
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the code host's API,
   and inject it into the production path.
-- Make the test fail when the report and the code disagree, such as by building the report from the
-  code in the test and comparing it with the committed one. A test that passes on a stale report
-  checks nothing.
 - Keep a test that calls a live API out of `evals/`, such as a test that pins how a model SDK
   behaves. Give it the `.model-api` suffix, beside its module or in `integration/`, as
   [Lanes](./slow-tests.md#lanes) describes.
@@ -303,8 +309,8 @@ folder holds:
   their logic, with its tests, in `src/test-utils/`.
 - Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a budget for each number
   it records. Run benchmarks with `rig bench`, never in a test run. It builds each program once,
-  starts the lane that `bench.lane` in `rig.config.ts` names, and fails when a number breaks its
-  budget.
+  runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` names, so the benchmarks
+  get that lane's shared services, and fails when a number breaks its budget.
 
 ```ts
 // packages/ledger/bench/import-statement.bench.ts, in a made-up repo
@@ -327,8 +333,8 @@ Use only inline snapshots, never of a component, and only for machine output tha
 out, such as generated SQL. Check a hand-written value, such as a spec test vector, with an explicit
 matcher.
 
-For any pipeline whose output depends only on its input, in `evals/` or beside its module, write a
-golden test and a determinism test:
+For any pipeline whose output depends only on its input, write a golden test and a determinism test,
+beside the pipeline's module:
 
 - In each golden test, write one input by hand as a literal, and pin the full output in an inline
   snapshot. Never build the input with a factory call. A change to the factory would change the

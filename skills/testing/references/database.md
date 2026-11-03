@@ -23,10 +23,10 @@ the testing skill's rules on [setupTest](../SKILL.md#setuptest), [Cleanup](../SK
 
 ## Postgres isolation
 
-In `setupTest()`, get a handle from the repo's test-database helper in `test-utils/`, and pass the
-handle's connection to the code under test. The helper builds the schema once per run as a template,
-as [Per-run templates](./slow-tests.md#per-run-templates) describes. Never drop its databases
-yourself: the sweep at the start of each run removes the ones that earlier runs left.
+In `setupTest()`, get a handle from the repo's test-database helper in `src/test-utils/`, and pass
+the handle's connection to the code under test. The helper builds the schema once per run as a
+template, as [Per-run templates](./slow-tests.md#per-run-templates) describes. Never drop its
+databases yourself: the sweep at the start of each run removes the ones that earlier runs left.
 
 Pick one isolation level for each test file, and pass it to the helper:
 

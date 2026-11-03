@@ -100,8 +100,10 @@ file moves.
 
 Leave out a fact the agent finds in one step, such as a script in `package.json` or a command in
 AGENTS.md. The terms come from the shared skills: a test budget from
-[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and a lane from
-[Lanes](../../testing/references/slow-tests.md#lanes) in testing.
+[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, a lane from
+[Lanes](../../testing/references/slow-tests.md#lanes) in testing, and a journey, a guarantee and a
+supported version from
+[End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing.
 
 | Project skill     | Fact               | Where                                                                    |
 | ----------------- | ------------------ | ------------------------------------------------------------------------ |
@@ -109,9 +111,9 @@ AGENTS.md. The terms come from the shared skills: a test budget from
 | project-ci-design | Required checks    | the command that lists the checks the `main` ruleset requires            |
 | project-testing   | Lanes              | the config that declares each lane's suffix or folder and its time limit |
 | project-testing   | Test utils         | the folder to search before you write a test helper                      |
-| project-testing   | Journeys           | each core user journey that gets one `journey-` e2e test                 |
-| project-testing   | Guarantees         | each guarantee that gets one `enforce-` e2e test                         |
-| project-testing   | Supported versions | each pair of versions that gets one `compat-` e2e test                   |
+| project-testing   | Journeys           | the journeys themselves, such as "sign-in, checkout"                     |
+| project-testing   | Guarantees         | the guarantees themselves, such as "a guest can't reach the host"        |
+| project-testing   | Supported versions | the version pairs themselves, such as "client N-1 with server N"         |
 
 A made-up project-ci-design skill:
 
