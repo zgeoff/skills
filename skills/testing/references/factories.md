@@ -12,28 +12,27 @@ seeds build their input with these factories.
 Watch for these mistakes:
 
 - Never pass `undefined` as an override to leave a field out. To leave an optional field out, take
-  it off the factory's result: `const { note, ...line } = buildMockOrderLine();`. With
-  `exactOptionalPropertyTypes` on, as in the shared tsconfig, an `undefined` override is a type
-  error.
-- Faker's values follow the order of its calls, so one new faker call elsewhere changes them. In a
-  package with a test that pins output in an inline snapshot or compares it with a committed file,
-  default every field of every factory to a literal value in place of faker, foreign keys included.
+  it off the factory's result: `const { note, ...line } = buildMockOrderLine();`. Turn on
+  `exactOptionalPropertyTypes` in the tsconfig, and an `undefined` override becomes a type error.
+- Faker's values follow the order of its calls, so one new faker call elsewhere changes them. A
+  golden test pins output in an inline snapshot or compares it with a committed file. In a package
+  with a golden test, default every field of the package's own factories to a literal value.
 - Never write a helper that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
   its defaults. A seed named for a state, such as `archivedNote`, may set the one field its name
-  gives. Nothing else presets a field.
+  gives. No other helper presets a field.
 
 ## Writing a factory
 
 - Keep the factory, with its own test file, in `src/test-utils/` of the package that defines the
   type. For a type from a third-party package, such as an SDK result, keep it in the package that
   wraps that package. When no package wraps it, keep it in the package whose tests use it. Another
-  package imports the factory by package name. Add the `exports` entry that
-  [Where a test lives](../SKILL.md#where-a-test-lives) describes when it's missing.
+  package imports the factory by package name, as
+  [Where a test lives](../SKILL.md#where-a-test-lives) says.
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
   `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
   resource.
-- Take one argument of overrides, and return a complete value, with every optional field filled.
-  Return the object literal itself, so the return type checks each field with no cast:
+- Take one argument of overrides. Return a complete value, with every optional field filled. Return
+  the object literal itself, so the return type checks each field with no cast:
 
   ```ts
   export function buildMockOrderLine(overrides: Partial<OrderLine> = {}): OrderLine {
@@ -48,7 +47,7 @@ Watch for these mistakes:
   }
   ```
 
-- Outside a package with a snapshot test, default a field to a `@faker-js/faker` value when no test
+- Outside a package with a golden test, default a field to a `@faker-js/faker` value when no test
   depends on its value. The reader then sees that the value doesn't matter. When the package has no
   `@faker-js/faker` dev dependency, add it.
 - Call `faker.seed()` with a fixed number in the test preload of each package that uses faker, so a
@@ -78,8 +77,7 @@ Watch for these mistakes:
   ```
 
 - When a domain type has one shape as a database row and another in the API, write a factory for
-  each shape, named for its type, such as `buildMockOrderLineRow` and `buildMockOrderLine`. Each
-  factory still only builds a value.
+  each shape, named for its type, such as `buildMockOrderLineRow` and `buildMockOrderLine`.
 - In a test file, call the factory in the test that uses its value, never in a shared constant or a
   hook. The reader then sees each value next to the assertion that uses it.
 

@@ -69,7 +69,7 @@ metadata:
 - Run the unit tests with `rig unit --no-isolate`, from
   [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig). rig sets `--parallel`
   from the host's cores and memory, and `--no-isolate` lets the files share each worker's process.
-  Never turn Bun's per-file isolation back on.
+  Never turn Bun's per-file isolation back on. It slows the suite and hides a leak between files.
 
 ## Where a test lives
 
@@ -79,9 +79,9 @@ Lay out each package like this made-up one:
 packages/ledger/
 ├── package.json                    exports "./test-utils/*"
 ├── src/
-│   ├── post-entry.ts
-│   ├── post-entry.test.ts          unit test, beside its module
-│   ├── post-entry.bench.ts         benchmark of one module
+│   ├── record-payment.ts
+│   ├── record-payment.test.ts      unit test, beside its module
+│   ├── record-payment.bench.ts     benchmark of one module
 │   ├── render-pdf.browser.test.ts  unit test in the browser lane
 │   └── test-utils/
 │       ├── start-ledger.ts         helper, with its own test
@@ -89,7 +89,7 @@ packages/ledger/
 ├── e2e/
 │   ├── start-ready.test.ts         the built program, run as a process
 │   ├── journey-checkout.test.ts
-│   └── fixtures/Dockerfile
+│   └── fixtures/                   inputs that aren't code, such as a Dockerfile
 ├── evals/
 │   └── categorise/                 one folder per evaluation
 └── bench/
@@ -101,12 +101,12 @@ packages/ledger/
 | starts a program as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](./references/system-tests.md#end-to-end-suites) |
 | scores a corpus               | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](./references/system-tests.md#evaluation-suites) shows           |
 | measures a running program    | in `bench/` of the package that builds the program, as [Benchmarks](./references/system-tests.md#benchmarks) shows                             |
-| does anything else            | beside the module or script it tests, one test file per module, entry modules included: `src/post-entry.test.ts` beside `src/post-entry.ts`    |
+| does anything else            | beside the module or script it tests, one test file per module, a program's main module and a shell script included                            |
 
-- Import runtime code in a test only from its own package and the packages its package lists under
-  `dependencies`. Runtime code is any import but a type import or a `test-utils` import. When a test
-  needs two packages that don't depend on each other, put it in the package that wires them together
-  in production, beside the module that does the wiring.
+- In a test, import runtime code from another workspace package only when the test's package lists
+  that package under `dependencies`. Runtime code is any import but a type import or a `test-utils`
+  import. When a test needs two packages that don't depend on each other, put it in the package that
+  wires them together in production, beside the module that does the wiring.
 - Put a helper in `src/test-utils/` of the package that owns what it starts, builds or fakes, such
   as a server harness in the server's package. Put a general helper, such as `waitFor`, in a package
   that every package using it depends on. Search each package's `src/test-utils/` before you write a
@@ -115,21 +115,24 @@ packages/ledger/
   and list that package as a `workspace:*` dev dependency. When the package has no `exports` entry
   for its `src/test-utils/`, add the one that
   [Publishing seeds](./references/seeding.md#publishing-seeds) shows.
-- In `e2e/`, name each file for the behaviour a caller sees, after its prefix, such as
-  `stop-on-signal.test.ts`.
+- In `e2e/`, name each file with its prefix, then the behaviour a caller sees:
+  `stop-on-signal.test.ts` is the `stop-` prefix and the `on-signal` behaviour.
 - Add a lane's suffix, as in `render-pdf.browser.test.ts`, when the test needs that lane's real
   system. Only that [lane](./references/slow-tests.md#lanes) runs the file.
 - In a repo that is one package at the root, put `e2e/`, `evals/` and `bench/` at the root.
-
-`chex test-layout` fails a test folder or a test file outside this layout. The zgeoff lint rules
-fail a test's runtime import from outside its package's `dependencies`, a relative import into
-another package's `src/`, and a `test-utils` import in production code. rig fails a test file whose
-lane suffix `rig.config.ts` doesn't declare.
-
 - Check a config file, such as `package.json`, on its own with a check script that CI runs, never
   with a test file: a unit test tests the module beside it. A test may still read a config file to
   check it against that module, such as a CI matrix against the list of suites a script defines, as
   [Workflows](./references/workflows.md) shows.
+
+CI checks this layout:
+
+- [`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails a test folder
+  or a test file outside this layout.
+- The [zgeoff lint rules](https://github.com/zgeoff/tools/tree/main/packages/oxlint-config) fail a
+  test's runtime import from a workspace package outside its package's `dependencies`, a relative
+  import into another package's `src/`, and a `test-utils` import in production code.
+- rig fails a test file whose lane suffix `rig.config.ts` doesn't declare.
 
 ## Test shape
 
