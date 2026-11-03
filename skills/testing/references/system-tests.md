@@ -303,25 +303,24 @@ that passes on a stale report checks nothing.
 
 - Put a benchmark of one module beside it, as `src/<module>.bench.ts`.
 - Put a benchmark of a running program in `bench/<name>.bench.ts` of the package that builds the
-  program, and start the program with `startProgram`. Keep only these entry files in `bench/`. Put
-  their logic, with its tests, in `src/test-utils/`.
-- Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a budget for each number
-  it records. Run benchmarks with `rig bench`, never in a test run. It builds each program once,
-  runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` sets, so the benchmarks get
-  that lane's shared services, and fails when a number breaks its budget.
+  program, and start the program with `startProgram` in `setup`. Keep only these entry files in
+  `bench/`. Put their logic, with its tests, in `src/test-utils/`.
+- Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a `budget` for the median
+  time of one `run`. Run benchmarks with `rig bench`, never in a test run. It builds each program
+  once, runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` sets, so the
+  benchmarks get that lane's shared services, and fails when the median passes the budget.
 
 ```ts
 // packages/ledger/bench/import-statement.bench.ts, in a made-up repo
-import { defineBench, startProgram } from '@zgeoff/rig/bench';
-import { timeImport } from '../src/test-utils/time-import.ts';
+import { defineBench } from '@zgeoff/rig/bench';
+import { startProgram } from '@zgeoff/rig/e2e';
+import { importStatement } from '../src/test-utils/import-statement.ts';
 
 export default defineBench({
-  budget: { importMs: { max: 800 } },
-  run: async () => {
-    const ledger = await startProgram('ledger');
-
-    return { importMs: await timeImport(ledger, 'statement.csv') };
-  },
+  name: 'import one statement',
+  budget: '800ms',
+  setup: () => startProgram('ledger', { ready: { url: '/health' } }),
+  run: (ledger) => importStatement(ledger, 'statement.csv'),
 });
 ```
 
