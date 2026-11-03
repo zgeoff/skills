@@ -32,10 +32,10 @@ Each fix in more detail:
 
 - To call the code in the test process, call its handler, its main function with a test argv, an
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
-  `startProgram` or `runProgram`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two
-  kinds of test start a real script outside `e2e/`: the test of a shell script, and the test of a
-  TypeScript script that a CI step runs. Put each in the file beside its script. The test starts the
-  script directly, and it runs in the unit run, within the unit limit.
+  `@zgeoff/testing`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two kinds of test
+  start a real script outside `e2e/`: the test of a shell script, and the test of a TypeScript
+  script that a CI step runs. Put each in the file beside its script. The test starts the script
+  directly, and it runs in the unit run, within the unit limit.
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow

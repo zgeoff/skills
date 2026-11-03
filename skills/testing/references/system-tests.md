@@ -28,22 +28,35 @@ An `e2e/` test starts a program that its package builds, as a process, and drive
 
 - Declare each program in `programs` in `rig.config.ts`: its package, its source entry, its build
   command and its artifact.
-- In an `e2e/` test, start a program only with `runProgram` or `startProgram` from `@zgeoff/rig/e2e`
-  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)), or with a helper in
-  `src/test-utils/` that calls one of them. `runProgram` runs the program to its exit, for a `cli-`
-  or `build-` test. `startProgram` leaves it running and returns a handle that stops it. Never build
-  the program's command in the test.
+- In an `e2e/` test, get the program's command only from `resolveProgram` in `@zgeoff/rig/e2e`
+  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). Never build the command in the
+  test.
+- Drive the program with
+  [`@zgeoff/testing`](https://github.com/zgeoff/tools/tree/main/packages/testing), or with a helper
+  in `src/test-utils/` that calls it:
+  - `run` from `@zgeoff/testing/process` runs the program to its exit, for a `cli-` or `build-`
+    test.
+  - `start` from `@zgeoff/testing/process` leaves it running, in its own process group, and returns
+    a handle that stops the whole group.
+  - `spawnCLI` from `@zgeoff/testing/cli` runs it in a pseudo-terminal, for a program a person types
+    into.
 - Run the lane with `bun run test:e2e`. The script that `rig init` writes calls `rig e2e`, which
-  builds each program once, and the tests run the artifact. When you run an `e2e/` file with
-  `bun test` on your machine, the helpers start the program from its source. In CI, the helpers
-  throw when `rig e2e` didn't build the program, so CI never tests the source.
+  builds each program once, and `resolveProgram` returns the artifact. When you run an `e2e/` file
+  with `bun test` on your machine, `resolveProgram` returns the source. In CI, `resolveProgram`
+  throws when `rig e2e` didn't build the program, so CI never tests the source.
 
 ```ts
 // packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo
-import { startProgram } from '@zgeoff/rig/e2e';
+import { resolveProgram } from '@zgeoff/rig/e2e';
+import { start } from '@zgeoff/testing/process';
 
 test('it exits 0 on SIGTERM', async () => {
-  const ledger = await startProgram('ledger', { ready: { url: '/health' } });
+  const program = await resolveProgram('ledger');
+
+  await using ledger = await start(program.command, {
+    cwd: program.cwd,
+    ready: { url: '/health' },
+  });
 
   expect(await ledger.stop('SIGTERM')).toBe(0);
 });
@@ -66,9 +79,9 @@ code it reaches.
 | `compat-`  | two versions meet, such as an older client and a newer server                        |
 | `journey-` | one core user journey, such as signing in, on its success path                       |
 
-- To make the program fail where a `recover-` test needs it, pass an option to `startProgram`, such
-  as an environment variable, that the program reads at that point in its code. Test other inputs at
-  the same point as unit tests.
+- To make the program fail where a `recover-` test needs it, pass an option to `start`, such as an
+  environment variable, that the program reads at that point in its code. Test other inputs at the
+  same point as unit tests.
 - Test each other case of a journey, such as a wrong password, as a unit test.
 - Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
   that builds the CLI's commands importable for it. The `cli-` tests check only each command's
@@ -303,23 +316,29 @@ that passes on a stale report checks nothing.
 
 - Put a benchmark of one module beside it, as `src/<module>.bench.ts`.
 - Put a benchmark of a running program in `bench/<name>.bench.ts` of the package that builds the
-  program, and start the program with `startProgram` in `setup`. Keep only these entry files in
-  `bench/`. Put their logic, with its tests, in `src/test-utils/`.
+  program, and start the program with `start` from `@zgeoff/testing/process` in `setup`. Keep only
+  these entry files in `bench/`. Put their logic, with its tests, in `src/test-utils/`.
 - Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a `budget` for the median
   time of one `run`. Run benchmarks with `rig bench`, never in a test run. It builds each program
   once, runs the `start` hook of the lane that `bench.lane` in `rig.config.ts` sets, so the
-  benchmarks get that lane's shared services, and fails when the median passes the budget.
+  benchmarks get that lane's shared services, and fails when the median passes the budget. After the
+  runs, it stops the program that `setup` started.
 
 ```ts
 // packages/ledger/bench/import-statement.bench.ts, in a made-up repo
 import { defineBench } from '@zgeoff/rig/bench';
-import { startProgram } from '@zgeoff/rig/e2e';
+import { resolveProgram } from '@zgeoff/rig/e2e';
+import { start } from '@zgeoff/testing/process';
 import { importStatement } from '../src/test-utils/import-statement.ts';
 
 export default defineBench({
   name: 'import one statement',
   budget: '800ms',
-  setup: () => startProgram('ledger', { ready: { url: '/health' } }),
+  setup: async () => {
+    const program = await resolveProgram('ledger');
+
+    return start(program.command, { cwd: program.cwd, ready: { url: '/health' } });
+  },
   run: (ledger) => importStatement(ledger, 'statement.csv'),
 });
 ```
