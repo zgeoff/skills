@@ -103,12 +103,15 @@ AGENTS.md. The terms come from the shared skills: a test budget from
 [Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and a lane from
 [Lanes](../../testing/references/slow-tests.md#lanes) in testing.
 
-| Project skill     | Fact            | Where                                                                    |
-| ----------------- | --------------- | ------------------------------------------------------------------------ |
-| project-ci-design | Test budget     | the figure itself, such as "3 min"                                       |
-| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires            |
-| project-testing   | Lanes           | the config that declares each lane's suffix or folder and its time limit |
-| project-testing   | Test utils      | the folder to search before you write a test helper                      |
+| Project skill     | Fact               | Where                                                                    |
+| ----------------- | ------------------ | ------------------------------------------------------------------------ |
+| project-ci-design | Test budget        | the figure itself, such as "3 min"                                       |
+| project-ci-design | Required checks    | the command that lists the checks the `main` ruleset requires            |
+| project-testing   | Lanes              | the config that declares each lane's suffix or folder and its time limit |
+| project-testing   | Test utils         | the folder to search before you write a test helper                      |
+| project-testing   | Journeys           | each core user journey that gets one `journey-` e2e test                 |
+| project-testing   | Guarantees         | each guarantee that gets one `enforce-` e2e test                         |
+| project-testing   | Supported versions | each pair of versions that gets one `compat-` e2e test                   |
 
 A made-up project-ci-design skill:
 
