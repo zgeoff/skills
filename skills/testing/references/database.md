@@ -41,7 +41,7 @@ Pick one isolation level for each test file, and pass it to the helper:
   - uses database-wide state, such as advisory locks, `LISTEN`/`NOTIFY` or DDL statements;
   - opens its own connection, which you point at the clone.
 
-In a file that uses `clone`, add a comment on the code that needs it, such as
+In a file that uses `clone`, name the code that needs it in a comment, such as
 `// claimJob commits the claim before it runs the job`.
 
 ## SQLite isolation

@@ -16,7 +16,7 @@ A transcript is a `.jsonl` file with one entry per line. The transcripts live on
   turned into `-`.
 - Codex: `~/.codex/sessions/<year>/<month>/<day>/rollout-*.jsonl`. Each file's first entry, of type
   `session_meta`, holds the session's working directory.
-- Any other store the `## Evidence sources` section of the repo's AGENTS.md names.
+- Any other store the `## Evidence sources` section of the repo's AGENTS.md lists.
 
 When none of these stores exists, you are on a machine without them. Put this source under Gaps in
 your return.

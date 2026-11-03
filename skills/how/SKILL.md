@@ -49,7 +49,7 @@ Before you start any subagent, read what the repo already says:
 
 1. `docs/README.md`, the index of the repo's docs. There you find the doc for each concept.
 2. The doc in `docs/architecture/` that covers the concept the question asks about. When the index
-   names none, search `docs/architecture/` for the concept's name.
+   lists none, search `docs/architecture/` for the concept's name.
 3. A decision record in `docs/decisions/`, only when the question turns on why something was built a
    certain way. For more than the record holds, load the [why](../why/SKILL.md) skill.
 

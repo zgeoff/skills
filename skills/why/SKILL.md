@@ -80,7 +80,7 @@ candidate, and check it like any other.
 
 ## Sources
 
-Read the `## Evidence sources` section of the repo's AGENTS.md. It names each source the project has
+Read the `## Evidence sources` section of the repo's AGENTS.md. It lists each source the project has
 and how to reach it. An invented example:
 
 ```markdown

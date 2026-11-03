@@ -32,7 +32,7 @@ lesson. After you apply the approved ones, hand back each file you changed and w
   message.
 - [Sort](#sort): a fourth subagent sorts the lessons, and a lesson a check could enforce goes to
   Backlog.
-- [Apply](#apply): only the lessons the user approves, each in the file it names.
+- [Apply](#apply): only the lessons the user approves, each in its file.
 
 ## References
 
@@ -76,7 +76,7 @@ the numbers to apply, and may change where a lesson goes or move it to another l
 the user approved. Then, for each approved lesson:
 
 - **A small edit,** such as one line, a corrected fact or a skill's `description`: make it in the
-  file the lesson names, following that repo's rules for changing files. When that repo copies the
+  file in the lesson, following that repo's rules for changing files. When that repo copies the
   skill from another repo, make the edit in the source repo, or ask the user which repo that is.
 - **A larger edit, or a new skill:** load the [skill-writing](../skill-writing/SKILL.md) skill
   first. For a description, write it so the skill would have loaded in this session, and run
