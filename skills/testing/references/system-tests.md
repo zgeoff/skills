@@ -33,7 +33,7 @@ An `e2e/` test starts a program that its package builds, as a process, and drive
   program's command in the test.
 - Run the lane with `rig e2e`. It builds each program once, and the tests run the artifact. When you
   run an `e2e/` file with `bun test` on your machine, it runs the source. In CI, the helpers throw
-  when `rig e2e` didn't build the program, so CI never tests the source by mistake.
+  when `rig e2e` didn't build the program, so CI never tests the source.
 
 ```ts
 // packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo

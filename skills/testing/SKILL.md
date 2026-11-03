@@ -77,15 +77,15 @@ metadata:
 - Put each test helper, with its own test file, in `src/test-utils/` of its package. Put a helper
   that several packages use in the package that owns what it starts or builds, such as a server
   harness in the server's package. Search your own package's `src/test-utils/` before you write a
-  helper, then that of the package that owns what you need.
+  helper, then the `src/test-utils/` of the package that owns what you need.
 - To use another package's helper, import it by package name, such as
   `@acme/server/test-utils/start-server`, and list that package as a `workspace:*` dev dependency.
   The package that holds the helper exports its `test-utils/`, as
   [Publishing seeds](./references/seeding.md#publishing-seeds) shows. Never import from another
   package's `src/` by a relative path. Never import `test-utils` from production code.
 - Put a test in the package that exports the function its act calls.
-- When the test imports runtime code from a workspace package that its own package doesn't list in
-  `dependencies`, put it in its package's `integration/` folder, named for the flow it checks.
+- When a test imports runtime code from a workspace package that its own package doesn't list under
+  `dependencies`, put the test in `integration/` of its own package, named for the flow it checks.
   Otherwise it is a unit test of the module it acts on. Both run in the unit run. When the dev
   dependency would make a cycle, put the test in a package that already depends on every package it
   imports.
