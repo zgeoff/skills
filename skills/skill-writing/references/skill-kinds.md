@@ -99,21 +99,14 @@ command that shows it. A pointer stays true when the value changes, and `chex li
 file moves.
 
 The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
-ci-design, a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing, and a
-journey, a guarantee and a supported version from
-[End-to-end suites](../../testing/references/system-tests.md#end-to-end-suites) in testing. List the
-journeys, guarantees and supported versions in their rows, even when test files name them: each
-`journey-`, `enforce-` and `compat-` test must match an entry in its row.
+ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing.
 
-| Project skill     | Fact               | Where                                                                    |
-| ----------------- | ------------------ | ------------------------------------------------------------------------ |
-| project-ci-design | Test budget        | the figure itself, such as "3 min"                                       |
-| project-ci-design | Required checks    | the command that lists the checks the `main` ruleset requires            |
-| project-testing   | Lanes              | the config that declares each lane's suffix or folder and its time limit |
-| project-testing   | Test utils         | the folder to search before you write a test helper                      |
-| project-testing   | Journeys           | the journeys themselves, such as "sign-in, checkout"                     |
-| project-testing   | Guarantees         | the guarantees themselves, such as "a guest can't reach the host"        |
-| project-testing   | Supported versions | the version pairs themselves, such as "client N-1 with server N"         |
+| Project skill     | Fact            | Where                                                                    |
+| ----------------- | --------------- | ------------------------------------------------------------------------ |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                       |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires            |
+| project-testing   | Lanes           | the config that declares each lane's suffix or folder and its time limit |
+| project-testing   | Test utils      | the folder to search before you write a test helper                      |
 
 A made-up project-ci-design skill:
 

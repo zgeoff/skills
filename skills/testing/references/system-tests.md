@@ -52,31 +52,23 @@ test('it exits 0 on SIGTERM', async () => {
 ### E2e prefixes
 
 Start each `e2e/` file name with one of these prefixes. Test anything else as a unit test of the
-code it reaches. Guarantees, Supported versions and Journeys are rows of the Facts table in the
-repo's project-testing skill.
+code it reaches.
 
-| Prefix     | What the test checks                                                          | How many tests                                       |
-| ---------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `start-`   | the program starts and reports ready, or refuses a bad config                 | per program, 1 ready and 1 refused config            |
-| `stop-`    | a signal or a shutdown command, then a clean exit                             | 1 per signal or shutdown command the program handles |
-| `crash-`   | the program is killed mid-work, and the next start recovers                   | 1 per named fault point                              |
-| `fault-`   | a service the program uses fails, and the program recovers when it comes back | 1 per named fault point                              |
-| `cli-`     | a command's wiring: its exit code and output                                  | per command, 1 success and 1 failure                 |
-| `build-`   | the artifact itself: it runs from a clean folder, with its assets             | 1 per artifact                                       |
-| `runtime-` | a code path the unit run can't load, such as React Server Components          | 1 per such path                                      |
-| `enforce-` | a guarantee that only the real environment enforces, such as a memory limit   | 1 per entry in Guarantees                            |
-| `compat-`  | two versions meet, such as an older client and a newer server                 | 1 per entry in Supported versions                    |
-| `journey-` | one core user journey, such as signing in, on its success path                | 1 per entry in Journeys                              |
+| Prefix     | What the test checks                                                                 |
+| ---------- | ------------------------------------------------------------------------------------ |
+| `start-`   | the program starts and reports ready, or refuses a bad config                        |
+| `stop-`    | a signal or a shutdown command, then a clean exit                                    |
+| `recover-` | the program is killed mid-work, or a service it uses fails, and the program recovers |
+| `cli-`     | a command's wiring: its exit code and output                                         |
+| `build-`   | the artifact itself: it runs from a clean folder, with its assets                    |
+| `runtime-` | a code path the unit run can't load, such as React Server Components                 |
+| `enforce-` | a guarantee that only the real environment enforces, such as a memory limit          |
+| `compat-`  | two versions meet, such as an older client and a newer server                        |
+| `journey-` | one core user journey, such as signing in, on its success path                       |
 
-- Give each `crash-` and `fault-` test its own named fault point: a point in the program's code,
-  such as `queue.after-commit`, where the program stops or fails when a test asks it to. The program
-  reads the request from an option that the test passes to `startProgram`, such as an environment
-  variable. A `fault-` test makes the program's call to the service fail at its fault point, and
-  leaves the real service running. Test a second case at the same point, with other input, as a unit
-  test, where [Where a test lives](../SKILL.md#where-a-test-lives) puts it.
-- List the entries of Journeys, Guarantees and Supported versions in the Facts table of the repo's
-  project-testing skill. When the product gains a journey, a guarantee or a version it supports, add
-  the entry and its test in one pull request. Never add an entry only to make room for a test.
+- To make the program fail where a `recover-` test needs it, pass an option to `startProgram`, such
+  as an environment variable, that the program reads at that point in its code. Test other inputs at
+  the same point as unit tests.
 - Test each other case of a journey, such as a wrong password, as a unit test.
 - Test each argument and flag of a CLI through its real parser in a unit test, and keep the code
   that builds the CLI's commands importable for it. The `cli-` tests check only each command's
