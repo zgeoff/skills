@@ -25,8 +25,8 @@ Don't change any file. Run only read-only commands, such as `grep` or `git log`.
 
 1. With explorer findings, merge the slices into one flow. Where two explorers disagree, read the
    code, and write the flow the code shows. Without findings, your caller judged the question
-   simple: trace the flow yourself, with no subagents. Start from the function the question names,
-   or the first caller of its main term.
+   simple: trace the flow yourself, with no subagents. Start from the function in the question, or
+   the first caller of its main term.
 2. Check each claim in the caller's docs that your answer relies on against the code. Put each doc
    the code contradicts under Surprises.
 3. When you can't trace a stage of the flow after reading the files where it should live, stop

@@ -20,13 +20,13 @@ against now before you act. Report what you found to the user, then start on the
 3. Check each claim in the doc against how things stand now, including:
    - the branches and worktrees, and each change the doc calls uncommitted;
    - each PR's state and checks;
-   - the state of each ticket the doc names, in the tracker your session can reach;
+   - the state of each ticket in the doc, in the tracker your session can reach;
    - each process, preview, container or CI run the doc calls running.
 
    List each difference, and each claim you couldn't check.
 
 4. Decide the next action. Start from the doc's. When a difference makes it wrong or already done,
-   or the doc names none, choose another action.
+   or the doc has none, choose another action.
 5. Tell the user, in a few lines: the goal, where it stands now, with the differences and the claims
    you couldn't check first, what waits on the user, and the next action.
 6. When the next action is the doc's, start on it. When you chose another, ask the user to approve

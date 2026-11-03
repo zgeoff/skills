@@ -93,7 +93,7 @@ problem to be: which requirements it meets, and how it reads each one.
 
 Load the [second-opinion](../second-opinion/SKILL.md) skill. Copy each sketch's files into a new
 folder in your scratch directory named A, B or C, in shuffled order, and note which letter is which
-approach. Delete any comment that names the approach. Send the other model:
+approach. Delete any comment about the approach. Send the other model:
 
 - the three folders, with none of the subagents' replies;
 - your criteria, and red-flags.md;

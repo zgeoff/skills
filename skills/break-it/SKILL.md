@@ -95,10 +95,9 @@ use the [read-back](../read-back/SKILL.md) skill.
 ## Check each bug
 
 Rerun each bug in a fresh detached worktree from `break-it-scratch`, one per bug, numbered like
-`.worktrees/rerun-1`. Copy in the files the bug's Command item names, from the subagent's worktree
-or its reply, and any untracked files you copied before. Run the command there. When the subagent
-gave a count, such as 7/20, the bug shows only in some runs: run it 20 times, and report your own
-count.
+`.worktrees/rerun-1`. Copy in the files in the bug's Command item, from the subagent's worktree or
+its reply, and any untracked files you copied before. Run the command there. When the subagent gave
+a count, such as 7/20, the bug shows only in some runs: run it 20 times, and report your own count.
 
 Keep a bug when your rerun shows it at least once, and it breaks what the change is meant to do.
 When the bug also fails on the default branch, keep it, and mark it as there before the change. Drop

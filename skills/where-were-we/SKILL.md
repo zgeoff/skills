@@ -53,7 +53,7 @@ skill to find what was tried, and use its answer as evidence for a decision.
 
 ## What happened
 
-Open with one sentence that names what waits on the user, or says nothing does.
+Open with one sentence on what waits on the user, or write that nothing does.
 
 Then say what happened since their last message, in under 100 words, not counting diagrams:
 

@@ -28,8 +28,8 @@ You get:
 ## What a sketch holds
 
 Write these files in your folder, in the language of the code that would call the design. Start each
-file with a comment that names the repo file it would become, and write each import as it would read
-from that repo file. The sketch doesn't need to compile.
+file with a comment that gives the path of the repo file it would become, and write each import as
+it would read from that repo file. The sketch doesn't need to compile.
 
 1. `01-usage.<ext>`: two or three places in the repo that would use the design, each written as
    those few lines would read once the design is built. Name each place's file in a comment. When

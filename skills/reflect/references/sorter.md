@@ -21,8 +21,8 @@ Run each lesson through these tests, in order, and stop at the first it fails:
 1. **Still true in 6 months:** the point survives when the paths, hashes and versions in it change.
 2. **Changes what an agent does:** an agent that reads it would act differently.
 3. **Specific enough** that an agent knows when it applies.
-4. **Goes in a real file:** the Goes in line names a skill the session used, its description,
-   AGENTS.md or a new skill. Open the path it names, from the repo root.
+4. **Goes in a real file:** the Goes in line gives a skill the session used, its description,
+   AGENTS.md or a new skill. Open that path, from the repo root.
 5. **Not covered already:** read the file the lesson goes in. Fail the lesson when the file states
    it clearly. When the file states it weakly, or where an agent would miss it, pass the lesson, as
    a change that rewords or moves the file's text.
