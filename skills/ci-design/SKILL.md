@@ -45,17 +45,16 @@ one. When the repo has no budget, skip each rule below that uses one.
 - In a public repo, write a job of your own only when it saves 60 s of wall time over a script in
   `bun-checks.yml`. Shard tests only when the repo is over its test budget.
 - In a private repo, write a job of your own only for a heavy check: one on any runner but a
-  GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`,
-  because GitHub bills its minutes on every push to a pull request. Never make it a required check.
+  GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`, as
+  GitHub bills its minutes on every push to a pull request. Never make it a required check.
 - When you make a job of your own a required check, give it no `if:` or path filter that can skip
   it. GitHub counts a skipped required check as a pass.
 
 ## Timeouts
 
 Set `timeout-minutes` on every job that runs steps. GitHub refuses the key on a job that calls a
-reusable workflow, such as the `changes` job under [Path filters](#path-filters), so the called
-workflow sets its own. Set the timeout of `bun-checks.yml` with the repo variable
-`BUN_CHECK_TIMEOUT_MINUTES`, and pass it to the workflow's `timeout-minutes` input:
+reusable workflow, so the called workflow sets its own. Set the timeout of `bun-checks.yml` with the
+repo variable `BUN_CHECK_TIMEOUT_MINUTES`, and pass it to the workflow's `timeout-minutes` input:
 `timeout-minutes: ${{ fromJSON(vars.BUN_CHECK_TIMEOUT_MINUTES || '20') }}` under `with:`.
 
 Until the repo has a test budget and its tests have stayed within it for a week, set the timeout to
@@ -66,8 +65,8 @@ recent runs. In a public repo, one timeout covers every job: use the slowest tes
 ## Reusable workflows
 
 Share steps as a reusable workflow. A composite action's failure shows as one red line, with no step
-to point at. Check zgeoff/tools for a shared one before you write setup steps by hand. When you add
-the call, pin it to the latest commit on `main`:
+to point at. Before you write setup steps, check zgeoff/tools for a shared one. When you add the
+call, pin it to the latest commit on `main`:
 
 ```yaml
 uses: zgeoff/tools/.github/workflows/<name>.yml@<commit> # main
@@ -109,7 +108,8 @@ jobs:
 
 ## Cancelling runs
 
-- In a checks workflow, cancel the older run when a newer commit arrives:
+- Run the checks of a push to `main` in their own workflow, so no later push cancels them. In the
+  pull-request workflow, cancel the older run when a newer commit arrives:
 
 ```yaml
 concurrency:
@@ -122,7 +122,6 @@ concurrency:
   `cancel-in-progress: false`. When the checks share that workflow, move their group to job level
   too. A workflow-level group cancels every job in the run, the deploy included.
 - In a workflow that runs only on `main`, group by `github.sha`, with `cancel-in-progress: false`.
-  Then no later push cancels a commit's run.
 
 ## Builds
 
