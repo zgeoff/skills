@@ -25,9 +25,11 @@ shape of your parser.
 ## Access rules
 
 - Test that each kind of caller the rule allows succeeds, such as a team editor and an admin.
-- Write one test for each condition the rule checks. Give it a caller who fails that condition and
-  passes every other one, so the test fails when someone deletes that check. Name the caller in the
-  title, such as `it rejects an editor of another team`.
+- Write one test for each condition the rule checks. Give it a caller who fails that condition,
+  passes the other conditions on the same path to access, and takes no other path. For
+  `admin || (editor && sameTeam)`, refuse an editor of another team and a non-editor on the team,
+  neither of them an admin. The test then fails when someone deletes that check. Name the caller in
+  the title, such as `it rejects an editor of another team`.
 - Assert each refusal at the strictness the contract needs. For a thrown error, follow
   [Errors](../SKILL.md#errors). For a returned refusal, assert its code or status, such as
   `toBe(403)`.

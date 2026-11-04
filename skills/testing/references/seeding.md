@@ -11,7 +11,7 @@ through it, a schema or layout change breaks only the module and its tests.
 - [`buildSeeder` and `setupTest`](#buildseeder-and-setuptest)
 - [Calls that stay in the test](#calls-that-stay-in-the-test)
 - [Table-driven tests](#table-driven-tests)
-- [A state no code in the module makes](#a-state-no-code-in-the-module-makes)
+- [A state no code in the repo makes](#a-state-no-code-in-the-repo-makes)
 - [Interrupted operations](#interrupted-operations)
 - [A seed's own test](#a-seeds-own-test)
 
@@ -30,8 +30,8 @@ they are.
 
 Write directly only in these places, and never in `e2e/`:
 
-- inside a seed, for a state that no code in the module makes, as in
-  [A state no code in the module makes](#a-state-no-code-in-the-module-makes);
+- inside a seed, for a state that no code in the repo makes, as in
+  [A state no code in the repo makes](#a-state-no-code-in-the-repo-makes);
 - in the module's own tests, when no seed makes the state;
 - in a migration test, and in a test of code whose product is SQL or storage, such as a database
   dialect.
@@ -50,7 +50,7 @@ Start from the module's state type, such as `type NoteStatus = 'draft' | 'archiv
 - Pass every other difference, such as a title or a timestamp, as input to a seed. Never write a new
   seed for it.
 
-Write no seed beyond that list, except one for a state that no code in the module makes.
+Write no seed beyond that list, except one for a state that no code in the repo makes.
 
 ## Writing a seed
 
@@ -68,8 +68,9 @@ Give a seed two arguments:
 Inside the seed, call the module's write functions in a straight line:
 
 - In the base seed, call the module's create function.
-- In a variant, call the base seed, then the shortest chain of the module's transition functions
-  that reaches the state: `seedArchivedNote` calls `seedNote`, then `archiveNote`.
+- In a variant, call the base seed, then the shortest chain of transition functions that reaches the
+  state: `seedArchivedNote` calls `seedNote`, then `archiveNote`. When another module holds a
+  transition, call that module's function. Never write the row directly for it.
 - When a transition takes an argument that the create input lacks, such as a cancel reason, pass a
   fixed value in the seed. When a test checks that argument, call the transition in the test.
 - When a write function returns a wider type than the seed promises, narrow it with `invariant()`
@@ -194,12 +195,12 @@ test.each([
 });
 ```
 
-## A state no code in the module makes
+## A state no code in the repo makes
 
-Some states come from no code in the module, such as a row that an older version wrote before a
-column became required. Write such a row directly, only inside a seed, and name the exact state in a
-`//` comment. Give each such state its own seed, and add it to the module's `build<Record>Seeder`
-beside the others.
+Some states come from no code in the repo, such as a row that an older version wrote before a column
+became required. Write such a row directly, only inside a seed, and name the exact state in a `//`
+comment. Give each such state its own seed, and add it to the module's `build<Record>Seeder` beside
+the others.
 
 This seed writes the row itself, so it takes a partial of the table's insert shape, built with that
 shape's factory, in place of the create input:
