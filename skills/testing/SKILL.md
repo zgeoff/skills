@@ -2,7 +2,7 @@
 name: testing
 description:
   Testing rules for zgeoff repos, covering where a test lives, test shape, setupTest and cleanup,
-  test data, stored state seeded and read through the module that writes it, schemas, assertions,
+  test data, stored state seeded and read through the module that creates it, schemas, assertions,
   matchers, time, boundaries and speed. References cover seeding, slow tests and lanes, factories,
   databases, HTTP mocking, cleanup, observability, system tests, shell scripts, workflows and Claude
   Code mods, plus frontend, Go and NixOS where a repo uses them. Load it before you write or review
@@ -145,11 +145,12 @@ test('it lists the notes of a user with none as empty', async () => {
 
 ## Stored state
 
-Reach database rows and files on disk through the module that writes them. Only that module's own
-tests may write them directly, when no seed makes the state.
+Reach database rows and files on disk through the module that creates them, even in the tests of a
+module that only changes them. Only the creating module's own tests may write them directly, when no
+seed makes the state.
 
-- Outside the module's tests, read through its code: a read function for rows, a path helper for
-  files. When none exists, add one, with a test.
+- Outside the creating module's tests, read through its code: a read function for rows, a path
+  helper for files. When none exists, add one, with a test.
 - Seed through the module, with one seed per state, such as
   `ctx.seed.archivedNote({ title: 'Groceries' })`. Keep the call under test and each clock move in
   the test, as [Seeding](./references/seeding.md) says.
@@ -158,8 +159,8 @@ tests may write them directly, when no seed makes the state.
 
 - Assert the full contract with `toStrictEqual`, with an asymmetric matcher for a field the test
   doesn't decide, such as a generated ID. Never use `toEqual`. Use `toMatchObject` only for an
-  error's code, or a raw row in the writing module's own test. When you read stored state back after
-  a change, one `toBe` on the changed field is enough.
+  error's code, or a raw row in the creating module's own test. When you read stored state back
+  after a change, one `toBe` on the changed field is enough.
 - Assert each result in its own `expect`, and the parts of one result in one `expect`, such as a
   command's exit code, stdout and stderr.
 - Derive the expected value from the contract, never with the unit's own calculation.

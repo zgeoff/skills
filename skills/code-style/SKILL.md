@@ -126,7 +126,7 @@ Give any other function any verb that fits, except a banned one.
 | event-callback prop or parameter                                                                          | `on`                         | follows the framework's callback convention                                    |
 | function passed to an `on` prop, or a function that handles a framework lifecycle event such as a request | `handle`                     | follows the framework's callback convention                                    |
 | a test file's per-test fixture                                                                            | `setupTest`                  | as the testing skill's [setupTest](../testing/SKILL.md#setuptest) section says |
-| stored state put in place for a test, through the code of the module that writes it                       | `seed`                       | may do I/O; test code only                                                     |
+| stored state put in place for a test, through the code of the module that creates that state              | `seed`                       | may do I/O; test code only                                                     |
 
 - Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
   `zgeoff/verb-contract` lint rule can't see I/O inside an npm package or behind a helper whose name

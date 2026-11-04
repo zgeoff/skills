@@ -77,20 +77,20 @@ its data exists, boot it in the test body, after the test creates that data.
 
 ## Persisted test data
 
-Outside the module that writes the table, seed rows through that module's seeds, never with your own
-insert, as in [Stored state](../SKILL.md#stored-state). To write a seed, see
-[Seeding](./seeding.md).
+In a test outside the module that creates a table's rows, seed those rows through that module's
+seeds, never with your own insert, as in [Stored state](../SKILL.md#stored-state). To write a seed,
+see [Seeding](./seeding.md).
 
 ## Reading results back
 
-Outside the module that writes the table, read a row back through that module's read function, as in
-[Stored state](../SKILL.md#stored-state). In the module's own test, query its table directly. With
-Kysely, read a row that must exist with `executeTakeFirstOrThrow()`, and select only the column
-under test when only that column matters. Assert absence with `executeTakeFirst()` and
+In a test outside the module that creates a table's rows, read a row back through that module's read
+function, as in [Stored state](../SKILL.md#stored-state). In the module's own test, query its table
+directly. With Kysely, read a row that must exist with `executeTakeFirstOrThrow()`, and select only
+the column under test when only that column matters. Assert absence with `executeTakeFirst()` and
 `toBeUndefined()`.
 
 ```ts
-// archive-note.test.ts, in the module that writes the notes table
+// archive-note.test.ts, in the module that creates notes
 await archiveNote(ctx.db, note.id, ctx.clock.now());
 
 const row = await ctx.db
@@ -114,9 +114,7 @@ await request.catch(() => {});
 
 expect(request).rejects.toMatchObject({ code: 'NOT_FOUND' });
 
-const row = await ctx.db.selectFrom('notes').selectAll().executeTakeFirst();
-
-expect(row).toBeUndefined();
+expect(await ctx.service.listNotes()).toStrictEqual([]);
 ```
 
 To test how code recovers after several calls fail, such as a job that gives up after its third
@@ -158,13 +156,16 @@ Give the tie its own test, with two rows that share the timestamp.
 In an access test, seed each user or role the rule covers. In the test body, build the client each
 one calls through, such as an API client signed in as that user, or a connection as that Postgres
 role. Then write the tests in [Access rules](./schemas-and-access.md#access-rules): the allowed user
-succeeds, and each other user or role is refused or sees nothing.
+succeeds, and a caller who fails each condition is refused or sees nothing.
+
+Under `transaction` isolation, a second connection can't see the rows the test seeded. To act as a
+Postgres role there, run `SET LOCAL ROLE` on the test's connection. Otherwise use `clone`.
 
 ## Configuration stored in the database
 
 When a service reads its configuration from a table, seed the configuration rows through the seeds
-of the module that writes the table, and let the real query pick the row that applies. Never stub
-the configuration read. Which row wins, such as the most specific match, is the behaviour under
+of the module that creates the table's rows, and let the real query pick the row that applies. Never
+stub the configuration read. Which row wins, such as the most specific match, is the behaviour under
 test.
 
 ## SQL built from identifiers

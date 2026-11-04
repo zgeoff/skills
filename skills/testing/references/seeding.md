@@ -1,8 +1,8 @@
 # Seeding
 
-Seed through the module that writes the state: put rows or files in place for a test by calling that
-module's own functions. Keep the seeds in the `src/test-utils/` folder of the module's package, and
-export them so other packages' tests can import them. When every test outside the module seeds
+Seed through the module that creates the state: put rows or files in place for a test by calling
+that module's own functions. Keep the seeds in the `src/test-utils/` folder of the module's package,
+and export them so other packages' tests can import them. When every test outside the module seeds
 through it, a schema or layout change breaks only the module and its tests.
 
 - [The seeds a module publishes](#the-seeds-a-module-publishes)
@@ -106,6 +106,9 @@ export async function seedArchivedNote(
 When a write sits inside a larger function, such as a request handler, move it into its own function
 in the module. Call that function from both the handler and the seed.
 
+When two modules create one kind of record, move the create function into the module that holds most
+of the record's write functions, and call it from the other. The seeds then live in that one module.
+
 ## Publishing seeds
 
 Export the package's `src/test-utils/` folder in the `exports` of its `package.json`, such as
@@ -122,8 +125,8 @@ export const buildNoteSeeder = (deps: NotesDeps) => ({
 });
 ```
 
-Name each key for the seed without `seed`, so a test calls `ctx.seed.archivedNote(…)`. Only one
-module stores each kind of record, so two modules never publish the same key.
+Name each key for the seed without `seed`, so a test calls `ctx.seed.archivedNote(…)`. Only the
+module that creates a kind of record publishes its seeds, so two modules never publish the same key.
 
 ## `buildSeeder` and `setupTest`
 
@@ -193,10 +196,10 @@ test.each([
 
 ## A state no code in the module makes
 
-Some states come from no code in the repo, such as a row that an older version wrote before a column
-became required. Write such a row directly, only inside a seed, and name the exact state in a `//`
-comment. Give each such state its own seed, and add it to the module's `build<Record>Seeder` beside
-the others.
+Some states come from no code in the module, such as a row that an older version wrote before a
+column became required. Write such a row directly, only inside a seed, and name the exact state in a
+`//` comment. Give each such state its own seed, and add it to the module's `build<Record>Seeder`
+beside the others.
 
 This seed writes the row itself, so it takes a partial of the table's insert shape, built with that
 shape's factory, in place of the create input:

@@ -7,12 +7,13 @@ rule allows.
 ## Schemas and parsers
 
 The examples use a schema whose `safeParse` returns `{ success, data, error }`, such as a Zod
-schema. Map them onto the result shape of your parser.
+schema. Test through a parser's non-throwing form, such as `safeParse` in place of `parse`. Map the
+examples onto the result shape of your parser.
 
 - Write each payload as a literal in the test. With a factory's defaults, the reader can't see which
   field the test checks.
-- Build each rejected payload from the valid literal, with one field changed. Then the one changed
-  field is the only reason the payload can fail.
+- Build each rejected payload from the valid literal, with one field changed or removed. Then that
+  one field is the only reason the payload can fail.
 - Assert a rejection's issue path:
   `expect(result.error?.issues).toPartiallyContain({ path: ['title'] })`. Never assert `issues[0]`,
   because the order of the issues changes with the schema. Never assert a bare `success: false`,
@@ -23,8 +24,10 @@ schema. Map them onto the result shape of your parser.
 ## Access rules
 
 - Test that the allowed caller succeeds.
-- Test that another caller is refused, with a title that says who owns the record:
-  `it rejects a note owned by another user`. Assert the refusal at the strictness the contract
-  needs, as [Errors](../SKILL.md#errors) says.
+- Write one test for each condition the rule checks, with a caller who fails that condition:
+  `it rejects a caller who isn't signed in`, `it rejects an editor of another team`.
+- Assert each refusal at the strictness the contract needs. For a thrown error, follow
+  [Errors](../SKILL.md#errors). For a returned refusal, assert its code or status, such as
+  `toBe(403)`.
 - When the rule hides a record from a read, assert the refused caller's empty result, such as
-  `toBeNull()`.
+  `toBeNull()` or `toStrictEqual([])`.
