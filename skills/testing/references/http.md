@@ -39,7 +39,8 @@ and `server.disable()` in `afterAll`. Never call `enable()` when the module load
 
 Choose what happens to a request that no handler matches:
 
-- In most suites, pass `onUnhandledFrame: 'error'`. The request rejects, and MSW prints its URL.
+- Pass `onUnhandledFrame: 'error'`, unless the next bullet applies. The request rejects, and MSW
+  prints its URL.
 - When a suite sends real requests to a server it started on the loopback interface, pass a
   callback. Return for a loopback host, so the request goes through. For any other host, call
   `defaults.error()` to print the URL, then throw. `defaults.error()` only prints, and the throw
@@ -94,16 +95,17 @@ For a small lookup, such as an HTTP status for each health-check URL, you may us
 test preload clears. For a side effect with no record behind it, such as a sent email, export an
 array, such as `sentEmails`, from the handler module, and clear it in the test preload.
 
-Export each part of such a handler on its own, so a test can wrap or replace it:
+Keep records, their writes and their relationships in collections. Use a `Map` or an array only for
+these two cases.
+
+Export each part of a side-effect handler on its own, so a test can wrap or replace it:
 
 - the array;
 - the base URL constant that the handler's route starts with, such as `NOTES_API_URL`;
 - the resolver function that builds the response.
 
-Put records, their writes and their relationships in collections.
-
-Never call `mock()` in a handler module. A dev server or a story can load the module too, and
-`mock()` works only under the test runner.
+Never call `mock()` in a handler module. A dev server or a story can load the module too, in a
+runtime that can't import `bun:test`.
 
 ## Per-test handlers
 

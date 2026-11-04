@@ -16,8 +16,8 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
 2. **Package README:** in any other folder with its own manifest (`package.json`, `go.mod` or
    `Cargo.toml`), wherever the folder sits. Give a published package the
    [published package sections](#published-package-sections), because the registry shows its README
-   on the package's page. Give an unpublished package the short README that ends
-   [published package sections](#published-package-sections).
+   on the package's page. Give an unpublished package a short README, as the last paragraph of
+   [published package sections](#published-package-sections) describes.
 3. **Docs index:** `docs/README.md`, one line and a link for each doc.
 4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
    the design. Give a design folder inside another design folder its own design README.
@@ -86,8 +86,8 @@ field to rewrite a relative link so that it points at the repo.
    a short recording or a screenshot, when one exists.
 3. `## Install`: one command and its prerequisites. Link a guide for any other way to install. Then
    the first 2 or 3 commands a new user runs.
-4. `## Features`, with one line per feature, and a link to its doc or guide when one exists. A
-   package that supports a list of tools or platforms adds a section for that list, such as
+4. `## Features`, with one line per feature, and a link to its doc or guide when one exists. When a
+   package supports a list of tools or platforms, add a section for that list, such as
    `## Supported platforms`.
 5. `## Configuration`: one paragraph, and a link to the config schema, or to the configuration guide
    when there's no schema. Leave it out when the package has no configuration.
@@ -116,9 +116,9 @@ of date:
 ## Who reviews a README
 
 The user owns what each README says about the project, so the user reviews every README change in
-its PR. Make the change without asking first, in the PR this list names:
+its PR. Make the change without asking first, in the PR that each line below names:
 
 - Add a new package's README in the PR that adds the package.
-- Add a new feature's line to the package README's `## Features` in the PR that adds the feature.
+- Add a new feature's README line in the PR that adds the feature.
 - Rewrite a sentence your change made false in the same PR.
 - Make any other change to an existing README in a PR of its own.

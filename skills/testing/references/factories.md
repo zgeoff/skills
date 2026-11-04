@@ -21,8 +21,9 @@ Watch for these mistakes:
   the order of its calls in the run, so one new faker call in any test file changes them.
 - Never write a factory that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
   its defaults. Pass the overrides in the test instead: `buildMockInvoice({ status: 'paid' })`.
-- A seed named for a state, such as `seedArchivedNote` in [Seeding](./seeding.md), is no such
-  factory. It may set the fields that state needs, such as `archivedAt`.
+- Write a seed for each state instead, such as `seedArchivedNote` in [Seeding](./seeding.md). It
+  reaches the state through the module's own functions, so it never presets a field such as
+  `archivedAt` by hand.
 
 ## Writing a factory
 

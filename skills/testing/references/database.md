@@ -34,8 +34,8 @@ runs left.
 Pick one isolation mode for each test file, and pass it to the helper. These modes are the helper's,
 not Postgres transaction isolation levels such as `SERIALIZABLE`:
 
-- Use `transaction` by default. Each test runs in one transaction on its worker's copy of the
-  template, and the helper rolls it back after the test.
+- Use `transaction` by default. Each test runs in one transaction on a copy of the template that
+  belongs to its test runner worker process, and the helper rolls it back after the test.
 - Use `clone` when the code does one of these. Each test then gets its own copy of the template,
   which the helper drops after the test:
   - commits;
@@ -53,9 +53,9 @@ In a file that uses `clone`, name the code that needs it in a comment, such as
 Give each test a copy of a migrated template file, so no test spends its time on migrations.
 
 The test-database helper migrates the template once per run. Before any test copies the template,
-the helper closes it or checkpoints its write-ahead log. When you copy the main file alone, the copy
-misses the changes that are still in the log, migrations included. When you write such a helper, do
-the same.
+the helper closes its connection to the template or checkpoints the template's write-ahead log. When
+you copy the main file alone, the copy misses the changes that are still in the log, migrations
+included. When you write such a helper, do the same.
 
 Choose how the test gets its copy:
 
@@ -158,8 +158,9 @@ Give the tie its own test, with two rows that share the timestamp.
 ## Access rules
 
 In an access test, seed each user or role the rule covers. In the test body, build the client each
-one calls through, such as an API client signed in as that user, or a connection as that Postgres
-role. Then write the tests that [Access rules](./schemas-and-access.md#access-rules) lists.
+one calls through, such as an API client signed in as that user, or the test's connection switched
+to that Postgres role. Then write the tests that
+[Access rules](./schemas-and-access.md#access-rules) lists.
 
 To test as a Postgres role under `transaction` isolation, run `SET LOCAL ROLE` on the test's
 connection, with one role per test. Never open a second connection as the role: it can't see the

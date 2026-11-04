@@ -1,9 +1,9 @@
 # System tests
 
 Never sleep to let a service settle. Wait on a condition. Never overwrite, truncate, mount or delete
-a host resource that this run didn't create. Never mark a Rust test that belongs in a
-[lane](./slow-tests.md#lanes) with `#[ignore]`. Every lane skips an ignored test, and nothing
-reports that the test stopped running.
+a host resource that this run didn't create. Never put `#[ignore]` on a Rust test that belongs in a
+[lane](./slow-tests.md#lanes). Every lane skips an ignored test, and nothing reports that the test
+stopped running.
 
 These rules add to the [testing skill](../SKILL.md). They cover where each kind of test lives, a
 test that runs a whole program, a browser or a VM, and a test that touches something the whole host
@@ -68,7 +68,8 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
    [Programs in e2e tests](https://github.com/zgeoff/tools/blob/main/docs/guides/e2e-programs.md),
    in the rig docs, explains each key.
 2. In the test, call `resolveProgram(name)` from `@zgeoff/rig/e2e`, where `name` is the program's
-   key under `programs`. It returns `{ command, cwd }`. Never write the command in the test.
+   key under `programs`. It returns a promise of `{ command, cwd }`. Never write the command in the
+   test.
 3. Pass `command` and `cwd` to one helper from
    [`@zgeoff/testing`](https://github.com/zgeoff/tools/tree/main/packages/testing). Call it
    directly, or write a helper in `src/test-utils/` when several files repeat the same options:
@@ -156,8 +157,8 @@ the state that the act before it left. Outside `e2e/`, a test still has one act.
 ## Real applications and transport
 
 Test a client that the repo ships, such as a CLI or an SDK, against the real service from the same
-repo. Give each test data that only it uses. Use a stand-in only for a system that the test can't
-run, such as a VM, the kernel or a remote service.
+repo. Give each test its own data, which no other test uses. Use a stand-in only for a system that
+the test can't run, such as a VM, the kernel or a remote service.
 
 In the unit run, call the service in the test's process, such as through its request handler or an
 in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes) says. When the client
@@ -260,7 +261,7 @@ the type checker and the linter check it.
   lane's `build:browser` script. Replace a fixed wait with a wait for the element or the event.
   Split a test of a whole user flow into a test per component or page.
 - Test navigation across the web app's routes in a browser suite.
-- Give each browser helper of the repo's own, such as one that opens a view, its own test file.
+- Give each browser helper that the repo writes, such as one that opens a view, its own test file.
 - Keep every test that needs no page out of a browser suite, so it runs in the fast unit run.
 
 ## Native timers and scenario delays
@@ -398,9 +399,9 @@ export default defineBench({
 
 ## Golden tests
 
-Use only inline snapshots, never of a component, and only for machine output that no person writes
-by hand, such as generated SQL. Check a hand-written value, such as a spec test vector, with an
-explicit matcher.
+Use a snapshot only for machine output that no person writes by hand, such as generated SQL. Make it
+an inline snapshot, and never snapshot a component. Check a hand-written value, such as a spec test
+vector, with an explicit matcher.
 
 For any pipeline whose output depends only on its input, write a golden test and a determinism test,
 beside the pipeline's module:

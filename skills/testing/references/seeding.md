@@ -16,16 +16,15 @@ through it, a schema or layout change breaks only the module and its tests.
 - [A seed's own test](#a-seeds-own-test)
 
 Write seeds this way even in a repo whose older tests still write rows themselves, such as with
-Kysely's `insertInto`. When you change a module, move each test that writes the module's rows or
-files directly onto its seeds, wherever a seed makes the record the test needs. Leave other tests as
-they are.
+Kysely's `insertInto`. When you change a module, move the module's own tests onto its seeds,
+wherever a seed makes the record the test needs. Leave other tests as they are.
 
 - Never branch on a state in a seed, such as a `seedNote` that reads `input.status` and archives the
   note when it is `'archived'`. The branch copies the module's state machine, and the copy goes
   wrong when the module changes. Write one seed per state, each a straight line of calls.
-- Never write a seed for a bundle of records, such as `seedUserWithTwoNotes`, because it hides the
-  scenario. Call `ctx.seed.user` and `ctx.seed.note` in the test, and pass the user's ID into the
-  note's input.
+- Never write a seed for a bundle of records, such as `seedUserWithTwoNotes`, because it hides from
+  the reader which records the test depends on. Call `ctx.seed.user` and `ctx.seed.note` in the
+  test, and pass the user's ID into the note's input.
 - When the module doesn't export its write function, export it. Never write rows or files directly
   to get around a missing export, an awkward import or a slow call.
 
@@ -37,7 +36,7 @@ Write directly only in these places, and never in `e2e/`:
 - in a migration test, and in a test of code whose product is SQL or storage, such as a database
   dialect.
 
-You may also run a query that only sets up a failure, such as a trigger that makes a write fail.
+You may also run a statement that only sets up a failure, such as a trigger that makes a write fail.
 
 ## The seeds a module publishes
 
@@ -215,7 +214,7 @@ export async function seedNoteWithoutTitle(deps: NotesDeps, input: Partial<NoteR
 }
 ```
 
-When you can't name the exact state, it isn't one of these. Seed it through the module's own
+When you can't name the exact state, write no such seed. Seed the record through the module's own
 functions.
 
 ## Interrupted operations
@@ -231,4 +230,5 @@ Put a `seed-<name>.test.ts` beside each `seed-<name>.ts` file. In it, assert the
 seed writes, and that input overrides apply. Use `toMatchObject` on a row, because the database
 fills some of its fields.
 
-Count a seed's test as one of the module's own tests, so read its rows and files directly.
+Count a seed's test as one of the module's own tests, so read the rows and files the seed writes
+directly.

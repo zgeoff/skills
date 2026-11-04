@@ -7,7 +7,8 @@ or add a sleep to hide that cost. Two oxlint rules from `@zgeoff/oxlint-config` 
 `zgeoff/no-test-sleep` refuses a fixed sleep.
 
 When a test is slow, find its cause in [Causes and fixes](#causes-and-fixes) and make that fix.
-Never raise the timeout first, and never move a test to a lane only because it is slow.
+Raise a timeout only as [A test over its limit](#a-test-over-its-limit) allows, and never move a
+test to a lane only because it is slow.
 
 - [Causes and fixes](#causes-and-fixes)
 - [A real system in the unit run](#a-real-system-in-the-unit-run)
@@ -35,8 +36,8 @@ Each fix in more detail:
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
   `@zgeoff/testing`, as [Where a test lives](../SKILL.md#where-a-test-lives) says.
 
-  Two tests are the exception. Each sits in the file beside its script, starts the script itself,
-  and runs in the unit run within the unit limit:
+  Two kinds of test are the exception. Each sits in the file beside its script, starts the script
+  itself, and runs in the unit run within the unit limit:
   - the test of a shell script;
   - the test of a TypeScript script that a CI step runs.
 
@@ -183,7 +184,8 @@ warning, unless a comment on that setting holds a ticket or `floor:`.
 
 - Pass `--no-isolate` with every `--parallel=<N>`. `--parallel` implies `--isolate`, which runs each
   test file in a fresh global object. With isolation on, the suite runs slower, and a leak between
-  files goes unseen. The resets in the test preload and `--randomize` catch that leak instead.
+  files never fails a test. With isolation off, the resets in the test preload and `--randomize`
+  make that leak fail a test.
 - Run the unit tests with `rig unit --no-isolate`. rig sets `--parallel` from the host's cores and
   memory, and `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts one
   worker per core and takes memory the workers need.

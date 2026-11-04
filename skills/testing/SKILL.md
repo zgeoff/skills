@@ -190,7 +190,7 @@ allows.
 ## Matchers
 
 Use a [jest-extended matcher](./references/matchers.md) over a hand-written check, such as
-`toSatisfyAll(isOpen)`. It prints the received value.
+`toSatisfyAll(isOpen)`. The matcher prints the received value.
 
 ## Time and waiting
 

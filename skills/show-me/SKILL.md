@@ -117,9 +117,9 @@ in the table instead. The user compares options by what moved. A new layout hide
 
 When the options differ in code, show the call site first. The user judges an option by its code
 there. Then show each new structure the option adds, such as a table or a type. Leave out every line
-that is the same in all the options. When every option adds a new function that the call site calls,
-the code has no name for it yet: give it the same invented name in every option. When the call site
-is the same in every option, show no code.
+that is the same in all the options. When every option needs a new function that the code has no
+name for yet, give that function the same invented name in every option. When the call site is the
+same in every option, show no code.
 
 ## Compare in a table
 

@@ -58,9 +58,8 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- When an assertion has to stay, get the maintainer's approval in the PR, and add an
-  `oxlint-disable-next-line` comment that gives the reason. In review, flag every new assertion,
-  approved or not.
+- When an assertion has to stay, get the maintainer's approval in the PR, and add a lint disable
+  comment that gives the reason. In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -78,8 +77,8 @@ metadata:
 
 - Return an expected outcome, such as a miss or bad input from outside, as a value of the return
   type. Throw only what the caller can't plan for.
-- Never check again what the value's type or a schema parse already guarantees, such as a `null`
-  check on a field the schema requires.
+- Never check again what the value's source already guarantees, such as its type, a schema parse or
+  a library's documented behaviour. An example is a `null` check on a field the schema requires.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
 - Log failures, state changes and slow calls. Never log each call of code that runs once per request
   or per item.
@@ -105,7 +104,8 @@ metadata:
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a verb that the last bullet of this section bans.
+Give any other function any verb that fits, except a banned verb from the last bullet of this
+section, such as `fetch` or `process`.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
@@ -135,8 +135,8 @@ Give any other function any verb that fits, except a verb that the last bullet o
 - Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
   `zgeoff/verb-contract` rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O
   inside an npm package or behind a helper whose name hides it. Check those by hand.
-- Use the yes/no row's verbs even when another verb reads well. Two functions that return a boolean
-  keep their own verb:
+- Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
+  Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
