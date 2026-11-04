@@ -184,8 +184,8 @@ To add a release-age exclude:
    ```
 
 2. Add the package's name to `minimumReleaseAgeExcludes`, and pin it to one exact version. Pin a
-   direct dependency in the root `package.json` catalog, and a dependency of a dependency in an
-   override: a catalog entry reaches only direct dependencies.
+   direct dependency in the root `package.json` catalog, and a transitive dependency in an override:
+   a catalog entry reaches only direct dependencies.
 3. Above the exclude, write a removal comment in the shape below, with the day the release passes
    `minimumReleaseAge`. Change only the package, its version and the dates: `chex dependency-gates`
    and the audit-fix workflow match the rest word for word.
