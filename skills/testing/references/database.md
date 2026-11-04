@@ -104,7 +104,8 @@ expect(row.archived_at).toBeValidDate();
 
 A rejected call can still be rolling back its transaction when the test moves on. When the test
 reads the database after a call it expects to reject, settle the call with `.catch()` first, then
-assert the rejection with the rules in the testing skill's [Errors](../SKILL.md#errors), then read:
+assert the rejection with the rules in the testing skill's [Errors](../SKILL.md#errors) and in
+[Matchers](./matchers.md), then read:
 
 ```ts
 const request = ctx.service.archiveNote({ noteID: 'missing' });
@@ -157,7 +158,7 @@ Give the tie its own test, with two rows that share the timestamp.
 In an access test, seed each user or role the rule covers. In the test body, build the client each
 one calls through, such as an API client signed in as that user, or a connection as that Postgres
 role. Then write the tests that [Access rules](./schemas-and-access.md#access-rules) asks for: the
-allowed user succeeds, and the other is refused or sees nothing.
+allowed user succeeds, and each other user or role is refused or sees nothing.
 
 ## Configuration stored in the database
 

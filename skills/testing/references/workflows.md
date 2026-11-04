@@ -30,14 +30,12 @@ A step whose only key is `uses:` runs someone else's action. Write no test for i
 
 ## Tests that read a workflow file
 
-Check a config file, such as `package.json`, with a check script that CI runs, never with a test
-file. The one exception is the test below, which checks a workflow file against data the repo keeps
-elsewhere.
-
-Read a workflow file in a test only to check it against data the repo keeps elsewhere, such as a CI
-matrix against the list of suites that a script defines. A change to one side then fails the test
-until the other side matches. Parse the file with `Bun.YAML.parse`, and assert with `toMatchObject`
-on the path to the value you check, so the test holds no other job or key.
+Check a config file, such as `package.json`, in a script that CI runs as a check, never in a test
+file. A workflow file is the one exception: read it in a test only to check it against data the repo
+keeps elsewhere, such as a CI matrix against the list of suites that a script defines. A change to
+one side then fails the test until the other side matches. Parse the file with `Bun.YAML.parse`, and
+assert with `toMatchObject` on the path to the value you check, so the test holds no other job or
+key.
 
 A made-up repo lists its end-to-end suites in `scripts/e2e-suites.ts` and runs one matrix job per
 suite:

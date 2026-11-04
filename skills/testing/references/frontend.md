@@ -51,7 +51,8 @@ test, for stores from zustand's `create` and `createStore` alike.
   the global `screen`.
 - When a test needs one provider with a different value, call RTL's `render` with a `wrapper` that
   holds the app's providers and that one. Still query through the returned `rendered`.
-- Never take a snapshot of a component: once updated, it passes whatever renders.
+- Never take a snapshot of a component. Once someone updates the snapshot, the test passes whatever
+  the component renders.
 - Never write a helper function in a test file that renders the component under test, such as
   `renderNoteEditor()`. It hides setup that the reader needs in the test body.
 
@@ -152,7 +153,8 @@ returns a plain object by calling the handler. Test only the other branches thro
 
 `bun test` can't read a real request either. To test a handler that reads one, mock
 `@tanstack/react-start/server` once, in a `register-<module>-mock.ts` preload whose stand-in reads
-from a stub store that one exported setter changes, as [Boundaries](../SKILL.md#boundaries) allows.
+from a stub store that one exported setter changes, as [Module mocks](./boundaries.md#module-mocks)
+allows.
 
 React Server Components need a server module graph that is built with the `react-server` export
 condition. `bun test` builds no such graph, so no unit test can render a Server Component. When the
