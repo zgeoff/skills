@@ -56,7 +56,7 @@ returns the error, or a conflicting row. When no real failure reaches the branch
 
 To test how code recovers after several calls fail, turn each call's rejection into a value with
 `.then(() => null, (error: unknown) => error)`. Then assert the list of errors and the final state
-in the same test. A rejection left as a rejection stops the test at the first failed call.
+in the same test. When you leave a rejection as it is, the test stops at the first failed call.
 
 ## Module mocks
 

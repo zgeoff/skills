@@ -62,8 +62,8 @@ competing stories: someone copied the code from there, or someone chose it here.
 - When a Found reason has no citation, or its citation doesn't exist or doesn't say what the
   investigator quoted, move the reason to Inferred if indirect evidence supports it, or to Unknown
   if nothing does. Say why.
-- Drop any reason that rests on the shape of the code alone, and say so under Unknown. A code
-  comment counts as evidence, because a person wrote it.
+- Drop any reason that rests on the shape of the code alone, and say so under Unknown. Count a code
+  comment as evidence. A person wrote it.
 - Check each reason against the date the code landed. A reason that makes sense today may not be the
   one the code was written for.
 - Use "because", "was designed to", "fixes" and "we decided" only beside a citation. The reader

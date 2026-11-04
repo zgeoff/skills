@@ -14,10 +14,11 @@ Build one chat message that shows the user what they need to see before they act
 stands, the options for a decision, the shape of a structure, or a change before and after. Hand
 back the message, ending in one question when it asks for a decision.
 
-Build each diagram up one part at a time, so the user sees which part matters. Draw every option on
-the same base frame, the last frame of the current system, so the user sees what moved. Give your
-recommendation after the options, so the user reads each one on its own terms first. Ask in the
-message itself: a question tool's dialog can hide the message.
+Build each diagram as a series of frames, one drawing each, and add one part in each frame, so the
+user sees which part matters. Draw every option on the base frame, the last frame of the current
+system, so the user sees what moved. Give your recommendation after the options, so the user weighs
+each option before seeing your pick. Ask in the message itself: a tool that asks the question in a
+dialog can hide the message.
 
 ## Key rules
 
@@ -27,7 +28,7 @@ message itself: a question tool's dialog can hide the message.
   each, a line above each on what it adds, and no line over 100 characters.
 - [Draw each option on the base frame](#draw-each-option-on-the-base-frame): the same layout, with
   the point where the option fails marked.
-- [Show code from the caller](#show-code-from-the-caller): the call site first, then the one new
+- [Show code from the caller](#show-code-from-the-caller): the call site first, then each new
   structure.
 - [Compare in a table](#compare-in-a-table): one column per option, each row phrased so `✓` is good.
 - [Show the source](#show-the-source): the lines the choice rests on, in a code block or a quote,
@@ -49,12 +50,12 @@ Draw a diagram for one of these four tasks:
   from the same base frame.
 - **Options for a decision:** each option drawn on the base frame.
 - **A shape:** a pipeline, a state machine, a table and its relations, the processes and how they
-  reach each other.
+  call or message each other.
 - **Before and after:** the system now, then the system with the change.
 
 Answer anything else in words. A fact, a status line, or a yes-or-no answer to a factual question
-needs no diagram. A choice between options that change the system's shape gets one, even when the
-user asked it as a yes or no.
+needs no diagram. Draw one for a choice between options that change the system's shape, even when
+the user asked it as a yes or no.
 
 ## Build a diagram one part at a time
 
@@ -64,14 +65,14 @@ one part in each frame after it. Above each frame, say in one line what it adds.
 doesn't have to compare two frames part by part. Keep the build-up to about five frames. Option
 frames don't count.
 
-A frame adds more than one part in three cases:
+Add more than one part to a frame only for:
 
 - two parts that make sense only together;
 - an option frame, with all of that option's changes;
 - the after frame of a before and after, with the whole change.
 
-In a decision message, build the base frame up inside the message only when the user hasn't seen
-this diagram in the conversation. Otherwise show it once, as a single frame.
+In a decision message, build the base frame up inside the message only when the conversation holds
+no drawing of this system yet. Otherwise show it once, as a single frame.
 
 ````markdown
 A user publishes a recipe through the API:
@@ -116,9 +117,9 @@ in the table instead. The user compares options by what moved. A new layout hide
 
 When the options differ in code, show the call site first. The user judges an option by its code
 there. Then show each new structure the option adds, such as a table or a type. Leave out every line
-that is the same in all the options. When every option needs a new function, such as the one the
-caller calls, give it the same invented name in every option. When the call site is the same in
-every option, show no code.
+that is the same in all the options. When every option needs a new function that the code has no
+name for yet, give that function the same invented name in every option. When the call site is the
+same in every option, show no code.
 
 ## Compare in a table
 
@@ -151,7 +152,7 @@ A message that asks for a decision goes in this order:
 6. Your recommendation and what it costs, in two or three sentences.
 7. One question, with the choices named, so the user can answer in a word.
 
-Put each quote from [Show the source](#show-the-source) next to the claim it supports, usually in
+Put each quote from [Show the source](#show-the-source) next to the claim it supports, such as in
 step 2 or step 5. Put the recommendation after the options, so the user weighs each option before
 they see your pick. Put it just before the question, so the user answers with your reason in view.
 
@@ -165,7 +166,7 @@ it that says what it adds. End it with a question only when you need an answer.
 
 ## Where it goes
 
-Put the message in the chat, where the user reads it beside the question. Don't publish it as a page
-or a doc.
+Put the message in the chat, where the user reads it beside the question it ends with. Don't publish
+it as a page or a doc.
 
 **Reply:** the message, ending in one question when it asks for a decision.

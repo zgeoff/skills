@@ -55,7 +55,7 @@ under its own `##` heading. Under a section with nothing in it, write "None".
 1. **Goal.** What the work is for, and why, in two or three sentences. Name a ticket by what it
    does, with its ID after.
 2. **Where it stands.** Three lists: done, in progress and not started. Each "done" has its
-   evidence. A blocked item goes under Waiting.
+   evidence. Put a blocked item under Waiting.
 3. **Decided.** Each decision, with its reason and who made it, so the next agent doesn't reopen it.
    Link where it was decided, such as a PR comment or a ticket, when you can.
 4. **Approvals.** Two lists. The first holds each approval the user gave, for work like this rather
