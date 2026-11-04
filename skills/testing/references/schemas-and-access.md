@@ -20,12 +20,13 @@ your parser.
 
 ## Access rules
 
-- Test that each kind of caller the rule allows succeeds, such as a team editor and an admin.
-- Write one test for each condition the rule checks. Give it a caller who fails that condition,
-  meets the other conditions in the same branch of the rule, and meets no other branch. For
-  `admin || (editor && sameTeam)`, refuse an editor of another team and a non-editor on the team,
-  neither of them an admin. The test then fails when someone deletes that check. Name the caller in
-  the title, such as `it rejects an editor of another team`.
+- Test that each kind of caller the rule allows succeeds, such as a team editor and an admin. When
+  someone deletes the check for one kind, such as `admin`, its test fails.
+- For each condition joined by `&&`, write a test that refuses a caller who fails only that
+  condition and meets no alternative joined by `||`. For `admin || (editor && sameTeam)`, refuse an
+  editor of another team, and a non-editor on the team. Neither of them is an admin. When someone
+  deletes that condition, its test fails. Name the caller in the title, such as
+  `it rejects an editor of another team`.
 - Assert each refusal at the strictness the contract needs. For a thrown error, follow
   [Errors](../SKILL.md#errors). For a returned refusal, assert its code or status, such as
   `toBe(403)`.

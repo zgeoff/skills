@@ -133,7 +133,8 @@ Give any other function any verb that fits, except a banned one.
   hides it. Check those by hand.
 - Start a function that returns a boolean and does no I/O with `is`, `has`, `can` or `should`, even
   when another verb reads well. A function with an I/O verb may return a success flag
-  (`removeFile`). Keep the `use`, `on` and `handle` prefixes.
+  (`removeFile`), and a boolean function whose name starts with `use`, `on` or `handle` keeps that
+  prefix.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
 - Never start a name with `process`, `manage`, `do`, `perform`, `execute`, `compute`, `fetch`,

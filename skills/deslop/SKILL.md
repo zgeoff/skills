@@ -105,8 +105,8 @@ hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them
    ```
 
 7. **Make a person or the reader the subject.** A thing that acts like a person hides who does the
-   work. So does a made-up "a [thing]" that acts out a rule. Start each such sentence with what the
-   reader does. Keep a definition, and a fact about a real tool.
+   work. So does a general case that acts out a rule, such as "a new bed" below. Start each such
+   sentence with what the reader does. Keep a definition, and a fact about a named tool.
 
    ```diff
    - The seed packet decides how deep each seed goes.

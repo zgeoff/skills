@@ -1,9 +1,9 @@
 # Slow tests and lanes
 
 Keep each test in the unit run under 5 s on CI, and each test in another lane under that lane's
-limit in [Lanes](#lanes). You pay for a slow test again in every later run. A raised timeout or a
-sleep hides that cost and leaves it in place: `zgeoff/max-test-timeout` refuses a timeout above the
-limit of the file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep.
+limit in [Lanes](#lanes). You pay for a slow test again in every later run. Never raise the timeout
+or add a sleep to hide that cost: `zgeoff/max-test-timeout` refuses a timeout above the limit of the
+file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep.
 
 When a test is slow, find its cause in [Causes and fixes](#causes-and-fixes) and make that fix.
 Never raise the timeout first, and never move a test to a lane only because it is slow.

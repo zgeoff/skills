@@ -146,8 +146,8 @@ test('it lists the notes of a user with none as empty', async () => {
 ## Stored state
 
 Reach database rows and files on disk through the module that creates them, even in tests of a
-module that only changes them. Write them directly only in the creating module's own tests, when no
-seed makes the state.
+module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
+allows.
 
 - Outside the creating module's tests, read through its code: a read function for rows, a path
   helper for files. When none exists, add one, with a test.

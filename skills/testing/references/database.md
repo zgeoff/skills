@@ -46,8 +46,7 @@ In a file that uses `clone`, name the code that needs it in a comment, such as
 
 ## SQLite isolation
 
-Give each test a copy of a migrated template file. With a fresh database, each test runs every
-migration.
+Give each test a copy of a migrated template file. Then no test runs the migrations itself.
 
 The test-database helper migrates the template once per run. Before any test copies the template,
 the helper closes it or checkpoints its write-ahead log. When you copy the main file alone, the copy
@@ -156,8 +155,7 @@ Give the tie its own test, with two rows that share the timestamp.
 
 In an access test, seed each user or role the rule covers. In the test body, build the client each
 one calls through, such as an API client signed in as that user, or a connection as that Postgres
-role. Then write the tests in [Access rules](./schemas-and-access.md#access-rules): each allowed
-caller succeeds, and a caller who fails each condition is refused or sees nothing.
+role. Then write the tests that [Access rules](./schemas-and-access.md#access-rules) lists.
 
 To test as a Postgres role under `transaction` isolation, run `SET LOCAL ROLE` on the test's
 connection, with one role per test. A second connection can't see the rows the test seeded. When the

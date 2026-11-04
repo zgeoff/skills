@@ -67,8 +67,8 @@ Open every root README and every published package README with this header. Repl
 
 - **The `<h1>`:** the repo or package name, or a logo as an `<img>` with the name as its alt text.
 - **The badges:** one per line. Give a published package its registry's version badge, such as
-  npm's, crates.io's or pkg.go.dev's. Give every README a licence badge that matches `LICENSE`.
-  Leave the version badge off a root README that publishes several packages or none.
+  npm's, crates.io's or pkg.go.dev's. Give every README with a header a licence badge that matches
+  `LICENSE`. Leave the version badge off a root README that publishes several packages or none.
 - **The links:** the docs index, then up to two guides a new user needs first, joined by `•`. Leave
   the `<p>` out when there are no docs.
 - **The description:** one line below the `<div>`, in plain Markdown.

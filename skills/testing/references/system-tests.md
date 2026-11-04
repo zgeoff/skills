@@ -269,9 +269,9 @@ Find which kind of timer your test waits on, then follow the rules under its hea
 - Set the timer, such as a server's idle timeout, through its real setting, to the shortest value
   that still behaves like the real one. When the runtime reads the setting only at start-up, start a
   child process for this test alone, with the setting.
-- Check that the timer fires. Add a second test that stops whatever keeps the operation inside the
-  timeout, such as a keep-alive ping, and checks that the timeout then ends the operation. When you
-  only set a short value, the test never sees the timer fire.
+- Check that the timer fires. A keep-alive, such as a ping, resets the timer, so a test that only
+  sets a short value never sees it fire. Add a second test that stops the keep-alive and checks that
+  the timeout then ends the operation.
 - Test the default value in its own test. Wait out the real default only when the runtime has no
   shorter setting that behaves the same. Wait for the timeout's event with `waitFor`, and keep the
   test in the unit run with the disable comment from
@@ -346,8 +346,8 @@ these files:
 
 When the scoring runs offline, make the test replay the corpus through the production path and
 compare the result with `report.json`. When the scoring needs a live model, the test can't replay
-it: make the test build the parts of the report that the code decides, and compare those. Otherwise
-the test passes on a stale report.
+it: make the test build the parts of the report that the code decides, and compare those. A test
+that only reads `report.json` passes after the code changes and the report goes stale.
 
 - Read the committed corpus or report through one tested loader. Never copy its cases into the test
   as literals.

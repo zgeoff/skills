@@ -96,8 +96,8 @@ clears. For a side effect with no record behind it, such as a sent email, export
 constant and the resolver function separately, so a test can wrap or replace each one. Put records,
 their writes and their relationships in collections.
 
-Never call `mock()` in a handler module. The dev server loads the module too, and it has no test
-runner.
+Never call `mock()` in a handler module. When a dev server loads the module, no test runner is
+available.
 
 ## Per-test handlers
 
