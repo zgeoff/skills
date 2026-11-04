@@ -66,8 +66,10 @@ metadata:
 ## Where a test lives
 
 - Put a test beside the module or script it tests: `src/record-payment.test.ts`.
-- Put a shared helper, with its own test beside it, in `src/test-utils/` of the package that owns
-  what the helper starts, builds or fakes. First look for it in `@zgeoff/testing/helpers`.
+- Look for a shared helper in
+  [`@zgeoff/testing/helpers`](https://github.com/zgeoff/tools/tree/main/packages/testing) first. Put
+  a new one, with its own test beside it, in `src/test-utils/` of the package that owns what the
+  helper starts, builds or fakes.
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 

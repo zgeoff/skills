@@ -27,9 +27,10 @@ AWS SDK v3 client. Give that client a stand-in `send`.
   - a no-op;
   - a map from input to answer;
   - an answer queue.
-- For a sequence of answers, call `makeAnswerQueue([first, second])` from `@zgeoff/testing/helpers`,
-  and pass the function it returns as the stand-in. Each call gives the next answer, and a call past
-  the last answer throws.
+- For a sequence of answers, call `makeAnswerQueue([first, second])` from
+  [`@zgeoff/testing/helpers`](https://github.com/zgeoff/tools/tree/main/packages/testing), and pass
+  the function it returns as the stand-in. Each call gives the next answer, and a call past the last
+  answer throws.
 - Never chain `mockReturnValueOnce` or `mockResolvedValueOnce`. A call past the last answer in the
   chain returns the default silently.
 - When the code polls until a deadline, you can't know how many calls it makes. Use

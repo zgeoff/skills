@@ -113,9 +113,9 @@ Add a handler with `server.use(...)` in a test only for one of these:
 
 - an outcome the collections can't reach, such as a 503, a transport failure or a malformed payload;
 - a sequence, such as a 503 and then a success: build
-  `const answer = makeAnswerQueue([first, second])` from `@zgeoff/testing/helpers`, and return
-  `answer()` from the handler. It throws when the code sends more requests than the test gave
-  answers, as [Stand-ins](./boundaries.md#stand-ins) says;
+  `const answer = makeAnswerQueue([unavailable, ok])` from `@zgeoff/testing/helpers`, where each
+  answer is an `HttpResponse`, and return `answer()` from the handler. `answer()` throws on a
+  request past the last answer, as [Stand-ins](./boundaries.md#stand-ins) says;
 - input you capture: call an inline `mock()` from the handler, and assert it with the mock matchers.
 
 Keep logic out of a per-test handler. Return a fixed response, or one looked up by one request
