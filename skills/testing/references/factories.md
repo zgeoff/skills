@@ -20,8 +20,8 @@ Watch for these mistakes:
   value. A golden test pins output in an inline snapshot or a committed file. Faker's values follow
   the order of its calls in the run, so one new faker call in any test file changes them.
 - Never write a helper that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
-  its defaults. A seed named for a state, such as `archivedNote`, may set the fields that state
-  needs, such as `archivedAt`. Any other helper never presets a field.
+  its defaults. The one exception is a seed named for a state, such as `archivedNote`: it may set
+  the fields that state needs, such as `archivedAt`.
 
 ## Writing a factory
 
@@ -61,7 +61,7 @@ Watch for these mistakes:
 - When the type is a class, pass the merged fields to its constructor and return the instance, so
   `toStrictEqual` against a real instance passes.
 - Build a nested object with its own factory, and pass it the nested override. For a list field, the
-  spread replaces the whole default list, so build no merge for lists.
+  spread replaces the whole default list, so never write merge code for a list.
 
   ```ts
   type ShipmentOverrides = Partial<Omit<Shipment, 'address'>> & { address?: Partial<Address> };

@@ -6,9 +6,10 @@ rule allows.
 
 ## Schemas and parsers
 
-The examples use a schema whose `safeParse` returns `{ success, data, error }`, such as a Zod
-schema. Test through a parser's non-throwing form, such as `safeParse` in place of `parse`. Map the
-examples onto the result shape of your parser.
+Test through the parser's form that returns a result, such as Zod's `safeParse`, in place of the
+form that throws, such as `parse`. The result holds every issue, so the test can assert the issue
+path and the output. The examples use Zod's `{ success, data, error }`. Map them onto the result
+shape of your parser.
 
 - Write each payload as a literal in the test. With a factory's defaults, the reader can't see which
   field the test checks.
@@ -23,9 +24,10 @@ examples onto the result shape of your parser.
 
 ## Access rules
 
-- Test that the allowed caller succeeds.
-- Write one test for each condition the rule checks, with a caller who fails that condition:
-  `it rejects a caller who isn't signed in`, `it rejects an editor of another team`.
+- Test that each kind of caller the rule allows succeeds, such as a team editor and an admin.
+- Write one test for each condition the rule checks. Give it a caller who fails that condition and
+  passes every other one, so the test fails when someone deletes that check. Name the caller in the
+  title, such as `it rejects an editor of another team`.
 - Assert each refusal at the strictness the contract needs. For a thrown error, follow
   [Errors](../SKILL.md#errors). For a returned refusal, assert its code or status, such as
   `toBe(403)`.

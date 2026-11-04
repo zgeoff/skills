@@ -158,8 +158,9 @@ one calls through, such as an API client signed in as that user, or a connection
 role. Then write the tests in [Access rules](./schemas-and-access.md#access-rules): the allowed user
 succeeds, and a caller who fails each condition is refused or sees nothing.
 
-Under `transaction` isolation, a second connection can't see the rows the test seeded. To act as a
-Postgres role there, run `SET LOCAL ROLE` on the test's connection. Otherwise use `clone`.
+To test as a Postgres role under `transaction` isolation, run `SET LOCAL ROLE` on the test's
+connection, with one role per test. A second connection can't see the rows the test seeded. When the
+code under test opens its own connection as the role, use `clone`.
 
 ## Configuration stored in the database
 
