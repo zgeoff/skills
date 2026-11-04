@@ -1,10 +1,10 @@
 # Cleanup
 
-`onTestFinished` hooks run first-in, first-out, after every `afterEach` hook, the test preload's
-resets included. A disposable stack runs its callbacks last-in, first-out. A test that runs past its
-timeout still runs its cleanup. A run that something outside stops, such as a CI job timeout, an
-out-of-memory kill or Ctrl-C, runs none. For the common case, see [Cleanup](../SKILL.md#cleanup) in
-the testing skill.
+`onTestFinished` hooks run first-in, first-out, after every `afterEach` hook, the resets in the
+[test preload](#the-test-preload) included. An `AsyncDisposableStack` runs its callbacks last-in,
+first-out. A test that runs past its timeout still runs its cleanup. A run that something outside
+stops, such as a CI job timeout, an out-of-memory kill or Ctrl-C, runs none. For the common case,
+see [Cleanup](../SKILL.md#cleanup) in the testing skill.
 
 - [The test preload](#the-test-preload)
 - [Helpers that register cleanup](#helpers-that-register-cleanup)
@@ -16,8 +16,8 @@ the testing skill.
 
 ## The test preload
 
-- Reset shared state after each test in the test preload, the file that `bunfig.toml` lists under
-  `[test] preload`. When you add module-level state, such as a cache, add its reset there.
+- Put each reset of shared state in an `afterEach` hook in the test preload, the file that
+  `bunfig.toml` lists under `[test] preload`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
 
 ## Helpers that register cleanup
@@ -41,9 +41,10 @@ test('it removes its checkout when the test finishes', async () => {
 ```
 
 When your hook reads a folder that the helper doesn't remove, such as a log folder, register that
-folder's removal after your hook. It then runs after your hook reads the folder.
+folder's removal after your hook, so the removal runs after your hook reads the folder.
 
-Never assert outside the test body anywhere else.
+Assert in an `onTestFinished` hook only for this proof. Never assert anywhere else outside the test
+body.
 
 Skip the proof when the helper's cleanup only stops work that a passing test always waits for, such
 as a build that the test awaits.
@@ -89,8 +90,9 @@ async function setupTest() {
 
 ## Cleanup after the resets
 
-The test preload's resets remove every environment override before `onTestFinished` runs. So save
-each path when you create it, and use the saved value in cleanup:
+The test preload's resets remove every environment override before `onTestFinished` runs. So when
+you point a variable such as `HOME` at a path you create, save the path, and use the saved value in
+cleanup:
 
 ```ts
 const home = await mkdtemp(join(tmpdir(), 'notes-home-'));
@@ -129,14 +131,15 @@ A killed run leaves behind the temp folders and database clones it made. On a ho
 the database's data sits on tmpfs, each leftover holds RAM.
 
 Name each folder and database clone that a run makes after the PID of the test process that made it
-and its PID namespace, such as `pid4182-ns4026531836-`. On Linux, `readlink /proc/self/ns/pid`
-prints `pid:[<namespace>]`. A sandbox with its own PID namespace can share the temp folder, and
-there the same PID belongs to another process.
+and that process's PID namespace, such as `pid4182-ns4026531836-`. On Linux,
+`readlink /proc/self/ns/pid` prints `pid:[<namespace>]`. A sandbox with its own PID namespace can
+share the temp folder, and there the same PID belongs to another process.
 
 Then sweep at the start of each run, in the repo's test script before `bun test` starts, so the
 sweep runs once per run. Remove each leftover from the sweep's own namespace whose PID no longer
-runs, and never touch a leftover from another namespace. `process.kill(pid, 0)` throws when the
-process is gone. The sweep removes:
+runs, and never touch a leftover from another namespace. `process.kill(pid, 0)` throws `ESRCH` when
+the process is gone. Treat any other error, such as `EPERM` for another user's process, as a process
+that still runs. The sweep removes:
 
 - temp folders, such as a test's `HOME`;
 - the database clones that the test-database helper makes, as

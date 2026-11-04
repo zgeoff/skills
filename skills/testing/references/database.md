@@ -156,7 +156,7 @@ Give the tie its own test, with two rows that share the timestamp.
 
 In an access test, seed each user or role the rule covers. In the test body, build the client each
 one calls through, such as an API client signed in as that user, or a connection as that Postgres
-role. Then write the tests that [Access rules](./kinds-of-code.md#access-rules) asks for: the
+role. Then write the tests that [Access rules](./schemas-and-access.md#access-rules) asks for: the
 allowed user succeeds, and the other is refused or sees nothing.
 
 ## Configuration stored in the database

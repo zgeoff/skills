@@ -1,11 +1,12 @@
 # Boundaries
 
-Find the boundary your code talks to in this table, and give the test what the table lists. Use the
-real thing wherever the table says so.
+Find the boundary your code talks to in this table, and give the test what its row lists. Never stub
+`fetch` or an HTTP client: mock the remote server with MSW, so the code's own request code runs. The
+one exception is an SDK client that sends command objects, which gets a stand-in `send`.
 
 | Boundary                                                            | The test uses                                                  |
 | ------------------------------------------------------------------- | -------------------------------------------------------------- |
-| A CLI the code runs, its own or another, such as `git`              | The real binary, spawned                                       |
+| A CLI the code runs, from the repo or installed, such as `git`      | The real binary, spawned                                       |
 | A shell script                                                      | The real script, through Bun's `$` ([Shell](./shell.md))       |
 | The filesystem                                                      | A real `mkdtemp` tree per test                                 |
 | A database                                                          | The real engine, isolated per test ([Database](./database.md)) |
@@ -16,8 +17,6 @@ real thing wherever the table says so.
 
 ## Stand-ins
 
-- Never stub `fetch` or an HTTP client. Mock the remote server with MSW, so the code's own request
-  code runs.
 - When the code builds an SDK client or another dependency itself, change it to take the dependency
   from its caller. Then pass the stand-in in.
 - Never spy on a real method to make it fail.
@@ -27,8 +26,8 @@ real thing wherever the table says so.
   - a no-op;
   - a map from input to answer;
   - the answer-queue helper in `src/test-utils/`.
-- No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
-  default silently, where the answer-queue helper throws.
+- Never chain `mockReturnValueOnce` or `mockResolvedValueOnce`. A call past the last answer in the
+  chain returns the default silently. The answer-queue helper throws instead.
 - Put each stand-in in `src/test-utils/`, and name the file for what it does:
   - `start-stub-<thing>.ts` starts a process or a server that keeps running;
   - `create-stub-<thing>.ts` creates a resource on disk or in a service;
@@ -52,7 +51,7 @@ const hasDocker = await probeDocker();
 
 Reach a failure branch with a real failure: an address where nothing listens, an MSW handler that
 returns the error, or a conflicting row. When no real failure reaches the branch, pass the code a
-stand-in that throws.
+`mock()` that throws.
 
 To test how code recovers after several calls fail, turn each call's rejection into a value with
 `.then(() => null, (error: unknown) => error)`. Then assert the list of errors and the final state
@@ -60,8 +59,8 @@ in the same test. A rejection left as a rejection stops the test at the first fa
 
 ## Module mocks
 
-When you want to mock a module only because a module it imports does work as it loads, move that
-work out of the imported module, or pass that dependency in.
+When you want to mock a module only because one of its imports does work as it loads, move that work
+out of the import, or pass the import's work in as a dependency.
 
 Write a module mock only for one of these, in its own file, `register-<module>-mock.ts`, that the
 test preload loads:

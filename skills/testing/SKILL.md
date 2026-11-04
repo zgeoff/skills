@@ -20,18 +20,19 @@ metadata:
 - [Slow tests and lanes](./references/slow-tests.md): a slow test, the run mode, and a lane.
 - [Factories](./references/factories.md): writing a factory.
 - [Matchers](./references/matchers.md): a matcher for a kind of value.
-- [Kinds of code](./references/kinds-of-code.md): a test of a schema, a parser or an access rule.
+- [Schemas and access rules](./references/schemas-and-access.md): a test of a schema, a parser or an
+  access rule.
 - [Boundaries](./references/boundaries.md): the stand-in for each boundary, and module mocks.
 - [Database](./references/database.md): a package that owns a schema.
 - [HTTP mocking](./references/http.md): a package that calls a remote service.
-- [Cleanup](./references/cleanup.md): the test preload, cleanup order, and a test that fails only in
-  the full run.
+- [Cleanup](./references/cleanup.md): adding a reset to the test preload, ordering cleanup, and
+  finding why a test fails only in the full run.
 - [Observability](./references/observability.md): code that records telemetry.
-- [System tests](./references/system-tests.md): the package layout, end-to-end, evaluation, property
-  and golden tests, native timers, and stateful stand-ins.
+- [System tests](./references/system-tests.md): placing a test in a package, and writing an
+  end-to-end, evaluation, property or golden test, a native timer or a stateful stand-in.
 - [Shell scripts](./references/shell.md): a script's test.
-- [Workflows](./references/workflows.md): a GitHub Actions step's logic, and a check of a config
-  file.
+- [Workflows](./references/workflows.md): testing a GitHub Actions step's logic, or checking a
+  config file.
 - [Claude Code mod checks](./references/claude-code-mods.md): a mod's hooks.
 
 <!-- repo-sync needs ./references/frontend.md -->
@@ -70,8 +71,9 @@ metadata:
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 
-[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) and rig fail a test
-outside this layout.
+[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) and the
+[`rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) test runner fail a test outside this
+layout.
 
 ## Test shape
 
@@ -81,8 +83,8 @@ outside this layout.
   title with the unit: `#archiveNote rejects …`.
 - Arrange, act, assert, with no phase comments. Write one act per test. Treat an earlier act the
   test depends on, such as saving the note it archives, as arrangement, and don't assert on it.
-- Use `test.each` only for cases that differ in values, with rows of plain data or seed calls. Put
-  the value that varies in the title.
+- Use `test.each` only for cases that differ in values, with rows of plain data or seed functions.
+  Put the value that varies in the title.
 - No loop of assertions. Use `test.each`, or one collection matcher:
   `expect(listOpenNotes(store)).toSatisfyAll((note: Note) => note.archivedAt === null)`.
 
@@ -90,9 +92,9 @@ outside this layout.
 
 - Put per-test setup in one local `setupTest()` that each test calls, and no hook such as
   `beforeEach` in a test file.
-- In `setupTest()`, wire the temp directories, the database, the clock, servers, clients, recorders,
-  the unit, and the [seeder](./references/seeding.md#buildseeder-and-setuptest). Create no data
-  there. Give it no `if`, and no argument that a test's outcome depends on.
+- In `setupTest()`, wire the temp directories, the database, the clock, servers, clients, telemetry
+  recorders, the unit, and the [seeder](./references/seeding.md#buildseeder-and-setuptest). Create
+  no data there. Give it no `if`, and no argument that a test's outcome depends on.
 - Create each test's data in the test, even when every test needs the same. Set the time in each
   test whose code reads it.
 - Declare nothing at module level but imports, `setupTest()` and tests.
@@ -140,9 +142,9 @@ onTestFinished(() => rm(dir, { recursive: true, force: true }));
 
 - Keep plain inputs inline: write the literal again in the next test, never a shared fixture or a
   named constant.
-- Give a type that crosses a module boundary, such as an SDK result, a tested `buildMock<Type>`
-  [factory](./references/factories.md) in `src/test-utils/` on first use. Build only plain data in a
-  factory, and write no rows or files.
+- When a test first needs a type that crosses a module boundary, such as an SDK result, write a
+  tested `buildMock<Type>` [factory](./references/factories.md) for it in `src/test-utils/`. Build
+  only plain data in a factory, and write no rows or files.
 - Build a stand-in for a boundary from data only, in one of the forms
   [Stand-ins](./references/boundaries.md#stand-ins) lists. Move any logic in a stand-in to a tested
   helper in `src/test-utils/`.
@@ -181,8 +183,8 @@ tests may write them directly, when no seed makes the state.
 
 - No branch in a test body. Give each path its own test.
 - Before `toBeUndefined`, `toBeFalsy`, `toBeNil` or a `.not` matcher, narrow a value that may be
-  missing with `invariant(value)`, then assert on `value.field`. Each of these passes on the
-  `undefined` that `value?.field` reads. Before any other matcher, write `value?.field`.
+  missing with `invariant(value)`, then assert on `value.field`. Each of those matchers passes on
+  the `undefined` that `value?.field` reads. Before any other matcher, write `value?.field`.
 - To check that the value itself is absent, assert on the value, with no `invariant`.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.
