@@ -24,7 +24,8 @@ says. Make its `checks` job a required check. GitHub lists it as `<your job> / c
 Add CI work as a package script, so `bun-checks.yml` runs it:
 
 - It runs `audit`, `deadcode`, `format:check`, `lint`, `typecheck` and `test`, then each of
-  `test:e2e`, `test:browser`, `test:docker` and `test:host` that the repo defines.
+  `test:e2e`, `test:browser`, `test:docker`, `test:host`, `test:agent-sdk` and `test:crash` that the
+  repo defines.
 - To run another script, set the repo variable `BUN_CHECK_SCRIPTS` to every script to run, separated
   by spaces. It replaces the list above, so list those scripts too.
 - In a private repo, it runs every script as a step of the one `checks` job, because GitHub bills
@@ -166,15 +167,15 @@ this section.
 
 For any other package, add an exception only for a named reason, such as a fix the repo needs. If an
 older release works, pin the newest one that is older than `minimumReleaseAge`, and add no
-exception. An exception is one of these:
+exception. Add the exception as one of these:
 
-- A release-age exclude: the package's name in `minimumReleaseAgeExcludes`, for one exact version
-  that the catalog or the override pins.
-- An override: an entry in the `overrides` of `package.json`, pinned to one exact version. It needs
-  no comment.
-- An audit ignore: an `--ignore` flag on the `audit` script in `package.json`, for one advisory ID.
-  Give it an entry in the root `audit-ignores.json`, keyed by that advisory ID, with its `package`,
-  its `reason` and an ISO `expires` date, so the audit-fix workflow audits it again.
+- For a release-age exclude, put the package's name in `minimumReleaseAgeExcludes`, for one exact
+  version that the catalog or the override pins.
+- For an override, add an entry to the `overrides` of `package.json`, pinned to one exact version.
+  It needs no comment.
+- For an audit ignore, add an `--ignore` flag to the `audit` script in `package.json`, for one
+  advisory ID. Give it an entry in the root `audit-ignores.json`, keyed by that advisory ID, with
+  its `package`, its `reason` and an ISO `expires` date, so the audit-fix workflow audits it again.
 
 Before you add a release-age exclude, check that the release has npm provenance:
 
@@ -194,10 +195,10 @@ writes. Give the date the release passes `minimumReleaseAge`. Keep the comment's
 # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then
 ```
 
-`chex dependency-gates` runs in `bun-checks.yml`. It fails on each of these:
+`chex dependency-gates` runs in `bun-checks.yml`, and fails the run when you break one of these:
 
-- A release-age exclude past its date, or with no removal comment. A first-party exclude passes with
-  no comment.
-- A first-party package with no exclude.
-- An override that changes nothing, because every locked version already meets it.
-- An audit ignore that no locked package needs.
+- Never leave a release-age exclude past its date, or with no removal comment. A first-party exclude
+  passes with no comment.
+- Never leave a first-party package with no exclude.
+- Never keep an override that changes nothing, because every locked version already meets it.
+- Never keep an audit ignore that no locked package needs.
