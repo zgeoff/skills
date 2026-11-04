@@ -112,8 +112,8 @@ runtime that can't import `bun:test`.
 Add a handler with `server.use(...)` in a test only for one of these:
 
 - an outcome the collections can't reach, such as a 503, a transport failure or a malformed payload;
-- a sequence, such as a 503 and then a success: take each answer from the answer-queue helper in
-  `src/test-utils/`. It throws when the code asks for more answers than the test gave, as
+- a sequence, such as a 503 and then a success: take each answer from `makeAnswerQueue` in
+  `@zgeoff/testing/helpers`. It throws when the code asks for more answers than the test gave, as
   [Stand-ins](./boundaries.md#stand-ins) says;
 - input you capture: call an inline `mock()` from the handler, and assert it with the mock matchers.
 

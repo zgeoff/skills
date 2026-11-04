@@ -26,9 +26,11 @@ AWS SDK v3 client. Give that client a stand-in `send`.
   - `mock()`;
   - a no-op;
   - a map from input to answer;
-  - the answer-queue helper in `src/test-utils/`.
+  - `makeAnswerQueue` from `@zgeoff/testing/helpers`.
 - Never chain `mockReturnValueOnce` or `mockResolvedValueOnce`. A call past the last answer in the
-  chain returns the default silently. The answer-queue helper throws instead.
+  chain returns the default silently. `makeAnswerQueue` throws instead.
+- For code that polls until a deadline, use `makeRepeatingAnswerQueue`. The clock sets how many
+  calls the code makes, so this queue answers the last answer again once the answers run out.
 - Put each stand-in in `src/test-utils/`, and name the file for what it does:
   - `start-stub-<thing>.ts` starts a process or a server that keeps running;
   - `create-stub-<thing>.ts` creates a resource on disk or in a service;
