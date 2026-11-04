@@ -24,7 +24,7 @@ process, see [Real applications and transport](./system-tests.md#real-applicatio
 ## The server and its lifecycle
 
 Build one MSW server per test process, and export it as `server` from a `mocks/node.ts` file that
-the test preload imports:
+the [test preload](./cleanup.md#the-test-preload) imports:
 
 - Import `defineNetwork`, `InterceptorSource` and `HttpNetworkFrame` from `msw/experimental`, and
   `FetchInterceptor` from `@mswjs/interceptors/fetch/web`.
@@ -112,9 +112,10 @@ runtime that can't import `bun:test`.
 Add a handler with `server.use(...)` in a test only for one of these:
 
 - an outcome the collections can't reach, such as a 503, a transport failure or a malformed payload;
-- a sequence, such as a 503 and then a success: take each answer from the answer-queue helper in
-  `src/test-utils/`. It throws when the code asks for more answers than the test gave, as
-  [Stand-ins](./boundaries.md#stand-ins) says;
+- a sequence, such as a 503 and then a success: build
+  `const answer = makeAnswerQueue([unavailable, ok])` from `@zgeoff/testing/helpers`, where each
+  answer is an `HttpResponse`, and return `answer()` from the handler. `answer()` throws on a
+  request past the last answer, as [Stand-ins](./boundaries.md#stand-ins) says;
 - input you capture: call an inline `mock()` from the handler, and assert it with the mock matchers.
 
 Keep logic out of a per-test handler. Return a fixed response, or one looked up by one request

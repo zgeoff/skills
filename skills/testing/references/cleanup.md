@@ -19,6 +19,9 @@ see [Cleanup](../SKILL.md#cleanup) in the testing skill.
 - Put each reset of shared state in an `afterEach` hook in the test preload, the file that
   `bunfig.toml` lists under `[test] preload`.
 - Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
+- Import `updateEnv` and `removeEnvOverrides` from `@zgeoff/testing/helpers`. In a test, change an
+  environment variable with `updateEnv`. In the preload, call `afterEach(removeEnvOverrides)`, which
+  puts back each variable that `updateEnv` changed.
 
 ## Helpers that register cleanup
 
@@ -89,13 +92,14 @@ async function setupTest() {
 
 ## Cleanup after the resets
 
-The test preload's resets undo every environment override, including each one your env helper made,
-before `onTestFinished` runs. So when you point `HOME` at a temp folder, keep the folder's path in a
-variable, and remove the folder through that variable:
+The preload's `afterEach` hooks run before `onTestFinished`. By then, `removeEnvOverrides` has put
+back each variable that `updateEnv` changed. So when you point `HOME` at a temp folder, keep the
+folder's path in a variable, and remove the folder through that variable:
 
 ```ts
 const home = await mkdtemp(join(tmpdir(), 'notes-home-'));
 
+updateEnv('HOME', home);
 onTestFinished(() => rm(home, { recursive: true, force: true }));
 ```
 

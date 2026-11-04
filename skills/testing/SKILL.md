@@ -66,8 +66,10 @@ metadata:
 ## Where a test lives
 
 - Put a test beside the module or script it tests: `src/record-payment.test.ts`.
-- Put a shared helper, with its own test beside it, in `src/test-utils/` of the package that owns
-  what the helper starts, builds or fakes.
+- Look for a shared helper in
+  [`@zgeoff/testing/helpers`](https://github.com/zgeoff/tools/tree/main/packages/testing) first. Put
+  a new one, with its own test beside it, in `src/test-utils/` of the package that owns what the
+  helper starts, builds or fakes.
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 
@@ -127,8 +129,8 @@ test('it lists the notes of a user with none as empty', async () => {
   right after the change.
 - When you add state to production code that outlives a test, such as a cache, reset it in the test
   preload.
-- Override an environment variable through a helper in `src/test-utils/` that restores it after the
-  test, never by assigning `process.env`.
+- Override an environment variable with `updateEnv` from `@zgeoff/testing/helpers`, never by
+  assigning `process.env`.
 - Keep tests apart with the [test-database helper](./references/database.md) and a folder per test,
   never with random IDs: a list query still returns the other test's rows.
 
@@ -199,8 +201,8 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
   2. an injected clock: `ctx.clock.advance(30_000)`;
   3. fake timers, for code the repo doesn't own, restored in `onTestFinished`.
 - When you can't pass the time in, assert a range around `Date.now()`, such as `toBeWithin`.
-- Wait on a condition with the repo's `waitFor` helper, never a sleep. When the code has nothing to
-  wait on, add a signal, such as an event.
+- Wait on a condition with `waitFor` from `@zgeoff/testing/helpers`, never a sleep. When the code
+  has nothing to wait on, add a signal, such as an event.
 
 ## Boundaries
 
