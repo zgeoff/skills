@@ -105,8 +105,8 @@ hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them
    ```
 
 7. **Make a person or the reader the subject.** A thing that acts like a person hides who does the
-   work. Look hardest at each bullet that opens with "A", "The" or "Each" and a thing, and start it
-   with what the reader does.
+   work. So does a made-up "a [thing]" that acts out a rule. Start each such sentence with what the
+   reader does. Keep a definition, and a fact about a real tool.
 
    ```diff
    - The seed packet decides how deep each seed goes.
@@ -114,8 +114,8 @@ hand-back: the [docs-writing](../docs-writing/SKILL.md) skill's rules cover them
    ```
 
    ```diff
-   - - Each new bed gets a layer of compost.
-   + - Spread a layer of compost on each new bed.
+   - A new bed fails when nobody spreads compost on it.
+   + Spread a layer of compost on each new bed.
    ```
 
 8. **Keep blunt lines blunt.** Don't explain them, qualify them or make them more formal. Cut a

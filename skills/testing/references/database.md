@@ -46,12 +46,13 @@ In a file that uses `clone`, name the code that needs it in a comment, such as
 
 ## SQLite isolation
 
-Give each test a copy of a migrated template file. A fresh database pays for every migration in
-every test.
+Give each test a copy of a migrated template file. With a fresh database, each test runs every
+migration.
 
 The test-database helper migrates the template once per run. Before any test copies the template,
-the helper closes it or checkpoints its write-ahead log. A copy of the main file alone misses the
-changes that are still in the log, migrations included. When you write such a helper, do the same.
+the helper closes it or checkpoints its write-ahead log. When you copy the main file alone, the copy
+misses the changes that are still in the log, migrations included. When you write such a helper, do
+the same.
 
 Choose how the test gets its copy:
 
@@ -60,20 +61,20 @@ Choose how the test gets its copy:
 - When the code takes the database handle as an argument, load the template's bytes into an
   in-memory database with `Database.deserialize` from `bun:sqlite`.
 
-Open SQLite with `synchronous = off` in the helper. A test never needs its writes to survive a power
-loss, and a sync on each commit costs time. In a test of what survives a crash, use production's
-setting.
+Open SQLite with `synchronous = off` in the helper. Your tests never need their writes to survive a
+power loss, and a sync on each commit costs time. In a test of what survives a crash, use
+production's setting.
 
 ## Booting a service
 
 Give a service one function that builds it, such as `createNotesService({ db })`, and call it from
 the production entrypoint and from every test. In a test, pass in only the I/O the testing skill's
 [Boundaries](../SKILL.md#boundaries) lets you replace, such as the database and the clock. Never
-copy the service's configuration into a test's setup, because a copy drifts from production.
+copy the service's configuration into a test's setup. The copy drifts from production.
 
 In `setupTest()`, build the database handle and boot the service through that function. Create no
-data there, as in the [testing skill](../SKILL.md#setuptest). When a service refuses to start until
-its data exists, boot it in the test body, after the test creates that data.
+data there, as in the [testing skill](../SKILL.md#setuptest). When the service refuses to start
+until its data exists, boot it in the test body, after the test creates that data.
 
 ## Persisted test data
 
@@ -102,9 +103,9 @@ const row = await ctx.db
 expect(row.archived_at).toBeValidDate();
 ```
 
-A rejected call can still be rolling back its transaction when the test moves on. When the test
-reads the database after a call it expects to reject, settle the call with `.catch()` first, then
-assert the rejection with the rules in the testing skill's [Errors](../SKILL.md#errors) and in
+When a call rejects, its transaction can still be rolling back as the test moves on. When you read
+the database after a call you expect to reject, settle the call with `.catch()` first, then assert
+the rejection with the rules in the testing skill's [Errors](../SKILL.md#errors) and in
 [Matchers](./matchers.md), then read:
 
 ```ts
@@ -119,8 +120,8 @@ expect(await ctx.service.listNotes()).toStrictEqual([]);
 
 To test how code recovers after several calls fail, such as a job that gives up after its third
 failed run, make the calls one after another in one test. Turn each outcome into a value: `null`
-when the call resolves, and the error when it rejects. A rejection left as a rejection stops the
-test at the first failed call. Then read the stored state, and assert the outcomes and the state:
+when the call resolves, and the error when it rejects. When you leave a rejection as it is, the test
+stops at the first failed call. Then read the stored state, and assert the outcomes and the state:
 
 ```ts
 const runJobOnce = () =>
@@ -155,8 +156,8 @@ Give the tie its own test, with two rows that share the timestamp.
 
 In an access test, seed each user or role the rule covers. In the test body, build the client each
 one calls through, such as an API client signed in as that user, or a connection as that Postgres
-role. Then write the tests in [Access rules](./schemas-and-access.md#access-rules): the allowed user
-succeeds, and a caller who fails each condition is refused or sees nothing.
+role. Then write the tests in [Access rules](./schemas-and-access.md#access-rules): each allowed
+caller succeeds, and a caller who fails each condition is refused or sees nothing.
 
 To test as a Postgres role under `transaction` isolation, run `SET LOCAL ROLE` on the test's
 connection, with one role per test. A second connection can't see the rows the test seeded. When the

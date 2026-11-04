@@ -145,8 +145,8 @@ test('it lists the notes of a user with none as empty', async () => {
 
 ## Stored state
 
-Reach database rows and files on disk through the module that creates them, even in the tests of a
-module that only changes them. Only the creating module's own tests may write them directly, when no
+Reach database rows and files on disk through the module that creates them, even in tests of a
+module that only changes them. Write them directly only in the creating module's own tests, when no
 seed makes the state.
 
 - Outside the creating module's tests, read through its code: a read function for rows, a path

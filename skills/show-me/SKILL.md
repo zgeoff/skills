@@ -53,8 +53,8 @@ Draw a diagram for one of these four tasks:
 - **Before and after:** the system now, then the system with the change.
 
 Answer anything else in words. A fact, a status line, or a yes-or-no answer to a factual question
-needs no diagram. A choice between options that change the system's shape gets one, even when the
-user asked it as a yes or no.
+needs no diagram. Draw one for a choice between options that change the system's shape, even when
+the user asked it as a yes or no.
 
 ## Build a diagram one part at a time
 
@@ -64,7 +64,7 @@ one part in each frame after it. Above each frame, say in one line what it adds.
 doesn't have to compare two frames part by part. Keep the build-up to about five frames. Option
 frames don't count.
 
-A frame adds more than one part in three cases:
+Add more than one part to a frame only for:
 
 - two parts that make sense only together;
 - an option frame, with all of that option's changes;

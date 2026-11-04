@@ -69,7 +69,7 @@ metadata:
   and a thin one that acts.
 - No wrapper that only passes its arguments on.
 - No option, parameter or extension point until a caller passes it.
-- Reach I/O through dependencies the caller passes in. Only the entry point builds real clients.
+- Reach I/O through dependencies the caller passes in. Build real clients only in the entry point.
 
 ## Errors and logs
 
@@ -86,7 +86,7 @@ metadata:
   the file: a library bug, a runtime quirk, a measured number. Put it at the line, in three lines at
   most.
 - Never restate what the code or a test shows.
-- No history or project state ("previously", issue numbers, "not wired yet"). That goes in the
+- No history or project state ("previously", issue numbers, "not wired yet"). Put that in the
   commit.
 - Put what callers rely on in a test name, such as `it returns null for an unknown ID`, not in a
   comment. When code in another package depends on an invariant of yours, also state it in the doc
@@ -132,8 +132,8 @@ Give any other function any verb that fits, except a banned one.
   `zgeoff/verb-contract` lint rule can't see I/O inside an npm package or behind a helper whose name
   hides it. Check those by hand.
 - Start a function that returns a boolean and does no I/O with `is`, `has`, `can` or `should`, even
-  when another verb reads well. An I/O verb may return a success flag (`removeFile`), and `use`,
-  `on` and `handle` keep their prefix.
+  when another verb reads well. A function with an I/O verb may return a success flag
+  (`removeFile`). Keep the `use`, `on` and `handle` prefixes.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
 - Never start a name with `process`, `manage`, `do`, `perform`, `execute`, `compute`, `fetch`,

@@ -96,7 +96,8 @@ clears. For a side effect with no record behind it, such as a sent email, export
 constant and the resolver function separately, so a test can wrap or replace each one. Put records,
 their writes and their relationships in collections.
 
-Never call `mock()` in a handler module. A dev server that loads the module has no test runner.
+Never call `mock()` in a handler module. The dev server loads the module too, and it has no test
+runner.
 
 ## Per-test handlers
 
@@ -109,8 +110,8 @@ Add a handler with `server.use(...)` in a test only for one of these:
 
 Keep logic out of a per-test handler. Return a fixed response, or one looked up by one request
 parameter. Put any other response that depends on the request in the default handlers, and never
-re-implement the service's success path in a test. A handler that captures input may still return
-the fixed success response the client needs:
+re-implement the service's success path in a test. When you capture input in a handler, you may
+still return the fixed success response the client needs:
 
 ```ts
 const received = mock<(input: unknown) => void>();

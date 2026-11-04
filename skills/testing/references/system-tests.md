@@ -270,8 +270,8 @@ Find which kind of timer your test waits on, then follow the rules under its hea
   that still behaves like the real one. When the runtime reads the setting only at start-up, start a
   child process for this test alone, with the setting.
 - Check that the timer fires. Add a second test that stops whatever keeps the operation inside the
-  timeout, such as a keep-alive ping, and checks that the timeout then ends the operation. A test
-  that only sets a short value never sees the timer fire.
+  timeout, such as a keep-alive ping, and checks that the timeout then ends the operation. When you
+  only set a short value, the test never sees the timer fire.
 - Test the default value in its own test. Wait out the real default only when the runtime has no
   shorter setting that behaves the same. Wait for the timeout's event with `waitFor`, and keep the
   test in the unit run with the disable comment from
@@ -346,8 +346,8 @@ these files:
 
 When the scoring runs offline, make the test replay the corpus through the production path and
 compare the result with `report.json`. When the scoring needs a live model, the test can't replay
-it: make the test build the parts of the report that the code decides, and compare those. A test
-that passes on a stale report checks nothing.
+it: make the test build the parts of the report that the code decides, and compare those. Otherwise
+the test passes on a stale report.
 
 - Read the committed corpus or report through one tested loader. Never copy its cases into the test
   as literals.
@@ -422,7 +422,7 @@ point, name the program or the spec that fixes it in a comment.
 - Give a resource that the whole machine shares a name that sets this run apart, the way `mkdtemp`
   does.
 - Before you overwrite, truncate, mount or delete a resource, check that this run created it, such
-  as from a list the run keeps of what it made. A generated name alone proves nothing.
+  as from a list the run keeps of what it made. Never trust a generated name alone.
 - Register cleanup right after you acquire a resource, and release only what this run acquired. Make
   the cleanup safe to run after a partial failure, an interrupt, or a shutdown that already released
   the resource.

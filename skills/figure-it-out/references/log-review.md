@@ -32,7 +32,7 @@ Check each of your entries against the transcript:
 2. You can open its evidence.
 3. The evidence shows what the entry claims.
 
-An entry that fails any of these is wrong.
+Mark an entry wrong when it fails any of these.
 
 Add an entry, with the phase it happened in, for each decision that shaped the work and has none: a
 choice between approaches, a change of plan, or an approach you dropped. Its time is now, so write

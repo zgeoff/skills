@@ -14,12 +14,12 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
 1. **Root README:** `README.md` at the repo root, the repo's front page. It is always this kind,
    even when the root has a manifest.
 2. **Package README:** in any other folder with its own manifest (`package.json`, `go.mod` or
-   `Cargo.toml`), wherever the folder sits. A published package gets the
+   `Cargo.toml`), wherever the folder sits. Give a published package the
    [published package sections](#published-package-sections), because the registry shows its README
-   on the package's page. An unpublished package gets a short README.
+   on the package's page. Give an unpublished package a short README.
 3. **Docs index:** `docs/README.md`, one line and a link for each doc.
 4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
-   the design. A design folder inside another design folder gets its own design README.
+   the design. Give a design folder inside another design folder its own design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
    design. `docs-tree.md`, beside this file, lists its sections. When spikes live outside
    `docs/design/`, the folder that holds them gets a README too, as an index of the spikes.
@@ -66,9 +66,9 @@ Open every root README and every published package README with this header. Repl
 ```
 
 - **The `<h1>`:** the repo or package name, or a logo as an `<img>` with the name as its alt text.
-- **The badges:** one per line. A published package gets its registry's version badge, such as
-  npm's, crates.io's or pkg.go.dev's. Every README gets a licence badge that matches `LICENSE`. A
-  root README that publishes several packages or none has no version badge.
+- **The badges:** one per line. Give a published package its registry's version badge, such as
+  npm's, crates.io's or pkg.go.dev's. Give every README a licence badge that matches `LICENSE`.
+  Leave the version badge off a root README that publishes several packages or none.
 - **The links:** the docs index, then up to two guides a new user needs first, joined by `•`. Leave
   the `<p>` out when there are no docs.
 - **The description:** one line below the `<div>`, in plain Markdown.
@@ -92,7 +92,7 @@ monorepo, that field also needs `directory`, set to the package's folder.
    when there's no schema. Leave it out when the package has no configuration.
 6. `## Documentation`: one line that links `docs/`, for the reader who reads to the end.
 
-An unpublished package gets a short README with no header: one paragraph on what the package is for,
+Give an unpublished package a short README with no header: one paragraph on what the package is for,
 and a link to the architecture doc that covers it, when one exists.
 
 ## Length

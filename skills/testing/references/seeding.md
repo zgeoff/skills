@@ -126,8 +126,9 @@ export const buildNoteSeeder = (deps: NotesDeps) => ({
 });
 ```
 
-Name each key for the seed without `seed`, so a test calls `ctx.seed.archivedNote(…)`. Only the
-module that creates a kind of record publishes its seeds, so two modules never publish the same key.
+Name each key for the seed without `seed`, so a test calls `ctx.seed.archivedNote(…)`. Publish a
+kind of record's seeds only from the module that creates it, so two modules never publish the same
+key.
 
 ## `buildSeeder` and `setupTest`
 
@@ -148,7 +149,7 @@ handle that `TestDeps` lacks, TypeScript fails, so add the handle to `TestDeps` 
 
 Return the deps and the seeds from each of those `setupTest()` functions:
 `return { ...deps, seed: buildSeeder(deps) }`. Binding the seeds is wiring, so `setupTest()` still
-creates no data. A test then calls its seeds through `ctx.seed`.
+creates no data. In the test, call the seeds through `ctx.seed`.
 
 - When a test uses two databases, put both handles in `TestDeps`. Pass each `build<Record>Seeder`
   the part it needs, such as `buildAuditSeeder({ db: deps.auditDB, clock: deps.clock })`. The test
@@ -168,13 +169,11 @@ them:
   cancels the job's open tasks, and the test checks the tasks, stop the job in the test. Then assert
   that effect in the test.
 
-Never call `expect` inside a seed. The `invariant()` on a write function's result is the one check a
-seed makes.
+Never call `expect` inside a seed. Check only a write function's result there, with `invariant()`.
 
 When the test checks what a transition does, make the transition a real call in the test. For
-example, a test of what archiving does to a note's search entry calls `seedNote`, then
-`archiveNote`, and never calls `seedArchivedNote`. Use a seed when the test only needs the record to
-be in a state.
+example, to test what archiving does to a note's search entry, call `seedNote`, then `archiveNote`,
+and never call `seedArchivedNote`. Use a seed when the test only needs the record to be in a state.
 
 ## Table-driven tests
 
@@ -202,8 +201,8 @@ became required. Write such a row directly, only inside a seed, and name the exa
 comment. Give each such state its own seed, and add it to the module's `build<Record>Seeder` beside
 the others.
 
-This seed writes the row itself, so it takes a partial of the table's insert shape, built with that
-shape's factory, in place of the create input:
+Give this seed a partial of the table's insert shape, built with that shape's factory, in place of
+the create input. The seed writes the row itself:
 
 ```ts
 export async function seedNoteWithoutTitle(deps: NotesDeps, input: Partial<NoteRow> = {}) {

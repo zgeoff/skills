@@ -1,7 +1,7 @@
 # Slow tests and lanes
 
 Keep each test in the unit run under 5 s on CI, and each test in another lane under that lane's
-limit in [Lanes](#lanes). A slow test costs every later run its full time. A raised timeout or a
+limit in [Lanes](#lanes). You pay for a slow test again in every later run. A raised timeout or a
 sleep hides that cost and leaves it in place: `zgeoff/max-test-timeout` refuses a timeout above the
 limit of the file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep.
 
@@ -80,8 +80,8 @@ place in each test that only reads it.
   when it is done. The other workers wait until the template appears.
 - Never keep it in a module-level variable. Each worker would build it again, and the workers race
   on one output folder.
-- Put a hash of its inputs, such as the migration files, in its name. A changed input then builds a
-  new template, and an unchanged one reuses the last.
+- Put a hash of its inputs, such as the migration files, in its name. Then the run builds a new
+  template when an input changes, and reuses the last one otherwise.
 - Keep it in a git-ignored folder inside the repo, such as `node_modules/.cache/`, never in `/tmp`.
   `/tmp` is tmpfs on many hosts, so it holds every file in RAM.
 - At the start of each run, remove the folders, clones and old templates that earlier runs left, as

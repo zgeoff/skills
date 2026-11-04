@@ -126,8 +126,8 @@ the leak until a later test fails on it.
 
 ## Leftovers of a killed run
 
-A killed run leaves behind the temp folders and database clones it made. On a host where `/tmp` or
-the database's data sits on tmpfs, each leftover holds RAM.
+When something kills a run, its temp folders and database clones stay behind. On a host where `/tmp`
+or the database's data sits on tmpfs, each leftover holds RAM.
 
 Start the name of each folder and database clone that a run makes with a prefix, such as
 `pid4182-ns4026531836-`. Build it from the PID of the test process that made it and that process's

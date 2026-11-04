@@ -1,10 +1,10 @@
 # Factories
 
 Write a `buildMock<Type>` factory for each domain type that crosses a module boundary, as the
-testing skill's [Test data](../SKILL.md#test-data) section says. The factory returns the value and
-does nothing else: it writes no database row and no file. For stored state, a test calls the seeds
-of the module that creates the state, as [Stored state](../SKILL.md#stored-state) says, and those
-seeds build their input with these factories.
+testing skill's [Test data](../SKILL.md#test-data) section says. Make the factory return the value
+and do nothing else: write no database row and no file in it. For stored state, call the seeds of
+the module that creates the state, as [Stored state](../SKILL.md#stored-state) says, and build the
+seeds' input with these factories.
 
 - [Writing a factory](#writing-a-factory)
 - [A factory's own test](#a-factorys-own-test)
