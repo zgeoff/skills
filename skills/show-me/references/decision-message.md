@@ -97,9 +97,8 @@ CREATE TABLE outbox (
 | A dead subscriber's webhook is kept | ✗ dropped after 4 tries | ✓ row kept after 5 tries |
 | Effort                              | about 1 hour            | about half a day         |
 
-**Rejected: a queue service (C).** It works the same as B, but it adds a service to run, and at 40
-publishes a day nothing needs it. From `docs/vision.md`: "One process, one database, until a number
-says otherwise."
+**Rejected: a queue service (C),** which adds a service to run, against `docs/vision.md`: "One
+process, one database, until a number says otherwise."
 
 **Recommendation: B, the outbox with a worker.** A webhook survives a deploy or a crash, and a retry
 never blocks the request that caused it. It costs one table, one worker loop, and up to 1 s of delay

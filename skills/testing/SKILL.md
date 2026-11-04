@@ -25,8 +25,8 @@ metadata:
 - [Boundaries](./references/boundaries.md): the stand-in for each boundary, and module mocks.
 - [Database](./references/database.md): a package that owns a schema.
 - [HTTP mocking](./references/http.md): a package that calls a remote service.
-- [Cleanup](./references/cleanup.md): adding a reset to the test preload, ordering cleanup, and
-  finding why a test fails only in the full run.
+- [Cleanup](./references/cleanup.md): a reset in the test preload, cleanup order, or a test that
+  fails only in the full run.
 - [Observability](./references/observability.md): code that records telemetry.
 - [System tests](./references/system-tests.md): placing a test, and writing an end-to-end,
   evaluation, property or golden test.
@@ -57,17 +57,17 @@ metadata:
 
 - Write each test so a reader understands it from its body alone.
 - Make each test pass alone and in any order.
-- Give each behaviour you add or change a test through the function the unit's callers call. The
-  test fails when you revert the change.
+- Give each behaviour you add or change a test through the function the unit's callers call. Check
+  that the test fails when you revert the change.
 - Test the behaviour, so a refactor that keeps it leaves every test green.
-- Bring each test you touch in line with these rules.
+- Bring each test you edit in line with these rules.
 - Never cut a test that checks behaviour. Never add one that checks nothing.
 
 ## Where a test lives
 
 - Put a test beside the module or script it tests: `src/record-payment.test.ts`.
-- Put a shared helper in `src/test-utils/` of the package that owns what it starts, builds or fakes,
-  with its own test beside it.
+- Put a shared helper, with its own test beside it, in `src/test-utils/` of the package that owns
+  what the helper starts, builds or fakes.
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 
@@ -78,14 +78,14 @@ this layout.
 
 - Write top-level `test()` calls, with no `describe`. Hooks in a `describe` couple its tests.
 - Name the behaviour a caller sees in each title, as verb, outcome, condition:
-  `it rejects a title longer than 120 characters`. In a file that tests several units, start the
-  title with the unit: `#archiveNote rejects …`.
+  `it rejects a title longer than 120 characters`. In a file that tests several units, put the unit
+  in place of `it`: `#archiveNote rejects …`.
 - Arrange, act, assert, with no phase comments. Write one act per test. Treat an earlier act the
   test depends on, such as saving the note it archives, as arrangement, and don't assert on it.
 - Use `test.each` only for cases that differ in values, with rows of plain data or seed functions.
   Put the value that varies in the title.
-- No loop of assertions. Use `test.each`, or one collection matcher:
-  `expect(listOpenNotes(store)).toSatisfyAll((note: Note) => note.archivedAt === null)`.
+- Never loop over assertions: the failure doesn't name the case. Use `test.each`, or one collection
+  matcher: `expect(listOpenNotes(store)).toSatisfyAll((note: Note) => note.archivedAt === null)`.
 
 ## setupTest
 
@@ -96,7 +96,7 @@ this layout.
   no data there. Give it no `if`, and no argument that a test's outcome depends on.
 - Create each test's data in the test, even when every test needs the same. Set the time in each
   test whose code reads it.
-- Declare nothing at module level but imports, `setupTest()` and tests.
+- Declare only imports, `setupTest()` and tests at module level.
 - Keep each function that `setupTest()` returns, other than the seeder, to calls of production code,
   such as `readNotes: () => listNotes(db)`.
 - Write one `setupTest()` per file, and never share it. Bind its result to one `const ctx`, never
@@ -136,17 +136,17 @@ test('it lists the notes of a user with none as empty', async () => {
 
 - Keep plain inputs inline: write the literal again in the next test, never a shared fixture or a
   named constant.
-- When a test first needs a type that crosses a module boundary, such as an SDK result, write a
-  tested `buildMock<Type>` [factory](./references/factories.md) for it in `src/test-utils/`. Build
-  only plain data in a factory, and write no rows or files.
+- When a test needs a type that crosses a module boundary, such as an SDK result, write a tested
+  `buildMock<Type>` [factory](./references/factories.md) for it in `src/test-utils/`. Build only
+  plain data in a factory.
 - Build a stand-in for a boundary from data only, in one of the forms
   [Stand-ins](./references/boundaries.md#stand-ins) lists. Move any logic in a stand-in to a tested
   helper in `src/test-utils/`.
 
 ## Stored state
 
-Reach database rows and files on disk through the module that creates them, even in tests of a
-module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
+Seed and read database rows and files on disk through the module that creates them, even in tests of
+a module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
 allows.
 
 - Outside the creating module's tests, read through its code: a read function for rows, a path
@@ -167,30 +167,30 @@ allows.
 
 ## Errors
 
-- Assert at the strictness the contract needs: `toThrow()`, `toThrowWithMessage(Error, /…/)`, or
-  `toMatchObject({ code })`.
-- Give each declared error a test. For a throw that can't happen in production, delete the branch,
-  or write `invariant()` from `tiny-invariant`.
+- Assert only as much of the error as callers rely on: `toThrow()`,
+  `toThrowWithMessage(Error, /…/)`, or `toMatchObject({ code })`.
+- Test each error that the unit throws or returns on purpose. For a throw that can't happen in
+  production, delete the branch, or write `invariant()` from `tiny-invariant`.
 - Never assert in a `try`/`catch`: when nothing throws, nothing is asserted.
-- Write `.rejects` and `.resolves` without `await`. Always `await` `toResolve()` and `toReject()`.
-  [Matchers](./references/matchers.md) says why.
+- Write `.rejects` and `.resolves` without `await`: Bun settles the promise inside the matcher.
+  Always `await` `toResolve()` and `toReject()`.
 
 ## Narrowing
 
-- No branch in a test body. Give each path its own test.
+- Never branch in a test body. Give each path its own test.
 - When you assert on a field of a value that may be missing:
   - With `toBeUndefined`, `toBeFalsy`, `toBeNil` or a `.not` matcher, write `invariant(value)`
     first, then assert on `value.field`. These matchers pass on `undefined`, so `value?.field` hides
     a missing value.
   - With any other matcher, assert on `value?.field`. A missing value fails that matcher.
-- To check that the value itself is absent, assert on the value, with no `invariant`.
+- To check that the value is absent, assert on it, with no `invariant`.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.
 
 ## Matchers
 
 Use a [jest-extended matcher](./references/matchers.md) over a hand-written check, such as
-`toSatisfyAll(isOpen)`, because it prints the received value.
+`toSatisfyAll(isOpen)`. It prints the received value.
 
 ## Time and waiting
 
@@ -216,5 +216,5 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 
 ## Speed
 
-- Keep each unit test under 5 s on CI. When one is slower, fix its cause from the
+- Keep each unit test under 5 s on CI. Fix a slower one from the
   [slow-tests table](./references/slow-tests.md), never by raising the timeout.

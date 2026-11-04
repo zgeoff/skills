@@ -1,8 +1,9 @@
 # System tests
 
 Never sleep to let a service settle. Wait on a condition. Never overwrite, truncate, mount or delete
-a host resource that this run didn't create. Never mark a Rust lane test with `#[ignore]`: no lane
-runs an ignored test, and nothing reports that it stopped running.
+a host resource that this run didn't create. Never mark a Rust test that belongs in a
+[lane](./slow-tests.md#lanes) with `#[ignore]`. Every lane skips an ignored test, and nothing
+reports that the test stopped running.
 
 These rules add to the [testing skill](../SKILL.md). They cover where each kind of test lives, a
 test that runs a whole program, a browser or a VM, and a test that touches something the whole host
@@ -82,8 +83,8 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
      program in a pseudo-terminal.
 4. Run the lane with `bun run test:e2e`. `rig e2e` builds each program once, and `resolveProgram`
    gives the command that runs the built file. When you run one `e2e/` file with `bun test` on your
-   machine, it gives the command that runs the source. In CI, it throws when nothing built the
-   program.
+   machine, `resolveProgram` gives the command that runs the source. In CI, `resolveProgram` throws
+   when nothing built the program.
 
 This test needs no `setupTest`, because `await using` stops the program:
 
@@ -136,10 +137,11 @@ own. Inside an `e2e/` test, you may chain acts, and assert after each one, becau
 the state that the act before it left. Outside `e2e/`, a test still has one act.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
-  bring it up in the e2e lane's setup hook, the module that the lane's `start` key in
-  `rig.config.ts` names ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)), and take it
-  down in the lane's teardown hook, its `stop` key. rig runs both hooks once per lane run, outside
-  the test files.
+  bring it up in the e2e lane's setup hook, and take it down in the lane's teardown hook. Each hook
+  is a module that the lane names in `rig.config.ts`: the setup hook under its `start` key, and the
+  teardown hook under its `stop` key
+  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once per lane
+  run, outside the test files.
 - Return the address the tests need, such as a connection string, in the `environment` object that
   the setup hook returns. rig adds each entry to the environment of the lane's test process.
 - Never start a shared host or service in the `[test] preload` of `bunfig.toml`. Every unit run
@@ -157,9 +159,10 @@ Test a client that the repo ships, such as a CLI or an SDK, against the real ser
 repo. Give each test data that only it uses. Use a stand-in only for a system that the test can't
 run, such as a VM, the kernel or a remote service.
 
-In the unit run, call the service in the test's process, as
-[the cause table](./slow-tests.md#causes-and-fixes) says. When the client runs as a child process,
-start the service on a real port, so the child reaches it, and put the test in `e2e/`.
+In the unit run, call the service in the test's process, such as through its request handler or an
+in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes) says. When the client
+runs as a child process, start the service on a real port, so the child reaches it, and put the test
+in `e2e/`.
 
 For a remote HTTP service, use MSW, as in [Boundaries](../SKILL.md#boundaries). Write a stand-in
 server on a real socket only when MSW can't intercept the call, such as:
@@ -299,10 +302,10 @@ the time in as an argument or an injected clock, in the order
 ### Delays in a scenario
 
 You may use a real delay to set the rate of an end-to-end workload or the offset of a seeded fault.
-Name the rate or the fault in a comment, and keep the seed. To claim that a fault lands in the
-middle of an operation, assert the order of the operation's start, the fault and the operation's
-end, from events the code emits. Check both the fault and the recovery. Use a fixed wait only when
-the elapsed time is part of the contract.
+Name the rate or the fault in a comment. When a random seed picks the fault's offset, keep that seed
+in the code. To claim that a fault lands in the middle of an operation, assert the order of the
+operation's start, the fault and the operation's end, from events the code emits. Check both the
+fault and the recovery. Use a fixed wait only when the elapsed time is part of the contract.
 
 ## Property tests
 
@@ -353,8 +356,8 @@ that only reads `report.json` passes after the code changes and the report goes 
   as literals.
 - Keep an evaluation's helpers in `src/test-utils/`. Put measurement code that several packages use,
   such as a confidence interval or a report writer, in a package of its own that exports it.
-- Use a stand-in only for what a recording can't reproduce, such as the disk or the code host's API,
-  and inject it into the production path.
+- Use a stand-in only for what a recording can't reproduce, such as the disk or the API of a code
+  host like GitHub, and inject it into the production path.
 - Keep a test that calls a live API out of `evals/`, such as a test that pins how a model SDK
   behaves. Give it the `.model-api` suffix, beside its module, as [Lanes](./slow-tests.md#lanes)
   describes.
@@ -454,5 +457,5 @@ slow-timeout = { period = "60s", terminate-after = 1 }
   `slow-timeout`. A profile takes every setting it doesn't set from `default`. Run the lane with
   `cargo nextest run --profile <lane>`.
 - Give a test over its limit an override in its profile, with a comment that gives the time it takes
-  on CI and a ticket, or `floor:` and its evidence, as
+  on CI and a ticket, or `floor:` and the evidence that the time can't drop, as
   [A test over its limit](./slow-tests.md#a-test-over-its-limit) says.

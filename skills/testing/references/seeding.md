@@ -1,6 +1,6 @@
 # Seeding
 
-Seed through the module that creates the state: put rows or files in place for a test by calling
+Seed through the module that creates the records: put rows or files in place for a test by calling
 that module's own functions. Keep the seeds in the `src/test-utils/` folder of the module's package,
 and export them so other packages' tests can import them. When every test outside the module seeds
 through it, a schema or layout change breaks only the module and its tests.
@@ -16,7 +16,8 @@ through it, a schema or layout change breaks only the module and its tests.
 - [A seed's own test](#a-seeds-own-test)
 
 Write seeds this way even in a repo whose older tests still write rows themselves, such as with
-Kysely's `insertInto`. When you change a module, move its tests onto seeds, and leave other tests as
+Kysely's `insertInto`. When you change a module, move each test that writes the module's rows or
+files directly onto its seeds, wherever a seed makes the record the test needs. Leave other tests as
 they are.
 
 - Never branch on a state in a seed, such as a `seedNote` that reads `input.status` and archives the
@@ -25,14 +26,14 @@ they are.
 - Never write a seed for a bundle of records, such as `seedUserWithTwoNotes`, because it hides the
   scenario. Call `ctx.seed.user` and `ctx.seed.note` in the test, and pass the user's ID into the
   note's input.
-- Never write rows or files directly because the module doesn't export its write function. Export
-  the function from the module. An awkward import or a slow call is no reason either.
+- When the module doesn't export its write function, export it. Never write rows or files directly
+  to get around a missing export, an awkward import or a slow call.
 
 Write directly only in these places, and never in `e2e/`:
 
 - inside a seed, for a state that no code in the repo makes, as in
   [A state no code in the repo makes](#a-state-no-code-in-the-repo-makes);
-- in the module's own tests, when no seed makes the state;
+- in the module's own tests, when no seed makes the record the test needs;
 - in a migration test, and in a test of code whose product is SQL or storage, such as a database
   dialect.
 
@@ -42,11 +43,12 @@ You may also run a query that only sets up a failure, such as a trigger that mak
 
 Start from the module's state type, such as `type NoteStatus = 'draft' | 'archived'`.
 
-- Write the base seed, `seedNote`, to make the record in the state that the module's create function
-  gives it, here `draft`.
+- Write `seedNote` to make the record in the state that the module's create function gives it, here
+  `draft`.
 - Write one more seed for each other value of the state type, here `seedArchivedNote`.
-- Give a kind of record with no state type only its base seed. When the module has a status column
-  but no union type, treat each value that the module's code writes to the column as a state.
+- Give a kind of record with no state type only the seed that calls its create function. When the
+  module has a status column but no union type, treat each value that the module's code writes to
+  the column as a state.
 - Pass every other difference, such as a title or a timestamp, as input to a seed. Never write a new
   seed for it.
 
@@ -67,10 +69,10 @@ Give a seed two arguments:
 
 Inside the seed, call the module's write functions in a straight line:
 
-- In the base seed, call the module's create function.
-- In a variant, call the base seed, then the shortest chain of transition functions that reaches the
-  state: `seedArchivedNote` calls `seedNote`, then `archiveNote`. When another module holds a
-  transition, call that module's function. Never write the row directly for it.
+- In `seedNote`, call the module's create function.
+- In a seed for another state, call `seedNote`, then the shortest chain of transition functions that
+  reaches the state: `seedArchivedNote` calls `seedNote`, then `archiveNote`. When another module
+  holds a transition, call that module's function. Never write the row directly for it.
 - When a transition takes an argument that the create input lacks, such as a cancel reason, pass a
   fixed value in the seed. When a test checks that argument, call the transition in the test.
 - When a write function returns a wider type than the seed promises, narrow it with `invariant()`
@@ -78,8 +80,8 @@ Inside the seed, call the module's write functions in a straight line:
   returns, the seed then throws, and never hands a test a record in the wrong state.
 - Take the time from `deps.clock`. When a test needs a fixed timestamp, pass it in the input if the
   create input has the field. Otherwise move the clock in the test before you call the seed. When a
-  test needs two different timestamps, such as a creation time and an archive time, make the calls
-  in the test.
+  test needs two different timestamps, such as a creation time and an archive time, call `seedNote`,
+  move the clock, and call `archiveNote` in the test.
 
 ```ts
 // seed-note.ts
@@ -102,7 +104,7 @@ export async function seedArchivedNote(
 }
 ```
 
-`archiveNote` already returns `ArchivedNote`, so the variant needs no `invariant()`.
+`archiveNote` already returns `ArchivedNote`, so `seedArchivedNote` needs no `invariant()`.
 
 When a write sits inside a larger function, such as a request handler, move it into its own function
 in the module. Call that function from both the handler and the seed.
@@ -117,7 +119,7 @@ Export the package's `src/test-utils/` folder in the `exports` of its `package.j
 `<package>/test-utils/seed-note`.
 
 For each module, also export one function that binds the module's seeds to its deps. Name it for the
-record, such as `buildNoteSeeder` in `build-note-seeder.ts`:
+record, such as `buildNoteSeeder` in `src/test-utils/build-note-seeder.ts`:
 
 ```ts
 export const buildNoteSeeder = (deps: NotesDeps) => ({
@@ -133,7 +135,7 @@ key.
 ## `buildSeeder` and `setupTest`
 
 When a package's tests seed, give the package one `buildSeeder(deps)` in `build-seeder.ts` in its
-`src/test-utils/`. Spread into it the `build<Record>Seeder` of each module whose state those tests
+`src/test-utils/`. Spread into it the `build<Record>Seeder` of each module whose records those tests
 need. Write no test for it, because TypeScript checks it:
 
 ```ts
@@ -160,20 +162,18 @@ creates no data. In the test, call the seeds through `ctx.seed`.
 
 ## Calls that stay in the test
 
-Use a seed only to put state in place. Make these calls in the test body, where the reader sees
+Use a seed only to put records in place. Make these calls in the test body, where the reader sees
 them:
 
-- the call under test, through the unit's entry;
+- the call under test, through the function the unit's callers call;
 - each clock move;
-- each call whose effect on another record the test checks. For example, when stopping a job also
-  cancels the job's open tasks, and the test checks the tasks, stop the job in the test. Then assert
-  that effect in the test.
+- each call whose effect the test checks, and assert that effect in the test. For example, to test
+  what archiving does to a note's search entry, call `seedNote`, then `archiveNote`, and never call
+  `seedArchivedNote`. When stopping a job also cancels its open tasks, and the test checks the
+  tasks, stop the job in the test.
 
-Never call `expect` inside a seed. Check only a write function's result there, with `invariant()`.
-
-When the test checks what a transition does, make the transition a real call in the test. For
-example, to test what archiving does to a note's search entry, call `seedNote`, then `archiveNote`,
-and never call `seedArchivedNote`. Use a seed when the test only needs the record to be in a state.
+Use a seed when the test only needs the record to be in a state. Never call `expect` inside a seed.
+Check only a write function's result there, with `invariant()`.
 
 ## Table-driven tests
 
@@ -215,7 +215,8 @@ export async function seedNoteWithoutTitle(deps: NotesDeps, input: Partial<NoteR
 }
 ```
 
-When you can't name the exact state, call the module.
+When you can't name the exact state, it isn't one of these. Seed it through the module's own
+functions.
 
 ## Interrupted operations
 
@@ -230,4 +231,4 @@ Put a `seed-<name>.test.ts` beside each `seed-<name>.ts` file. In it, assert the
 seed writes, and that input overrides apply. Use `toMatchObject` on a row, because the database
 fills some of its fields.
 
-Count a seed's test as one of the module's own tests, so read stored state directly in it.
+Count a seed's test as one of the module's own tests, so read its rows and files directly.

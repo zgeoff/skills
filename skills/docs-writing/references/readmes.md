@@ -16,13 +16,14 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
 2. **Package README:** in any other folder with its own manifest (`package.json`, `go.mod` or
    `Cargo.toml`), wherever the folder sits. Give a published package the
    [published package sections](#published-package-sections), because the registry shows its README
-   on the package's page. Give an unpublished package a short README.
+   on the package's page. Give an unpublished package the short README that ends
+   [published package sections](#published-package-sections).
 3. **Docs index:** `docs/README.md`, one line and a link for each doc.
 4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
    the design. Give a design folder inside another design folder its own design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
-   design. `docs-tree.md`, beside this file, lists its sections. When spikes live outside
-   `docs/design/`, the folder that holds them gets a README too, as an index of the spikes.
+   design. [Spikes](./docs-tree.md#spikes) lists its sections. When spikes live outside
+   `docs/design/`, give the folder that holds them a README too, as an index of the spikes.
 
 Any other README is a mistake. Put its content in `docs/`, or in a code comment beside the code it
 explains. `chex readmes` fails on a README that isn't one of these kinds.
@@ -65,18 +66,18 @@ Open every root README and every published package README with this header. Repl
 <One-line description.>
 ```
 
-- **The `<h1>`:** the repo or package name, or a logo as an `<img>` with the name as its alt text.
-- **The badges:** one per line. Give a published package its registry's version badge, such as
-  npm's, crates.io's or pkg.go.dev's. Give every README with a header a licence badge that matches
+- Put the repo or package name in the `<h1>`, or a logo as an `<img>` with the name as its alt text.
+- Put one badge on each line. Give a published package its registry's version badge, such as npm's,
+  crates.io's or pkg.go.dev's. Give every README with a header a licence badge that matches
   `LICENSE`. Leave the version badge off a root README that publishes several packages or none.
-- **The links:** the docs index, then up to two guides a new user needs first, joined by `•`. Leave
-  the `<p>` out when there are no docs.
-- **The description:** one line below the `<div>`, in plain Markdown.
+- In the second `<p>`, link the docs index, then up to two guides a new user needs first, joined by
+  `•`. Leave that `<p>` out when there are no docs.
+- Write the one-line description below the `<div>`, in plain Markdown.
 
 Keep every link relative to the README's own folder. In a monorepo, a package README reaches the
-repo's docs and licence through the root, such as `../../docs/README.md`. npm rewrites a relative
-link to point at the repo, using the `repository` field in the package's `package.json`. In a
-monorepo, that field also needs `directory`, set to the package's folder.
+repo's docs and licence through the root, such as `../../docs/README.md`. Also set `directory`, in
+the `repository` field of each package's `package.json`, to the package's folder. npm uses that
+field to rewrite a relative link so that it points at the repo.
 
 ## Published package sections
 
@@ -109,15 +110,15 @@ of date:
 - install steps for each tool or platform the package supports;
 - edge cases inside table rows;
 - tables of keys or states;
-- dated "checked" stamps;
+- a line that says when someone last checked the README, such as "Checked 2026-03-01";
 - people's names.
 
 ## Who reviews a README
 
 The user owns what each README says about the project, so the user reviews every README change in
-its PR. Don't stop to ask first. Put each change in the right PR:
+its PR. Make the change without asking first, in the PR this list names:
 
-- **A new package:** its README ships in the PR that adds the package.
-- **A new feature:** its PR adds the feature's line.
-- **A sentence your change made false:** rewrite it in the same PR.
-- **Any other change to an existing README:** its own PR, a README PR.
+- Add a new package's README in the PR that adds the package.
+- Add a new feature's line to the package README's `## Features` in the PR that adds the feature.
+- Rewrite a sentence your change made false in the same PR.
+- Make any other change to an existing README in a PR of its own.

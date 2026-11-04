@@ -2,8 +2,9 @@
 
 Keep each test in the unit run under 5 s on CI, and each test in another lane under that lane's
 limit in [Lanes](#lanes). You pay for a slow test again in every later run. Never raise the timeout
-or add a sleep to hide that cost: `zgeoff/max-test-timeout` refuses a timeout above the limit of the
-file's lane, and `zgeoff/no-test-sleep` refuses a fixed sleep.
+or add a sleep to hide that cost. Two oxlint rules from `@zgeoff/oxlint-config` enforce this:
+`zgeoff/max-test-timeout` refuses a timeout above the limit of the file's lane, and
+`zgeoff/no-test-sleep` refuses a fixed sleep.
 
 When a test is slow, find its cause in [Causes and fixes](#causes-and-fixes) and make that fix.
 Never raise the timeout first, and never move a test to a lane only because it is slow.
@@ -24,7 +25,7 @@ Never raise the timeout first, and never move a test to a lane only because it i
 | sleeps to let something settle                                                 | no signal to wait on          | Wait on a condition with `waitFor`.             |
 | proves that something does not happen                                          | it waits out a timeout        | Wait for a later event.                         |
 | migrates a database or builds a bundle                                         | a fixture built in each test  | Use a [per-run template](#per-run-templates).   |
-| drives a program the repo starts, such as a guest, a worker or a VM manager    | a real process start          | Use a stateful stand-in for the program.        |
+| drives a program the repo starts, such as a VM guest agent or a worker         | a real process start          | Use a stateful stand-in for the program.        |
 | runs a linter or checker binary over text the code builds                      | a real process start          | Check the text with a script in `scripts/`.     |
 | needs a real system that the unit run can't host                               | a VM, the kernel or a browser | Put it in a [lane](#lanes).                     |
 
@@ -32,10 +33,13 @@ Each fix in more detail:
 
 - To call the code in the test process, call its handler, its main function with a test argv, an
   in-memory RPC link or an injected transport. Start a real process only in `e2e/`, through
-  `@zgeoff/testing`, as [Where a test lives](../SKILL.md#where-a-test-lives) says. Two kinds of test
-  start a real script outside `e2e/`: the test of a shell script, and the test of a TypeScript
-  script that a CI step runs. Put each in the file beside its script. The test starts the script
-  directly, and it runs in the unit run, within the unit limit.
+  `@zgeoff/testing`, as [Where a test lives](../SKILL.md#where-a-test-lives) says.
+
+  Two tests are the exception. Each sits in the file beside its script, starts the script itself,
+  and runs in the unit run within the unit limit:
+  - the test of a shell script;
+  - the test of a TypeScript script that a CI step runs.
+
 - To shorten a timer that the repo's code sets, make the delay an option of the code that sets it,
   pass a short one, and wait on the event the delay causes. For a timer inside Bun, Node or the
   kernel, which the repo's code can't set, follow
@@ -93,7 +97,7 @@ For each engine's template, see the Postgres isolation and SQLite isolation sect
 
 ## Lanes
 
-Put the tests that need one real system in a lane. Mark each file with the lane's suffix, or put it
+Put each test that needs a real system in a lane. Mark each file with the lane's suffix, or put it
 in `e2e/` for the e2e lane. Run the lane with its own `test:<lane>` script, and give its tests the
 lane's per-test limit. The unit run is the `unit` lane in the table below, and it leaves out the
 files of every other lane, as does the pre-push hook.
@@ -105,7 +109,8 @@ limit from there.
 
 Put a lane's harness, such as the code that starts the browser, in a package with its own tests.
 
-For where CI runs each lane, see the ci-design skill.
+For the CI job that runs each lane, see the ci-design skill. For when the `model-api` lane runs, see
+its bullet below.
 
 | Lane      | Where                                         | Limit | The real system                                                  |
 | --------- | --------------------------------------------- | ----- | ---------------------------------------------------------------- |
@@ -169,15 +174,16 @@ object. Pass the options object after the callback, because Bun's types accept n
 formatter puts each argument on its own line, so the comment stays next to the object.
 
 `zgeoff/test-timeout-exception-ticket` fails a disable of `zgeoff/max-test-timeout` whose reason
-after `--` holds neither a ticket nor `floor:` with text. `chex test-timeouts` fails an oxlint
-config that turns either rule off or down to a warning, unless a comment on that setting holds a
-ticket or `floor:`.
+after `--` holds neither a ticket nor `floor:` with text. The `test-timeouts` check of
+[`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails an oxlint config
+that turns `zgeoff/max-test-timeout` or `zgeoff/test-timeout-exception-ticket` off or down to a
+warning, unless a comment on that setting holds a ticket or `floor:`.
 
 ## The run mode and workers
 
 - Pass `--no-isolate` with every `--parallel=<N>`. `--parallel` implies `--isolate`, which runs each
-  test file in a fresh global object. Isolation slows the suite and hides a leak between files. The
-  resets in the test preload and `--randomize` catch that leak instead.
+  test file in a fresh global object. With isolation on, the suite runs slower, and a leak between
+  files goes unseen. The resets in the test preload and `--randomize` catch that leak instead.
 - Run the unit tests with `rig unit --no-isolate`. rig sets `--parallel` from the host's cores and
   memory, and `TEST_WORKERS` overrides the count. Never pass a bare `--parallel`, which starts one
   worker per core and takes memory the workers need.

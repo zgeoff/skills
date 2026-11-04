@@ -19,9 +19,10 @@ Watch for these mistakes:
 - In a package with a golden test, default every field of the package's own factories to a literal
   value. A golden test pins output in an inline snapshot or a committed file. Faker's values follow
   the order of its calls in the run, so one new faker call in any test file changes them.
-- Never write a helper that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
-  its defaults. The one exception is a seed named for a state, such as `archivedNote`: it may set
-  the fields that state needs, such as `archivedAt`.
+- Never write a factory that presets overrides, such as `buildMockPaidInvoice`. The reader can't see
+  its defaults. Pass the overrides in the test instead: `buildMockInvoice({ status: 'paid' })`.
+- A seed named for a state, such as `seedArchivedNote` in [Seeding](./seeding.md), is no such
+  factory. It may set the fields that state needs, such as `archivedAt`.
 
 ## Writing a factory
 
@@ -91,11 +92,12 @@ Put the test beside the factory, as `build-mock-<type>.test.ts`, with these 2 te
   the whole shape with `toStrictEqual` and asymmetric matchers.
 - `test('it applies overrides on top of the defaults', …)`.
 
-Add a test for each of these in the factory, and check that it fails when you delete the code it
-tests:
+Add one more test for each of these parts of the factory:
 
 - a field that the factory works out from another field;
 - a nested override that the factory passes to another factory, such as `address` in
   `buildMockShipment`.
+
+Delete the part, and check that its test fails.
 
 Never add a test of faker's output, or a second test of the plain merge of overrides.
