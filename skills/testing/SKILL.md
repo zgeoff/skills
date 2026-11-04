@@ -67,8 +67,7 @@ metadata:
 
 - Put a test beside the module or script it tests: `src/record-payment.test.ts`.
 - Put a shared helper, with its own test beside it, in `src/test-utils/` of the package that owns
-  what the helper starts, builds or fakes. Import a general helper, such as `waitFor`, from
-  `@zgeoff/testing/helpers`.
+  what the helper starts, builds or fakes. First look for it in `@zgeoff/testing/helpers`.
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 
@@ -200,8 +199,8 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
   2. an injected clock: `ctx.clock.advance(30_000)`;
   3. fake timers, for code the repo doesn't own, restored in `onTestFinished`.
 - When you can't pass the time in, assert a range around `Date.now()`, such as `toBeWithin`.
-- Wait on a condition with `waitFor`, never a sleep. When the code has nothing to wait on, add a
-  signal, such as an event.
+- Wait on a condition with `waitFor` from `@zgeoff/testing/helpers`, never a sleep. When the code
+  has nothing to wait on, add a signal, such as an event.
 
 ## Boundaries
 
