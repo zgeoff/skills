@@ -29,13 +29,13 @@ Add CI work as a package script. `bun-checks.yml` runs `audit`, `deadcode`, `for
 the repo defines: `test:e2e`, `test:browser`, `test:docker`, `test:host`, `test:agent-sdk` and
 `test:crash`, from `laneNames` in
 [`plan-check-scripts.ts`](https://github.com/zgeoff/tools/blob/main/packages/chex/src/ci-plan/plan-check-scripts.ts).
-A private repo runs every script in `checks`: GitHub bills each job at least a minute. In a public
-repo, each lane script runs in its own `test-<lane>` job, such as `test-e2e`. `test` and each other
-`test:<name>` script run in one `test` job. Every other script runs in one `static` job.
+In a private repo, it runs every script in `checks`: GitHub bills each job at least a minute. In a
+public repo, each lane script runs in its own `test-<lane>` job, such as `test-e2e`. `test` and each
+other `test:<name>` script run in one `test` job. Every other script runs in one `static` job.
 
 To run a script outside that list, set the repo variable `BUN_CHECK_SCRIPTS` to every script to run,
 separated by spaces, such as `lint test test:e2e build`. It replaces the list, so name each listed
-script you keep. A name that `package.json` lacks fails the run.
+script you keep. Name only scripts in `package.json`: any other name fails the run.
 
 Look up the repo's test budget in the Facts table of its project-ci-design skill. The budget limits
 the median CI test time over recent runs that restored no `actions/cache` entry. Take each run's
@@ -59,8 +59,8 @@ repo variable `BUN_CHECK_TIMEOUT_MINUTES`, and pass it to the workflow's `timeou
 
 Until the repo has a test budget and its tests have stayed within it for a week, set the timeout to
 20 minutes. Then set it to twice the budget plus the job's median time outside its tests. For a job
-with no tests, use twice its median time. Use at least 5 minutes. Read each median from the job's
-recent runs. In a public repo, one timeout covers every job: use the slowest test job's figures.
+with no tests, use twice its median time. Use at least 5 minutes. Read each median from recent runs.
+In a public repo, one timeout covers every job: use the slowest test job's figures.
 
 ## Reusable workflows
 
@@ -120,7 +120,7 @@ concurrency:
 - Never cancel a release, deploy or migrate job, because a deploy cut off halfway leaves its target
   half changed. Give it a job-level group, such as `deploy-${{ github.ref }}`, with
   `cancel-in-progress: false`. When the checks share that workflow, move their group to job level
-  too. A workflow-level group cancels every job in the run, the deploy included.
+  too. Then GitHub cancels only the checks, never the deploy.
 - In a workflow that runs only on `main`, group by `github.sha`, with `cancel-in-progress: false`.
 
 ## Builds
@@ -200,8 +200,8 @@ included, because the
 
 `chex dependency-gates` in `bun-checks.yml` fails the run when you break one of these:
 
-- Never leave a release-age exclude past its date, or with no removal comment. A first-party exclude
-  passes with no comment.
+- Never leave a release-age exclude past its date, or with no removal comment. Leave a first-party
+  exclude without a comment.
 - Never leave a first-party package with no exclude.
 - Never keep an override that every locked version meets. It changes nothing.
 - Never keep an audit ignore that no locked package needs.

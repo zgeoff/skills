@@ -99,7 +99,7 @@ Never repeat a rule the shared skill states. The agent reads both, and two copie
 
 Say where each fact lives. Link the file that holds it with a path relative to the skill, such as
 `../../../config/ci.json` from `.claude/skills/project-ci-design/SKILL.md`, and name the key or the
-command that shows the fact. A pointer stays true when the value changes, and
+command that shows the fact. Then the row stays true when the value changes, and
 [`chex links`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails when the file moves.
 Give a row a value only when no file in the repo holds the fact, such as the
 [test budget](../../ci-design/SKILL.md#jobs).
