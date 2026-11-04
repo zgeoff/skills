@@ -77,6 +77,10 @@ metadata:
 - Write the pure function first, from the values you will read, then the thin one around it. You
   then test each edge case with one `test.each` row of plain data. In one combined function, each
   case needs a stand-in for every read and write, so the edges go untested.
+- Take a cross-process file lock only with `withFileLock` from `@zgeoff/std/with-file-lock`, and do
+  the whole read, decision and write inside its callback, so no other process acts between them.
+  Write your own lock only when `withFileLock` can't do the job, such as a shared lock, and say why
+  in a comment.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
 - Never add an option, a parameter or an extension point before a caller passes it.
