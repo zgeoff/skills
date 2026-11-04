@@ -16,6 +16,9 @@ When a matcher throws `TypeError` at run time, list that package first in the `p
 | Mock              | `toHaveBeenCalledOnce`, `toHaveBeenCalledExactlyOnceWith`, `toHaveBeenCalledBefore`, `toHaveBeenCalledAfter`      |
 | Error and promise | `toThrowWithMessage`, `toResolve`, `toReject`                                                                     |
 
+- Write `.rejects` and `.resolves` without `await`, because Bun settles them inside the matcher.
+  Always `await` `toResolve()` and `toReject()`: they return a promise, and a test that doesn't
+  await it ends before the check runs.
 - Use any of them inside `toStrictEqual`: `status: expect.toBeOneOf(['open', 'held'])`.
 - `toPartiallyContain` and `toIncludeAllPartialMembers` take plain objects, never a bare asymmetric
   matcher, which matches any non-empty array. To find an element by a matcher, use

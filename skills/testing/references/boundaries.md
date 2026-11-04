@@ -21,6 +21,14 @@ real thing wherever the table says so.
 - When the code builds an SDK client or another dependency itself, change it to take the dependency
   from its caller. Then pass the stand-in in.
 - Never spy on a real method to make it fail.
+- Build a stand-in from data only. Use one of these:
+  - a fixed answer;
+  - `mock()`;
+  - a no-op;
+  - a map from input to answer;
+  - the answer-queue helper in `src/test-utils/`.
+- No `mockReturnValueOnce` or `mockResolvedValueOnce` chain: a call past the last answer returns the
+  default silently, where the answer-queue helper throws.
 - Put each stand-in in `src/test-utils/`, and name the file for what it does:
   - `start-stub-<thing>.ts` starts a process or a server that keeps running;
   - `create-stub-<thing>.ts` creates a resource on disk or in a service;

@@ -6,12 +6,19 @@ timeout still runs its cleanup. A run that something outside stops, such as a CI
 out-of-memory kill or Ctrl-C, runs none. For the common case, see [Cleanup](../SKILL.md#cleanup) in
 the testing skill.
 
+- [The test preload](#the-test-preload)
 - [Helpers that register cleanup](#helpers-that-register-cleanup)
 - [Ordered cleanup](#ordered-cleanup)
 - [Cleanup after the resets](#cleanup-after-the-resets)
 - [Concurrent tests](#concurrent-tests)
 - [A test that fails only in the full run](#a-test-that-fails-only-in-the-full-run)
 - [Leftovers of a killed run](#leftovers-of-a-killed-run)
+
+## The test preload
+
+- Reset shared state after each test in the test preload, the file that `bunfig.toml` lists under
+  `[test] preload`. When you add module-level state, such as a cache, add its reset there.
+- Start a shared resource, such as the MSW server, in the preload's `beforeAll`, never at import.
 
 ## Helpers that register cleanup
 
@@ -122,9 +129,9 @@ A killed run leaves behind the temp folders and database clones it made. On a ho
 the database's data sits on tmpfs, each leftover holds RAM.
 
 Name each folder and database clone that a run makes after the PID of the test process that made it
-and its PID namespace, such as `pid4182-ns4026531836-`. On Linux, `/proc/self/ns/pid` links to
-`pid:[<namespace>]`. A sandbox with its own PID namespace can share the temp folder, and there the
-same PID belongs to another process.
+and its PID namespace, such as `pid4182-ns4026531836-`. On Linux, `readlink /proc/self/ns/pid`
+prints `pid:[<namespace>]`. A sandbox with its own PID namespace can share the temp folder, and
+there the same PID belongs to another process.
 
 Then sweep at the start of each run, in the repo's test script before `bun test` starts, so the
 sweep runs once per run. Remove each leftover from the sweep's own namespace whose PID no longer
