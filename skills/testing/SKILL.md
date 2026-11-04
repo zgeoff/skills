@@ -28,8 +28,8 @@ metadata:
 - [Cleanup](./references/cleanup.md): adding a reset to the test preload, ordering cleanup, and
   finding why a test fails only in the full run.
 - [Observability](./references/observability.md): code that records telemetry.
-- [System tests](./references/system-tests.md): placing a test in a package, and writing an
-  end-to-end, evaluation, property or golden test, a native timer or a stateful stand-in.
+- [System tests](./references/system-tests.md): placing a test, and writing an end-to-end,
+  evaluation, property or golden test.
 - [Shell scripts](./references/shell.md): a script's test.
 - [Workflows](./references/workflows.md): testing a GitHub Actions step's logic, or checking a
   config file.
@@ -71,9 +71,8 @@ metadata:
 - Put an end-to-end test, an evaluation and a benchmark of a running program where
   [Package layout](./references/system-tests.md#package-layout) shows.
 
-[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) and the
-[`rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) test runner fail a test outside this
-layout.
+[`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails a test outside
+this layout.
 
 ## Test shape
 
@@ -123,16 +122,11 @@ test('it lists the notes of a user with none as empty', async () => {
 
 - Register `onTestFinished` right after each acquisition, so a later throw still releases it. No
   `try`/`finally` in a test.
-
-```ts
-const dir = mkdtempSync(join(tmpdir(), 'notes-'));
-
-onTestFinished(() => rm(dir, { recursive: true, force: true }));
-```
-
-- When a test changes process state, register `onTestFinished` right after the change. Skip it for
-  state that the [test preload](./references/cleanup.md#the-test-preload) resets, and add a reset
-  there for any module-level state you add, such as a cache.
+- When a test changes process state that the
+  [test preload](./references/cleanup.md#the-test-preload) doesn't reset, register `onTestFinished`
+  right after the change.
+- When you add state to production code that outlives a test, such as a cache, reset it in the test
+  preload.
 - Override an environment variable through a helper in `src/test-utils/` that restores it after the
   test, never by assigning `process.env`.
 - Keep tests apart with the [test-database helper](./references/database.md) and a folder per test,
@@ -177,14 +171,17 @@ tests may write them directly, when no seed makes the state.
 - Give each declared error a test. For a throw that can't happen in production, delete the branch,
   or write `invariant()` from `tiny-invariant`.
 - Never assert in a `try`/`catch`: when nothing throws, nothing is asserted.
-- Follow [Matchers](./references/matchers.md) on when to `await` a promise matcher.
+- Write `.rejects` and `.resolves` without `await`. Always `await` `toResolve()` and `toReject()`.
+  [Matchers](./references/matchers.md) says why.
 
 ## Narrowing
 
 - No branch in a test body. Give each path its own test.
-- Before `toBeUndefined`, `toBeFalsy`, `toBeNil` or a `.not` matcher, narrow a value that may be
-  missing with `invariant(value)`, then assert on `value.field`. Each of those matchers passes on
-  the `undefined` that `value?.field` reads. Before any other matcher, write `value?.field`.
+- When you assert on a field of a value that may be missing:
+  - With `toBeUndefined`, `toBeFalsy`, `toBeNil` or a `.not` matcher, write `invariant(value)`
+    first, then assert on `value.field`. These matchers pass on `undefined`, so `value?.field` hides
+    a missing value.
+  - With any other matcher, assert on `value?.field`. A missing value fails that matcher.
 - To check that the value itself is absent, assert on the value, with no `invariant`.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.

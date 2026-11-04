@@ -2,18 +2,19 @@
 
 Find the boundary your code talks to in this table, and give the test what its row lists. Never stub
 `fetch` or an HTTP client: mock the remote server with MSW, so the code's own request code runs. The
-one exception is an SDK client that sends command objects, which gets a stand-in `send`.
+one exception is an SDK client that makes every call through one `send(command)` method, such as an
+AWS SDK v3 client. Give that client a stand-in `send`.
 
-| Boundary                                                            | The test uses                                                  |
-| ------------------------------------------------------------------- | -------------------------------------------------------------- |
-| A CLI the code runs, from the repo or installed, such as `git`      | The real binary, spawned                                       |
-| A shell script                                                      | The real script, through Bun's `$` ([Shell](./shell.md))       |
-| The filesystem                                                      | A real `mkdtemp` tree per test                                 |
-| A database                                                          | The real engine, isolated per test ([Database](./database.md)) |
-| A remote HTTP or RPC service                                        | MSW handlers ([HTTP mocking](./http.md))                       |
-| A service that runs in a container, such as Redis                   | The real service in a container                                |
-| An SDK client that sends command objects, such as an AWS SDK client | A stand-in `send`                                              |
-| A worker the repo spawns and talks to over its own messages         | A stateful stand-in ([System tests](./system-tests.md))        |
+| Boundary                                                       | The test uses                                                  |
+| -------------------------------------------------------------- | -------------------------------------------------------------- |
+| A CLI the code runs, from the repo or installed, such as `git` | The real binary, spawned                                       |
+| A shell script                                                 | The real script, through Bun's `$` ([Shell](./shell.md))       |
+| The filesystem                                                 | A real `mkdtemp` tree per test                                 |
+| A database                                                     | The real engine, isolated per test ([Database](./database.md)) |
+| A remote HTTP or RPC service                                   | MSW handlers ([HTTP mocking](./http.md))                       |
+| A service that runs in a container, such as Redis              | The real service in a container                                |
+| An SDK client that makes every call through one `send` method  | A stand-in `send`                                              |
+| A worker the repo spawns and talks to over its own messages    | A stateful stand-in ([System tests](./system-tests.md))        |
 
 ## Stand-ins
 
@@ -59,8 +60,9 @@ in the same test. A rejection left as a rejection stops the test at the first fa
 
 ## Module mocks
 
-When you want to mock a module only because one of its imports does work as it loads, move that work
-out of the import, or pass the import's work in as a dependency.
+Say the module you test imports a `db.ts` that opens a connection as it loads. Never mock `db.ts`
+for that. Export a function from `db.ts` that opens the connection, or make the module you test take
+the connection from its caller.
 
 Write a module mock only for one of these, in its own file, `register-<module>-mock.ts`, that the
 test preload loads:

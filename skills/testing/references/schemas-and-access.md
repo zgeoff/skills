@@ -9,10 +9,10 @@ rule allows.
 The examples use a schema whose `safeParse` returns `{ success, data, error }`, such as a Zod
 schema. Map them onto the result shape of your parser.
 
-- Write each payload as a literal in the test. A factory's defaults hide which field the test
-  checks.
+- Write each payload as a literal in the test. With a factory's defaults, the reader can't see which
+  field the test checks.
 - Build each rejected payload from the valid literal, with one field changed. Then the one changed
-  field is the only reason it can fail.
+  field is the only reason the payload can fail.
 - Assert a rejection's issue path:
   `expect(result.error?.issues).toPartiallyContain({ path: ['title'] })`. Never assert `issues[0]`,
   because the order of the issues changes with the schema. Never assert a bare `success: false`,
@@ -23,8 +23,8 @@ schema. Map them onto the result shape of your parser.
 ## Access rules
 
 - Test that the allowed caller succeeds.
-- Test that another caller is refused, and name that caller in the test title:
+- Test that another caller is refused, with a title that says who owns the record:
   `it rejects a note owned by another user`. Assert the refusal at the strictness the contract
   needs, as [Errors](../SKILL.md#errors) says.
-- When a read returns nothing for a record the caller may not see, assert that empty result, such as
+- When the rule hides a record from a read, assert the refused caller's empty result, such as
   `toBeNull()`.

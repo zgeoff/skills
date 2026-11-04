@@ -46,16 +46,14 @@ packages/ledger/
     └── import-statement.bench.ts   benchmark of the running program
 ```
 
-Export `./test-utils/*` from `package.json`, so other packages' tests import the helpers. In the
-table, a program is one that the repo's `rig.config.ts` declares for
-[rig](https://github.com/zgeoff/tools/tree/main/packages/rig).
+Export `./test-utils/*` from `package.json`, so other packages' tests import the helpers.
 
-| The test                                                     | Put it                                                                                                             |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| starts a program that `rig.config.ts` declares, as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](#end-to-end-suites) |
-| scores a corpus                                              | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](#evaluation-suites) shows           |
-| measures a running program                                   | in `bench/` of the package that builds the program, as [Benchmarks](#benchmarks) shows                             |
-| does anything else                                           | beside the module or script it tests                                                                               |
+| The test                                                                                                                       | Put it                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| starts a program that `rig.config.ts` declares for [rig](https://github.com/zgeoff/tools/tree/main/packages/rig), as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](#end-to-end-suites) |
+| scores a corpus                                                                                                                | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](#evaluation-suites) shows           |
+| measures a running program                                                                                                     | in `bench/` of the package that builds the program, as [Benchmarks](#benchmarks) shows                             |
+| does anything else                                                                                                             | beside the module or script it tests                                                                               |
 
 ## End-to-end suites
 
