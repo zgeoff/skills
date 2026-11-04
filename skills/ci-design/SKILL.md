@@ -61,7 +61,8 @@ When the repo has no budget, skip each rule that uses one.
   of runs on `main`. Then set twice the budget plus the job's median time outside its tests.
 - Set twice the median time on a job with no tests, and never less than 5 minutes.
 - Set the timeout of the `bun-checks.yml` jobs with the repo variable `BUN_CHECK_TIMEOUT_MINUTES`.
-  It covers every job, so use the slowest test job's figures.
+  It covers every job, so use the slowest test job's figures. In a workflow you write that calls
+  `bun-checks.yml`, pass the variable the way `pr.yml` does.
 
 ## Reusable workflows
 
@@ -88,9 +89,9 @@ When the repo has no budget, skip each rule that uses one.
 
 ## Path filters
 
-Filter a job only when you can list every path it reads, shared packages and `bun.lock` included.
-Filter it with a `changes` job. Leave `paths` off the trigger: a workflow that never starts reports
-no checks, so a required check in it blocks the merge.
+Filter a job only when you can list every path it reads, shared packages, `bun.lock` and the
+workflow's own file included. Filter it with a `changes` job. Leave `paths` off the trigger: a
+workflow that never starts reports no checks, so a required check in it blocks the merge.
 
 ```yaml
 jobs:
@@ -101,6 +102,7 @@ jobs:
         services/api/**
         packages/shared/**
         bun.lock
+        .github/workflows/image.yml
   image: # not a required check, so a skip is safe
     needs: changes
     # != 'false', so a failed changes job still runs the image build
@@ -137,8 +139,8 @@ jobs:
 - Never cache `~/.bun/install/cache` or `node_modules`. `bun install --frozen-lockfile` is faster
   than the restore.
 - When a job reads git history, such as tags or old commits for a changelog, check out with
-  `fetch-depth: 0` and `filter: blob:none`. For a diff against the base branch, use
-  `fetch-depth: 2`.
+  `fetch-depth: 0` and `filter: blob:none`, or `filter: ''` when it reads many old files. For a diff
+  against the base branch, use `fetch-depth: 2`.
 
 ## `workflow_run` triggers
 
