@@ -2,21 +2,21 @@
 name: pr-evidence
 description:
   'Captures a screenshot of a web page and puts it, or a screen recording, into a pull request as
-  evidence, through the files.geoff.cloud file host. Load it before adding an image or recording to
+  evidence, through the user's file host. Load it before adding an image or recording to
   a PR, an issue or a review reply, and before committing an image that only shows a change.'
 ---
 
 # PR evidence
 
-Put a screenshot or a recording in a PR as a link to the `files.geoff.cloud` file host, and hand
-back the Markdown line you added. Never commit an image just to show a change: it stays in the
-repo's history forever. Anyone with the link can open the file, so keep every token, secret and
-piece of personal data out of it.
+Put a screenshot or a recording in a PR as a link to the user's file host, and hand back the
+Markdown line you added. Never commit an image just to show a change: it stays in the repo's history
+forever. Anyone with the link can open the file, so keep every token, secret and piece of personal
+data out of it.
 
 ## Key rules
 
-- [Pick the upload path](#pick-the-upload-path): the `cloud` CLI, or `curl` on an imp, a cloud VM
-  that runs agent sessions; otherwise stop before you capture.
+- [Pick the upload path](#pick-the-upload-path): the `cloud` CLI, or `curl` to the address in
+  `PR_EVIDENCE_URL`; otherwise stop before you capture.
 - [Save and capture](#save-and-capture): each file in `.scratch/`, kept out of git, named for what
   it shows.
 - [Upload it](#upload-it): with a label and a 30-day expiry, and check the reply.
@@ -29,8 +29,17 @@ Pick the path before you capture anything. Take the first row that matches:
 | Check                                | Path                                                               |
 | ------------------------------------ | ------------------------------------------------------------------ |
 | `command -v cloud` prints a path     | the `cloud` CLI, the file host's client on the user's own machines |
-| `test -n "$OP_CONNECT_HOST"` is true | `curl`, on an imp: a cloud VM that runs agent sessions             |
+| `test -n "$PR_EVIDENCE_URL"` is true | `curl`                                                             |
 | neither                              | none: stop and tell the user                                       |
+
+For the `curl` path, the machine's setup gives the file host's details in two environment variables:
+
+- `PR_EVIDENCE_URL`: the file host's upload address, such as `https://files.example.com/api/files`.
+- `PR_EVIDENCE_TOKEN_REF`: the 1Password secret reference to the upload token, such as
+  `op://<vault>/<item>/<field>`.
+
+When `PR_EVIDENCE_TOKEN_REF` is empty, stop and tell the user. Never write either value in a file
+you commit.
 
 ## Save and capture
 
@@ -54,10 +63,9 @@ Pick the path before you capture anything. Take the first row that matches:
    JPEG, GIF, WebP and AVIF as an image, and MP4 and WebM as a link. Any other format downloads as a
    file.
 
-   The imp's VM image installs `chromium`. When `command -v chromium` prints nothing on an imp, stop
-   and tell the user. On the user's machine without it, use another screenshot tool that runs
-   without a person at the screen, or stop and tell the user. For a recording, use any recorder
-   there, and save MP4 or WebM.
+   When `command -v chromium` prints nothing, use another screenshot tool that runs without a person
+   at the screen, or stop and tell the user. For a recording, use any recorder there, and save MP4
+   or WebM.
 
 4. Open the image before you upload it. Check that it shows the change, and holds no token, secret
    or personal data. When you can't view a recording, ask the user to check it before you upload it.
@@ -68,10 +76,10 @@ Write a label first: a few words on what the file shows, such as `Login form wit
 Leave out square brackets, which break the Markdown line. The file host stores the label, and you
 use it as the alt text on both paths.
 
-Set `expires` to `30d` on both paths. On an imp, the file host refuses a longer expiry from the
-agent token that `curl` sends. Without `expires`, the file host deletes the file after 7 days, which
-breaks the image in a PR that stays open longer than a week. Never set `never`: the image only needs
-to last through the review.
+Set `expires` to `30d` on both paths. The file host refuses a longer expiry from the agent token
+that `curl` sends. Without `expires`, the file host deletes the file after 7 days, which breaks the
+image in a PR that stays open longer than a week. Never set `never`: the image only needs to last
+through the review.
 
 - With the `cloud` CLI:
 
@@ -82,10 +90,10 @@ to last through the review.
   Expect the Markdown line, with the label as the alt text. On a failure it prints an error, prints
   no line, and exits non-zero. `--expires 30d` sets the expiry, so this path needs no expiry check.
 
-- With `curl` on an imp:
+- With `curl`:
 
   ```bash
-  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read op://imp/files-agent-token/credential)" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d https://files.geoff.cloud/api/files
+  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "$PR_EVIDENCE_TOKEN_REF")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$PR_EVIDENCE_URL"
   ```
 
   Expect a JSON body, then `HTTP 201`. The body holds `id`, `url`, `filename`, `contentType`,
