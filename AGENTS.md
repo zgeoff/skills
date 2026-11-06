@@ -60,9 +60,15 @@ skill's `scripts/` folder.
 
 ## Skill pull requests
 
-When you write or edit a skill, do every step in the "Check it" section of skill-writing. In this
-repo, give the full output of `bun run check` under "Skill checks": it runs every check that section
-names. A pull request that changes no skill needs only green CI.
+A pull request that changes a skill's `SKILL.md`, or a file under its `references/`, needs the
+skill's proof. A pull request that changes only other files, such as this AGENTS.md, needs only
+green CI.
+
+To give the proof, do every step in the "Check it" section of
+[skill-writing](skills/skill-writing/SKILL.md). Its step 4 puts the proof in a `## Checks` section
+of the PR template. This repo has no PR template, so add a `## Checks` heading to the PR
+description, with the three ticked lines and the Declined list that step 4 names. In this repo,
+`bun run check` runs the chex checks of the first ticked line.
 
 ## Commits and pull requests
 
