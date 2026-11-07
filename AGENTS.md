@@ -5,7 +5,9 @@ another repo: invent each example, and never use a term that only one repo uses.
 request into `main` with green CI, and for a skill change, a `## Checks` section in the PR
 description, as [Skill pull requests](#skill-pull-requests) says.
 
-Never open a pull request in another repo to deliver your change.
+Never open a pull request in another repo to deliver your change: this rule covers each agent that
+works in this repo. The `zgeoff/tools` change that moves its pin to your merged commit is a separate
+change, made in `zgeoff/tools`.
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) in
 `zgeoff/tools` copies the skills each repo takes, from the commit of this repo that `zgeoff/tools`
 pins, and opens those pull requests itself. Anyone outside the zgeoff repos installs the skills with
@@ -46,7 +48,7 @@ Run `bun x @zgeoff/chex skill skills/<skill>` to check one skill. A repo that in
 keeps them under `.agents/skills/`, and the skills give paths there. This repo keeps the same files
 under `skills/`.
 
-## Checks
+## Local and CI runs
 
 Work in a git worktree, and run `bun install` once in it. That installs the pre-commit hook, which
 runs oxfmt on the staged files and rewraps each Markdown paragraph at 100 columns. Write each
@@ -81,4 +83,5 @@ it.
 
 Write each commit message and each PR title as a Conventional Commit in the imperative mood, such as
 "add X", never "added X". Use the skill's folder name as the scope, or `skills` for a change to
-several skills. Never add attribution lines.
+several skills. For a change outside a skill, such as to `tests/`, CI or AGENTS.md, leave the scope
+out. For a dependency update, write `chore(deps)`. Never add attribution lines.
