@@ -14,8 +14,8 @@ metadata:
 ## Files and modules
 
 - Give each file one main export, and name the file after it: `parse-cli-args.ts` exports
-  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a module only
-  has a side effect, name it for what it does: `augment-bun-test.ts`.
+  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a module has
+  only a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
   type or constant just above its first use.
 - Make objects with factory functions, and never write a class. The one exception is a custom error,
