@@ -1,8 +1,8 @@
 # Kinds of skill
 
-Pick the kind before you write. A machinery skill and a method skill keep the opening that
-[SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. A
-rule set leaves that opening out, and so does a project skill, which is a rule set.
+Pick the kind before you write. In a machinery skill or a method skill, write the opening that
+[SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. Leave
+that opening out of a rule set, and out of a project skill, which is a rule set.
 
 - [A machinery skill](#a-machinery-skill) covers one repo's tools, such as its migrations or its
   deploy scripts.
@@ -85,13 +85,15 @@ has any, and the bullet rules in [A rule set](#a-rule-set). Then write these sec
 order:
 
 1. `## Facts`, in project-ci-design and project-testing only: a table with the columns Fact and
-   Where, and the rows below, in that order. Write "none" in the Where cell of a row that doesn't
-   apply.
+   Where, and the rows in [Facts rows](#facts-rows), in that order. Write "none" in the Where cell
+   of a row that doesn't apply.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
-   every rule. In project-code-style, put each stricter rule in a topic section, because
-   [code-style](../../code-style/SKILL.md) lets a repo add rules. In project-code-style, list a
-   departure only for code whose shape another tool sets, such as a plugin that a host's API shapes.
+   every rule. Write project-code-style with these exceptions:
+   - Put each stricter rule in a topic section, because [code-style](../../code-style/SKILL.md) lets
+     a repo add rules.
+   - List a departure only for code whose shape another tool sets, such as a plugin that a host's
+     API shapes.
 3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
    test harness or a test helper.
 
@@ -107,8 +109,7 @@ Give a row a value only when no file in the repo holds the fact, such as the
 [test budget](../../ci-design/SKILL.md#jobs).
 
 The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
-ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing. Each
-row below names a project skill, a fact, and what goes in the Where cell of its `## Facts` table.
+ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing.
 
 Each row below names a project skill, a fact, and what goes in the Where cell of its `## Facts`
 table.

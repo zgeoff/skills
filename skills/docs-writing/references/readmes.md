@@ -19,9 +19,10 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    on the package's page. Give an unpublished package a short README, as the last paragraph of
    [published package sections](#published-package-sections) describes.
 3. **Docs index:** the `README.md` in `docs/`, one line and a link for each doc.
-4. **Design README:** `docs/design/<work>/README.md`, where `<work>` names the work in a few words.
-   It has one line and a link for each doc and spike in the [design](./docs-tree.md#designs). Give a
-   design folder inside another design folder its own design README.
+4. **Design README:** `docs/design/<work>/README.md`, where `<work>` names the feature or project
+   that the design covers, in a few words. It has one line and a link for each doc and spike in the
+   [design](./docs-tree.md#designs). Give a design folder inside another design folder its own
+   design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
    design. [Spikes](./docs-tree.md#spikes) lists its sections. When spikes live outside
    `docs/design/`, give the folder that holds them a README too, as an index of the spikes.
@@ -47,8 +48,8 @@ The root README takes one of three shapes:
 ## The header
 
 Open every root README and every published package README with this header. Replace `<name>`,
-`<package>`, `<guide>`, `<Guide title>` and `<One-line description.>`. Keep each HTML tag that the
-rules below the template leave in:
+`<package>`, `<guide>`, `<Guide title>` and `<One-line description.>`. Keep the HTML tags. The
+bullets below the template name the only tags you may leave out:
 
 ```text
 <div align="center">
@@ -73,11 +74,11 @@ rules below the template leave in:
   crates.io's or pkg.go.dev's. Give every README with a header a licence badge that matches
   `LICENSE`. Leave the version badge off a root README that publishes several packages or none.
 - In the second `<p>`, link the docs index, then up to two guides a new user needs first, joined by
-  `•`. Leave that `<p>` out when there are no docs.
+  `•`. When there are no docs, leave that `<p>` out.
 - Write the one-line description below the `<div>`, in plain Markdown.
 
 Keep every link relative to the README's own folder. In a monorepo, a package README reaches the
-repo's docs and licence through the root, such as `[Docs](../../docs/README.md)`. Also set
+repo's docs and licence through the root, such as `<a href="../../docs/README.md">`. Also set
 `directory`, in the `repository` field of each package's `package.json`, to the package's folder.
 npm uses that field to rewrite a relative link so that it points at the repo.
 
@@ -92,7 +93,7 @@ npm uses that field to rewrite a relative link so that it points at the repo.
    package supports a list of tools or platforms, add a section for that list, such as
    `## Supported platforms`.
 5. `## Configuration`: one paragraph, and a link to the config schema, or to the configuration guide
-   when there's no schema. Leave it out when the package has no configuration.
+   when there's no schema. When the package has no configuration, leave the section out.
 6. `## Documentation`: one line that links `docs/`, for the reader who reads to the end.
 
 Give an unpublished package a short README with no header: one paragraph on what the package is for,
@@ -101,7 +102,7 @@ and a link to the architecture doc that covers it, when one exists.
 ## Length
 
 `chex length` sets each README's target and limit from its kind. Run `bun x @zgeoff/chex length` to
-print both. Cut a README to its target. The limit is where the run fails.
+print both for each README. Cut a README to its target. The limit is where the run fails.
 
 ## What stays out
 

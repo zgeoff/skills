@@ -108,8 +108,8 @@ test('it exits 0 on SIGTERM', async () => {
 
 ### E2e prefixes
 
-Start each `e2e/` file name with one of these prefixes. Test anything else as a unit test of the
-code it reaches.
+Start each `e2e/` file name with one of these prefixes. Test a case that no prefix covers as a unit
+test of the code that the case reaches.
 
 | Prefix     | What the test checks                                                                 |
 | ---------- | ------------------------------------------------------------------------------------ |
@@ -135,16 +135,16 @@ code it reaches.
 
 Never share a `setupTest` or a cleanup between `e2e/` test files: when a file needs one, give it its
 own. Inside an `e2e/` test, you may chain acts, and assert after each one, because each act needs
-the state that the act before it left. Outside `e2e/`, a test still has one act.
+the state that the act before it left. Outside `e2e/`, a test has one act, as
+[Test shape](../SKILL.md#test-shape) says.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
-  bring it up in the e2e lane's setup hook, and take it down in the lane's teardown hook. Name each
-  hook's module in the lane's entry under `lanes` in `rig.config.ts`: the setup hook under the
-  entry's `start` key, and the teardown hook under the entry's `stop` key
+  bring it up in a `start` hook, and take it down in a `stop` hook. Each hook is a module. Name it
+  under that key in the e2e lane's entry under `lanes` in `rig.config.ts`
   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once per lane
   run, outside the test files.
 - Return the address the tests need, such as a connection string, in the `environment` object that
-  the setup hook returns. rig adds each entry to the environment of the lane's test process.
+  the `start` hook returns. rig adds each entry to the environment of the lane's test process.
 - Never start a shared host or service in the `[test] preload` of `bunfig.toml`. Every unit run
   loads that file too, and would start it for nothing, or fail on a machine without it. Wire
   everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
@@ -157,8 +157,8 @@ the state that the act before it left. Outside `e2e/`, a test still has one act.
 ## Real applications and transport
 
 Test a client that the repo ships, such as a CLI or an SDK, against the real service from the same
-repo. Give each test its own data, which no other test uses. Use a stand-in only for a system that
-the test can't run, such as a VM, the kernel or a remote service.
+repo. Give each test its own data. Use a stand-in only for a system that the test can't run, such as
+a VM, the kernel or a remote service.
 
 In the unit run, call the service in the test's process, such as through its request handler or an
 in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes) says. When the client
@@ -178,9 +178,9 @@ doesn't expect.
 
 ## Stateful stand-ins
 
-When the repo starts a program in another process and drives it over its own protocol, such as a
-worker, a language server or a sandboxed guest, test the host against a stateful stand-in of the
-program:
+When the repo starts a program in another process and drives it over the program's own protocol,
+such as a worker, a language server or a sandboxed guest, test the host against a stateful stand-in
+of the program:
 
 - Send and accept the real messages over the real framing.
 - Keep the state the program keeps, and answer from that state.
@@ -236,7 +236,7 @@ with `new Bun.WebView({ backend: 'chrome' })`, and close the view in `onTestFini
 lane, its build and its memory cap, follow
 [Setting up the browser lane](https://github.com/zgeoff/tools/blob/main/docs/guides/browser-lane.md).
 
-Never run Playwright under `bun test`. Use Playwright only for an `e2e/` lane that needs Firefox,
+Never run Playwright under `bun test`. Use Playwright only for an e2e test that needs Firefox,
 WebKit on Linux or a live system, because `Bun.WebView` has no Firefox and runs WebKit only on
 macOS.
 
@@ -360,8 +360,8 @@ that only reads `report.json` passes after the code changes and the report goes 
   such as a confidence interval or a report writer, in a package of its own that exports it.
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the API of a code
   host like GitHub, and inject it into the production path.
-- Keep a test that calls a live API out of `evals/`, such as a test that pins how a model SDK
-  behaves. Give it the `.model-api` suffix, beside its module, as [Lanes](./slow-tests.md#lanes)
+- Keep a test that calls a live API, such as a test that pins how a model SDK behaves, out of
+  `evals/`. Give it the `.model-api` suffix, beside its module, as [Lanes](./slow-tests.md#lanes)
   describes.
 
 ## Benchmarks

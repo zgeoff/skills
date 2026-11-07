@@ -22,9 +22,9 @@ So give it what the code can't:
 Don't copy the code into the skill: the copy goes stale without the agent knowing. Keep the skill
 short, or the agent skims.
 
-When you write or edit one, hand back the skill's path, the PR link and the proof that
-[Check it](#check-it) gives. With no PR, put the proof in your reply. When you review one, hand back
-each finding with its line and the rule it breaks, quoted.
+When you write or edit one, hand back the skill's path, the PR link and the proof from
+[Check it](#check-it). With no PR, put the proof from step 4 in your reply. When you review one,
+hand back each finding with its line and the rule it breaks, quoted.
 
 ## Key rules
 
@@ -76,14 +76,14 @@ Every skill but a rule set opens the same way, because the agent decides what to
 a skill:
 
 1. A paragraph or two: the job, what the agent hands back, if anything, and the main mistakes to
-   avoid. Write them for this skill, with no stock opener, and name the mistakes without a count.
-   When a skill hands something back, repeat it in a `**Reply:**` line at the end.
+   avoid. Write them for this skill, with no stock opener, and name the mistakes without counting
+   them. When a skill hands something back, repeat it in a `**Reply:**` line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
-Keep a rule's detail in its section, and change its key rules line when you change the rule.
+Keep a rule's detail in its section. When you change a rule, change its key rules line too.
 
 Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
 says. It holds rules the agent applies during other work, so it has no job to open with.
@@ -97,7 +97,7 @@ description is all the agent sees when it picks a skill, so say what the skill d
 it, in the words a task would use.
 
 When several repos may use a skill, invent every example, and never use a term only one repo or team
-knows. A reader elsewhere can't open a file in the example, or doesn't know the word.
+knows. A reader in another repo can't open a file the example names, or doesn't know the word.
 
 ## Point at the code, don't copy it
 
@@ -105,7 +105,7 @@ When you mention a file, a function or a setting, link the file, in a sentence t
 code doesn't: a mistake to avoid, a reason or a choice. When someone renames the file, `chex links`
 fails.
 
-- **Replace a list of members,** one row per file, function or option, with the rule that defines
+- **Replace a list of files, functions or options,** one row per item, with the rule that defines
   the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
   search there before you write one". A table of commands is fine: each row says what the command
   needs to run.
@@ -147,21 +147,22 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    bun x @zgeoff/chex prose links skill
    ```
 
-   While you draft, `bun x @zgeoff/chex skill .agents/skills/<skill>` checks one skill. When a check
+   While you draft, `bun x @zgeoff/chex skill .claude/skills/<skill>` checks one skill. When a check
    flags a sentence you like, rewrite it so the check passes. The check may be wrong, so tell the
    user or your caller which sentence and which check.
 
 2. Run the `deslop` skill on each section you wrote or changed.
 3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
-   finds, give each changed file one more cold read. Then stop.
+   finds, give each changed file one more cold read. Then stop the cold reads.
 4. Run the checks again, and give the proof in a `## Checks` section of the PR description:
    - `- [x] chex prose, links and skill: cleared`, once the last run clears.
-   - `- [x] Cold read: <n> fixed, <n> declined`, counting every cold read.
-   - `- [x] Deslop: <n> edits`.
+   - `- [x] Cold read: <fixed> fixed, <declined> declined`, counting every cold read.
+   - `- [x] Deslop: <edits> edits`.
 
-   Under `Declined:`, give one line to each finding you declined and each gap in the rules, or write
-   `Declined: none.` Each line holds:
-   - the review that found it;
+   Under `Declined:`, give one line to each finding you declined and each gap in the rules, a place
+   where a cold reader got stuck and no rule applies. With neither, write `Declined: none.` Each
+   line holds:
+   - the check that found it;
    - the finding or the gap;
    - why not, or the issue it went to.
 

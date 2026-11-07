@@ -1,20 +1,21 @@
 # The docs/ tree
 
 Keep `docs/` to what is true of the system today. Keep research, plans and history out of it, and
-delete a design once its code is built. The table below gives the place for each kind of doc.
+delete a design once its code is built. Put each kind of doc in the folder that the table after the
+contents list names.
 
 Contents: [where content goes](#where-each-kind-of-content-goes) · [length](#length) ·
 [designs](#designs) · [decision records](#decision-records) · [spikes](#spikes)
 
-| Folder               | Holds                                                                     |
-| -------------------- | ------------------------------------------------------------------------- |
-| `docs/README.md`     | the index                                                                 |
-| `docs/architecture/` | how the built system works: `overview.md`, then one doc per concept       |
-| `docs/guides/`       | the steps a user takes, one doc per user task                             |
-| `docs/runbooks/`     | operator and contributor procedures, development and releasing included   |
-| `docs/reference/`    | generated reference only, such as the schema for the config file          |
-| `docs/decisions/`    | numbered decision records: the choice, the rejected alternatives, and why |
-| `docs/design/`       | a design: work with open questions that need spikes, deleted once built   |
+| Folder               | Holds                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| `docs/README.md`     | the index                                                                          |
+| `docs/architecture/` | how the built system works: `overview.md`, then one doc per concept                |
+| `docs/guides/`       | the steps a user takes, one doc per user task                                      |
+| `docs/runbooks/`     | operator and contributor procedures, development and releasing included            |
+| `docs/reference/`    | generated reference only, such as the schema for the config file                   |
+| `docs/decisions/`    | numbered decision records: the choice, the rejected alternatives, and why          |
+| `docs/design/`       | a design: work with open questions that need [spikes](#spikes), deleted once built |
 
 Once `docs/architecture/` holds more than 6 docs, not counting `overview.md`, group them into
 subfolders by area, so a reader can scan the folder. Link `docs/reference/` from the index.
@@ -53,9 +54,9 @@ these:
 ## Designs
 
 Start a design only when the user asks for one. A design has open questions that need spikes before
-anyone can build; a plan for work about to be built has none, and goes in its issue or PR. The
-design lives in `docs/design/<work>/`, where `<work>` is the work in a few words, while its code is
-unbuilt.
+anyone can build; a plan for work about to be built has none, and goes in its issue or PR. While its
+code is unbuilt, the design lives in `docs/design/<work>/`, where `<work>` names the work in a few
+words.
 
 When its code is built:
 
@@ -84,8 +85,8 @@ Name it `NNNN-<slug>.md`, with the next free number, and open it like this:
 
 `decided` is the only status. Add the `Updated` line only when the decision changes.
 
-It states the choice and the alternatives it rejected, with why, and never how the system works now:
-the architecture doc owns that. When a decision changes, edit the record in place:
+The record states the choice and the alternatives it rejected, with why, and never how the system
+works now: the architecture doc owns that. When a decision changes, edit the record in place:
 
 1. Keep its number, and state the decision as it now stands.
 2. Add or change the `Updated` line in its header.
@@ -99,9 +100,9 @@ folder, such as `research/<name>/` at the repo root. A spike outside the design 
 the design folder is deleted. Every spike has the same layout:
 
 ```text
-<spike>/
+<name>/
   README.md     the landing page, a spike README
-  results.md    the full report: versions, a `## Setup` section, every table, the reasons, an `## Untested` section
+  results.md    the full report: versions, a `## Setup` section, every table, the reason behind each result, an `## Untested` section
   <run>.md      a separate run, such as a run on a deployment host
   code, runs/ …
 ```

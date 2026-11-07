@@ -26,8 +26,9 @@ After reading the doc, the reader knows:
 To test the doc:
 
 1. Pick a case it doesn't describe outright, such as a process that dies halfway through a write.
-2. Predict from the doc alone what the system does. The cold read the docs-writing skill asks for
-   does this best, because its reader hasn't seen the code.
+2. Predict from the doc alone what the system does. Run the cold read that the docs-writing skill
+   asks for, and give its reader the case: that reader hasn't seen the code, so it predicts better
+   than you can.
 3. Check the code. When the prediction was wrong, add the fact that would have made it right, and go
    back to step 1 with a new case. Stop when a prediction holds.
 
@@ -35,7 +36,7 @@ To test the doc:
 
 Say what the subsystem does in the domain's own terms, because the reader thinks in those terms
 before they know the code. In the opening, name the package that implements it only by what it does,
-never by its path. The bad example below opens with the path.
+never by its path.
 
 - Bad: "`libs/stock-ledger` holds the ledger row, the two counters, and the reserve function."
 - Good: "Every order a buyer places at a warehouse takes its stock from one place: that warehouse's
@@ -53,19 +54,20 @@ the function. When the code doesn't show the function's reason, give the reason.
 
 ## Give the reason next to the fact
 
-Put the reason for each fact whose reason a reader without the code can't see in the same sentence
-or the next, joined by "because", "so" or "therefore". For the reason, say why the system works this
-way, or what would fail if it didn't. Write a paragraph that explains a design choice in this order:
+Give the reason for each fact whose reason a reader without the code can't see. Put the reason in
+the same sentence or the next, joined by "because", "so" or "therefore". For the reason, say why the
+system works this way, or what would fail if it didn't. Write a paragraph that explains a design
+choice in this order:
 
 1. the problem;
 2. its consequence;
 3. the response;
 4. the limit on the response: what the response doesn't cover, or the condition it needs.
 
-Join a reason to its fact with "because", "so" or "therefore", in place of a `**Why:**` marker, a
-bold label in front of a reason. Keep the marker for a one-off decision that no paragraph's chain of
-cause and effect explains, and give it a paragraph of its own. With a `**Why:**` on every paragraph,
-the doc turns into a list of rules, and the reader loses how one fact leads to the next.
+Use a `**Why:**` marker, a bold label in front of a reason, only for a one-off decision that no
+paragraph's chain of cause and effect explains, and give it a paragraph of its own. With a
+`**Why:**` on every paragraph, the doc turns into a list of rules, and the reader loses how one fact
+leads to the next.
 
 - Bad:
 
@@ -123,8 +125,8 @@ Each of these has another owner, and a copy here would go out of date:
 - **Design the code doesn't implement yet.** It goes under `docs/design/`. When a built part came
   from a design, link the design in one sentence.
 - **What someone who uses the product sees and does.** That goes in a guide, in `docs/guides/`.
-- **The alternatives you rejected, and the history of the design.** When the user approved the
-  choice, those go in a [decision record](./docs-tree.md#decision-records), a numbered file in
-  `docs/decisions/`. Otherwise they go in the PR description.
+- **The alternatives you rejected, and the history of the design.** When the person you work for
+  approved the choice, those go in a [decision record](./docs-tree.md#decision-records), a numbered
+  file in `docs/decisions/`. Otherwise they go in the PR description.
 - **Reference for internals**, such as one entry per protocol method, config key or module. That
   stays in the code, or in reference generated from it.

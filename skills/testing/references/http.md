@@ -15,6 +15,8 @@ This file covers a client inside the package under test. See
 - a whole program, such as a CLI or a server, tested against an application in the same repo;
 - a call MSW can't reach, such as one from a child process.
 
+Contents:
+
 - [The server and its lifecycle](#the-server-and-its-lifecycle)
 - [Stateful handlers](#stateful-handlers)
 - [Per-test handlers](#per-test-handlers)
@@ -43,11 +45,11 @@ and `server.disable()` in `afterAll`. Never call `enable()` when the module load
 Choose what happens to a request that no handler matches:
 
 - Pass `onUnhandledFrame: 'error'`. The request rejects, and MSW prints its URL.
-- Pass a callback in its place when a suite sends real requests to a server it started on the
-  loopback interface. For a loopback host, return without a value, so the request goes through. For
-  any other host, call `defaults.error()` to print the URL, then throw. `defaults.error()` only
-  prints, and the throw makes the request fail with a 500 response. Name the loopback traffic in a
-  comment on the callback.
+- When a suite sends real requests to a server it started on the loopback interface, pass a callback
+  in its place. For a loopback host, return without a value, so the request goes through. For any
+  other host, call `defaults.error()` to print the URL, then throw. `defaults.error()` only prints,
+  and the throw makes the request fail with a 500 response. Name the loopback traffic in a comment
+  on the callback.
 
 ```ts
 const loopbackHosts = ['127.0.0.1', '[::1]', 'localhost'];
@@ -78,12 +80,12 @@ collections and call the client. Clear every collection in the test preload afte
 
 - Return the service's not-found response for a missing record, and its permission error, such as a
   403 with the service's error body, for a caller without access. Read the caller from the request's
-  token, as [Auth tokens](#auth-tokens) allows. Seed the collections to reach those outcomes, and
-  never add a per-test handler for them.
+  token, with no signature check, as [Auth tokens](#auth-tokens) describes. Seed the collections to
+  reach those outcomes, and never add a per-test handler for them.
 - Shape each collection with a zod schema (`new Collection({ schema })`). Give every field a
   `.default()`, nested fields included, and use `@faker-js/faker` where the value is arbitrary.
-  Leave the default off a discriminator, the field, such as `type`, whose value tells one kind of
-  record from another. Never restate a default in a `.create()` call.
+  Leave the default off a discriminator. A discriminator is a field whose value tells one kind of
+  record from another, such as `type`. Never restate a default in a `.create()` call.
 - Never use `factory()`. It belongs to `@msw/data` before version 1, which replaced it with
   `Collection`.
 - Type each handler's response with the type the client reads, such as a type generated from the
@@ -115,11 +117,12 @@ runtime that can't import `bun:test`.
 Add a handler with `server.use(...)` in a test only for one of these:
 
 - an outcome the collections can't reach, such as a 503, a transport failure or a malformed payload;
-- a sequence, such as a 503 and then a success: build
-  `const answer = makeAnswerQueue([unavailable, ok])` from `@zgeoff/testing/helpers`, where each
-  answer is an `HttpResponse`, and return `answer()` from the handler. `answer()` throws on a
-  request past the last answer, as [Stand-ins](./boundaries.md#stand-ins) says;
-- input you capture: call an inline `mock()` from the handler, and assert it with the mock matchers.
+- a sequence, such as a 503 and then a success. Import `makeAnswerQueue` from
+  `@zgeoff/testing/helpers`, and build `const answer = makeAnswerQueue([unavailable, ok])`, where
+  `unavailable` and `ok` are `HttpResponse` values. Return `answer()` from the handler. `answer()`
+  throws on a request past the last answer, as [Stand-ins](./boundaries.md#stand-ins) says;
+- input you capture: in a handler you write in the test file, call an inline `mock()`, and assert it
+  with the mock matchers.
 
 Keep logic out of a per-test handler. Return a fixed response, or one looked up by one request
 parameter. Put any other response that depends on the request in the default handlers, and never
