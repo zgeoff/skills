@@ -11,8 +11,8 @@ the parts that only Bun has:
 
 The mistakes to avoid:
 
-- In place of the sleep that [System tests](./system-tests.md) rules out, wait on a condition of the
-  NixOS test driver, such as `wait_for_unit` or `wait_until_succeeds`.
+- Wait on a condition of the NixOS test driver, such as `wait_for_unit` or `wait_until_succeeds`, in
+  place of the sleep that [System tests](./system-tests.md) rules out.
 - Never let a case inherit tokens, files, mounts or service settings from an earlier case it doesn't
   depend on.
 - Before you add a path filter to a workflow that holds a required check, read

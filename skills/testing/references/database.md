@@ -120,9 +120,9 @@ expect(request).rejects.toMatchObject({ code: 'NOT_FOUND' });
 expect(await ctx.service.listNotes()).toStrictEqual([]);
 ```
 
-To test several failed calls, make the calls one after another in one test, as
-[Failure branches](./boundaries.md#failure-branches) says, then read the final state back. In this
-example, a job gives up after its third failed run:
+To test several failed calls, make the calls one after another in one test. Turn each call's
+rejection into a value as [Failure branches](./boundaries.md#failure-branches) shows, then read the
+final state back. In this example, a job gives up after its third failed run:
 
 ```ts
 const runJobOnce = () =>
