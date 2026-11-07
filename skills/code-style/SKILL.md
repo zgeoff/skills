@@ -14,8 +14,8 @@ metadata:
 ## Files and modules
 
 - Give each file one main export, and name the file after it: `parse-cli-args.ts` exports
-  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. Name a module that
-  only has a side effect for what it does: `augment-bun-test.ts`.
+  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a module only
+  has a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
   type or constant just above its first use.
 - Make objects with factory functions, and never write a class. The one exception is a custom error,
@@ -154,7 +154,7 @@ section, such as `fetch` or `process`.
 | function that returns a function                                                                          | `make`                       | returns a function                                                             |
 | higher-order wrapper                                                                                      | `with`                       | runs a callback inside a context                                               |
 | React hook                                                                                                | `use`                        | follows the rules of hooks                                                     |
-| event-callback prop or parameter                                                                          | `on`                         | follows the framework's callback convention                                    |
+| prop or parameter that takes an event callback                                                            | `on`                         | follows the framework's callback convention                                    |
 | function passed to an `on` prop, or a function that handles a framework lifecycle event such as a request | `handle`                     | follows the framework's callback convention                                    |
 | a test file's per-test fixture                                                                            | `setupTest`                  | as the testing skill's [setupTest](../testing/SKILL.md#setuptest) section says |
 | stored state put in place for a test, through the production module that writes that state                | `seed`                       | may do I/O; test code only ([seeding rules](../testing/references/seeding.md)) |
