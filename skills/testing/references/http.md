@@ -9,9 +9,11 @@ Never use MSW's `setupServer` under Bun. It intercepts at Node's sockets, which 
 never opens, so its handlers miss every request
 ([mswjs/msw#2811](https://github.com/mswjs/msw/issues/2811)).
 
-This file covers a client inside the package under test. To test a whole program, such as a CLI or a
-server, against an application in the same repo, or a call MSW can't reach, such as one from a child
-process, see [Real applications and transport](./system-tests.md#real-applications-and-transport).
+This file covers a client inside the package under test. See
+[Real applications and transport](./system-tests.md#real-applications-and-transport) for:
+
+- a whole program, such as a CLI or a server, tested against an application in the same repo;
+- a call MSW can't reach, such as one from a child process.
 
 - [The server and its lifecycle](#the-server-and-its-lifecycle)
 - [Stateful handlers](#stateful-handlers)
@@ -29,7 +31,8 @@ folder that the [test preload](./cleanup.md#the-test-preload) imports:
 - Import `defineNetwork`, `InterceptorSource` and `HttpNetworkFrame` from `msw/experimental`, and
   `FetchInterceptor` from `@mswjs/interceptors/fetch/web`.
 - Put the handler list of every package whose tests run in the process in the `handlers` option.
-  `resetHandlers()` then keeps every package's default handlers.
+  `resetHandlers()` goes back to the list the server was built with, so it keeps every package's
+  default handlers.
 - Never start a second server. Two servers in one process patch the same `fetch`, so one server's
   handlers answer requests meant for the other.
 
@@ -39,13 +42,12 @@ and `server.disable()` in `afterAll`. Never call `enable()` when the module load
 
 Choose what happens to a request that no handler matches:
 
-- Pass `onUnhandledFrame: 'error'`, unless the next bullet applies. The request rejects, and MSW
-  prints its URL.
-- When a suite sends real requests to a server it started on the loopback interface, pass a
-  callback. Return for a loopback host, so the request goes through. For any other host, call
-  `defaults.error()` to print the URL, then throw. `defaults.error()` only prints, and the throw
-  makes the request fail with a 500 response. Name the loopback traffic in a comment on the
-  callback.
+- Pass `onUnhandledFrame: 'error'`. The request rejects, and MSW prints its URL.
+- Pass a callback in its place when a suite sends real requests to a server it started on the
+  loopback interface. For a loopback host, return without a value, so the request goes through. For
+  any other host, call `defaults.error()` to print the URL, then throw. `defaults.error()` only
+  prints, and the throw makes the request fail with a 500 response. Name the loopback traffic in a
+  comment on the callback.
 
 ```ts
 const loopbackHosts = ['127.0.0.1', '[::1]', 'localhost'];
@@ -53,7 +55,7 @@ const loopbackHosts = ['127.0.0.1', '[::1]', 'localhost'];
 export const server = defineNetwork({
   sources: [new InterceptorSource({ interceptors: [new FetchInterceptor()] })],
   handlers: [...billingHandlers, ...searchHandlers],
-  // the sync suites call test servers on ephemeral loopback ports
+  // the e2e suites call test servers on ephemeral loopback ports
   onUnhandledFrame: ({ frame, defaults }) => {
     const url = frame instanceof HttpNetworkFrame ? new URL(frame.data.request.url) : null;
 
@@ -80,8 +82,8 @@ collections and call the client. Clear every collection in the test preload afte
   never add a per-test handler for them.
 - Shape each collection with a zod schema (`new Collection({ schema })`). Give every field a
   `.default()`, nested fields included, and use `@faker-js/faker` where the value is arbitrary.
-  Leave the default off a discriminator whose value gives a record its meaning. Never restate a
-  default in a `.create()` call.
+  Leave the default off a discriminator, the field, such as `type`, whose value tells one kind of
+  record from another. Never restate a default in a `.create()` call.
 - Never use `factory()`. It belongs to `@msw/data` before version 1, which replaced it with
   `Collection`.
 - Type each handler's response with the type the client reads, such as a type generated from the
@@ -91,12 +93,13 @@ collections and call the client. Clear every collection in the test preload afte
   `/notes/:noteID`. MSW matches handlers in registration order, so the sibling would match first.
   Say in a comment above the handler array that the order is deliberate.
 
-For a small lookup, such as an HTTP status for each health-check URL, you may use a `Map` that the
-test preload clears. For a side effect with no record behind it, such as a sent email, export an
-array, such as `sentEmails`, from the handler module, and clear it in the test preload.
+Keep records, their writes and their relationships in collections. Use something else only in these
+cases:
 
-Keep records, their writes and their relationships in collections. Use a `Map` or an array only for
-these two cases.
+- For a small lookup, such as an HTTP status for each health-check URL, you may use a `Map` that the
+  test preload clears.
+- For a side effect with no record behind it, such as a sent email, export an array, such as
+  `sentEmails`, from the handler module, and clear it in the test preload.
 
 Export each part of a side-effect handler on its own, so a test can wrap or replace it:
 

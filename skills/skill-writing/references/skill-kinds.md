@@ -2,7 +2,7 @@
 
 Pick the kind before you write. A machinery skill and a method skill keep the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. A
-rule set and a project skill leave that opening out.
+rule set leaves that opening out, and so does a project skill, which is a rule set.
 
 - [A machinery skill](#a-machinery-skill) covers one repo's tools, such as its migrations or its
   deploy scripts.
@@ -10,14 +10,15 @@ rule set and a project skill leave that opening out.
   way it is.
 - [A rule set](#a-rule-set), such as a code style, holds rules the agent applies while it writes
   something else.
-- [A project skill](#a-project-skill) holds one repo's facts for a shared rule set, and the rules
-  the repo replaces, such as project-testing beside testing.
+- [A project skill](#a-project-skill), such as project-testing beside testing, holds one repo's
+  facts for a shared rule set, and the repo's own rules that replace shared ones.
 
 When a skill has a reply line, make it the last line. It starts with "**Reply:**" and gives what the
 agent hands back, such as "**Reply:** each risk with its proof".
 
-In a skill of any kind, put a mechanical step in a script in the skill's `scripts/` folder, with a
-test beside it that the repo's test command runs. Tell the agent to run the script, not read it.
+In a skill of any kind, put a mechanical step, one with no judgment in it, in a script in the
+skill's `scripts/` folder, with a test beside it that the repo's test command runs. Tell the agent
+to run the script, not read it.
 
 ## A machinery skill
 
@@ -29,7 +30,7 @@ Write:
 - the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
 
 Add a mistake only if an agent with the source open would still lose time to it. A made-up example
-of a mistake worth adding:
+of a mistake worth adding, in a skill at `.claude/skills/<name>/SKILL.md`:
 
 ```markdown
 - **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
@@ -44,7 +45,7 @@ something for a reader, such as a report, say who reads it, and end with a reply
 Write:
 
 - the attitude you want the agent to take to the work, such as "treat a comment as stale until the
-  code agrees with it", and the mistakes that attitude keeps the agent from;
+  code agrees with it", and the mistakes the agent avoids when it holds that attitude;
 - who reads the agent's output, and what they do with it;
 - numbered steps, each with the decision the agent makes in it, such as when to stop;
 - a reply line.
@@ -84,12 +85,13 @@ has any, and the bullet rules in [A rule set](#a-rule-set). Then write these sec
 order:
 
 1. `## Facts`, in project-ci-design and project-testing only: a table with the columns Fact and
-   Where, and the rows below, in that order. Write "none" in a row that doesn't apply.
+   Where, and the rows below, in that order. Write "none" in the Where cell of a row that doesn't
+   apply.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
    every rule. In project-code-style, put each stricter rule in a topic section, because
-   [code-style](../../code-style/SKILL.md) lets a repo add rules. List a departure only for code
-   whose shape another tool sets, such as a plugin that a host's API shapes.
+   [code-style](../../code-style/SKILL.md) lets a repo add rules. In project-code-style, list a
+   departure only for code whose shape another tool sets, such as a plugin that a host's API shapes.
 3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
    test harness or a test helper.
 
@@ -105,7 +107,11 @@ Give a row a value only when no file in the repo holds the fact, such as the
 [test budget](../../ci-design/SKILL.md#jobs).
 
 The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
-ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing.
+ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing. Each
+row below names a project skill, a fact, and what goes in the Where cell of its `## Facts` table.
+
+Each row below names a project skill, a fact, and what goes in the Where cell of its `## Facts`
+table.
 
 | Project skill     | Fact            | Where                                                                    |
 | ----------------- | --------------- | ------------------------------------------------------------------------ |

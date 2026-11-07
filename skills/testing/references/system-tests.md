@@ -49,12 +49,12 @@ packages/ledger/
 
 Export `./test-utils/*` from `package.json`, so other packages' tests import the helpers.
 
-| The test                                                                                                                       | Put it                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| starts a program that `rig.config.ts` declares for [rig](https://github.com/zgeoff/tools/tree/main/packages/rig), as a process | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](#end-to-end-suites) |
-| scores a corpus                                                                                                                | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](#evaluation-suites) shows           |
-| measures a running program                                                                                                     | in `bench/` of the package that builds the program, as [Benchmarks](#benchmarks) shows                             |
-| does anything else                                                                                                             | beside the module or script it tests                                                                               |
+| The test                                                                                                                        | Put it                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| starts, as a process, a program that `rig.config.ts` declares for [rig](https://github.com/zgeoff/tools/tree/main/packages/rig) | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](#end-to-end-suites) |
+| scores a corpus                                                                                                                 | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](#evaluation-suites) shows           |
+| measures a running program                                                                                                      | in `bench/` of the package that builds the program, as [Benchmarks](#benchmarks) shows                             |
+| does anything else                                                                                                              | beside the module or script it tests                                                                               |
 
 ## End-to-end suites
 
@@ -82,10 +82,10 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
      code.
    - `spawnCLI` from `@zgeoff/testing/cli`, for a program that a person types into. It runs the
      program in a pseudo-terminal.
-4. Run the lane with `bun run test:e2e`. `rig e2e` builds each program once, and `resolveProgram`
-   gives the command that runs the built file. When you run one `e2e/` file with `bun test` on your
-   machine, `resolveProgram` gives the command that runs the source. In CI, `resolveProgram` throws
-   when nothing built the program.
+4. Run the lane with `bun run test:e2e`, the script that runs `rig e2e`. `rig e2e` builds each
+   program once, and `resolveProgram` gives the command that runs the built file. When you run one
+   `e2e/` file with `bun test` on your machine, `resolveProgram` gives the command that runs the
+   source. In CI, `resolveProgram` throws when nothing built the program.
 
 This test needs no `setupTest`, because `await using` stops the program:
 
@@ -138,9 +138,9 @@ own. Inside an `e2e/` test, you may chain acts, and assert after each one, becau
 the state that the act before it left. Outside `e2e/`, a test still has one act.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
-  bring it up in the e2e lane's setup hook, and take it down in the lane's teardown hook. Each hook
-  is a module that the lane names in `rig.config.ts`: the setup hook under its `start` key, and the
-  teardown hook under its `stop` key
+  bring it up in the e2e lane's setup hook, and take it down in the lane's teardown hook. Name each
+  hook's module in the lane's entry under `lanes` in `rig.config.ts`: the setup hook under the
+  entry's `start` key, and the teardown hook under the entry's `stop` key
   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once per lane
   run, outside the test files.
 - Return the address the tests need, such as a connection string, in the `environment` object that
@@ -218,9 +218,10 @@ test('it checks a repository out again after the worker evicts it', async () => 
 A scripted worker answers the second `build` with whatever its script holds, so a host that never
 sends the second `checkout` still passes.
 
-Keep the stand-in in `src/test-utils/` as `start-stub-<program>.ts`, with its own tests, as in
-[Test data](../SKILL.md#test-data). In each of those tests, check one behaviour the stand-in copies
-from the real program, such as the refusal for an evicted repository.
+Keep the stand-in in `src/test-utils/`, the test helper folder that
+[Test data](../SKILL.md#test-data) describes, as `start-stub-<program>.ts`, with its own tests. In
+each of those tests, check one behaviour the stand-in copies from the real program, such as the
+refusal for an evicted repository.
 
 When the stand-in makes up a value, such as a fake hash or a fake signature, assert only its
 properties: its shape, that the same input gives the same output, and that different inputs give
@@ -435,8 +436,8 @@ point, name the program or the spec that fixes it in a comment.
 
 Run a Rust crate's lanes through cargo-nextest, with the limits in [Lanes](./slow-tests.md#lanes).
 Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a folder or a file suffix does
-for Bun. Define the lanes in `nextest.toml`, in the repo's `.config/` folder, as in this made-up
-example:
+for Bun. The prefix is the test's module path, so a test inside `mod e2e` has the `e2e::` prefix.
+Define the lanes in `nextest.toml`, in the repo's `.config/` folder, as in this made-up example:
 
 ```toml
 [profile.default]

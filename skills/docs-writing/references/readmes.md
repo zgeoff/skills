@@ -19,8 +19,9 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    on the package's page. Give an unpublished package a short README, as the last paragraph of
    [published package sections](#published-package-sections) describes.
 3. **Docs index:** the `README.md` in `docs/`, one line and a link for each doc.
-4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
-   the design. Give a design folder inside another design folder its own design README.
+4. **Design README:** `docs/design/<work>/README.md`, where `<work>` names the work in a few words.
+   It has one line and a link for each doc and spike in the [design](./docs-tree.md#designs). Give a
+   design folder inside another design folder its own design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
    design. [Spikes](./docs-tree.md#spikes) lists its sections. When spikes live outside
    `docs/design/`, give the folder that holds them a README too, as an index of the spikes.
@@ -46,7 +47,8 @@ The root README takes one of three shapes:
 ## The header
 
 Open every root README and every published package README with this header. Replace `<name>`,
-`<package>`, `<guide>`, `<Guide title>` and `<One-line description.>`, and keep the HTML tags:
+`<package>`, `<guide>`, `<Guide title>` and `<One-line description.>`. Keep each HTML tag that the
+rules below the template leave in:
 
 ```text
 <div align="center">
@@ -98,20 +100,20 @@ and a link to the architecture doc that covers it, when one exists.
 
 ## Length
 
-`chex length` sets each README's target and limit from its kind, and prints both. Cut a README to
-its target. The limit is where the run fails.
+`chex length` sets each README's target and limit from its kind. Run `bun x @zgeoff/chex length` to
+print both. Cut a README to its target. The limit is where the run fails.
 
 ## What stays out
 
-Leave these out of every README, because the code, `--help` or `docs/` own them, and a copy goes out
-of date:
+Leave these out of every README:
 
 - flags, exit codes and config keys;
 - install steps for each tool or platform the package supports;
 - edge cases inside table rows;
 - tables of keys or states;
 - a line that says when someone last checked the README, such as "Checked 2026-03-01";
-- people's names.
+- people's names;
+- history, such as a changelog.
 
 ## Who reviews a README
 

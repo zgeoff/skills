@@ -8,8 +8,9 @@ description:
 
 # Writing skills
 
-A skill is a briefing for an agent in the middle of a task. It has the code open and none of your
-context. It does what you write, copies your examples, and fills every gap with a guess.
+Write a skill as a briefing for an agent in the middle of a task. The agent has the code open and
+none of your context. It does what you write, copies your examples, and fills every gap with a
+guess.
 
 So give it what the code can't:
 
@@ -17,6 +18,9 @@ So give it what the code can't:
 - which commands to run, and what each needs;
 - the mistakes that cost an hour;
 - the reasons behind rules that look arbitrary.
+
+Don't copy the code into the skill: the copy goes stale without the agent knowing. Keep the skill
+short, or the agent skims.
 
 When you write or edit one, hand back the skill's path, the PR link and the proof that
 [Check it](#check-it) gives. With no PR, put the proof in your reply. When you review one, hand back
@@ -34,7 +38,8 @@ each finding with its line and the rule it breaks, quoted.
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): chex, deslop and a cold read, with the proof in the PR.
+- [Check it](#check-it): the `@zgeoff/chex` checks, deslop and a cold read, with the proof in the
+  PR.
 
 ## References
 
@@ -72,7 +77,7 @@ a skill:
 
 1. A paragraph or two: the job, what the agent hands back, if anything, and the main mistakes to
    avoid. Write them for this skill, with no stock opener, and name the mistakes without a count.
-   When a skill hands something back, repeat it in a reply line at the end.
+   When a skill hands something back, repeat it in a `**Reply:**` line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
@@ -85,12 +90,11 @@ says. It holds rules the agent applies during other work, so it has no job to op
 
 ## What goes in
 
-For the parts of a skill that covers a repo's tools, teaches a way of working or is a project skill,
-read [Kinds of skill](./references/skill-kinds.md).
+For the parts each kind of skill needs, read [Kinds of skill](./references/skill-kinds.md).
 
 Write the `description` in the third person: the agent reads it as a label, not an order. The
 description is all the agent sees when it picks a skill, so say what the skill does and when to load
-it, in the words a task would use. Make the `name` match the name of the skill's folder.
+it, in the words a task would use.
 
 When several repos may use a skill, invent every example, and never use a term only one repo or team
 knows. A reader elsewhere can't open a file in the example, or doesn't know the word.
@@ -119,15 +123,14 @@ When a review asks for one of these copies, decline it and name this section.
 
 Keep SKILL.md under the word limit `chex skill` sets, a rule set included: it warns at 1,500 words
 and fails at 1,700. After a compaction, Claude Code brings back only the first 5,000 tokens of each
-skill the session loaded, and the limit keeps the whole skill inside that. When a skill grows, cut
+skill the session loaded, and a skill under the limit fits inside that. When a skill grows, cut
 first, then move what only some tasks need into a reference. In a rule set, keep every rule the
 common task needs in SKILL.md, and move only the rest.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
-When a script or a lint can check a rule, delete the prose and say which check runs. In a rule set,
+When a script or a lint checks a rule, delete the prose and say which check runs. In a rule set,
 keep a short bullet for the rule too, as [A rule set](./references/skill-kinds.md#a-rule-set) says.
-Put a mechanical step in a script, as [Kinds of skill](./references/skill-kinds.md) says.
 
 When an agent gets something wrong, fix the rule that covers the mistake. A near-copy of the rule
 leaves the agent unsure which one to follow. Call each thing by one name: the agent reads a second
@@ -144,21 +147,25 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    bun x @zgeoff/chex prose links skill
    ```
 
-   While you draft, `bun x @zgeoff/chex skill <skill folder>` checks one skill. When a check flags a
-   sentence you like, rewrite it so the check passes, and tell the user or your caller which
-   sentence and which check. The check may be wrong.
+   While you draft, `bun x @zgeoff/chex skill .agents/skills/<skill>` checks one skill. When a check
+   flags a sentence you like, rewrite it so the check passes. The check may be wrong, so tell the
+   user or your caller which sentence and which check.
 
 2. Run the `deslop` skill on each section you wrote or changed.
-3. Run the `cold-read` skill on each file of the skill you wrote or changed. When you fix what it
-   finds, give each changed file one more cold read, and stop.
-4. Run the checks again, and give the proof in the `## Checks` section of the PR template:
+3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
+   finds, give each changed file one more cold read. Then stop.
+4. Run the checks again, and give the proof in a `## Checks` section of the PR description:
    - `- [x] chex prose, links and skill: cleared`, once the last run clears.
    - `- [x] Cold read: <n> fixed, <n> declined`, counting every cold read.
    - `- [x] Deslop: <n> edits`.
 
-   Under `Declined:`, give each finding you declined one line: the review that found it, the
-   finding, then why not or the issue it went to. Report a gap in the rules the same way. Paste no
-   command output, fixed finding or diff: CI and the commits hold them.
+   Under `Declined:`, give one line to each finding you declined and each gap in the rules, or write
+   `Declined: none.` Each line holds:
+   - the review that found it;
+   - the finding or the gap;
+   - why not, or the issue it went to.
+
+   Paste no command output, fixed finding or diff: CI and the commits hold them.
 
 **Reply:** for a skill you wrote or edited, its path, its proof and the PR link; for a review, each
 finding with its line and the quoted rule.
