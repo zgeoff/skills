@@ -86,7 +86,7 @@ a skill:
 Keep a rule's detail in its section. When you change a rule, change its key rules line too.
 
 Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
-says. It holds rules the agent applies during other work, so it has no job to open with.
+says.
 
 ## What goes in
 
@@ -103,19 +103,20 @@ knows. A reader in another repo can't open a file the example names, or doesn't 
 
 When you mention a file, a function or a setting, link the file, in a sentence that says what the
 code doesn't: a mistake to avoid, a reason or a choice. When someone renames the file, `chex links`
-fails.
+fails. Write an invented example path as its file and folder apart, such as `nextest.toml` in
+`.config/`, or with a placeholder, such as `<name>`: `chex skill` warns on a bare path that matches
+a repo file.
 
 - **Replace a list of files, functions or options,** one row per item, with the rule that defines
   the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
-  search there before you write one". A table of commands is fine: each row says what the command
-  needs to run.
+  search there before you write one". A table of commands is fine: each row says what its command
+  needs.
 - **Replace a retelling,** such as "the script builds, tags, pushes, then rolls out", with the fact
   the agent acts on, such as "a failed push leaves the old version serving", and link the script.
-  The retelling goes stale with the script.
 - **Quote only when the exact words are the point.** A copied error message teaches the old text
   once the code changes. Otherwise invent the example.
-- **Never link a line anchor.** `#L42` points at the wrong line after the next edit. `chex skill`
-  fails on one, so link the file and name what to look for in it.
+- **Never link a line anchor.** `chex skill` fails on one, because `#L42` points at the wrong line
+  after the next edit. Name what to look for in the file.
 
 When a review asks for one of these copies, decline it and name this section.
 
@@ -148,8 +149,8 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    ```
 
    While you draft, `bun x @zgeoff/chex skill .claude/skills/<skill>` checks one skill. When a check
-   flags a sentence you like, rewrite it so the check passes. The check may be wrong, so tell the
-   user or your caller which sentence and which check.
+   flags a sentence you like, rewrite it, and tell the user or your caller which sentence and which
+   check: the check may be wrong.
 
 2. Run the `deslop` skill on each section you wrote or changed.
 3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
