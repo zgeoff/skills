@@ -15,8 +15,8 @@ The mistakes to avoid:
   `wait_for_unit`.
 - Never let a case inherit tokens, files, mounts or service settings from an earlier case it doesn't
   depend on.
-- Never skip a required check's whole workflow with path filters. A workflow that doesn't start
-  never reports its check, and the pull request can't merge.
+- Leave `paths` off the trigger of a workflow that holds a required check, as
+  [Path filters](../../ci-design/SKILL.md#path-filters) in the ci-design skill says.
 
 ## Option evaluation
 
