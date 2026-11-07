@@ -20,7 +20,7 @@ Family: OpenAI. In the user's runs, Codex answered a question in 40 seconds to 2
 review in 3 to 9 minutes.
 
 ```bash
-codex exec -s read-only -c model=gpt-6-astra -c model_reasoning_effort=high \
+codex exec -s read-only -c model_reasoning_effort=medium \
   -o <reply.md> "$(cat <prompt.md>)" < /dev/null
 ```
 
@@ -31,9 +31,7 @@ codex exec -s read-only -c model=gpt-6-astra -c model_reasoning_effort=high \
 - **`git diff HEAD` skips untracked files.** Run `git add -N <file>` on each new file first, so the
   diff shows it. The entry stays in the index until you commit or `git reset <file>`.
 - **Outside a git repo,** add `--skip-git-repo-check`.
-- **Pass the model with `-c model=`.** Without it, Codex uses the model in its config file, which
-  may not be the strongest. The user changes the name here when a stronger model ships, so use it as
-  written.
+- **Pass no model.** Codex uses the model in its config file. Don't add `-c model=`.
 - **Run the `codex` CLI itself.** A plugin that wraps Codex inside another agent can default to
   write mode in your working tree.
 
