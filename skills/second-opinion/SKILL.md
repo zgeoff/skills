@@ -52,8 +52,8 @@ Ask a model from another family. [Commands](./references/commands.md) lists the 
 order of preference: take the first one whose family isn't yours. A model of your own family shares
 your training, and with it your blind spots.
 
-Run its command as written. Each command uses its family's default model at medium effort. Change
-the model or the effort only when the user asks.
+Run its command as written. The Codex command runs gpt-6.1-sol and the Claude command runs Opus 5.5,
+both at medium effort. Change the model or the effort only when the user asks.
 
 When the model fails to run, or gives no reply in 15 minutes, stop it and try the next model in the
 list from another family. When none is left, run the command for your own family with the same
