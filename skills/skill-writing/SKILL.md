@@ -147,7 +147,7 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    bun x @zgeoff/chex prose links skill
    ```
 
-   While you draft, `bun x @zgeoff/chex skill .agents/skills/<skill>` checks one skill. When a check
+   While you draft, `bun x @zgeoff/chex skill .claude/skills/<skill>` checks one skill. When a check
    flags a sentence you like, rewrite it so the check passes, and tell the user or your caller which
    sentence and which check: the check may be wrong.
 
