@@ -18,7 +18,7 @@ metadata:
 
 ## Jobs
 
-Never edit `pr.yml`:
+Never edit [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/workflow-callers/pr.yml):
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) copies it from
 zgeoff/tools and overwrites your change. `pr.yml` runs the shared
 [`bun-checks.yml`](https://github.com/zgeoff/tools/blob/main/.github/workflows/bun-checks.yml) on
@@ -28,14 +28,14 @@ each pull request.
   standard list: `audit`, `deadcode`, `format:check`, `lint`, `typecheck`, `test`, and each script
   the repo defines for a lane in [Lanes](../testing/references/slow-tests.md#lanes) except
   `model-api`.
-- To run a script outside the standard list, such as a repo-only `test:kvm` lane, list every script
-  to run in the repo variable `BUN_CHECK_SCRIPTS`, such as
-  `audit deadcode format:check lint typecheck test test:e2e test:kvm`. A script you leave out stops
-  running, and a name that `package.json` lacks fails the run.
-- Expect a private repo to run every script in one `checks` job. In a public repo, each standard
-  lane script runs in its own `test-<lane>` job, each other listed `test:<name>` script in `test`,
-  and the rest in `static`.
-- Require `pr / checks` in the `main` ruleset. In a public repo, it fails when any other job fails.
+- To run a repo-only script, such as a `test:kvm` lane, list every script to run, the standard ones
+  too, in the repo variable `BUN_CHECK_SCRIPTS`. A script you leave out stops running, and a name
+  that `package.json` lacks fails the run.
+- Expect a private repo to run every script in one `checks` job. In a public repo, `bun-checks.yml`
+  runs each standard lane in a `test-<lane>` job, each other `test:<name>` script in the `test` job,
+  and the rest in the `static` job.
+- Require `pr / checks` in the `main` ruleset. In a public repo, the `checks` job fails when any
+  other job fails.
 - Put a job of your own in a workflow you write, such as `image.yml`.
 - Never require a branch to be up to date before merge. The push run on `main` tests the merged
   tree.
@@ -46,9 +46,9 @@ median test time of the last 20 push runs on `main` that restored no `actions/ca
 and the sum of the test and lane steps in a private one. When the repo has no budget, skip each rule
 that uses one.
 
-- In a public repo, write a job of your own only when the script's step takes more than 60 s plus a
-  new job's setup. Read both times from `gh run view <run-id> --json jobs`. Shard tests only when
-  the repo is over its test budget.
+- In a public repo, write a job of your own only when the script's step takes over 60 s longer than
+  a job's setup steps. Read both times from `gh run view <run-id> --json jobs`. Shard tests only
+  when the repo is over its test budget.
 - In a private repo, write a job of your own only for a heavy check: one on any runner but a
   GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`. A
   required check runs on every push to a pull request, so never require a heavy check.
@@ -63,8 +63,9 @@ that uses one.
 - Set twice the median time on a job with no tests, and never less than 5 minutes. Take each median
   from the test budget's 20 runs.
 - Set the timeout of the `bun-checks.yml` jobs with the repo variable `BUN_CHECK_TIMEOUT_MINUTES`.
-  Set it from the slowest test job's figures. In a workflow you write that calls `bun-checks.yml`,
-  pass the variable the way `pr.yml` does.
+  Set it to the slowest test job's timeout. In a workflow you write that calls `bun-checks.yml`,
+  pass the variable the way
+  [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/workflow-callers/pr.yml) does.
 
 ## Reusable workflows
 
@@ -146,7 +147,7 @@ jobs:
 ## `workflow_run` triggers
 
 When a job that `workflow_run` starts holds a secret or write access, give the job this `if:`. A
-fork's `main` passes the `branches:` filter.
+`pull_request` run can hold a fork's code, and a fork's `main` passes the `branches:` filter.
 
 ```yaml
 if: >-
@@ -166,7 +167,7 @@ bumps each one as soon as it publishes, and `bun install` refuses a release youn
   [audit-fix workflow](https://github.com/zgeoff/tools/blob/main/docs/architecture/dependency-updates.md#the-audit-fix-workflow)
   deletes the exclude on the comment's date.
 - Add a missing exclude in a pull request of its own into `main`. Renovate drops a commit you push
-  to its branch. Once it merges, tick the rebase checkbox in each red Renovate pull request.
+  to its branch. Once yours merges, tick the rebase checkbox in each red Renovate pull request.
 
 ## Dependency exceptions
 
@@ -186,9 +187,10 @@ To add a release-age exclude:
 2. Add the package's name to `minimumReleaseAgeExcludes`, and pin it to one exact version. Pin a
    direct dependency in the root `package.json` catalog, and a transitive dependency in an override:
    a catalog entry reaches only direct dependencies.
-3. Above the exclude, write a removal comment in the shape below, with the day the release passes
-   `minimumReleaseAge`. Change only the package, its version and the dates: `chex dependency-gates`
-   and the audit-fix workflow match the rest word for word.
+3. Above the exclude, write a removal comment in the shape below. Date the removal
+   `minimumReleaseAge` seconds after the publish date from `npm view <package> 'time[<version>]'`.
+   Change only the package, its version and the dates: `chex dependency-gates` and the audit-fix
+   workflow match the rest word for word.
 
    ```toml
    # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then (audit-fix)
@@ -201,6 +203,5 @@ To add a release-age exclude:
   `audit-ignores.json` with its `package`, `reason` and ISO `expires` date.
 
 Remove each exclude, override or ignore once it guards nothing. `chex dependency-gates` fails the
-run on an exclude past its date, an override that every locked version meets, and an ignore that no
-locked package needs. It also fails on a release-age exclude with no removal comment, except a
-first-party one.
+run on an expired exclude, an override that every `bun.lock` range admits, an ignore that no locked
+package needs, and a third-party exclude with no removal comment.
