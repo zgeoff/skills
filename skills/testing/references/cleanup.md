@@ -122,11 +122,10 @@ step with the flags of the repo's test script:
    again, until one file is left.
 3. In that file, find the state it never restores, such as a module cache, a singleton, a store or
    an override.
-4. For module state, add its reset to the test preload. For a stored row or a file, give each test
-   its own copy, as [Database testing](./database.md) describes.
+4. Reset that state, or give each test its own copy of it, as [Cleanup](../SKILL.md#cleanup) in the
+   testing skill says.
 
-Never reorder the tests. Never give each test unique IDs to dodge the shared state. Either one hides
-the leak until a later test fails on it.
+Never reorder the tests. That hides the leak until a later test fails on it.
 
 ## Leftovers of a killed run
 

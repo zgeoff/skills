@@ -11,7 +11,7 @@ the parts that only Bun has:
 
 The mistakes to avoid:
 
-- Never sleep to let a service settle. Wait on a condition of the NixOS test driver, such as
+- Never sleep in a VM test. Wait with a `wait_for_*` method of the NixOS test driver, such as
   `wait_for_unit`.
 - Never let a case inherit tokens, files, mounts or service settings from an earlier case it doesn't
   depend on.
