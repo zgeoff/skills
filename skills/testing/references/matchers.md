@@ -46,9 +46,10 @@ Assert a resolved value with `toStrictEqual`, such as
 `toStrictEqual({ status: 'fulfilled', value: { entries: 3 } })`.
 
 Once the Worker has answered one message, `.rejects`, `.resolves`, `toReject()` and `toResolve()`
-miss its next one, and the test hangs, with or without `await`. A test whose Worker answers nothing
-first can pass, then hang when a change to `setupTest()` sends the Worker a message. The hang shows
-with a Worker from `new Worker()` and with one from `node:worker_threads`.
+miss its next one, and the test times out, with or without `await`. With a Worker from
+`new Worker()`, the `bun test` process also keeps running after the timeout, so CI waits for the
+job's own time limit. A test whose Worker answers nothing first can pass, then hang when a change to
+`setupTest()` sends the Worker a message.
 
 Keep `.rejects` for a promise that waits on a file read, a `fetch` or a subprocess. It settles
 those.

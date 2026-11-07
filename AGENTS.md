@@ -42,9 +42,9 @@ Name each skill's folder after the `name` in its frontmatter: the skills CLI, `n
 skill at `skills/<name>/SKILL.md`. Keep `SKILL.md` out of the repo root, because the CLI reads a
 root `SKILL.md` as the repo's only skill.
 
-Run `bun x @zgeoff/chex skill skills/<skill>` where a skill says
-`bun x @zgeoff/chex skill .agents/skills/<skill>`. A repo that installs the skills keeps them under
-`.agents/skills/`, and the skills give paths there. This repo keeps the same files under `skills/`.
+Run `bun x @zgeoff/chex skill skills/<skill>` to check one skill. A repo that installs the skills
+keeps them under `.agents/skills/`, and the skills give paths there. This repo keeps the same files
+under `skills/`.
 
 ## Checks
 
