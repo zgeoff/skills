@@ -4,20 +4,45 @@ Pick a matcher by the kind of value it checks. The jest-extended matchers reach 
 `@zgeoff/bun-test-extended` package. When the package isn't set up yet:
 
 - When a matcher throws `TypeError` at run time, put the package at the start of the `preload` array
-  of `bunfig.toml`.
+  of `bunfig.toml`. A preload file listed before it that calls a matcher at load time, such as
+  `expect.toBeOneOf`, throws that `TypeError`. The
+  [package README](https://github.com/zgeoff/tools/tree/main/packages/bun-test-extended) gives the
+  `preload` entry.
 - When `tsc` reports a matcher as unknown, add the package to `compilerOptions.types` in
   `tsconfig.json`.
 
-| Value             | Matchers                                                                                                          |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Array             | `toIncludeAllMembers`, `toIncludeSameMembers`, `toIncludeAllPartialMembers`, `toPartiallyContain`, `toSatisfyAll` |
-| Object            | `toContainEntry`, `toContainEntries`, `toContainAllKeys`, `toBeFrozen`                                            |
-| String            | `toStartWith`, `toEndWith`, `toInclude`, `toEqualCaseInsensitive`, `toEqualIgnoringWhitespace`                    |
-| Number            | `toBeWithin`                                                                                                      |
-| Any value         | `toBeNil`, `toBeOneOf`, `toSatisfy`, `toBeEmpty`                                                                  |
-| Date              | `toBeAfter`, `toBeBefore`, `toBeBetween`, `toBeValidDate`                                                         |
-| Mock              | `toHaveBeenCalledOnce`, `toHaveBeenCalledExactlyOnceWith`, `toHaveBeenCalledBefore`, `toHaveBeenCalledAfter`      |
-| Error and promise | `toThrowWithMessage`, `toResolve`, `toReject`                                                                     |
+| Value             | Matcher                           |
+| ----------------- | --------------------------------- |
+| Array             | `toIncludeAllMembers`             |
+| Array             | `toIncludeSameMembers`            |
+| Array             | `toIncludeAllPartialMembers`      |
+| Array             | `toPartiallyContain`              |
+| Array             | `toSatisfyAll`                    |
+| Object            | `toContainEntry`                  |
+| Object            | `toContainEntries`                |
+| Object            | `toContainAllKeys`                |
+| Object            | `toBeFrozen`                      |
+| String            | `toStartWith`                     |
+| String            | `toEndWith`                       |
+| String            | `toInclude`                       |
+| String            | `toEqualCaseInsensitive`          |
+| String            | `toEqualIgnoringWhitespace`       |
+| Number            | `toBeWithin`                      |
+| Any value         | `toBeNil`                         |
+| Any value         | `toBeOneOf`                       |
+| Any value         | `toSatisfy`                       |
+| Any value         | `toBeEmpty`                       |
+| Date              | `toBeAfter`                       |
+| Date              | `toBeBefore`                      |
+| Date              | `toBeBetween`                     |
+| Date              | `toBeValidDate`                   |
+| Mock              | `toHaveBeenCalledOnce`            |
+| Mock              | `toHaveBeenCalledExactlyOnceWith` |
+| Mock              | `toHaveBeenCalledBefore`          |
+| Mock              | `toHaveBeenCalledAfter`           |
+| Error and promise | `toThrowWithMessage`              |
+| Error and promise | `toResolve`                       |
+| Error and promise | `toReject`                        |
 
 - Write Bun's own `.rejects` and `.resolves` without `await`. Bun settles the promise inside the
   matcher, so an `await` adds nothing.
