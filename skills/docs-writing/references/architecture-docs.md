@@ -50,7 +50,7 @@ describe it. How a lease on a job passes to another worker when its holder stops
 the worker and the timeout live in different files. Write the mechanism as a paragraph of cause and
 effect: each step happens because of the one before it, and that chain is what the reader needs to
 change the subsystem safely. Leave out a step-by-step account of one function: the reader can open
-the function. When the code doesn't show the function's reason, give the reason.
+the function.
 
 ## Give the reason next to the fact
 
@@ -125,8 +125,8 @@ Each of these has another owner, and a copy here would go out of date:
 - **Design the code doesn't implement yet.** It goes under `docs/design/`. When a built part came
   from a design, link the design in one sentence.
 - **What someone who uses the product sees and does.** That goes in a guide, in `docs/guides/`.
-- **The alternatives you rejected, and the history of the design.** When the person you work for
-  approved the choice, those go in a [decision record](./docs-tree.md#decision-records), a numbered
-  file in `docs/decisions/`. Otherwise they go in the PR description.
+- **The alternatives you rejected, and the history of the design.** When the user approved the
+  choice, those go in a [decision record](./docs-tree.md#decision-records), a numbered file in
+  `docs/decisions/`. Otherwise they go in the PR description.
 - **Reference for internals**, such as one entry per protocol method, config key or module. That
   stays in the code, or in reference generated from it.

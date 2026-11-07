@@ -83,7 +83,7 @@ a skill:
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
-Keep a rule's detail in its section. When you change a rule, change its key rules line too.
+Keep a rule's detail in its section. Change its key rules line with it.
 
 Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
 says.
@@ -103,9 +103,8 @@ knows. A reader in another repo can't open a file the example names, or doesn't 
 
 When you mention a file, a function or a setting, link the file, in a sentence that says what the
 code doesn't: a mistake to avoid, a reason or a choice. When someone renames the file, `chex links`
-fails. Write an invented example path as its file and folder apart, such as `nextest.toml` in
-`.config/`, or with a placeholder, such as `<name>`: `chex skill` warns on a bare path that matches
-a repo file.
+fails. Write an invented path as its file and folder apart, such as `nextest.toml` in `.config/`, or
+with a placeholder, such as `<name>`: `chex skill` warns on a bare path that matches a repo file.
 
 - **Replace a list of files, functions or options,** one row per item, with the rule that defines
   the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
@@ -148,9 +147,9 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    bun x @zgeoff/chex prose links skill
    ```
 
-   While you draft, `bun x @zgeoff/chex skill .claude/skills/<skill>` checks one skill. When a check
-   flags a sentence you like, rewrite it, and tell the user or your caller which sentence and which
-   check: the check may be wrong.
+   While you draft, `bun x @zgeoff/chex skill .agents/skills/<skill>` checks one skill. When a check
+   flags a sentence you like, rewrite it so the check passes, and tell the user or your caller which
+   sentence and which check: the check may be wrong.
 
 2. Run the `deslop` skill on each section you wrote or changed.
 3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it

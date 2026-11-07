@@ -2,7 +2,7 @@
 
 Pick the kind before you write. In a machinery skill or a method skill, write the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. Leave
-that opening out of a rule set, and out of a project skill, which is a rule set.
+that opening out of a rule set and out of a project skill.
 
 - [A machinery skill](#a-machinery-skill) covers one repo's tools, such as its migrations or its
   deploy scripts.

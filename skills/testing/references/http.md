@@ -118,7 +118,7 @@ Add a handler with `server.use(...)` in a test only for one of these:
 
 - an outcome the collections can't reach, such as a 503, a transport failure or a malformed payload;
 - a sequence, such as a 503 and then a success. Import `makeAnswerQueue` from
-  `@zgeoff/testing/helpers`, and build `const answer = makeAnswerQueue([unavailable, ok])`, where
+  `@zgeoff/testing/helpers`. Build `const answer = makeAnswerQueue([unavailable, ok])`, where
   `unavailable` and `ok` are `HttpResponse` values. Return `answer()` from the handler. `answer()`
   throws on a request past the last answer, as [Stand-ins](./boundaries.md#stand-ins) says;
 - input you capture: in a handler you write in the test file, call an inline `mock()`, and assert it

@@ -49,7 +49,7 @@ The root README takes one of three shapes:
 
 Open every root README and every published package README with this header. Replace `<name>`,
 `<package>`, `<guide>`, `<Guide title>` and `<One-line description.>`. Keep the HTML tags. The
-bullets below the template name the only tags you may leave out:
+bullets below the template name the only tags you may leave out. Use this header:
 
 ```text
 <div align="center">
@@ -106,15 +106,15 @@ print both for each README. Cut a README to its target. The limit is where the r
 
 ## What stays out
 
-Leave these out of every README:
+Leave these out of every README, because the code, `--help` or `docs/` own them, and a copy goes out
+of date:
 
 - flags, exit codes and config keys;
 - install steps for each tool or platform the package supports;
 - edge cases inside table rows;
 - tables of keys or states;
 - a line that says when someone last checked the README, such as "Checked 2026-03-01";
-- people's names;
-- history, such as a changelog.
+- people's names.
 
 ## Who reviews a README
 

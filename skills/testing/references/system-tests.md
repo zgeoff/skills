@@ -139,8 +139,8 @@ the state that the act before it left. Outside `e2e/`, a test has one act, as
 [Test shape](../SKILL.md#test-shape) says.
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
-  bring it up in a `start` hook, and take it down in a `stop` hook. Each hook is a module. Name it
-  under that key in the e2e lane's entry under `lanes` in `rig.config.ts`
+  bring it up in a `start` hook, and take it down in a `stop` hook. Give each hook's module path
+  under its own key, `start` or `stop`, in the e2e lane's entry under `lanes` in `rig.config.ts`
   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once per lane
   run, outside the test files.
 - Return the address the tests need, such as a connection string, in the `environment` object that
@@ -436,8 +436,9 @@ point, name the program or the spec that fixes it in a comment.
 
 Run a Rust crate's lanes through cargo-nextest, with the limits in [Lanes](./slow-tests.md#lanes).
 Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a folder or a file suffix does
-for Bun. The prefix is the test's module path, so a test inside `mod e2e` has the `e2e::` prefix.
-Define the lanes in `nextest.toml`, in the repo's `.config/` folder, as in this made-up example:
+for Bun. The prefix is the test's module path, so a test inside a top-level `mod e2e` of its crate
+or test binary has the `e2e::` prefix. Define the lanes in `nextest.toml`, in the repo's `.config/`
+folder, as in this made-up example:
 
 ```toml
 [profile.default]
