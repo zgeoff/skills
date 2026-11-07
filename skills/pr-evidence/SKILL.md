@@ -26,24 +26,31 @@ the file, so keep every token, secret and piece of personal data out of it.
 
 Pick the path before you capture anything. Take the first row that matches:
 
-| Check                                                                     | Path                                        |
-| ------------------------------------------------------------------------- | ------------------------------------------- |
-| `command -v cloud` prints a path                                          | the `cloud` CLI, the file host's own client |
-| `test -n "$PR_EVIDENCE_URL" && test -n "$PR_EVIDENCE_TOKEN_PATH"` is true | `curl`                                      |
-| neither                                                                   | none: stop and tell the user                |
+| Check                                                                                               | Path                                        |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `command -v cloud` prints a path                                                                    | the `cloud` CLI, the file host's own client |
+| `test -n "$PR_EVIDENCE_URL" && test -n "${PR_EVIDENCE_TOKEN_PATH:-$PR_EVIDENCE_TOKEN_REF}"` is true | `curl`                                      |
+| neither                                                                                             | none: stop and tell the user                |
 
-The user sets both variables on the machine:
+The user sets these variables on the machine:
 
 - `PR_EVIDENCE_URL`: the file host's upload address, such as `https://files.example.com/api/files`.
 - `PR_EVIDENCE_TOKEN_PATH`: where 1Password keeps the upload token, as `<vault>/<item>/<field>`.
+- `PR_EVIDENCE_TOKEN_REF`: the same place as an `op://<vault>/<item>/<field>` reference. A machine
+  sets this one or the token path, and the token path wins when both are set.
 
 `op run` resolves every `op://` value in its environment, and fails on one its token can't read. So
-the token path has no `op://` prefix. Add the prefix only inside an `op read` call, as the commands
-below do, and never export the value with it.
+the token path has no `op://` prefix. Build the reference only inside an `op read` call, as the
+commands below do, and never export it.
 
-The `curl` path also needs the 1Password `op` CLI, signed in. Run
-`op read "op://$PR_EVIDENCE_TOKEN_PATH" > /dev/null`. When it fails, stop and give the user `op`'s
-error. Never set either variable yourself, and never write either value in a file you commit.
+The `curl` path also needs the 1Password `op` CLI, signed in. Run this check:
+
+```bash
+op read "op://${PR_EVIDENCE_TOKEN_PATH:-${PR_EVIDENCE_TOKEN_REF#op://}}" > /dev/null
+```
+
+When it fails, stop and give the user `op`'s error. Never set any of these variables yourself, and
+never write a value of one in a file you commit.
 
 ## Save and capture
 
@@ -98,7 +105,7 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
 - With `curl`, pass the label with `--form-string`. `-F` cuts a label at a `;`.
 
   ```bash
-  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "op://$PR_EVIDENCE_TOKEN_PATH")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$PR_EVIDENCE_URL"
+  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "op://${PR_EVIDENCE_TOKEN_PATH:-${PR_EVIDENCE_TOKEN_REF#op://}}")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$PR_EVIDENCE_URL"
   ```
 
   Expect a JSON body, then `HTTP 201`. Check that the body's `expiresAt`, an ISO 8601 timestamp,
@@ -115,8 +122,9 @@ number `<n>`:
 
 1. Read the body: `gh pr view <n> --json body -q .body > .scratch/pr-body.md`.
 2. Put the line under the entry that the file is evidence for, such as a bullet or a checklist line.
-   Indent it to the entry's text, so it stays inside the entry. When no entry matches, put it at the
-   end.
+   Indent it to the entry's content column, the first column after the list marker: 2 spaces under a
+   `- ` bullet, checklist lines included, and 3 under `1. `. A deeper indent turns the line into a
+   code block. When no entry matches, put it at the end.
 3. Write the body back: `gh pr edit <n> --body-file .scratch/pr-body.md`. Expect the PR's URL.
 
 For an issue, use `gh issue view` and `gh issue edit` the same way. For a reply to a review comment,
