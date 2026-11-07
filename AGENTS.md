@@ -25,7 +25,12 @@ file you edit may be the one that changes the rules.
 
 ```text
 skills/<name>/      one skill per folder: SKILL.md, plus any references/ and helper scripts/ it uses
+tests/<name>/       tests of the behaviour that a rule in skill <name> describes
 ```
+
+Put a script's test beside the script. Put a test that shows the behaviour a skill's rule describes,
+such as a runtime quirk, under `tests/<name>/`. Repo-sync copies only `skills/`, so no other repo
+runs it.
 
 A Claude Code hook refuses an edit of a skill's `SKILL.md`, or of a file under its `references/`,
 until the session loads `skill-writing`, `docs-writing` and `deslop`. `.claude/skill-gate.json`
@@ -56,8 +61,8 @@ bun run test
 ```
 
 `bun run check` runs the [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex)
-checks that [package.json](package.json) lists. `bun run test` runs the test beside each script in a
-skill's `scripts/` folder.
+checks that [package.json](package.json) lists. `bun run test` runs each `*.test.ts` file: the test
+beside each script in a skill's `scripts/` folder, and each test under `tests/`.
 
 ## Skill pull requests
 

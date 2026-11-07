@@ -174,8 +174,9 @@ allows.
 - Test each error that the unit throws or returns on purpose. For a throw that can't happen in
   production, delete the branch, or write `invariant()` from `tiny-invariant`.
 - Never assert in a `try`/`catch`: when nothing throws, nothing is asserted.
-- Write `.rejects` and `.resolves` without `await`: Bun settles the promise inside the matcher.
-  Always `await` `toResolve()` and `toReject()`.
+- Write `.rejects` and `.resolves` without `await`. Always `await` `toResolve()` and `toReject()`.
+- When the promise waits on a Worker, all four hang: use
+  [`Promise.allSettled`](./references/matchers.md#a-promise-that-waits-on-a-worker).
 
 ## Narrowing
 
