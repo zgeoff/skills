@@ -180,8 +180,9 @@ bumps each one as soon as it publishes, and `bun install` refuses a release youn
 - Add a release-age exclude, an override or an audit ignore for a third-party package only for a
   named reason, such as a fix the repo needs. Add it as
   [Dependency exceptions](./references/dependency-exceptions.md) says.
-- When a release older than `minimumReleaseAge` holds the fix, use that release, and add no
-  exception.
+- When a release older than `minimumReleaseAge` holds the fix, lock it as step 2 of
+  [Release-age excludes](./references/dependency-exceptions.md#release-age-excludes) says, and add
+  no exclude.
 - Remove each exclude, override or ignore once it guards nothing. `chex dependency-gates` fails the
   run on an expired exclude, an override that every `bun.lock` range admits, and an ignore that no
   locked package needs.
