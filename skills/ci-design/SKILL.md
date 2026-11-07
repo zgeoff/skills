@@ -191,7 +191,7 @@ To add a release-age exclude:
    and the audit-fix workflow match the rest word for word.
 
    ```toml
-   # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then
+   # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then (audit-fix)
    ```
 
 - For an override, pin one exact version in `overrides` in `package.json`. JSON takes no comments,
