@@ -68,8 +68,8 @@ error. Never set either variable yourself, and never write either value in a fil
    AVIF in the PR as an image, MP4 and WebM as a link, and offers any other format as a download.
 
    When `command -v chromium` prints nothing, use another screenshot tool that runs without a person
-   at the screen, or stop and tell the user. For a recording, use any recorder on the machine. When
-   it has none, stop and tell the user.
+   at the screen, or stop and tell the user. For a recording, use any recorder on the machine, or
+   stop and tell the user when the machine has none.
 
 4. View the image before you upload it, with a tool that shows you images, such as your file-read
    tool. Check that it shows the change, and holds no token, secret or personal data. When you can't
