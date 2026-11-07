@@ -11,12 +11,12 @@ the parts that only Bun has:
 
 The mistakes to avoid:
 
-- Never sleep in a VM test. Wait with a `wait_for_*` method of the NixOS test driver, such as
-  `wait_for_unit`.
+- In place of the sleep that [System tests](./system-tests.md) rules out, wait on a condition of the
+  NixOS test driver, such as `wait_for_unit` or `wait_until_succeeds`.
 - Never let a case inherit tokens, files, mounts or service settings from an earlier case it doesn't
   depend on.
-- Leave `paths` off the trigger of a workflow that holds a required check, as
-  [Path filters](../../ci-design/SKILL.md#path-filters) in the ci-design skill says.
+- Before you add a path filter to a workflow that holds a required check, read
+  [Path filters](../../ci-design/SKILL.md#path-filters) in the ci-design skill.
 
 ## Option evaluation
 
