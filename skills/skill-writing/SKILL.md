@@ -58,11 +58,10 @@ The agent copies how you write as well as what you say.
 - **Make a person or the agent the subject.** "Add a mistake only if…", never "a mistake earns its
   place". A thing as the actor hides who does the work.
 - **Keep short lines short.** "Slow, but right." Don't pad a blunt line with an explanation, a
-  qualifier or tidier grammar. The padding is what reads as machine-written.
+  qualifier or tidier grammar. The padding reads as machine-written.
 - **Cut the rhetoric.** No "X is not the job. The job is Y", no aphorisms, no drama words
   ("worthless", "critical"), no point made three ways. Say the instruction and its reason once.
-- **Put a list the agent acts on in bullets.** A list inside a sentence is hard to scan, and it
-  grows one item at a time.
+- **Put a list the agent acts on in bullets.** A list inside a sentence is hard to scan.
 
 When a section still reads oddly after two rewrites, change its structure. Rebuild it in a new
 order, and say the plain instruction.
@@ -147,9 +146,10 @@ Leave out anything time-bound, like "until the next release": it goes false unno
    bun x @zgeoff/chex prose links skill
    ```
 
-   While you draft, `bun x @zgeoff/chex skill .claude/skills/<skill>` checks one skill. When a check
-   flags a sentence you like, rewrite it so the check passes, and tell the user or your caller which
-   sentence and which check: the check may be wrong.
+   While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder of its
+   SKILL.md: `.claude/skills/<skill>`, or `skills/<skill>` in the repo that publishes the skills.
+   When a check flags a sentence you like, rewrite it so the check passes, and tell your caller
+   which sentence and which check: the check may be wrong.
 
 2. Run the `deslop` skill on each section you wrote or changed.
 3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
