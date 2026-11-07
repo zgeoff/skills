@@ -156,7 +156,7 @@ section, such as `fetch` or `process`.
 | event-callback prop or parameter                                                                          | `on`                         | follows the framework's callback convention                                    |
 | function passed to an `on` prop, or a function that handles a framework lifecycle event such as a request | `handle`                     | follows the framework's callback convention                                    |
 | a test file's per-test fixture                                                                            | `setupTest`                  | as the testing skill's [setupTest](../testing/SKILL.md#setuptest) section says |
-| stored state that a test puts in place by calling the module that creates it                              | `seed`                       | may do I/O; test code only                                                     |
+| stored state put in place for a test, through the module that writes it                                   | `seed`                       | may do I/O; test code only                                                     |
 
 - Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
   `zgeoff/verb-contract` rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O
