@@ -2,11 +2,11 @@ import { expect, onTestFinished, test } from 'bun:test';
 import { once } from 'node:events';
 
 async function setupTest() {
-  const worker = new Worker(new URL('echo-worker.ts', import.meta.url));
+  const webWorker = new Worker(new URL('echo-worker.ts', import.meta.url));
 
-  onTestFinished(() => worker.terminate());
+  onTestFinished(() => webWorker.terminate());
 
-  const runFailingStart = async (): Promise<never> => {
+  const runFailingStart = async (worker: Worker): Promise<never> => {
     const reply = once(worker, 'message');
 
     worker.postMessage('ping');
@@ -16,13 +16,13 @@ async function setupTest() {
   };
 
   // The matchers hang only on a Worker that has already answered once.
-  await runFailingStart().catch(() => undefined);
+  await runFailingStart(webWorker).catch(() => undefined);
 
-  return { runFailingStart };
+  return { webWorker, runFailingStart };
 }
 
 test('rejects', async () => {
   const ctx = await setupTest();
 
-  expect(ctx.runFailingStart()).rejects.toThrow('the start config is unreadable');
+  expect(ctx.runFailingStart(ctx.webWorker)).rejects.toThrow('the start config is unreadable');
 });

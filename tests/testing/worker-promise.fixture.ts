@@ -6,15 +6,15 @@ import { Worker } from 'node:worker_threads';
 import { $ } from 'bun';
 
 async function setupTest() {
-  const worker = new Worker(new URL('echo-worker.ts', import.meta.url));
+  const threadWorker = new Worker(new URL('echo-worker.ts', import.meta.url));
 
-  onTestFinished(() => worker.terminate());
+  onTestFinished(() => threadWorker.terminate());
 
   const server = Bun.serve({ port: 0, fetch: () => new Response('pong') });
 
   onTestFinished(() => server.stop(true));
 
-  const readWorkerReply = async (): Promise<unknown> => {
+  const readWorkerReply = async (worker: Worker): Promise<unknown> => {
     const reply = once(worker, 'message');
 
     worker.postMessage('ping');
@@ -24,52 +24,54 @@ async function setupTest() {
     return message;
   };
 
-  const runFailingStart = async (): Promise<never> => {
-    await readWorkerReply();
+  const runFailingStart = async (worker: Worker): Promise<never> => {
+    await readWorkerReply(worker);
 
     throw new Error('the start config is unreadable');
   };
 
   // The matchers hang only on a Worker that has already answered once.
-  await readWorkerReply();
+  await readWorkerReply(threadWorker);
 
-  return { readWorkerReply, runFailingStart, serverURL: server.url };
+  return { threadWorker, readWorkerReply, runFailingStart, serverURL: server.url };
 }
 
 test('rejects', async () => {
   const ctx = await setupTest();
 
-  expect(ctx.runFailingStart()).rejects.toThrow('the start config is unreadable');
+  expect(ctx.runFailingStart(ctx.threadWorker)).rejects.toThrow('the start config is unreadable');
 });
 
 test('awaited rejects', async () => {
   const ctx = await setupTest();
 
-  await expect(ctx.runFailingStart()).rejects.toThrow('the start config is unreadable');
+  await expect(ctx.runFailingStart(ctx.threadWorker)).rejects.toThrow(
+    'the start config is unreadable',
+  );
 });
 
 test('resolves', async () => {
   const ctx = await setupTest();
 
-  expect(ctx.readWorkerReply()).resolves.toBe('ping');
+  expect(ctx.readWorkerReply(ctx.threadWorker)).resolves.toBe('ping');
 });
 
 test('toReject', async () => {
   const ctx = await setupTest();
 
-  await expect(ctx.runFailingStart()).toReject();
+  await expect(ctx.runFailingStart(ctx.threadWorker)).toReject();
 });
 
 test('toResolve', async () => {
   const ctx = await setupTest();
 
-  await expect(ctx.readWorkerReply()).toResolve();
+  await expect(ctx.readWorkerReply(ctx.threadWorker)).toResolve();
 });
 
 test('allSettled', async () => {
   const ctx = await setupTest();
 
-  const [started] = await Promise.allSettled([ctx.runFailingStart()]);
+  const [started] = await Promise.allSettled([ctx.runFailingStart(ctx.threadWorker)]);
 
   expect(started).toStrictEqual({
     status: 'rejected',
