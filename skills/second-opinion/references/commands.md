@@ -20,7 +20,7 @@ Family: OpenAI. In the user's runs, Codex answered a question in 40 seconds to 2
 review in 3 to 9 minutes.
 
 ```bash
-codex exec -s read-only -c model=gpt-6-astra -c model_reasoning_effort=high \
+codex exec -s read-only -c model=gpt-6.1-sol -c model_reasoning_effort=medium \
   -o <reply.md> "$(cat <prompt.md>)" < /dev/null
 ```
 
@@ -32,8 +32,8 @@ codex exec -s read-only -c model=gpt-6-astra -c model_reasoning_effort=high \
   diff shows it. The entry stays in the index until you commit or `git reset <file>`.
 - **Outside a git repo,** add `--skip-git-repo-check`.
 - **Pass the model with `-c model=`.** Without it, Codex uses the model in its config file, which
-  may not be the strongest. The user changes the name here when a stronger model ships, so use it as
-  written.
+  can differ from the one the user picked. When the user names another model, put its name in place
+  of `gpt-6.1-sol`.
 - **Run the `codex` CLI itself.** A plugin that wraps Codex inside another agent can default to
   write mode in your working tree.
 
@@ -42,14 +42,14 @@ codex exec -s read-only -c model=gpt-6-astra -c model_reasoning_effort=high \
 Family: Anthropic.
 
 ```bash
-claude -p --model opus --effort high --permission-mode plan "$(cat <prompt.md>)" \
+claude -p --model claude-opus-5-5 --effort medium --permission-mode plan "$(cat <prompt.md>)" \
   < /dev/null > <reply.md>
 ```
 
 - **Plan mode keeps Claude read-only.** It reads files and runs commands that only read, and refuses
   to change a file.
-- **`opus` is the alias for the strongest Claude model.** The user changes it here when a stronger
-  Claude model ships under another alias, so use it as written.
+- **Pass the full model ID.** The alias `opus` moves to each new Opus model when it ships. When the
+  user names another model, put its ID in place of `claude-opus-5-5`.
 
 ## Add a model
 
@@ -59,7 +59,7 @@ Ask the user where the new model goes in the order, and add its section there. G
 - one command that takes the prompt file and writes the reply to a file, with stdin from
   `/dev/null`;
 - how the command keeps the model read-only;
-- how to set its strongest model and its effort;
+- how to set its model and its effort;
 - the mistakes to avoid with it, and how long it takes to answer, once you've measured it.
 
 When the model can't run read-only, run it with its tools turned off, as its CLI help says. Put the
