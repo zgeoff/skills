@@ -11,6 +11,11 @@ metadata:
 
 # CI design
 
+## References
+
+- [Dependency exceptions](./references/dependency-exceptions.md): adding a release-age exclude, an
+  override or an audit ignore for a third-party package.
+
 ## Workflow lint
 
 - After you change a workflow, run `bun x @zgeoff/chex workflows` and fix every warning. CI stays
@@ -57,7 +62,7 @@ that uses one.
 ## Timeouts
 
 - Set `timeout-minutes` on every job that runs steps. On a job that calls a reusable workflow, pass
-  it as the `timeout-minutes` input.
+  it as the `timeout-minutes` input when the workflow takes one.
 - Set 20 minutes on a job with tests until its tests have stayed within the test budget for a week
   of runs on `main`. Then set twice the budget plus the job's median time outside its tests.
 - Set twice the median time on a job with no tests, and never less than 5 minutes. Take each median
@@ -163,7 +168,8 @@ bumps each one as soon as it publishes, and `bun install` refuses a release youn
 - Run `bun x @zgeoff/chex dependency-gates`, and add each first-party package it lists to
   `minimumReleaseAgeExcludes`, by its full name, such as `@zgeoff/std`.
 - Never write a scope, such as `@zgeoff/*`. Bun accepts it with no warning and lets nothing through.
-- Never put a [removal comment](#dependency-exceptions) above a first-party exclude. The
+- Never put a [removal comment](./references/dependency-exceptions.md#release-age-excludes) above a
+  first-party exclude. The
   [audit-fix workflow](https://github.com/zgeoff/tools/blob/main/docs/architecture/dependency-updates.md#the-audit-fix-workflow)
   deletes the exclude on the comment's date.
 - Add a missing exclude in a pull request of its own into `main`. Renovate drops a commit you push
@@ -171,37 +177,11 @@ bumps each one as soon as it publishes, and `bun install` refuses a release youn
 
 ## Dependency exceptions
 
-Add a release-age exclude, an override or an audit ignore for any other package only for a named
-reason, such as a fix the repo needs. When an older release works, pin the newest release older than
-`minimumReleaseAge` in `package.json` instead.
-
-To add a release-age exclude:
-
-1. Check that the release has npm provenance. When this prints nothing, pin an older release and
-   stop here:
-
-   ```bash
-   npm view <package>@<version> dist.attestations.provenance
-   ```
-
-2. Add the package's name to `minimumReleaseAgeExcludes`, and pin it to one exact version. Pin a
-   direct dependency in the root `package.json` catalog, and a transitive dependency in an override:
-   a catalog entry reaches only direct dependencies.
-3. Above the exclude, write a removal comment in the shape below. Date the removal
-   `minimumReleaseAge` seconds after the publish date from `npm view <package> 'time[<version>]'`.
-   Change only the package, its version and the dates: `chex dependency-gates` and the audit-fix
-   workflow match the rest word for word.
-
-   ```toml
-   # @scope/example 2.4.1 (published 2026-10-30) ages past the gate ~2026-11-06 — remove then (audit-fix)
-   ```
-
-- For an override, pin one exact version in `overrides` in `package.json`. JSON takes no comments,
-  so give the reason in the pull request.
-- For an audit ignore, let the audit-fix workflow add it and set its expiry. By hand, add
-  `--ignore <advisory-id>` to the `audit` script, and an entry under that ID in the root
-  `audit-ignores.json` with its `package`, `reason` and ISO `expires` date.
-
-Remove each exclude, override or ignore once it guards nothing. `chex dependency-gates` fails the
-run on an expired exclude, an override that every `bun.lock` range admits, an ignore that no locked
-package needs, and a third-party exclude with no removal comment.
+- Add a release-age exclude, an override or an audit ignore for a third-party package only for a
+  named reason, such as a fix the repo needs. Add it as
+  [Dependency exceptions](./references/dependency-exceptions.md) says.
+- When a release older than `minimumReleaseAge` holds the fix, use that release, and add no
+  exception.
+- Remove each exclude, override or ignore once it guards nothing. `chex dependency-gates` fails the
+  run on an expired exclude, an override that every `bun.lock` range admits, and an ignore that no
+  locked package needs.
