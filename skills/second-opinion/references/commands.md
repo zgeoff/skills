@@ -32,6 +32,8 @@ codex exec -s read-only -c model_reasoning_effort=medium \
   diff shows it. The entry stays in the index until you commit or `git reset <file>`.
 - **Outside a git repo,** add `--skip-git-repo-check`.
 - **Pass no model.** Codex uses the model in its config file. Don't add `-c model=`.
+- **When the user names a model, add `-c model=<name>`,** with `<name>` the model they named.
+- **Report the model from Codex's `model:` line.** Codex prints that line on stderr when it starts.
 - **Run the `codex` CLI itself.** A plugin that wraps Codex inside another agent can default to
   write mode in your working tree.
 
