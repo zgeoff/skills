@@ -36,9 +36,9 @@ subfolders by area, so a reader can scan the folder. Link `docs/reference/` from
   architecture doc that owns it. Put each finding someone will act on in the issue tracker. Delete
   the write-up.
 
-- **Development and releasing live in runbooks.** Put the contributor setup in
-  `docs/runbooks/development.md`. The release runbook, `docs/runbooks/releasing.md`, is for the
-  steps the release tooling doesn't do. When the tooling does every step, delete the runbook.
+- **Development and releasing live in runbooks.** Put the contributor setup in `development.md`, in
+  `docs/runbooks/`. The release runbook, `releasing.md` in the same folder, is for the steps the
+  release tooling doesn't do. When the tooling does every step, delete the runbook.
 
 ## Length
 

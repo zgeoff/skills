@@ -89,8 +89,8 @@ keeps it, with its reason beside it.
 
 ## Shape the set of docs around concepts
 
-- **Keep an overview.** `docs/architecture/overview.md` shows the whole system on one page, so a
-  reader can find the doc they need. It has a paragraph and a link for each of:
+- **Keep an overview.** The `overview.md` in `docs/architecture/` shows the whole system on one
+  page, so a reader can find the doc they need. It has a paragraph and a link for each of:
   - the path a request takes, end to end;
   - the topology: which processes and deployments exist, and how they reach each other;
   - the data: each store, and the shapes of data it holds;

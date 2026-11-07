@@ -435,7 +435,8 @@ point, name the program or the spec that fixes it in a comment.
 
 Run a Rust crate's lanes through cargo-nextest, with the limits in [Lanes](./slow-tests.md#lanes).
 Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a folder or a file suffix does
-for Bun. Define the lanes in the repo's `.config/nextest.toml`, as in this made-up example:
+for Bun. Define the lanes in `nextest.toml`, in the repo's `.config/` folder, as in this made-up
+example:
 
 ```toml
 [profile.default]

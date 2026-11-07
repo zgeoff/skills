@@ -18,7 +18,7 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    [published package sections](#published-package-sections), because the registry shows its README
    on the package's page. Give an unpublished package a short README, as the last paragraph of
    [published package sections](#published-package-sections) describes.
-3. **Docs index:** `docs/README.md`, one line and a link for each doc.
+3. **Docs index:** the `README.md` in `docs/`, one line and a link for each doc.
 4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
    the design. Give a design folder inside another design folder its own design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
@@ -75,9 +75,9 @@ Open every root README and every published package README with this header. Repl
 - Write the one-line description below the `<div>`, in plain Markdown.
 
 Keep every link relative to the README's own folder. In a monorepo, a package README reaches the
-repo's docs and licence through the root, such as `../../docs/README.md`. Also set `directory`, in
-the `repository` field of each package's `package.json`, to the package's folder. npm uses that
-field to rewrite a relative link so that it points at the repo.
+repo's docs and licence through the root, such as `[Docs](../../docs/README.md)`. Also set
+`directory`, in the `repository` field of each package's `package.json`, to the package's folder.
+npm uses that field to rewrite a relative link so that it points at the repo.
 
 ## Published package sections
 

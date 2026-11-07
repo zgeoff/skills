@@ -18,13 +18,9 @@ So give it what the code can't:
 - the mistakes that cost an hour;
 - the reasons behind rules that look arbitrary.
 
-Link the code instead of copying it: a copy goes stale without the agent knowing. Keep the skill
-short, or the agent skims.
-
-When you write or edit one, hand back the skill's path and its proof: the three ticked lines and the
-Declined list that [Check it](#check-it) gives. Put the proof in the `## Checks` section of the PR
-description, and link the PR in your reply. With no PR, put the proof in your reply. When you review
-one, hand back each finding with its line and the rule it breaks, quoted.
+When you write or edit one, hand back the skill's path, the PR link and the proof that
+[Check it](#check-it) gives. With no PR, put the proof in your reply. When you review one, hand back
+each finding with its line and the rule it breaks, quoted.
 
 ## Key rules
 
@@ -38,8 +34,7 @@ one, hand back each finding with its line and the rule it breaks, quoted.
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): the `@zgeoff/chex` checks, deslop and a cold read, with their proof in the
-  PR description.
+- [Check it](#check-it): chex, deslop and a cold read, with the proof in the PR.
 
 ## References
 
@@ -76,8 +71,8 @@ Every skill but a rule set opens the same way, because the agent decides what to
 a skill:
 
 1. A paragraph or two: the job, what the agent hands back, if anything, and the main mistakes to
-   avoid. Write them for this skill, with no stock opener, and name the mistakes without a count,
-   never "three mistakes". When a skill hands something back, repeat it in a reply line at the end.
+   avoid. Write them for this skill, with no stock opener, and name the mistakes without a count.
+   When a skill hands something back, repeat it in a reply line at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
    `## Key rules`, `## References` and each `###` out of the list.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
