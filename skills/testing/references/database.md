@@ -81,9 +81,9 @@ data exists, boot it in the test body, after the test creates that data.
 
 ## Seeding rows
 
-Seed a table's rows as the testing skill's [Stored state](../SKILL.md#stored-state) says. When you
-write a seed, follow [Seeding](./seeding.md). Follow it too in the tests of the module that creates
-the rows.
+Follow [Seeding](./seeding.md) when you write a seed, and in the tests of the module that creates
+the rows. In every other test, seed the rows as the testing skill's
+[Stored state](../SKILL.md#stored-state) says.
 
 ## Reading results back
 
@@ -121,8 +121,8 @@ expect(await ctx.service.listNotes()).toStrictEqual([]);
 ```
 
 To test several failed calls in one test, follow
-[Failure branches](./boundaries.md#failure-branches). Read the final state through the service, as
-in this test of a job that gives up after its third failed run:
+[Failure branches](./boundaries.md#failure-branches), then read the final state back. In this
+example, a job gives up after its third failed run:
 
 ```ts
 const runJobOnce = () =>
