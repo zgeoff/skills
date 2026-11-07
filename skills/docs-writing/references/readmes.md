@@ -19,7 +19,7 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    - `package.json`
    - `go.mod`
    - `Cargo.toml`
-   - `build.gradle.kts`, `build.gradle` or `settings.gradle.kts`
+   - `build.gradle.kts`, `build.gradle`, `settings.gradle.kts` or `settings.gradle`
 
    Give a published package the [published package sections](#published-package-sections), because
    the registry shows its README on the package's page. Give an unpublished package a short README
