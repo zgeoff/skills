@@ -71,7 +71,8 @@ metadata:
   removes or runs something:
   - a pure function that takes the values read and returns what to do. Give it a verb from a no-I/O
     row of the [verb table](#function-names), such as `collect` or `pick`, so the
-    `zgeoff/verb-contract` rule in `@zgeoff/oxlint-config` keeps I/O out of it;
+    [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
+    rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
 - Write the pure function first, from the values you will read, then the thin one around it. You
@@ -156,11 +157,12 @@ section, such as `fetch` or `process`.
 | event-callback prop or parameter                                                                          | `on`                         | follows the framework's callback convention                                    |
 | function passed to an `on` prop, or a function that handles a framework lifecycle event such as a request | `handle`                     | follows the framework's callback convention                                    |
 | a test file's per-test fixture                                                                            | `setupTest`                  | as the testing skill's [setupTest](../testing/SKILL.md#setuptest) section says |
-| stored state put in place for a test, through the module that writes that state                           | `seed`                       | may do I/O; test code only ([seeding rules](../testing/references/seeding.md)) |
+| stored state put in place for a test, through the production module that writes that state                | `seed`                       | may do I/O; test code only ([seeding rules](../testing/references/seeding.md)) |
 
 - Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
-  `zgeoff/verb-contract` rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O
-  inside an npm package or behind a helper whose name hides it. Check those by hand.
+  [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
+  rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
+  behind a helper whose name hides it. Check those by hand.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
   Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
