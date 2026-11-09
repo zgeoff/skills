@@ -48,8 +48,9 @@ function isUnscopedSearch(command: string): boolean {
 // Each of these GitHub search filters matches a person's activity in every org.
 const PERSON =
   'author(?:-name|-email)?|committer(?:-name|-email)?|involves|commenter|reviewed-by|assignee|mentions';
-// A qualifier that follows a `-` excludes, and `{author:` is a jq object key.
-const QUALIFIER_START = `(?<=^|[\\s"'+?=(&,])`;
+// A qualifier that follows a `-` excludes, and `{author:` is a jq object key. `%20` is an encoded
+// space in a REST query.
+const QUALIFIER_START = `(?<=^|[\\s"'+?=(&,]|%20)`;
 const QUALIFIER_VALUE = '(?::|%3A)[\\w@$<{]';
 const PERSON_QUALIFIER = new RegExp(`${QUALIFIER_START}(?:${PERSON})${QUALIFIER_VALUE}`, 'i');
 const PERSON_FLAG = new RegExp(`(?<=^|[\\s"'])--(?:${PERSON})\\b`);
