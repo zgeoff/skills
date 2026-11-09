@@ -78,7 +78,7 @@ test('it sends nothing when a newer commit is the branch head', async () => {
 
   expect(result).toStrictEqual({
     exitCode: 0,
-    stdout: 'skipped a1b2c3d: the branch head is now e4f5a6b, whose run sends it\n',
+    stdout: 'skipped a1b2c3d: the branch head is now e4f5a6b\n',
     stderr: '',
   });
   expect(await ctx.readCalls()).toStrictEqual([

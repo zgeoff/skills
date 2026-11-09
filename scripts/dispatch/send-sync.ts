@@ -12,7 +12,7 @@ export async function runSendSync(dependencies: SendSyncDependencies): Promise<s
   const head = await dependencies.readBranchHead();
 
   if (!shouldSendSync(dependencies.commit, head)) {
-    return `skipped ${dependencies.commit}: the branch head is now ${head}, whose run sends it`;
+    return `skipped ${dependencies.commit}: the branch head is now ${head}`;
   }
 
   await dependencies.writeSyncEvent(dependencies.commit);
