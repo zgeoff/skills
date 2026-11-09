@@ -12,7 +12,7 @@ if (root === undefined) {
 
 // git grep exits 1 when no file matches. The check's own tests hold unscoped searches on purpose.
 const candidates =
-  await $`git grep --untracked -I -l -z -i -E ${'author|committer|involves|commenter|reviewed-by|assignee|mentions'} -- . ${':!scripts/search-scope/'}`
+  await $`git grep --untracked -I -l -z -i -E ${'author|committer|involves|commenter|reviewed-by|review-requested|assignee|mentions'} -- . ${':!scripts/search-scope/'}`
     .cwd(root)
     .nothrow()
     .quiet();

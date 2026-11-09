@@ -5,6 +5,8 @@ test.each([
   ['gh search prs --author pip-moss --state open'],
   ['gh search issues --author=pip-moss'],
   ['gh search prs --involves pip-moss'],
+  ['gh search prs --review-requested pip-moss'],
+  ["gh api 'search/issues?q=is:pr+user-review-requested:pip-moss'"],
   ['gh search commits --author-email pip@example.com'],
   ["gh api 'search/issues?q=author:pip-moss+is:pr'"],
   ["gh api 'search/issues?q=is:pr+author%3Apip-moss'"],
