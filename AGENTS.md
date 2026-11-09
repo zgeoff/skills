@@ -62,10 +62,11 @@ bun run test
 checks that [package.json](package.json) lists, then the search-scope check. `bun run test` runs the
 test beside each script in a skill's `scripts/` folder and in the root `scripts/` folder.
 
-The search-scope check fails each GitHub search that filters by author and names no owner, because
-the author's login also opens PRs in other orgs. Add an `owner:`, `user:`, `org:` or `repo:`
-qualifier, or the `--owner` or `--repo` flag, on the line of the search. A search in a skill that
-only zgeoff repos run, such as a report on the owner's PRs, names `owner:zgeoff`.
+The search-scope check fails each GitHub search that filters by a person, such as with `author:`,
+`--involves` or `commenter:`, and names no owner. That person's login also opens PRs in other orgs,
+so such a search returns them. Add an `owner:`, `user:`, `org:` or `repo:` qualifier, or the
+`--owner` or `--repo` flag, to the same command. A search in a skill that only zgeoff repos run,
+such as a report on the owner's PRs, names `owner:zgeoff`.
 
 ## Skill pull requests
 

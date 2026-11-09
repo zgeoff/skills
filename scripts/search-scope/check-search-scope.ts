@@ -1,8 +1,9 @@
 import { join } from 'node:path';
+import { parseArgs } from 'node:util';
 import { $ } from 'bun';
 import { collectUnscopedSearches } from './collect-unscoped-searches.ts';
 
-const [root] = process.argv.slice(2);
+const [root] = parseArgs({ allowPositionals: true }).positionals;
 
 if (root === undefined) {
   console.error('usage: bun scripts/search-scope/check-search-scope.ts <repo root>');
@@ -11,13 +12,13 @@ if (root === undefined) {
 
 // git grep exits 1 when no file matches. The check's own tests hold unscoped searches on purpose.
 const candidates =
-  await $`git grep --untracked -I -l -z -i author -- . ${':!scripts/search-scope/'}`
+  await $`git grep --untracked -I -l -z -i -E ${'author|committer|involves|commenter|reviewed-by|assignee|mentions'} -- . ${':!scripts/search-scope/'}`
     .cwd(root)
     .nothrow()
     .quiet();
 
 if (candidates.exitCode > 1) {
-  console.error(candidates.stderr.toString());
+  console.error(candidates.stderr.toString().trim());
   process.exit(candidates.exitCode);
 }
 
@@ -36,7 +37,7 @@ for (const search of unscopedSearches) {
 
 if (unscopedSearches.length > 0) {
   console.log(
-    'Each GitHub search above filters by author with no owner, so it returns PRs and issues from every org the author works in. Add an owner:, user:, org: or repo: qualifier, or the --owner or --repo flag, on the same line.',
+    'Each GitHub search above filters by a person, such as with author: or --involves, and names no owner, so it returns results from every org that person works in. Add an owner:, user:, org: or repo: qualifier, or the --owner or --repo flag, to the same command.',
   );
   process.exit(1);
 }
