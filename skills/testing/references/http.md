@@ -35,16 +35,17 @@ under Bun.
    [test preload](./cleanup.md#the-test-preload). In it, import `defineNetwork`, `InterceptorSource`
    and `HttpNetworkFrame` from `msw/experimental`, and `FetchInterceptor` from
    `@mswjs/interceptors/fetch/web`.
-2. Export the server that `defineNetwork` returns as `server`, as the example below shows.
+2. Export the server that `defineNetwork` returns as `server`.
 3. In the `handlers` option of `defineNetwork`, spread the handler array that each package exports,
-   such as `billingHandlers`, for every package whose tests run in the process.
+   such as `billingHandlers`, for every package whose tests run in the process. `resetHandlers()`
+   removes each handler that a test added with `server.use(...)`, and keeps the handlers the server
+   was built with, so every package keeps its default handlers.
 4. Pass `onUnhandledFrame: 'error'` to `defineNetwork`. A request that no handler matches then
    rejects, and MSW prints its URL.
-5. In the test preload, import `server` from the `server.ts` file. Call `server.enable()` in
-   `beforeAll`, `server.resetHandlers()` in `afterEach` and `server.disable()` in `afterAll`.
-
-`resetHandlers()` removes each handler that a test added with `server.use(...)`, and keeps the
-handlers the server was built with.
+5. In the test preload, import `server` from the `server.ts` file, and call these:
+   - `server.enable()` in `beforeAll`;
+   - `server.resetHandlers()` in `afterEach`;
+   - `server.disable()` in `afterAll`.
 
 Never start a second server. Two servers in one process patch the same `fetch`, so one server's
 handlers answer requests meant for the other.
@@ -85,12 +86,6 @@ Write the default handlers as a small version of the remote service over `@msw/d
 read and write records, validate input, and return the real response shape. In a test, seed the
 collections and call the client.
 
-From the module that holds the collections, export a `reset()` function that clears every
-collection, and call it in the test preload's `afterEach`, beside `server.resetHandlers()`. In
-`reset()`, clear a collection whose records reference another collection before the one it
-references, so no record points at a record already cleared. Say in a comment that the order is
-deliberate.
-
 - Return the service's not-found response for a missing record, and its permission error, such as a
   403 with the service's error body, for a caller without access. Read the caller from the request's
   token, as [Auth tokens](#auth-tokens) says. Seed the collections to reach those outcomes, and
@@ -114,6 +109,12 @@ Use something else only in these cases:
   test preload clears.
 - For a side effect with no record behind it, such as a sent email, export an array, such as
   `sentEmails`, from the handler module, and clear it in the test preload.
+
+From the module that holds the collections, export a `reset()` function that clears every
+collection, and call it in the test preload's `afterEach`, beside `server.resetHandlers()`. In
+`reset()`, clear a collection whose records reference another collection before the one it
+references, so no record points at a record already cleared. Say in a comment that the order is
+deliberate.
 
 From each handler module, export the base URL constant that its routes start with, such as
 `NOTES_API_URL`, so a per-test handler can build the same route.
@@ -176,7 +177,8 @@ For an oRPC contract module, write these tests:
 1. For each procedure, list in the test the error codes you expect, and assert with
    `toContainAllKeys` that the procedure's error map holds them.
 2. For each error code that the contract defines, write the HTTP status you expect in the test, and
-   assert that the code's entry in the procedure's error map has that `status`.
+   assert that `fallbackORPCErrorStatus(code, entry.status)` from `@orpc/client` returns it. The
+   function gives oRPC's default status for a code whose entry in the error map sets none.
 3. When the repo commits, serves or publishes an OpenAPI document built from the contract, add a
    test that builds it with `OpenAPIGenerator` from `@orpc/openapi`, with the same
    `schemaConverters` the repo uses. When the repo commits the document, compare the result with the
