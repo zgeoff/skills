@@ -4,16 +4,17 @@ Write Go tests with the standard `testing` runner. These sections of the testing
 tests as they stand: [Principles](../SKILL.md#principles), [Test data](../SKILL.md#test-data),
 [Assertions](../SKILL.md#assertions), [Errors](../SKILL.md#errors),
 [Access rules](./schemas-and-access.md#access-rules) and [Narrowing](../SKILL.md#narrowing). From
-[Test shape](../SKILL.md#test-shape), keep the titles and the one act per test. This file replaces
-the rest of Test shape for Go. The Bun-only parts don't apply: `setupTest`, the test preload, the
-jest-extended matchers, the `bun run test:<name>` commands and the `bun test` flags.
+[Test shape](../SKILL.md#test-shape), keep the rule on how to name a test, and the rule of one act
+per test. This file replaces the rest of Test shape for Go. The Bun-only parts don't apply:
+`setupTest`, the test preload, the jest-extended matchers, the `bun run test:<name>` commands and
+the `bun test` flags.
 
 The mistakes to avoid:
 
 - Never pass mutable state from a parent test to its subtests. When one subtest changes it, the
   subtests after it break.
-- Never give each case a random ID so that cases which share state stop colliding. The shared state
-  stays, and a later test fails on it.
+- When cases collide on shared state, give each case its own state. Never give each case a random ID
+  to stop the collision: the shared state stays, and a later test fails on it.
 - Never retry a failed test, such as with gotestsum's `--rerun-fails`, or skip one behind a check of
   the environment. Both hide a flaky test.
 

@@ -89,8 +89,8 @@ order:
    of a row that doesn't apply.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
-   every rule. In project-code-style, [code-style](../../code-style/SKILL.md) lets a repo add rules,
-   so:
+   every rule. In project-code-style only, write these two sections another way, because the
+   [code-style](../../code-style/SKILL.md) skill allows a repo to add rules:
    - Put each stricter rule in a topic section from step 3, never under Departures.
    - List a departure only for code whose shape another tool sets, such as a plugin whose shape a
      host's API decides.
@@ -116,12 +116,12 @@ table. The shared skills define each fact: the test budget in [Jobs](../../ci-de
 in ci-design, and the test commands in
 [Where each test runs](../../testing/references/slow-tests.md#where-each-test-runs) in testing.
 
-| Project skill     | Fact            | Where                                                                                                       |
-| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
-| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                                          |
-| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                                               |
-| project-testing   | Test commands   | the config that gives each test command its folder or file suffix, and its timeout, such as `rig.config.ts` |
-| project-testing   | Test utils      | the folder to search before you write a test helper                                                         |
+| Project skill     | Fact            | Where                                                                                                                                              |
+| ----------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                                                                                 |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                                                                                      |
+| project-testing   | Test commands   | the config that gives each test command its folder or file suffix, and its timeout, such as `rig.config.ts`; link each file when several hold them |
+| project-testing   | Test utils      | the folder to search before you write a test helper                                                                                                |
 
 A made-up project-ci-design skill:
 

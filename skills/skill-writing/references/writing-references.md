@@ -21,6 +21,6 @@ Link to a heading in another file in `references/` with a Markdown link, such as
 `[Per-run templates](./slow-tests.md#per-run-templates)`, never with a plain mention of the file.
 Then `chex links` fails when someone renames the heading.
 
-Keep such links few. An agent that reaches a reference from SKILL.md may read only part of a second
-reference that the first one links, and miss the fact you sent it for. Put a fact that most tasks
-need in SKILL.md.
+Link from a reference to another reference only when the reader needs a fact from it. When SKILL.md
+links reference A, and A links reference B, an agent may read only part of B and miss the fact you
+sent it for. Put a fact that most tasks need in SKILL.md.
