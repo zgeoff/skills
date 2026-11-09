@@ -57,8 +57,8 @@ the user in its own section, such as "When the user asked the question".
 
 Mark it with `kind: rule-set` under a `metadata` key in its frontmatter. Keep the `#` title. Then
 put `## References`, when it has any, and the rule sections, one `##` per topic. Leave out the
-opening paragraph, `## Key rules`, the hand-back and the reply line: the agent reads a rule set for
-the rule that fits what it is writing, and hands nothing back.
+opening paragraph, `## Key rules` and the reply line: the agent reads a rule set for the rule that
+fits what it is writing, and hands nothing back.
 
 In its SKILL.md:
 
@@ -89,11 +89,11 @@ order:
    of a row that doesn't apply.
 2. `## Departures`: one bullet for each shared rule the repo replaces. Open it with what the repo
    does, link the shared rule's section, and give the reason. Write "None." when the repo follows
-   every rule. Write project-code-style with these exceptions:
-   - Put each stricter rule in a topic section, because [code-style](../../code-style/SKILL.md) lets
-     a repo add rules.
-   - List a departure only for code whose shape another tool sets, such as a plugin that a host's
-     API shapes.
+   every rule. In project-code-style, [code-style](../../code-style/SKILL.md) lets a repo add rules,
+   so:
+   - Put each stricter rule in a topic section from step 3, never under Departures.
+   - List a departure only for code whose shape another tool sets, such as a plugin whose shape a
+     host's API decides.
 3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
    test harness or a test helper.
 
@@ -102,25 +102,26 @@ Never repeat a rule the shared skill states. The agent reads both, and two copie
 ### Facts rows
 
 Say where each fact lives. Link the file that holds it with a path relative to the skill, such as
-`../../../config/ci.json` from `.claude/skills/<project-skill>/SKILL.md`, and name the key or the
-command that shows the fact. Then the row stays true when the value changes, and
+`../../../config/ci.json` from `.claude/skills/<project-skill>/SKILL.md`, and name the key that
+holds the fact. Then the row stays true when the value changes, and
 [`chex links`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails when the file moves.
-Give a row a value only when no file in the repo holds the fact, such as the
-[test budget](../../ci-design/SKILL.md#jobs).
+The rule has two exceptions:
 
-The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
-ci-design, and a test command from
-[Where each test runs](../../testing/references/slow-tests.md#where-each-test-runs) in testing.
+- When a command shows the fact and no file holds it, write the command in place of the link.
+- When neither a file nor a command holds the fact, write the value itself, such as the
+  [test budget](../../ci-design/SKILL.md#jobs).
 
 Each row below names a project skill, a fact, and what goes in the Where cell of its `## Facts`
-table.
+table. The shared skills define each fact: the test budget in [Jobs](../../ci-design/SKILL.md#jobs)
+in ci-design, and the test commands in
+[Where each test runs](../../testing/references/slow-tests.md#where-each-test-runs) in testing.
 
-| Project skill     | Fact            | Where                                                                              |
-| ----------------- | --------------- | ---------------------------------------------------------------------------------- |
-| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                 |
-| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                      |
-| project-testing   | Test commands   | the config that declares the folder or suffix and the timeout of each test command |
-| project-testing   | Test utils      | the folder to search before you write a test helper                                |
+| Project skill     | Fact            | Where                                                                                                       |
+| ----------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                                          |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                                               |
+| project-testing   | Test commands   | the config that gives each test command its folder or file suffix, and its timeout, such as `rig.config.ts` |
+| project-testing   | Test utils      | the folder to search before you write a test helper                                                         |
 
 A made-up project-ci-design skill:
 

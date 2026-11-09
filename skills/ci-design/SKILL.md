@@ -30,16 +30,18 @@ zgeoff/tools and overwrites your change. `pr.yml` runs the shared
 each pull request.
 
 - Add CI work as a package script. Unless `BUN_CHECK_SCRIPTS` is set, `bun-checks.yml` runs the
-  standard list: `audit`, `deadcode`, `format:check`, `lint`, `typecheck`, `test`, and each script
-  from [Where each test runs](../testing/references/slow-tests.md#where-each-test-runs) that the
-  repo defines, except `test:model-api`.
-- To run a repo-only script, such as a made-up `test:kvm`, list every script to run, the standard
-  ones too, in the repo variable `BUN_CHECK_SCRIPTS`. A script you leave out stops running, and a
-  name that `package.json` lacks fails the run.
+  standard list: `audit`, `deadcode`, `format:check`, `lint`, `typecheck` and `test`, and each of
+  `test:e2e`, `test:browser`, `test:docker`, `test:host` and `test:agent-sdk` that the repo defines.
+  [Where each test runs](../testing/references/slow-tests.md#where-each-test-runs) says what each
+  test script runs. `test:model-api` calls a live model, so it stays out of the list and runs
+  nightly.
+- To run a script outside the standard list, such as a made-up `check:sql`, set the repo variable
+  `BUN_CHECK_SCRIPTS`. Write in it every script to run, the standard ones included. A script you
+  leave out stops running, and a name that `package.json` lacks fails the run.
 - Expect a private repo to run every script in one `checks` job. In a public repo, `bun-checks.yml`
-  runs each of `test:e2e`, `test:browser`, `test:docker`, `test:host` and `test:agent-sdk` in its
-  own job, such as `test-e2e`, each other `test:<name>` script in the `test` job, and the rest in
-  the `static` job.
+  gives each of `test:e2e`, `test:browser`, `test:docker`, `test:host` and `test:agent-sdk` a job of
+  its name, such as `test-e2e`. It runs each other `test:<name>` script in the `test` job, and the
+  rest in the `static` job.
 - Require `pr / checks` in the `main` ruleset. In a public repo, the `checks` job fails when any
   other job fails.
 - Put a job of your own in a workflow you write, such as `image.yml`.
@@ -52,9 +54,9 @@ median test time of the last 20 push runs on `main` that restored no `actions/ca
 and the sum of the steps that run test scripts in a private one. When the repo has no budget, skip
 each rule that uses one.
 
-- In a public repo, write a job of your own only when the script's step takes over 60 s longer than
-  a job's setup steps. Read both times from `gh run view <run-id> --json jobs`. Shard tests only
-  when the repo is over its test budget.
+- In a public repo, move a script into a job in a workflow you write only when its step takes 60 s
+  longer than the setup steps of the job it runs in. Read both times from
+  `gh run view <run-id> --json jobs`. Shard tests only when the repo is over its test budget.
 - In a private repo, write a job of your own only for a heavy check: one on any runner but a
   GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`. A
   required check runs on every push to a pull request, so never require a heavy check.
@@ -147,8 +149,8 @@ jobs:
 - Never cache `~/.bun/install/cache` or `node_modules`. `bun install --frozen-lockfile` is faster
   than the restore.
 - When a job reads git history, such as tags, check out with `fetch-depth: 0` and
-  `filter: blob:none`, or `filter: ''` when it reads many old files. For a diff against the base
-  branch, use `fetch-depth: 2`.
+  `filter: blob:none`. When it reads many old files, use `filter: ''` in place of `blob:none`. For a
+  diff against the base branch, use `fetch-depth: 2`.
 
 ## `workflow_run` triggers
 

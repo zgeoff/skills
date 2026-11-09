@@ -84,10 +84,11 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
      code.
    - `spawnCLI` from `@zgeoff/testing/cli`, for a program that a person types into. It runs the
      program in a pseudo-terminal.
-4. Run the tests with `bun run test:e2e`, the script that runs `rig e2e`. `rig e2e` builds each
-   program once, and `resolveProgram` gives the command that runs the built file. When you run one
-   `e2e/` file with `bun test` on your machine, `resolveProgram` gives the command that runs the
-   source. In CI, `resolveProgram` throws when nothing built the program.
+4. Run the tests with `bun run test:e2e`, the script that runs `rig e2e`. When `package.json` lacks
+   the script, run `bun x rig init`, which adds it. `rig e2e` builds each program once, and
+   `resolveProgram` gives the command that runs the built file. When you run one `e2e/` file with
+   `bun test` on your machine, `resolveProgram` gives the command that runs the source. In CI,
+   `resolveProgram` throws when nothing built the program.
 
 This test needs no `setupTest`, because `await using` stops the program:
 
@@ -140,18 +141,21 @@ own. Inside an `e2e/` test, you may chain acts, and assert after each one, becau
 the state that the act before it left. Outside `e2e/`, a test has one act, as
 [Test shape](../SKILL.md#test-shape) says.
 
-- To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
-  bring it up in a `start` hook, and take it down in a `stop` hook. Give each hook's module path
-  under its own key, `start` or `stop`, in the `e2e` entry under `lanes` in `rig.config.ts`
-  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once each
-  time `bun run test:e2e` runs, outside the test files.
-- Return the address the tests need, such as a connection string, in the `environment` object that
-  the `start` hook returns. rig adds each entry to the environment of the test process.
-- Never start a shared host or service in the `[test] preload` of `bunfig.toml`. `bun run test`
-  loads that file too, and would start it for nothing, or fail on a machine without it. Wire
-  everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
-- Reset the shared host or service to its starting state in `setupTest`, which each test calls. When
-  the host or service has no reset, rebuild its state there, such as by recreating the database.
+- To share a slow service, such as a VM or a database container, across the `e2e/` tests, write a
+  module that brings it up and one that takes it down. In `rig.config.ts`, `lanes` holds one entry
+  for each test command. Put the two module paths under the `start` and `stop` keys of its `e2e`
+  entry ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs each module once
+  each time `bun run test:e2e` runs, outside the test files. Keep these files in `e2e/`, with no
+  `.docker` suffix: the `start` module starts the container, and the tests only connect to it.
+- Default-export a function from the `start` module. Return the address the tests need, such as a
+  connection string, as `{ environment: { DATABASE_URL: url } }`. rig adds each entry of
+  `environment` to the environment of the test process.
+- Never start a shared service in the `[test] preload` of `bunfig.toml`. `bun run test` loads that
+  file too, and would start the service for nothing, or fail on a machine without it. Wire
+  everything else a test needs in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest)
+  says.
+- Reset the shared service to its starting state in `setupTest`, which each test calls. When the
+  service has no reset, rebuild its state there, such as by recreating the database.
 - Give the reset helper its own test file in `src/test-utils/`. Test that the reset reaches the
   starting state from what a test changed, from what a test left when it failed midway, and from
   what the test process left when it got a `SIGINT`.
@@ -181,32 +185,33 @@ doesn't expect.
 ## Stateful stand-ins
 
 When the repo starts a program in another process and drives it over the program's own protocol,
-such as a worker, a language server or a sandboxed guest, test the host against a stateful stand-in
-of the program:
+such as a worker, a language server or a sandboxed guest, test the code that drives it against a
+stateful stand-in of the program:
 
 - Send and accept the real messages over the real framing.
 - Keep the state the program keeps, and answer from that state.
-- In a test, shape the state through the stand-in's methods, and drive the host through its real
-  code.
-- Run the real program only in the program's own suite, so the host's tests start no process.
+- In a test, shape the state through the stand-in's methods, and call the driving code through its
+  real functions.
+- Run the real program only in the program's own suite, so the tests of the driving code start no
+  process.
 
 Write a stand-in with state, never one that each test scripts. With a scripted stand-in, each test
 writes out the program's behaviour again, and the stand-in accepts a message the real program
-refuses, so a host bug passes.
+refuses, so a bug in the driving code passes.
 
-In this made-up example, a build host sends jobs to a worker process that keeps a cache of
-checked-out repositories. When the host skips the checkout for a repository the worker evicted, the
-stand-in refuses the build, as the real worker does:
+In this made-up example, a build server sends jobs to a worker process that keeps a cache of
+checked-out repositories. When the server skips the checkout for a repository the worker evicted,
+the stand-in refuses the build, as the real worker does:
 
 ```ts
 test('it checks a repository out again after the worker evicts it', async () => {
-  const ctx = await setupTest(); // the build host, wired to the stand-in worker
+  const ctx = await setupTest(); // the build server, wired to the stand-in worker
 
-  await ctx.host.build({ repo: 'acme/api', ref: 'main' });
+  await ctx.server.build({ repo: 'acme/api', ref: 'main' });
 
   ctx.worker.evict('acme/api');
 
-  await ctx.host.build({ repo: 'acme/api', ref: 'main' });
+  await ctx.server.build({ repo: 'acme/api', ref: 'main' });
 
   expect(ctx.worker.received.map((message) => message.type)).toStrictEqual([
     'checkout',
@@ -217,7 +222,7 @@ test('it checks a repository out again after the worker evicts it', async () => 
 });
 ```
 
-A scripted worker answers the second `build` with whatever its script holds, so a host that never
+A scripted worker answers the second `build` with whatever its script holds, so a server that never
 sends the second `checkout` still passes.
 
 Keep the stand-in in `src/test-utils/`, the test helper folder that
@@ -239,9 +244,9 @@ these files starts Chrome. In `setupTest`, open a view on that Chrome with
 `bun run test:browser`, its build and its memory cap, follow
 [rig's browser guide](https://github.com/zgeoff/tools/blob/main/docs/guides/browser-lane.md).
 
-Never run Playwright under `bun test`. Use Playwright only for an e2e test that needs Firefox,
-WebKit on Linux or a live system, because `Bun.WebView` has no Firefox and runs WebKit only on
-macOS.
+Use Playwright only for an e2e test that needs Firefox, WebKit on Linux or a live system, such as a
+deployed site. `Bun.WebView` has no Firefox and runs WebKit only on macOS. Run it with Playwright's
+own runner, never under `bun test`.
 
 ### Page code
 
@@ -295,9 +300,10 @@ Find which kind of timer your test waits on, then follow the rules under its hea
 
 ### A deadline in a process the test spawns
 
-When the repo's code sets a deadline in a process the test spawns, such as a crash harness's settle
-window, read its length from an option of that code, or from a constant exported outside the test
-file. Wait on a condition that the test checks or the process reports.
+When the repo's code sets a deadline in a process the test spawns, such as how long a crash-test
+harness waits for writes to settle, take its length from an option of that code or from a constant
+the code exports. Never copy the number into the test. Wait on a condition that the test checks or
+the process reports.
 
 ### A deadline in the test's own process
 
@@ -378,9 +384,9 @@ that only reads `report.json` passes after the code changes and the report goes 
   time of one `run`.
 - Run benchmarks with `rig bench`, never in a test run. It builds each program once, as `rig e2e`
   does, and fails when the median passes the budget.
-- To give the benchmarks the shared services of a test command, such as `bun run test:e2e`, name its
-  entry under `lanes`, such as `e2e`, in `bench.lane` in `rig.config.ts`. `rig bench` runs that
-  entry's `start` hook.
+- To give the benchmarks the services that the `e2e/` tests share, set `bench.lane` in
+  `rig.config.ts` to `'e2e'`, the name of their entry under `lanes`. `rig bench` then runs that
+  entry's `start` module before the first benchmark, and its `stop` module after the last.
 - Return the handle from `setup`. `rig bench` disposes of it after the runs, which stops the
   program.
 
@@ -425,9 +431,9 @@ beside the pipeline's module:
 When a kernel or a program fixes a path, such as a certificate trust directory, procfs or a VM mount
 point, name the program or the spec that fixes it in a comment.
 
-- Put the path inside something the test created, such as a temp directory, a mount namespace or a
-  container. Check that the path is inside it before you write there. When you can't check that, use
-  a VM or a container that only this run uses.
+- Run the program so that its fixed path lands inside something the test created, such as a temp
+  directory, a mount namespace or a container. Check that the path is inside it before you write
+  there. When you can't check that, use a VM or a container that only this run uses.
 - Create each test's own files and records in that test, and clean them up.
 - Give a resource that the whole machine shares a name that sets this run apart, the way `mkdtemp`
   does.
@@ -441,10 +447,10 @@ point, name the program or the spec that fixes it in a comment.
 
 Run a Rust test that needs a real system through its own cargo-nextest profile, with the timeouts in
 [Where each test runs](./slow-tests.md#where-each-test-runs). Put the test in a top-level module
-named for the profile, such as `mod e2e` or `mod host`, in its crate or test binary. The module
-gives the test a path prefix, such as `e2e::`, and each profile selects its tests by that prefix, as
-a folder or a file suffix does for Bun. Define the profiles in `nextest.toml`, in the repo's
-`.config/` folder, as in this made-up example:
+named for the profile, such as `mod e2e` or `mod host`, in its crate or test binary. nextest names
+each test by its module path, so a test in `mod e2e` starts with `e2e::`. Select each profile's
+tests by that prefix in its `default-filter`, as a folder or a file suffix selects them for Bun.
+Define the profiles in `nextest.toml`, in the repo's `.config/` folder, as in this made-up example:
 
 ```toml
 [profile.default]

@@ -17,24 +17,23 @@ metadata:
 
 ## References
 
-- [Seeding](./references/seeding.md): a seed, a seeder, and where to write rows directly.
+- [Seeding](./references/seeding.md): seeds, seeders, and where to write rows directly.
 - [Slow tests](./references/slow-tests.md): a slow test, and the command for a test that needs a
   real system.
-- [Factories](./references/factories.md): writing a factory.
+- [Factories](./references/factories.md): a factory.
 - [Matchers](./references/matchers.md): a matcher for a kind of value.
-- [Schemas and access rules](./references/schemas-and-access.md): a test of a schema, a parser or an
-  access rule.
+- [Schemas and access rules](./references/schemas-and-access.md): a schema, a parser or an access
+  rule.
 - [Boundaries](./references/boundaries.md): the stand-in for each boundary, and module mocks.
 - [Database](./references/database.md): a package that owns a schema.
 - [HTTP mocking](./references/http.md): a package that calls a remote service.
-- [Cleanup](./references/cleanup.md): a reset in the test preload, cleanup order, or a test that
-  fails only in the full run.
+- [Cleanup](./references/cleanup.md): a reset in the test preload, cleanup order, or a leak between
+  test files.
 - [Observability](./references/observability.md): code that records telemetry.
-- [System tests](./references/system-tests.md): placing a test, and writing an end-to-end,
-  evaluation, property or golden test.
+- [System tests](./references/system-tests.md): placing a test, and an end-to-end, evaluation,
+  property or golden test.
 - [Shell scripts](./references/shell.md): a script's test.
-- [Workflows](./references/workflows.md): testing a GitHub Actions step's logic, or checking a
-  config file.
+- [Workflows](./references/workflows.md): a GitHub Actions step's logic, or a config file check.
 - [Claude Code mod checks](./references/claude-code-mods.md): a mod's hooks.
 
 <!-- repo-sync needs ./references/frontend.md -->
@@ -73,7 +72,8 @@ metadata:
   a new one, with its own test beside it, in `src/test-utils/` of the package that owns what the
   helper starts, builds or fakes.
 - Put an end-to-end test, an evaluation, a benchmark of a running program and a test that needs a
-  real system where [Package layout](./references/system-tests.md#package-layout) shows.
+  browser, a container or a VM where [Package layout](./references/system-tests.md#package-layout)
+  shows.
 
 [`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails a test outside
 this layout.
@@ -93,11 +93,12 @@ this layout.
 
 ## setupTest
 
-- Put per-test setup in one local `setupTest()` that each test calls, and no hook such as
-  `beforeEach` in a test file.
-- In `setupTest()`, wire the temp directories, the database, the clock, servers, clients, telemetry
-  recorders, the unit, and the [seeder](./references/seeding.md#buildseeder-and-setuptest). Create
-  no data there. Give it no `if`, and no argument that a test's outcome depends on.
+- Put per-test setup in one local `setupTest()` that each test calls, never a hook such as
+  `beforeEach`.
+- In `setupTest()`, wire the unit and what it needs, such as temp directories, the database, the
+  clock, servers, clients, telemetry recorders and the
+  [seeder](./references/seeding.md#buildseeder-and-setuptest). Give it no `if`, and no argument that
+  a test's outcome depends on.
 - Create each test's data in the test, even when every test needs the same. Set the time in each
   test whose code reads it.
 - Declare only imports, `setupTest()` and tests at module level.
@@ -153,8 +154,8 @@ Seed and read database rows and files through the module that creates them, even
 module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
 allows.
 
-- Outside the creating module's tests, read through its read function or path helper. When none
-  exists, add one, with a test.
+- Outside the creating module's tests, read rows through its read function, and file paths through
+  its path function. When none exists, add one, with a test.
 - Give each state its own seed, such as `ctx.seed.archivedNote({ title: 'Groceries' })`. Keep the
   call under test and each clock move in the test.
 
@@ -167,6 +168,8 @@ allows.
 - Assert each result in its own `expect`, and the parts of one result in one `expect`, such as a
   command's exit code, stdout and stderr.
 - Derive the expected value from the contract, never with the unit's own calculation.
+- Use a [jest-extended matcher](./references/matchers.md) over a hand-written check: it prints the
+  received value.
 
 ## Errors
 
@@ -191,11 +194,6 @@ allows.
 - Copy a value out of a callback and assert after the call returns: an assertion in a callback that
   never runs passes.
 
-## Matchers
-
-Use a [jest-extended matcher](./references/matchers.md) over a hand-written check, such as
-`toSatisfyAll(isOpen)`. The matcher prints the received value.
-
 ## Time and waiting
 
 - Control time in the most explicit form the code allows:
@@ -211,9 +209,10 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 - Pass plain values to code that does no I/O. Answer a remote service's requests with
   [MSW](./references/http.md), and run database code against a
   [real database](./references/database.md).
-- Never stub `fetch`, an HTTP client or the unit's own services.
-- Pass every path in from the test's `mkdtemp` folder. Never steer a module through `process.cwd()`
-  or a `HOME` set after startup.
+- Never stub `fetch`, an HTTP client or the unit's own services. Stub only an SDK client's `send`,
+  as [Boundaries](./references/boundaries.md) says.
+- Pass every path in from the test's `mkdtemp` folder. Never let a module find a path through
+  `process.cwd()` or a `HOME` set after start-up.
 - Reach a failure branch with a real failure, as
   [Failure branches](./references/boundaries.md#failure-branches) shows.
 - Never call `mock.module` in a test file. It leaks into every later file in the worker.
