@@ -6,7 +6,7 @@ tests as they stand: [Principles](../SKILL.md#principles), [Test data](../SKILL.
 [Access rules](./schemas-and-access.md#access-rules) and [Narrowing](../SKILL.md#narrowing). From
 [Test shape](../SKILL.md#test-shape), keep the titles and the one act per test. This file replaces
 the rest of Test shape for Go. The Bun-only parts don't apply: `setupTest`, the test preload, the
-jest-extended matchers, lanes and the `bun test` flags.
+jest-extended matchers, the `bun run test:<name>` commands and the `bun test` flags.
 
 The mistakes to avoid:
 

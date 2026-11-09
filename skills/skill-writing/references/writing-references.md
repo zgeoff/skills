@@ -18,8 +18,8 @@ SKILL.md, so put in the brief what it would find there:
 ## Links between references
 
 Link to a heading in another file in `references/` with a Markdown link, such as
-`[Lanes](./slow-tests.md#lanes)`, never with a plain mention of the file. Then `chex links` fails
-when someone renames the heading.
+`[Per-run templates](./slow-tests.md#per-run-templates)`, never with a plain mention of the file.
+Then `chex links` fails when someone renames the heading.
 
 Keep such links few. An agent that reaches a reference from SKILL.md may read only part of a second
 reference that the first one links, and miss the fact you sent it for. Put a fact that most tasks

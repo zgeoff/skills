@@ -31,14 +31,15 @@ each pull request.
 
 - Add CI work as a package script. Unless `BUN_CHECK_SCRIPTS` is set, `bun-checks.yml` runs the
   standard list: `audit`, `deadcode`, `format:check`, `lint`, `typecheck`, `test`, and each script
-  the repo defines for a lane in [Lanes](../testing/references/slow-tests.md#lanes) except
-  `model-api`.
-- To run a repo-only script, such as a `test:kvm` lane, list every script to run, the standard ones
-  too, in the repo variable `BUN_CHECK_SCRIPTS`. A script you leave out stops running, and a name
-  that `package.json` lacks fails the run.
+  from [Where each test runs](../testing/references/slow-tests.md#where-each-test-runs) that the
+  repo defines, except `test:model-api`.
+- To run a repo-only script, such as a made-up `test:kvm`, list every script to run, the standard
+  ones too, in the repo variable `BUN_CHECK_SCRIPTS`. A script you leave out stops running, and a
+  name that `package.json` lacks fails the run.
 - Expect a private repo to run every script in one `checks` job. In a public repo, `bun-checks.yml`
-  runs each standard lane in a `test-<lane>` job, each other `test:<name>` script in the `test` job,
-  and the rest in the `static` job.
+  runs each of `test:e2e`, `test:browser`, `test:docker`, `test:host` and `test:agent-sdk` in its
+  own job, such as `test-e2e`, each other `test:<name>` script in the `test` job, and the rest in
+  the `static` job.
 - Require `pr / checks` in the `main` ruleset. In a public repo, the `checks` job fails when any
   other job fails.
 - Put a job of your own in a workflow you write, such as `image.yml`.
@@ -48,8 +49,8 @@ each pull request.
 Find the repo's test budget in the Facts table of its project-ci-design skill. The budget caps the
 median test time of the last 20 push runs on `main` that restored no `actions/cache` entry, from
 `gh run list --branch main --event push --limit 20`. Measure the slowest test job in a public repo,
-and the sum of the test and lane steps in a private one. When the repo has no budget, skip each rule
-that uses one.
+and the sum of the steps that run test scripts in a private one. When the repo has no budget, skip
+each rule that uses one.
 
 - In a public repo, write a job of your own only when the script's step takes over 60 s longer than
   a job's setup steps. Read both times from `gh run view <run-id> --json jobs`. Shard tests only

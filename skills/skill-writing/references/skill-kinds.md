@@ -109,17 +109,18 @@ Give a row a value only when no file in the repo holds the fact, such as the
 [test budget](../../ci-design/SKILL.md#jobs).
 
 The terms come from the shared skills: a test budget from [Jobs](../../ci-design/SKILL.md#jobs) in
-ci-design, and a lane from [Lanes](../../testing/references/slow-tests.md#lanes) in testing.
+ci-design, and a test command from
+[Where each test runs](../../testing/references/slow-tests.md#where-each-test-runs) in testing.
 
 Each row below names a project skill, a fact, and what goes in the Where cell of its `## Facts`
 table.
 
-| Project skill     | Fact            | Where                                                                    |
-| ----------------- | --------------- | ------------------------------------------------------------------------ |
-| project-ci-design | Test budget     | the figure itself, such as "3 min"                                       |
-| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires            |
-| project-testing   | Lanes           | the config that declares each lane's suffix or folder and its time limit |
-| project-testing   | Test utils      | the folder to search before you write a test helper                      |
+| Project skill     | Fact            | Where                                                                              |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------- |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                 |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                      |
+| project-testing   | Test commands   | the config that declares the folder or suffix and the timeout of each test command |
+| project-testing   | Test utils      | the folder to search before you write a test helper                                |
 
 A made-up project-ci-design skill:
 

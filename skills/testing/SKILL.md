@@ -3,11 +3,12 @@ name: testing
 description:
   Testing rules for zgeoff repos, covering where a test lives, test shape, setupTest and cleanup,
   test data, stored state seeded and read through the module that creates it, schemas, assertions,
-  matchers, time, boundaries and speed. References cover seeding, slow tests and lanes, factories,
-  databases, HTTP mocking, cleanup, observability, system tests, shell scripts, workflows and Claude
-  Code mods, plus frontend, Go and NixOS where a repo uses them. Load it before you write or review
-  a test. Load the repo's project-testing skill beside it, for the lanes and utils in its Facts
-  table, and for its stand-ins; where they disagree, the project skill wins.
+  matchers, time, boundaries and speed. References cover seeding, slow tests and the command that
+  runs each kind of test, factories, databases, HTTP mocking, cleanup, observability, system tests,
+  shell scripts, workflows and Claude Code mods, plus frontend, Go and NixOS where a repo uses them.
+  Load it before you write or review a test. Load the repo's project-testing skill beside it, for
+  the test commands and utils in its Facts table, and for its stand-ins; where they disagree, the
+  project skill wins.
 metadata:
   kind: rule-set
 ---
@@ -17,7 +18,8 @@ metadata:
 ## References
 
 - [Seeding](./references/seeding.md): a seed, a seeder, and where to write rows directly.
-- [Slow tests and lanes](./references/slow-tests.md): a slow test, the run mode, and a lane.
+- [Slow tests](./references/slow-tests.md): a slow test, and the command for a test that needs a
+  real system.
 - [Factories](./references/factories.md): writing a factory.
 - [Matchers](./references/matchers.md): a matcher for a kind of value.
 - [Schemas and access rules](./references/schemas-and-access.md): a test of a schema, a parser or an
@@ -70,8 +72,8 @@ metadata:
   [`@zgeoff/testing/helpers`](https://github.com/zgeoff/tools/tree/main/packages/testing) first. Put
   a new one, with its own test beside it, in `src/test-utils/` of the package that owns what the
   helper starts, builds or fakes.
-- Put an end-to-end test, an evaluation and a benchmark of a running program where
-  [Package layout](./references/system-tests.md#package-layout) shows.
+- Put an end-to-end test, an evaluation, a benchmark of a running program and a test that needs a
+  real system where [Package layout](./references/system-tests.md#package-layout) shows.
 
 [`chex test-layout`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails a test outside
 this layout.
@@ -147,15 +149,14 @@ test('it lists the notes of a user with none as empty', async () => {
 
 ## Stored state
 
-Seed and read database rows and files on disk through the module that creates them, even in tests of
-a module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
+Seed and read database rows and files through the module that creates them, even in tests of a
+module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
 allows.
 
-- Outside the creating module's tests, read through its code: a read function for rows, a path
-  helper for files. When none exists, add one, with a test.
-- Seed through the module, with one seed per state, such as
-  `ctx.seed.archivedNote({ title: 'Groceries' })`. Keep the call under test and each clock move in
-  the test, as [Seeding](./references/seeding.md) says.
+- Outside the creating module's tests, read through its read function or path helper. When none
+  exists, add one, with a test.
+- Give each state its own seed, such as `ctx.seed.archivedNote({ title: 'Groceries' })`. Keep the
+  call under test and each clock move in the test.
 
 ## Assertions
 
@@ -219,5 +220,5 @@ Use a [jest-extended matcher](./references/matchers.md) over a hand-written chec
 
 ## Speed
 
-- Keep each unit test under 5 s on CI. Fix a slower one from the
-  [slow-tests table](./references/slow-tests.md), never by raising the timeout.
+- Keep each test of `bun run test` under 5 s on CI. Fix a slower one from
+  [Causes and fixes](./references/slow-tests.md#causes-and-fixes), never with a longer timeout.

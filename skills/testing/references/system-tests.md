@@ -1,9 +1,10 @@
 # System tests
 
 Never sleep to let a service settle. Wait on a condition. Never overwrite, truncate, mount or delete
-a host resource that this run didn't create. Never put `#[ignore]` on a Rust test that belongs in a
-[lane](./slow-tests.md#lanes). Every lane skips an ignored test, and nothing reports that the test
-stopped running.
+a host resource that this run didn't create. Never put `#[ignore]` on a Rust test that needs a real
+system: give it the module and the nextest profile from
+[Rust tests that need a real system](#rust-tests-that-need-a-real-system). Every profile skips an
+ignored test, and nothing reports that the test stopped running.
 
 These rules add to the [testing skill](../SKILL.md). They cover where each kind of test lives, a
 test that runs a whole program, a browser or a VM, and a test that touches something the whole host
@@ -20,7 +21,7 @@ shares, such as a kernel timer or a fixed path.
 - [Benchmarks](#benchmarks)
 - [Golden tests](#golden-tests)
 - [Program-fixed paths and global resources](#program-fixed-paths-and-global-resources)
-- [Rust lanes](#rust-lanes)
+- [Rust tests that need a real system](#rust-tests-that-need-a-real-system)
 
 ## Package layout
 
@@ -33,7 +34,7 @@ packages/ledger/
 │   ├── record-payment.ts
 │   ├── record-payment.test.ts      unit test, beside its module
 │   ├── record-payment.bench.ts     benchmark of one module
-│   ├── render-pdf.browser.test.ts  unit test in the browser lane
+│   ├── render-pdf.browser.test.ts  unit test that bun run test:browser runs
 │   └── test-utils/
 │       ├── start-ledger.ts         helper, with its own test
 │       └── start-ledger.test.ts
@@ -54,6 +55,7 @@ Export `./test-utils/*` from `package.json`, so other packages' tests import the
 | starts, as a process, a program that `rig.config.ts` declares for [rig](https://github.com/zgeoff/tools/tree/main/packages/rig) | in `e2e/` of the package that builds the program, named with a prefix from [End-to-end suites](#end-to-end-suites) |
 | scores a corpus                                                                                                                 | in `evals/<name>/` of the package whose code it scores, as [Evaluation suites](#evaluation-suites) shows           |
 | measures a running program                                                                                                      | in `bench/` of the package that builds the program, as [Benchmarks](#benchmarks) shows                             |
+| needs a real system, such as a browser or a container                                                                           | where [Where each test runs](./slow-tests.md#where-each-test-runs) says, with the command it names                 |
 | does anything else                                                                                                              | beside the module or script it tests                                                                               |
 
 ## End-to-end suites
@@ -82,7 +84,7 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
      code.
    - `spawnCLI` from `@zgeoff/testing/cli`, for a program that a person types into. It runs the
      program in a pseudo-terminal.
-4. Run the lane with `bun run test:e2e`, the script that runs `rig e2e`. `rig e2e` builds each
+4. Run the tests with `bun run test:e2e`, the script that runs `rig e2e`. `rig e2e` builds each
    program once, and `resolveProgram` gives the command that runs the built file. When you run one
    `e2e/` file with `bun test` on your machine, `resolveProgram` gives the command that runs the
    source. In CI, `resolveProgram` throws when nothing built the program.
@@ -118,7 +120,7 @@ test of the code that the case reaches.
 | `recover-` | the program is killed mid-work, or a service it uses fails, and the program recovers |
 | `cli-`     | a command's wiring: its exit code and output                                         |
 | `build-`   | the artifact itself: it runs from a clean folder, with its assets                    |
-| `runtime-` | a code path the unit run can't load, such as React Server Components                 |
+| `runtime-` | a code path `bun run test` can't load, such as React Server Components               |
 | `enforce-` | a guarantee that only the real environment enforces, such as a memory limit          |
 | `compat-`  | two versions meet, such as an older client and a newer server                        |
 | `journey-` | one core user journey, such as signing in, on its success path                       |
@@ -140,12 +142,12 @@ the state that the act before it left. Outside `e2e/`, a test has one act, as
 
 - To share a slow host or service, such as a VM or a database container, across the `e2e/` tests,
   bring it up in a `start` hook, and take it down in a `stop` hook. Give each hook's module path
-  under its own key, `start` or `stop`, in the e2e lane's entry under `lanes` in `rig.config.ts`
-  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once per lane
-  run, outside the test files.
+  under its own key, `start` or `stop`, in the `e2e` entry under `lanes` in `rig.config.ts`
+  ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs both hooks once each
+  time `bun run test:e2e` runs, outside the test files.
 - Return the address the tests need, such as a connection string, in the `environment` object that
-  the `start` hook returns. rig adds each entry to the environment of the lane's test process.
-- Never start a shared host or service in the `[test] preload` of `bunfig.toml`. Every unit run
+  the `start` hook returns. rig adds each entry to the environment of the test process.
+- Never start a shared host or service in the `[test] preload` of `bunfig.toml`. `bun run test`
   loads that file too, and would start it for nothing, or fail on a machine without it. Wire
   everything else in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest) says.
 - Reset the shared host or service to its starting state in `setupTest`, which each test calls. When
@@ -160,10 +162,10 @@ Test a client that the repo ships, such as a CLI or an SDK, against the real ser
 repo. Give each test its own data. Use a stand-in only for a system that the test can't run, such as
 a VM, the kernel or a remote service.
 
-In the unit run, call the service in the test's process, such as through its request handler or an
-in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes) says. When the client
-runs as a child process, start the service on a real port, so the child reaches it, and put the test
-in `e2e/`.
+In a test that `bun run test` runs, call the service in the test's process, such as through its
+request handler or an in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes)
+says. When the client runs as a child process, start the service on a real port, so the child
+reaches it, and put the test in `e2e/`.
 
 For a remote HTTP service, use MSW, as in [Boundaries](../SKILL.md#boundaries). Write a stand-in
 server on a real socket only when MSW can't intercept the call, such as:
@@ -229,12 +231,13 @@ different outputs.
 
 ## Browser suites
 
-Name a browser suite `<module>.browser.test.ts`, beside the module it tests, and run it in the
-browser lane of [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) with
-`bun run test:browser`. The lane's preload starts Chrome. In `setupTest`, open a view on that Chrome
-with `new Bun.WebView({ backend: 'chrome' })`, and close the view in `onTestFinished`. To set up the
-lane, its build and its memory cap, follow
-[Setting up the browser lane](https://github.com/zgeoff/tools/blob/main/docs/guides/browser-lane.md).
+Name a browser suite `<module>.browser.test.ts`, beside the module it tests, and run it with
+`bun run test:browser`, which
+[`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) runs. rig's preload for
+these files starts Chrome. In `setupTest`, open a view on that Chrome with
+`new Bun.WebView({ backend: 'chrome' })`, and close the view in `onTestFinished`. To set up
+`bun run test:browser`, its build and its memory cap, follow
+[rig's browser guide](https://github.com/zgeoff/tools/blob/main/docs/guides/browser-lane.md).
 
 Never run Playwright under `bun test`. Use Playwright only for an e2e test that needs Firefox,
 WebKit on Linux or a live system, because `Bun.WebView` has no Firefox and runs WebKit only on
@@ -255,15 +258,16 @@ the type checker and the linter check it.
 
 ### Time and helpers
 
-- Keep the browser lane's 10 s limit in every browser suite. Never give a browser test the disable
-  comment from [A test over its limit](./slow-tests.md#a-test-over-its-limit).
+- Keep every browser test under the 10 s timeout of `bun run test:browser`. Never give a browser
+  test the disable comment from [A test over its limit](./slow-tests.md#a-test-over-its-limit).
 - When a browser test runs longer, find its cause in
   [the cause table](./slow-tests.md#causes-and-fixes). Move a build out of the test and into the
-  lane's `build:browser` script. Replace a fixed wait with a wait for the element or the event.
-  Split a test of a whole user flow into a test per component or page.
+  `build:browser` script, which rig runs once each time `bun run test:browser` runs. Replace a fixed
+  wait with a wait for the element or the event. Split a test of a whole user flow into a test per
+  component or page.
 - Test navigation across the web app's routes in a browser suite.
 - Give each browser helper that the repo writes, such as one that opens a view, its own test file.
-- Keep every test that needs no page out of a browser suite, so it runs in the fast unit run.
+- Keep every test that needs no page out of a browser suite, so `bun run test` runs it fast.
 
 ## Native timers and scenario delays
 
@@ -279,7 +283,7 @@ Find which kind of timer your test waits on, then follow the rules under its hea
   the timeout then ends the operation.
 - Test the default value in its own test. Wait out the real default only when the runtime has no
   shorter setting that behaves the same. Wait for the timeout's event with `waitFor`, and keep the
-  test in the unit run with the disable comment from
+  test in `bun run test` with the disable comment from
   [A test over its limit](./slow-tests.md#a-test-over-its-limit).
 
 ### A timer inside a library
@@ -346,7 +350,7 @@ these files:
 | -------------------- | ---------------------------------------------------------------------------------------- |
 | `corpus.json`        | the committed cases or recorded traffic                                                  |
 | `report.json`        | the committed results of the last scoring run                                            |
-| `<name>.test.ts`     | the test, in the unit run, under the 5 s limit                                           |
+| `<name>.test.ts`     | the test, which `bun run test` runs, under its 5 s timeout                               |
 | `run-<name>-eval.ts` | scores the code, such as a model's answers, and writes `report.json`; `rig eval` runs it |
 
 When the scoring runs offline, make the test replay the corpus through the production path and
@@ -361,8 +365,8 @@ that only reads `report.json` passes after the code changes and the report goes 
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the API of a code
   host like GitHub, and inject it into the production path.
 - Keep a test that calls a live API, such as a test that pins how a model SDK behaves, out of
-  `evals/`. Give it the `.model-api` suffix, beside its module, as [Lanes](./slow-tests.md#lanes)
-  describes.
+  `evals/`. Give it the `.model-api` suffix, beside its module, as
+  [Where each test runs](./slow-tests.md#where-each-test-runs) describes.
 
 ## Benchmarks
 
@@ -374,8 +378,9 @@ that only reads `report.json` passes after the code changes and the report goes 
   time of one `run`.
 - Run benchmarks with `rig bench`, never in a test run. It builds each program once, as `rig e2e`
   does, and fails when the median passes the budget.
-- To give the benchmarks a lane's shared services, name the lane in `bench.lane` in `rig.config.ts`.
-  `rig bench` runs that lane's `start` hook.
+- To give the benchmarks the shared services of a test command, such as `bun run test:e2e`, name its
+  entry under `lanes`, such as `e2e`, in `bench.lane` in `rig.config.ts`. `rig bench` runs that
+  entry's `start` hook.
 - Return the handle from `setup`. `rig bench` disposes of it after the runs, which stops the
   program.
 
@@ -432,13 +437,14 @@ point, name the program or the spec that fixes it in a comment.
   the cleanup safe to run after a partial failure, an interrupt, or a shutdown that already released
   the resource.
 
-## Rust lanes
+## Rust tests that need a real system
 
-Run a Rust crate's lanes through cargo-nextest, with the limits in [Lanes](./slow-tests.md#lanes).
-Mark a lane with a test path prefix, such as `e2e::` or `host::`, as a folder or a file suffix does
-for Bun. The prefix is the test's module path, so a test inside a top-level `mod e2e` of its crate
-or test binary has the `e2e::` prefix. Define the lanes in `nextest.toml`, in the repo's `.config/`
-folder, as in this made-up example:
+Run a Rust test that needs a real system through its own cargo-nextest profile, with the timeouts in
+[Where each test runs](./slow-tests.md#where-each-test-runs). Put the test in a top-level module
+named for the profile, such as `mod e2e` or `mod host`, in its crate or test binary. The module
+gives the test a path prefix, such as `e2e::`, and each profile selects its tests by that prefix, as
+a folder or a file suffix does for Bun. Define the profiles in `nextest.toml`, in the repo's
+`.config/` folder, as in this made-up example:
 
 ```toml
 [profile.default]
@@ -455,11 +461,12 @@ filter = "test(=e2e::restores_a_volume_from_its_oldest_snapshot)"
 slow-timeout = { period = "60s", terminate-after = 1 }
 ```
 
-- Run the unit tests with the default profile. Its `slow-timeout` ends a test at the 5 s limit, and
-  its `default-filter` leaves out every lane prefix.
-- Give each lane one profile, with the lane's prefix in `default-filter` and the lane's limit in
-  `slow-timeout`. A profile takes every setting it doesn't set from `default`. Run the lane with
-  `cargo nextest run --profile <lane>`.
-- Give a test over its limit an override in its profile, with a comment that gives the time it takes
-  on CI and a ticket, or `floor:` and the evidence that the time can't drop, as
+- Run the tests that need no real system with `cargo nextest run`, which uses the default profile.
+  Its `slow-timeout` ends a test at 5 s, and its `default-filter` leaves out every other profile's
+  prefix.
+- Give each other profile its prefix in `default-filter` and its timeout in `slow-timeout`. A
+  profile takes every setting it doesn't set from `default`. Run it with
+  `cargo nextest run --profile <profile>`, such as `cargo nextest run --profile e2e`.
+- Give a test over its timeout an override in its profile, with a comment that gives the time it
+  takes on CI and a ticket, or `floor:` and the evidence that the time can't drop, as
   [A test over its limit](./slow-tests.md#a-test-over-its-limit) says.
