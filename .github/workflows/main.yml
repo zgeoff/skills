@@ -3,30 +3,18 @@ name: Main
 on:
   push:
     branches: [main]
-  pull_request:
 
-# A newer push makes the checks of an older one worthless, and its dispatch carries the newer commit.
+# A cancelled run would leave its merged commit untested, so each commit gets a run of its own.
 concurrency:
-  group: checks-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.sha }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
-  # The whole run takes well under a minute, so a split into parallel jobs would save no wall time.
   checks:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version-file: .bun-version
-      - run: bun install --frozen-lockfile
-      - run: bun run format:check
-      - run: bun run check
-      - run: bun run test
+    uses: ./.github/workflows/checks.yml
 
   # zgeoff/tools pins the commit of this repo that repo-sync delivers. Each green main sends tools
   # its commit, and tools opens a pull request that moves the pin, whose merge syncs every repo.
@@ -34,10 +22,17 @@ jobs:
   dispatch:
     name: Send the commit to zgeoff/tools
     needs: checks
-    if: github.event_name == 'push' && github.repository == 'zgeoff/skills'
+    if: github.repository == 'zgeoff/skills'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # No concurrency group: GitHub cancels a waiting job when a newer one joins the group, so a group
+    # can drop the send of the head commit.
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+
       - name: Mint the sync App token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
@@ -50,8 +45,6 @@ jobs:
 
       - name: Send zgeoff-skills-sync to zgeoff/tools
         env:
-          COMMIT: ${{ github.sha }}
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run:
-          gh api --silent repos/zgeoff/tools/dispatches -f event_type=zgeoff-skills-sync -f
-          "client_payload[sha]=$COMMIT"
+          GH_TOKEN: ${{ github.token }}
+          TOOLS_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: bun run --silent ci:send-sync
