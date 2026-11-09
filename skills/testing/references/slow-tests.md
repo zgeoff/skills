@@ -102,18 +102,22 @@ For each engine's template, see the Postgres isolation and SQLite isolation sect
 
 ## Where each test runs
 
-Put each test where the row for what it needs says, and run it with that row's command. A test that
-runs past the row's timeout fails.
+Find the row for what the test needs. Put the test where the row says, and run it with the row's
+command. A test that runs past the row's timeout fails. Put a file with a suffix beside the module
+it tests, or in `e2e/` when it drives the program from outside. The rig command column names the
+`rig` command that each `bun run` script calls.
 
-| The test needs                                                                      | Put it in                                              | Run it with              | Timeout |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------ | ------- |
-| no real system: code in the test process, a per-run template or a stateful stand-in | `<name>.test.ts`, beside the module it tests           | `bun run test`           | 5 s     |
-| the program, run as a process and driven from outside                               | `e2e/` in the package that builds the program          | `bun run test:e2e`       | 15 s    |
-| a real browser                                                                      | `<name>.browser.test.ts`, beside the module it tests   | `bun run test:browser`   | 10 s    |
-| a container engine                                                                  | `<name>.docker.test.ts`, beside the module it tests    | `bun run test:docker`    | 15 s    |
-| the host kernel, root or the network stack                                          | `<name>.host.test.ts`, beside the module it tests      | `bun run test:host`      | 15 s    |
-| the Claude Agent SDK subprocess, against a scripted model                           | `<name>.agent-sdk.test.ts`, beside the module it tests | `bun run test:agent-sdk` | 5 s     |
-| a live model API                                                                    | `<name>.model-api.test.ts`, beside the module it tests | `bun run test:model-api` | 120 s   |
+| rig command | Put it in                                     | Timeout | The test needs                                                                      | Run it with              |
+| ----------- | --------------------------------------------- | ------- | ----------------------------------------------------------------------------------- | ------------------------ |
+| unit        | `<name>.test.ts`, beside the module it tests  | 5 s     | no real system: code in the test process, a per-run template or a stateful stand-in | `bun run test`           |
+| e2e         | `e2e/` in the package that builds the program | 15 s    | the program, run as a process and driven from outside                               | `bun run test:e2e`       |
+| browser     | `<name>.browser.test.ts`                      | 10 s    | a real browser                                                                      | `bun run test:browser`   |
+| docker      | `<name>.docker.test.ts`                       | 15 s    | a container engine                                                                  | `bun run test:docker`    |
+| host        | `<name>.host.test.ts`                         | 15 s    | the host kernel, root or the network stack                                          | `bun run test:host`      |
+| agent-sdk   | `<name>.agent-sdk.test.ts`                    | 5 s     | the Claude Agent SDK subprocess, against a scripted model                           | `bun run test:agent-sdk` |
+| model-api   | `<name>.model-api.test.ts`                    | 120 s   | a live model API                                                                    | `bun run test:model-api` |
+
+<!-- Tests in zgeoff/tools parse the first three columns of this table: keep their shape. -->
 
 [`@zgeoff/rig`](https://github.com/zgeoff/tools/tree/main/packages/rig) runs each command.
 `rig init` writes the `test:<name>` scripts into `package.json`, and `bun run test` runs `rig unit`,

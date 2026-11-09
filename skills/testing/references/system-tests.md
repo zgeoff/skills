@@ -149,9 +149,10 @@ To share a slow service, such as a VM or a database container, across the `e2e/`
    `{ environment: { DATABASE_URL: url } }`. rig adds each entry of `environment` to the environment
    of the test process.
 3. In `rig.config.ts`, give the two module paths as `lanes.e2e.start` and `lanes.e2e.stop`
-   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). The `lanes` key holds one entry
-   for each test command, and `e2e` is the entry for `bun run test:e2e`. rig runs each module once
-   each time `bun run test:e2e` runs, outside the test files.
+   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). Under `lanes`, `rig.config.ts`
+   holds only the test commands the repo adds or changes, by their `rig` name: `e2e` is the name for
+   `bun run test:e2e`. rig runs each module once each time `bun run test:e2e` runs, outside the test
+   files.
 
 Leave the `.docker` suffix off the `e2e/` test files that connect to the service. The suffix is for
 a test that starts a container itself, and `bun run test:e2e` skips a file that has it.
@@ -390,9 +391,10 @@ that only reads `report.json` passes after the code changes and the report goes 
   time of one `run`.
 - Run benchmarks with `rig bench`, never in a test run. It builds each program once, as `rig e2e`
   does, and fails when the median passes the budget.
-- To give the benchmarks the services that the `e2e/` tests share, set `bench.lane` in
-  `rig.config.ts` to `'e2e'`, the name of their entry under `lanes`. `rig bench` then runs that
-  entry's `start` module before the first benchmark, and its `stop` module after the last.
+- To give the benchmarks the services that a test command shares, set `bench.lane` in
+  `rig.config.ts` to that command's `rig` name, such as `'e2e'` for `bun run test:e2e`. `rig bench`
+  then runs that command's `start` module before the first benchmark, and its `stop` module after
+  the last.
 - Return the handle from `setup`. `rig bench` disposes of it after the runs, which stops the
   program.
 

@@ -21,7 +21,7 @@ metadata:
 - [Slow tests](./references/slow-tests.md): a slow test, and the command for a test that needs a
   real system.
 - [Factories](./references/factories.md): a factory.
-- [Matchers](./references/matchers.md): a matcher for a kind of value.
+- [Matchers](./references/matchers.md): a matcher per kind of value.
 - [Schemas and access rules](./references/schemas-and-access.md): a schema, a parser or an access
   rule.
 - [Boundaries](./references/boundaries.md): the stand-in for each boundary, and module mocks.
@@ -219,5 +219,5 @@ allows.
 
 ## Speed
 
-- Keep each test of `bun run test` under 5 s on CI, and fix a slower one from
-  [Causes and fixes](./references/slow-tests.md#causes-and-fixes).
+- Keep each test of `bun run test` under 5 s on CI. Fix a slower one from
+  [Causes and fixes](./references/slow-tests.md#causes-and-fixes), never with a longer timeout.

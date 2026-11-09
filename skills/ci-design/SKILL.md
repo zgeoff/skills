@@ -54,8 +54,8 @@ median test time of the last 20 push runs on `main` that restored no `actions/ca
 and the sum of the steps that run test scripts in a private one. When the repo has no budget, skip
 each rule that uses one.
 
-- In a public repo, move a script into a job in a workflow you write only when its step takes 60 s
-  longer than the steps before it in its job, such as the checkout and `bun install`. Read both
+- In a public repo, move a script into a job in a workflow you write only when its step takes over
+  60 s longer than the steps that set up a job, such as the checkout and `bun install`. Read both
   times from `gh run view <run-id> --json jobs`. Shard tests only when the repo is over its test
   budget.
 - In a private repo, write a job of your own only for a heavy check: one on any runner but a
