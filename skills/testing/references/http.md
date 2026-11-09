@@ -27,8 +27,8 @@ Contents:
 
 ## The server and its lifecycle
 
-Build one MSW server per test process, and export it as `server` from a `node.ts` file in a `mocks/`
-folder that the [test preload](./cleanup.md#the-test-preload) imports:
+Build one MSW server per test process, and export it as `server` from a `server.ts` file in a
+`mocks/` folder that the [test preload](./cleanup.md#the-test-preload) imports:
 
 - Import `defineNetwork`, `InterceptorSource` and `HttpNetworkFrame` from `msw/experimental`, and
   `FetchInterceptor` from `@mswjs/interceptors/fetch/web`.
