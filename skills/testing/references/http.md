@@ -80,8 +80,8 @@ collections and call the client. Clear every collection in the test preload afte
 
 - Return the service's not-found response for a missing record, and its permission error, such as a
   403 with the service's error body, for a caller without access. Read the caller from the request's
-  token, with no signature check, as [Auth tokens](#auth-tokens) describes. Seed the collections to
-  reach those outcomes, and never add a per-test handler for them.
+  token. You may skip the signature check, as [Auth tokens](#auth-tokens) says. Seed the collections
+  to reach those outcomes, and never add a per-test handler for them.
 - Shape each collection with a zod schema (`new Collection({ schema })`). Give every field a
   `.default()`, nested fields included, and use `@faker-js/faker` where the value is arbitrary.
   Leave the default off a discriminator. A discriminator is a field whose value tells one kind of

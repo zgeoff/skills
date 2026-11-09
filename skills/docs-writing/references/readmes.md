@@ -27,9 +27,8 @@ Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
    covers it, when one exists.
 
 3. **Docs index:** the `README.md` in `docs/`, one line and a link for each doc.
-4. **Design README:** `docs/design/<work>/README.md`, where `<work>` names the feature or project
-   that the design covers, in a few words. It has one line and a link for each doc and spike in the
-   [design](./docs-tree.md#designs). Give a design folder inside another design folder its own
+4. **Design README:** `docs/design/<work>/README.md`, one line and a link for each doc and spike in
+   the [design](./docs-tree.md#designs). Give a design folder inside another design folder its own
    design README.
 5. **Spike README:** the landing page of a spike, an experiment that answers one question for a
    design. [Spikes](./docs-tree.md#spikes) lists its sections. When spikes live outside

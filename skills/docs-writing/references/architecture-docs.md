@@ -54,10 +54,10 @@ the function.
 
 ## Give the reason next to the fact
 
-Give the reason for each fact whose reason a reader without the code can't see. Put the reason in
-the same sentence or the next, joined by "because", "so" or "therefore". For the reason, say why the
-system works this way, or what would fail if it didn't. Write a paragraph that explains a design
-choice in this order:
+Give the reason for each fact whose reason the code doesn't show. Put the reason in the same
+sentence or the next, joined by "because", "so" or "therefore". For the reason, say why the system
+works this way, or what would fail if it didn't. Write a paragraph that explains a design choice in
+this order:
 
 1. the problem;
 2. its consequence;

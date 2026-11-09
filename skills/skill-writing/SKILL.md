@@ -82,10 +82,9 @@ a skill:
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
-Keep a rule's detail in its section. Change its key rules line with it.
+Keep a rule's detail in its section. When you change the rule, change its key rules line.
 
-Shape a rule set, such as a code style, as [A rule set](./references/skill-kinds.md#a-rule-set)
-says.
+Shape a rule set as [A rule set](./references/skill-kinds.md#a-rule-set) says.
 
 ## What goes in
 
@@ -93,7 +92,8 @@ For the parts each kind of skill needs, read [Kinds of skill](./references/skill
 
 Write the `description` in the third person: the agent reads it as a label, not an order. The
 description is all the agent sees when it picks a skill, so say what the skill does and when to load
-it, in the words a task would use.
+it, in the words a task would use. `chex skill` fails when the `name` differs from the skill's
+folder name.
 
 When several repos may use a skill, invent every example, and never use a term only one repo or team
 knows. A reader in another repo can't open a file the example names, or doesn't know the word.
@@ -105,10 +105,9 @@ code doesn't: a mistake to avoid, a reason or a choice. When someone renames the
 fails. Write an invented path as its file and folder apart, such as `nextest.toml` in `.config/`, or
 with a placeholder, such as `<name>`: `chex skill` warns on a bare path that matches a repo file.
 
-- **Replace a list of files, functions or options,** one row per item, with the rule that defines
-  the list and the search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`;
-  search there before you write one". A table of commands is fine: each row says what its command
-  needs.
+- **Replace a list of files, functions or options,** with the rule that defines the list and the
+  search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`; search there
+  before you write one". A table of commands is fine: each row says what its command needs.
 - **Replace a retelling,** such as "the script builds, tags, pushes, then rolls out", with the fact
   the agent acts on, such as "a failed push leaves the old version serving", and link the script.
 - **Quote only when the exact words are the point.** A copied error message teaches the old text
@@ -121,10 +120,9 @@ When a review asks for one of these copies, decline it and name this section.
 ## Keep it short and true
 
 Keep SKILL.md under the word limit `chex skill` sets, a rule set included: it warns at 1,500 words
-and fails at 1,700. After a compaction, Claude Code brings back only the first 5,000 tokens of each
-skill the session loaded, and a skill under the limit fits inside that. When a skill grows, cut
-first, then move what only some tasks need into a reference. In a rule set, keep every rule the
-common task needs in SKILL.md, and move only the rest.
+and fails at 1,700. After a compaction, Claude Code restores only the first 5,000 tokens of each
+loaded skill. When a skill grows, cut first, then move what only some tasks need into a reference.
+In a rule set, keep every rule the common task needs in SKILL.md, and move only the rest.
 
 Write the rule. The incident, the issue ID and the date go in the PR.
 
@@ -148,21 +146,20 @@ Leave out anything time-bound, like "until the next release": it goes false unno
 
    While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder of its
    SKILL.md: `.claude/skills/<skill>`, or `skills/<skill>` in the repo that publishes the skills.
-   When a check flags a sentence you like, rewrite it so the check passes, and tell your caller
-   which sentence and which check: the check may be wrong.
+   When a check flags a sentence you like, rewrite it so the check passes, and tell the user or your
+   caller which sentence and which check: the check may be wrong.
 
 2. Run the `deslop` skill on each section you wrote or changed.
 3. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
-   finds, give each changed file one more cold read. Then stop the cold reads.
+   finds, give each changed file one more cold read, and stop.
 4. Run the checks again, and give the proof in a `## Checks` section of the PR description:
    - `- [x] chex prose, links and skill: cleared`, once the last run clears.
    - `- [x] Cold read: <fixed> fixed, <declined> declined`, counting every cold read.
    - `- [x] Deslop: <edits> edits`.
 
-   Under `Declined:`, give one line to each finding you declined and each gap in the rules, a place
-   where a cold reader got stuck and no rule applies. With neither, write `Declined: none.` Each
-   line holds:
-   - the check that found it;
+   Under `Declined:`, give one line to each finding you declined and each gap in the rules, where a
+   cold reader got stuck and no rule applies. With neither, write `Declined: none.` Each line holds:
+   - the check or review that found it;
    - the finding or the gap;
    - why not, or the issue it went to.
 
