@@ -6,7 +6,7 @@
     "prepare": "lefthook install --force || true",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "check": "chex prose length links readmes skill",
+    "check": "chex prose length links readmes skill && bun scripts/search-scope/check-search-scope.ts .",
     "test": "bun test"
   },
   "devDependencies": {

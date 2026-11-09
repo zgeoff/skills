@@ -27,6 +27,7 @@ file you edit may be the one that changes the rules.
 
 ```text
 skills/<name>/      one skill per folder: SKILL.md, plus any references/ and helper scripts/ it uses
+scripts/            the repo's own checks, each with its test
 ```
 
 A Claude Code hook refuses an edit of a skill's `SKILL.md`, or of a file under its `references/`,
@@ -58,8 +59,16 @@ bun run test
 ```
 
 `bun run check` runs the [`@zgeoff/chex`](https://github.com/zgeoff/tools/tree/main/packages/chex)
-checks that [package.json](package.json) lists. `bun run test` runs the test beside each script in a
-skill's `scripts/` folder.
+checks that [package.json](package.json) lists, then the search-scope check. `bun run test` runs the
+test beside each script in a skill's `scripts/` folder and in the root `scripts/` folder.
+
+The search-scope check fails each GitHub search that filters by a person, such as with `author:`,
+`--involves` or `commenter:`, and names no owner. That person's login also opens PRs in other orgs,
+so such a search returns them. Add an `owner:`, `user:`, `org:` or `repo:` qualifier, or the
+`--owner`, `--repo` or `-R` flag, to the same command. The check skips `gh pr list` and
+`gh issue list`, because each searches only the current repo. In a skill, take the owner from the
+caller, such as `owner:<owner>`, where `<owner>` is the account or org the caller names. Any repo
+can install a skill, so a skill never writes in an owner of its own.
 
 ## Skill pull requests
 
