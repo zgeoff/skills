@@ -33,11 +33,11 @@ another command only because it is slow.
 Each fix in more detail:
 
 - To call the code in the test process, call its handler, its main function with a test argv, an
-  in-memory RPC link or an injected transport. Start the repo's own program as a process only in
+  in-memory RPC link or an injected transport. Start the program under test as a process only in
   `e2e/`, with `run` or `start` from `@zgeoff/testing/process`, as
   [End-to-end suites](./system-tests.md#end-to-end-suites) says.
 
-  Two kinds of test are the exception. Each sits in the file beside its script, starts the script
+  Two kinds of test are the exception. Each test file sits beside its script, starts the script
   itself, and runs in `bun run test` under its 5 s timeout:
   - the test of a shell script;
   - the test of a TypeScript script that a CI step runs.
@@ -65,14 +65,14 @@ swaps memory or shares its cores runs the same test slower.
 
 ## Tests that need a real system
 
-Keep a test in `bun run test` when everything it needs starts in milliseconds and gives each test
-its own copy, such as an in-memory store, a database template copied per test, or a stateful
-stand-in.
+When everything a test needs starts in milliseconds and gives each test its own copy, keep the test
+in `bun run test`. An in-memory store, a database template copied per test and a stateful stand-in
+each pass this check.
 
 Move a test out of `bun run test` only when it needs:
 
 - a real system that `bun run test` can't host, such as a VM, the kernel or root, a browser, a
-  container image, the Agent SDK subprocess or a live API;
+  container image, the Claude Agent SDK subprocess or a live API;
 - the product's own process, to test its start-up, signals or exit codes.
 
 Put such a test in the folder, or give it the file suffix, that
@@ -138,9 +138,10 @@ describes. For the CI job that runs each command, see the ci-design skill.
   such as a made-up `.kvm` for a test that boots a VM.
 - Add a suffix of the repo's own only for a real system from the list in
   [Tests that need a real system](#tests-that-need-a-real-system). Declare it under `lanes` in
-  `rig.config.ts`, with its `suffix` and its timeout in `limit`. The repo's lint rules read each
-  timeout from there. List the suffix, its command and its timeout in the Facts table of the repo's
-  project-testing skill, and put the measured test times in the pull request that adds it.
+  `rig.config.ts`, with its `suffix` and its timeout in `limit`, such as `'15s'`. The repo's lint
+  rules read each timeout from there. List the suffix, its command and its timeout in the Facts
+  table of the repo's project-testing skill. Put the measured test times in the pull request that
+  adds the suffix.
 - Put the code that starts the real system, such as the code that starts the browser, in a package
   with its own tests.
 
@@ -151,8 +152,8 @@ describes.
 ## A test over its limit
 
 When a test is slow and [Causes and fixes](#causes-and-fixes) has a fix for it, make the fix in the
-pull request where you find the test slow, even when your change doesn't touch its file. Never leave
-it for a ticket.
+pull request where you find the test slow, even when your change doesn't touch its file. Leave the
+fix for a ticket only when it can't land in this pull request, such as a fix in another repo.
 
 When a test still can't finish within the timeout of its command, give it a disable comment with the
 time it takes on CI and one of these reasons:

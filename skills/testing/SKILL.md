@@ -17,7 +17,7 @@ metadata:
 
 ## References
 
-- [Seeding](./references/seeding.md): seeds, seeders, and where to write rows directly.
+- [Seeding](./references/seeding.md): seeds, seeders, and direct row writes.
 - [Slow tests](./references/slow-tests.md): a slow test, and the command for a test that needs a
   real system.
 - [Factories](./references/factories.md): a factory.
@@ -154,7 +154,7 @@ Seed and read database rows and files through the module that creates them, even
 module that only changes them. Write them directly only where [Seeding](./references/seeding.md)
 allows.
 
-- Outside the creating module's tests, read rows through its read function, and file paths through
+- Outside the creating module's tests, read through its read function, and get a file's path from
   its path function. When none exists, add one, with a test.
 - Give each state its own seed, such as `ctx.seed.archivedNote({ title: 'Groceries' })`. Keep the
   call under test and each clock move in the test.
@@ -212,12 +212,12 @@ allows.
 - Never stub `fetch`, an HTTP client or the unit's own services. Stub only an SDK client's `send`,
   as [Boundaries](./references/boundaries.md) says.
 - Pass every path in from the test's `mkdtemp` folder. Never let a module find a path through
-  `process.cwd()` or a `HOME` set after start-up.
+  `process.cwd()` or a `HOME` changed after the module loads.
 - Reach a failure branch with a real failure, as
   [Failure branches](./references/boundaries.md#failure-branches) shows.
 - Never call `mock.module` in a test file. It leaks into every later file in the worker.
 
 ## Speed
 
-- Keep each test of `bun run test` under 5 s on CI. Fix a slower one from
-  [Causes and fixes](./references/slow-tests.md#causes-and-fixes), never with a longer timeout.
+- Keep each test of `bun run test` under 5 s on CI, and fix a slower one from
+  [Causes and fixes](./references/slow-tests.md#causes-and-fixes).

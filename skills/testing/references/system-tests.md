@@ -141,15 +141,21 @@ own. Inside an `e2e/` test, you may chain acts, and assert after each one, becau
 the state that the act before it left. Outside `e2e/`, a test has one act, as
 [Test shape](../SKILL.md#test-shape) says.
 
-- To share a slow service, such as a VM or a database container, across the `e2e/` tests, write a
-  module that brings it up and one that takes it down. In `rig.config.ts`, `lanes` holds one entry
-  for each test command. Put the two module paths under the `start` and `stop` keys of its `e2e`
-  entry ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). rig runs each module once
-  each time `bun run test:e2e` runs, outside the test files. Keep these files in `e2e/`, with no
-  `.docker` suffix: the `start` module starts the container, and the tests only connect to it.
-- Default-export a function from the `start` module. Return the address the tests need, such as a
-  connection string, as `{ environment: { DATABASE_URL: url } }`. rig adds each entry of
-  `environment` to the environment of the test process.
+To share a slow service, such as a VM or a database container, across the `e2e/` tests:
+
+1. Write a module that starts the service and one that stops it, in `src/test-utils/`.
+   Default-export a function from each.
+2. Return the address the tests need from the start function, such as
+   `{ environment: { DATABASE_URL: url } }`. rig adds each entry of `environment` to the environment
+   of the test process.
+3. In `rig.config.ts`, give the two module paths as `lanes.e2e.start` and `lanes.e2e.stop`
+   ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). The `lanes` key holds one entry
+   for each test command, and `e2e` is the entry for `bun run test:e2e`. rig runs each module once
+   each time `bun run test:e2e` runs, outside the test files.
+
+Leave the `.docker` suffix off the `e2e/` test files that connect to the service. The suffix is for
+a test that starts a container itself, and `bun run test:e2e` skips a file that has it.
+
 - Never start a shared service in the `[test] preload` of `bunfig.toml`. `bun run test` loads that
   file too, and would start the service for nothing, or fail on a machine without it. Wire
   everything else a test needs in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest)
@@ -245,8 +251,8 @@ these files starts Chrome. In `setupTest`, open a view on that Chrome with
 [rig's browser guide](https://github.com/zgeoff/tools/blob/main/docs/guides/browser-lane.md).
 
 Use Playwright only for an e2e test that needs Firefox, WebKit on Linux or a live system, such as a
-deployed site. `Bun.WebView` has no Firefox and runs WebKit only on macOS. Run it with Playwright's
-own runner, never under `bun test`.
+deployed site. `Bun.WebView` has no Firefox and runs WebKit only on macOS. Run a Playwright test
+with Playwright's own runner, never under `bun test`.
 
 ### Page code
 
