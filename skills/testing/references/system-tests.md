@@ -87,10 +87,11 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
    - `spawnCLI` from `@zgeoff/testing/cli`, for a program that a person types into. It runs the
      program in a pseudo-terminal.
 4. Run the tests with `bun run test:e2e`, the script that runs `rig e2e`. When `package.json` lacks
-   the script, run `bun x rig init`, which adds it. `rig e2e` builds each program once, and
-   `resolveProgram` gives the command that runs the built file. When you run one `e2e/` file with
-   `bun test` on your machine, `resolveProgram` gives the command that runs the source. In CI,
-   `resolveProgram` throws when nothing built the program.
+   the script, `git add` your first `e2e/` test file, then run `bun x rig init`. It adds the script
+   only once git tracks a test file for it. `rig e2e` builds each program once, and `resolveProgram`
+   gives the command that runs the built file. When you run one `e2e/` file with `bun test` on your
+   machine, `resolveProgram` gives the command that runs the source. In CI, `resolveProgram` throws
+   when nothing built the program.
 
 This test needs no `setupTest`, because `await using` stops the program when the test ends. After an
 explicit `stop`, the disposal finds no running process and does nothing:
@@ -249,9 +250,9 @@ A scripted worker answers the second `build` with whatever its script holds, so 
 sends the second `checkout` still passes.
 
 Keep the stand-in in `src/test-utils/`, the test helper folder that
-[Test data](../SKILL.md#test-data) describes, as `start-stub-<program>.ts`, with its own tests. In
-each of those tests, check one behaviour the stand-in copies from the real program, such as the
-refusal for an evicted repository.
+[Where a test lives](../SKILL.md#where-a-test-lives) describes, as `start-stub-<program>.ts`, with
+its own tests. In each of those tests, check one behaviour the stand-in copies from the real
+program, such as the refusal for an evicted repository.
 
 When the stand-in makes up a value, such as a fake hash or a fake signature, assert only its
 properties: its shape, that the same input gives the same output, and that different inputs give

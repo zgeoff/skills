@@ -34,8 +34,7 @@ each pull request.
   standard list: `audit`, `deadcode`, `format:check`, `lint`, `typecheck` and `test`, and each of
   `test:e2e`, `test:browser`, `test:docker`, `test:host` and `test:agent-sdk` that the repo defines.
   [Where each test runs](../testing/references/slow-tests.md#where-each-test-runs) says what each
-  test script runs. `test:model-api` calls a live model, so it stays out of the list and runs
-  nightly.
+  test script runs. `test:model-api` stays out of the list, and runs as that page says.
 - To run a script outside the standard list, such as a made-up `check:sql`, set the repo variable
   `BUN_CHECK_SCRIPTS`. Write in it every script to run, the standard ones included. A script you
   leave out stops running, and a name that `package.json` lacks fails the run.
