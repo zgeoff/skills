@@ -48,7 +48,8 @@ packages/ledger/
     └── import-statement.bench.ts   benchmark of the running program
 ```
 
-Export `./test-utils/*` from `package.json`, so other packages' tests import the helpers.
+Export the helpers from `package.json` as `"./test-utils/*": "./src/test-utils/*.ts"`, so other
+packages' tests import them.
 
 | The test                                                                                                                        | Put it                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -78,10 +79,11 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
    - `run` from `@zgeoff/testing/process`, for a program that runs to its exit. It returns the exit
      code and the output.
    - `start` from `@zgeoff/testing/process`, for a program that keeps running, such as a server. It
-     picks a free port, passes the port to the program as `PORT`, and waits until the program is
-     ready, such as until `ready: { url: '/health' }` on that port answers with a 2xx.
-     `stop(signal)` on its handle signals the program's whole process group and returns the exit
-     code.
+     picks a free port, passes the port to the program as `PORT`, and waits for its `ready` option.
+     `ready: { url: '/health' }` waits until that URL on the port answers with a 2xx.
+     `ready: { stdout: /^listening/u }` waits for a matching stdout line, and `ready: { check }`
+     waits until `check` returns true. Without `ready`, `start` returns at once. `stop(signal)` on
+     its handle signals the program's whole process group and returns the exit code.
    - `spawnCLI` from `@zgeoff/testing/cli`, for a program that a person types into. It runs the
      program in a pseudo-terminal.
 4. Run the tests with `bun run test:e2e`, the script that runs `rig e2e`. When `package.json` lacks
@@ -90,7 +92,8 @@ program from outside. Start each file name with a prefix from [E2e prefixes](#e2
    `bun test` on your machine, `resolveProgram` gives the command that runs the source. In CI,
    `resolveProgram` throws when nothing built the program.
 
-This test needs no `setupTest`, because `await using` stops the program:
+This test needs no `setupTest`, because `await using` stops the program when the test ends. After an
+explicit `stop`, the disposal finds no running process and does nothing:
 
 ```ts
 // packages/ledger/e2e/stop-on-signal.test.ts, in a made-up repo
@@ -137,18 +140,22 @@ test of the code that the case reaches.
 ### Files and shared hosts
 
 Never share a `setupTest` or a cleanup between `e2e/` test files: when a file needs one, give it its
-own. Inside an `e2e/` test, you may chain acts, and assert after each one, because each act needs
-the state that the act before it left. Outside `e2e/`, a test has one act, as
+own. A file's own `setupTest` may call a shared helper from `src/test-utils/`, such as the reset
+helper below. Inside an `e2e/` test, you may chain acts, and assert after each one, because each act
+needs the state that the act before it left. Outside `e2e/`, a test has one act, as
 [Test shape](../SKILL.md#test-shape) says.
 
 To share a slow service, such as a VM or a database container, across the `e2e/` tests:
 
 1. Write a module that starts the service and one that stops it, in `src/test-utils/`.
-   Default-export a function from each.
+   Default-export a function from each. rig calls each function with the same `LaneContext` from
+   `@zgeoff/rig`, which holds `repoRoot`, `lane`, `runID` and `environment`.
 2. Return the address the tests need from the start function, such as
    `{ environment: { DATABASE_URL: url } }`. rig adds each entry of `environment` to the environment
    of the test process.
-3. In `rig.config.ts`, give the two module paths as `lanes.e2e.start` and `lanes.e2e.stop`
+3. Find the service in the stop function from the context, such as by a container name that both
+   functions build from `runID`. The stop function never gets what the start function returned.
+4. In `rig.config.ts`, give the two module paths as `lanes.e2e.start` and `lanes.e2e.stop`
    ([rig](https://github.com/zgeoff/tools/tree/main/packages/rig)). Under `lanes`, `rig.config.ts`
    holds only the test commands the repo adds or changes, by their `rig` name: `e2e` is the name for
    `bun run test:e2e`. rig runs each module once each time `bun run test:e2e` runs, outside the test
@@ -161,22 +168,28 @@ a test that starts a container itself, and `bun run test:e2e` skips a file that 
   file too, and would start the service for nothing, or fail on a machine without it. Wire
   everything else a test needs in each file's own `setupTest`, as [setupTest](../SKILL.md#setuptest)
   says.
-- Reset the shared service to its starting state in `setupTest`, which each test calls. When the
-  service has no reset, rebuild its state there, such as by recreating the database.
+- Reset the shared service to its starting state in each file's `setupTest`, through one reset
+  helper in `src/test-utils/`. When the service has no reset, make the helper rebuild its state,
+  such as by recreating the database.
 - Give the reset helper its own test file in `src/test-utils/`. Test that the reset reaches the
   starting state from what a test changed, from what a test left when it failed midway, and from
   what the test process left when it got a `SIGINT`.
+- To get the state a `SIGINT` leaves, run a script that writes to the service with `start` from
+  `@zgeoff/testing/process`. Wait until the script has written, then call `stop('SIGINT')` on its
+  handle.
 
 ## Real applications and transport
 
 Test a client that the repo ships, such as a CLI or an SDK, against the real service from the same
 repo. Give each test its own data. Use a stand-in only for a system that the test can't run, such as
-a VM, the kernel or a remote service.
+a remote service. A test that `bun run test` runs can't run a VM or change the kernel. An `e2e/`
+test can use a VM that [Files and shared hosts](#files-and-shared-hosts) shares.
 
 In a test that `bun run test` runs, call the service in the test's process, such as through its
 request handler or an in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes)
 says. When the client runs as a child process, start the service on a real port, so the child
-reaches it, and put the test in `e2e/`.
+reaches it, and put the test in `e2e/`. Name the test with the prefix for what it checks, such as
+`cli-` for a command's wiring or `compat-` for an older client.
 
 For a remote HTTP service, use MSW, as in [Boundaries](../SKILL.md#boundaries). Write a stand-in
 server on a real socket only when MSW can't intercept the call, such as:
@@ -185,9 +198,12 @@ server on a real socket only when MSW can't intercept the call, such as:
 - a call on a Unix socket whose options MSW drops;
 - a request from a child process, a container or a VM.
 
-Try MSW on the call first, with the version the repo installs. In a stand-in server, keep real
-routing and serialization, parse its stored state with a zod schema, and fail loudly on each call it
-doesn't expect.
+Try MSW on the call first, with the version the repo installs. In a stand-in server:
+
+- Route each request by its method and path, as the real service does.
+- Encode each response in the real service's format, such as JSON with its field names.
+- Parse the server's stored state with a zod schema.
+- Fail loudly on each call it doesn't expect.
 
 ## Stateful stand-ins
 
@@ -275,8 +291,8 @@ the type checker and the linter check it.
 - When a browser test runs longer, find its cause in
   [the cause table](./slow-tests.md#causes-and-fixes). Move a build out of the test and into the
   `build:browser` script, which rig runs once each time `bun run test:browser` runs. Replace a fixed
-  wait with a wait for the element or the event. Split a test of a whole user flow into a test per
-  component or page.
+  wait with a wait for the element or the event. Split a browser test of a whole user flow into a
+  test per component or page. A `journey-` test in `e2e/` keeps its whole flow.
 - Test navigation across the web app's routes in a browser suite.
 - Give each browser helper that the repo writes, such as one that opens a view, its own test file.
 - Keep every test that needs no page out of a browser suite, so `bun run test` runs it fast.
@@ -294,8 +310,8 @@ Find which kind of timer your test waits on, then follow the rules under its hea
   sets a short value never sees it fire. Add a second test that stops the keep-alive and checks that
   the timeout then ends the operation.
 - Test the default value in its own test. Wait out the real default only when the runtime has no
-  shorter setting that behaves the same. Wait for the timeout's event with `waitFor`, and keep the
-  test in `bun run test` with the disable comment from
+  shorter setting that behaves the same. Wait for the timeout's event with `waitFor` from
+  `@zgeoff/testing/helpers`, and keep the test in `bun run test` with the disable comment from
   [A test over its limit](./slow-tests.md#a-test-over-its-limit).
 
 ### A timer inside a library
@@ -368,8 +384,10 @@ these files:
 
 When the scoring runs offline, make the test replay the corpus through the production path and
 compare the result with `report.json`. When the scoring needs a live model, the test can't replay
-it: make the test build the parts of the report that the code decides, and compare those. A test
-that only reads `report.json` passes after the code changes and the report goes stale.
+it: make the test build the parts of the report that the code decides, and compare those. Such parts
+include the prompt that the code sends for each case, and the score that it gives each recorded
+answer. A test that only reads `report.json` passes after the code changes and the report goes
+stale.
 
 - Read the committed corpus or report through one tested loader. Never copy its cases into the test
   as literals.
@@ -378,15 +396,16 @@ that only reads `report.json` passes after the code changes and the report goes 
 - Use a stand-in only for what a recording can't reproduce, such as the disk or the API of a code
   host like GitHub, and inject it into the production path.
 - Keep a test that calls a live API, such as a test that pins how a model SDK behaves, out of
-  `evals/`. Give it the `.model-api` suffix, beside its module, as
+  `evals/`. Name it `<module>.model-api.test.ts`, beside its module, as
   [Where each test runs](./slow-tests.md#where-each-test-runs) describes.
 
 ## Benchmarks
 
 - Put a benchmark of one module beside it, as `src/<module>.bench.ts`.
 - Put a benchmark of a running program in `bench/<name>.bench.ts` of the package that builds the
-  program, and start the program with `start` from `@zgeoff/testing/process` in `setup`. Keep only
-  these entry files in `bench/`. Put their logic, with its tests, in `src/test-utils/`.
+  program. Start the program with `start` from `@zgeoff/testing/process` in the benchmark's `setup`
+  function, as in the example below. Keep only these entry files in `bench/`. Put their logic, with
+  its tests, in `src/test-utils/`.
 - Export each benchmark with `defineBench` from `@zgeoff/rig/bench`, with a `budget` for the median
   time of one `run`.
 - Run benchmarks with `rig bench`, never in a test run. It builds each program once, as `rig e2e`
@@ -423,8 +442,9 @@ Use a snapshot only for machine output that no person writes by hand, such as ge
 an inline snapshot, and never snapshot a component. Check a hand-written value, such as a spec test
 vector, with an explicit matcher.
 
-For any pipeline whose output depends only on its input, write a golden test and a determinism test,
-beside the pipeline's module:
+For code that generates machine output from its input, such as SQL or an OpenAPI document, write a
+golden test and a determinism test when the output depends only on the input. Put both beside the
+code's module:
 
 - In each golden test, write one input by hand as a literal, and pin the full output in an inline
   snapshot. Never build the input with a factory call. A change to the factory would change the
@@ -473,6 +493,11 @@ slow-timeout = { period = "15s", terminate-after = 1 }
 [[profile.e2e.overrides]]
 filter = "test(=e2e::restores_a_volume_from_its_oldest_snapshot)"
 slow-timeout = { period = "60s", terminate-after = 1 }
+
+# 22 s on CI; floor: one VM boot plus a kernel module load
+[[profile.e2e.overrides]]
+filter = "test(=e2e::loads_the_driver_after_a_cold_boot)"
+slow-timeout = { period = "30s", terminate-after = 1 }
 ```
 
 - Run the tests that need no real system with `cargo nextest run`, which uses the default profile.
