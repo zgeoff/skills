@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@zgeoff/chex": "0.2.5",
-    "@zgeoff/skill-gate": "0.2.26",
+    "@zgeoff/skill-gate": "0.2.27",
     "lefthook": "2.2.2",
     "oxfmt": "0.75.0"
   },
