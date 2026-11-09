@@ -27,7 +27,7 @@ file you edit may be the one that changes the rules.
 
 ```text
 skills/<name>/      one skill per folder: SKILL.md, plus any references/ and helper scripts/ it uses
-scripts/            the repo's own checks, each with its test
+scripts/            the repo's own checks and CI step scripts, each with its test
 ```
 
 A Claude Code hook refuses an edit of a skill's `SKILL.md`, or of a file under its `references/`,
