@@ -5,10 +5,11 @@ on:
     branches: [main]
   pull_request:
 
-# A newer push makes the checks of an older one worthless, and its dispatch carries the newer commit.
+# A newer push to a pull request makes the checks of an older one worthless. A run on main never
+# cancels, so each merged commit is checked.
 concurrency:
-  group: checks-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
