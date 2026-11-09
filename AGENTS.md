@@ -65,9 +65,10 @@ test beside each script in a skill's `scripts/` folder and in the root `scripts/
 The search-scope check fails each GitHub search that filters by a person, such as with `author:`,
 `--involves` or `commenter:`, and names no owner. That person's login also opens PRs in other orgs,
 so such a search returns them. Add an `owner:`, `user:`, `org:` or `repo:` qualifier, or the
-`--owner` or `--repo` flag, to the same command. In a skill that readers in other repos use, take
-the owner from the caller, such as `owner:<owner>`, where `<owner>` is the account or org the caller
-names. Write `owner:zgeoff` only in a skill that zgeoff repos alone install.
+`--owner`, `--repo` or `-R` flag, to the same command. The check skips `gh pr list` and
+`gh issue list`, because each searches only the current repo. In a skill that readers in other repos
+use, take the owner from the caller, such as `owner:<owner>`, where `<owner>` is the account or org
+the caller names. Write `owner:zgeoff` only in a skill that zgeoff repos alone install.
 
 ## Skill pull requests
 
