@@ -23,7 +23,7 @@ a diagnosis and a judge, and the **Reply** line at the end gives the shape for e
 
 - [When to ask](#when-to-ask): a review before hand-off, a diagnosis after two failed fixes, or a
   judge for a bake-off.
-- [Who to ask](#who-to-ask): another model family, at high effort; your own family only as a
+- [Who to ask](#who-to-ask): another model family, at medium effort; your own family only as a
   fallback, and say so.
 - [Write the prompt](#write-the-prompt): the question and the facts, never your conclusion.
 - [Ask for a reply shape](#ask-for-a-reply-shape): one shape per job, with a cap on findings.
@@ -52,8 +52,8 @@ Ask a model from another family. [Commands](./references/commands.md) lists the 
 order of preference: take the first one whose family isn't yours. A model of your own family shares
 your training, and with it your blind spots.
 
-Run its command as written. Each command uses the strongest model in its family, at high effort,
-because these are the reads you act on. Change the effort only when the user asks.
+Run its command as written. The Codex command runs gpt-6.1-sol and the Claude command runs Opus 5.5,
+both at medium effort. Change the model or the effort only when the user asks.
 
 When the model fails to run, or gives no reply in 15 minutes, stop it and try the next model in the
 list from another family. When none is left, run the command for your own family with the same
