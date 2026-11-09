@@ -105,7 +105,6 @@ Say where each fact lives. Link the file that holds it with a path relative to t
 `../../../config/ci.json` from `.claude/skills/<project-skill>/SKILL.md`, and name the key that
 holds the fact. Then the row stays true when the value changes, and
 [`chex links`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails when the file moves.
-The rule has two exceptions:
 
 - When a command shows the fact and no file holds it, write the command in place of the link.
 - When neither a file nor a command holds the fact, write the value itself, such as the

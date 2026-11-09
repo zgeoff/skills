@@ -5,9 +5,9 @@ tests as they stand: [Principles](../SKILL.md#principles), [Test data](../SKILL.
 [Assertions](../SKILL.md#assertions), [Errors](../SKILL.md#errors),
 [Access rules](./schemas-and-access.md#access-rules) and [Narrowing](../SKILL.md#narrowing). From
 [Test shape](../SKILL.md#test-shape), keep the rule on how to name a test, and the rule of one act
-per test. This file replaces the rest of Test shape for Go. The Bun-only parts don't apply:
-`setupTest`, the test preload, the jest-extended matchers, the `bun run test:<name>` commands and
-the `bun test` flags.
+per test. This file replaces the rest of Test shape for Go. Skip the Bun-only parts: `setupTest`,
+the test preload, the jest-extended matchers, the `bun run test:<name>` commands and the `bun test`
+flags.
 
 The mistakes to avoid:
 

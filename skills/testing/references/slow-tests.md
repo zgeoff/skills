@@ -2,9 +2,9 @@
 
 Keep each test that `bun run test` runs under 5 s on CI. Keep each test that another command runs
 under that command's timeout in [Where each test runs](#where-each-test-runs). You pay for a slow
-test again in every later run. Never raise the timeout or add a sleep to hide that cost. Two oxlint
-rules from `@zgeoff/oxlint-config` enforce this: `zgeoff/max-test-timeout` refuses a timeout above
-the one for the file's command, and `zgeoff/no-test-sleep` refuses a fixed sleep.
+test again in every later run. Never raise the timeout or add a sleep to hide that cost. The oxlint
+rules in `@zgeoff/oxlint-config` enforce this: `zgeoff/max-test-timeout` refuses a timeout above the
+one for the file's command, and `zgeoff/no-test-sleep` refuses a fixed sleep.
 
 When a test is slow, find its cause in [Causes and fixes](#causes-and-fixes) and make that fix.
 Raise a timeout only as [A test over its limit](#a-test-over-its-limit) allows. Never move a test to
@@ -37,8 +37,8 @@ Each fix in more detail:
   `e2e/`, with `run` or `start` from `@zgeoff/testing/process`, as
   [End-to-end suites](./system-tests.md#end-to-end-suites) says.
 
-  Two kinds of test are the exception. Each test file sits beside its script, starts the script
-  itself, and runs in `bun run test` under its 5 s timeout:
+  Keep these tests beside their script, outside `e2e/`. Each starts the script itself, and runs in
+  `bun run test` under its 5 s timeout:
   - the test of a shell script;
   - the test of a TypeScript script that a CI step runs.
 
@@ -177,9 +177,8 @@ test(
 ```
 
 `zgeoff/max-test-timeout` reports on the line of the timeout value, so put the comment on the line
-before the options object. Pass the options object after the callback, because Bun's types accept no
-other order. The formatter puts each argument on its own line, so the comment stays next to the
-object.
+before the options object. Pass the options object after the callback. Bun's types accept no other
+order. The formatter puts each argument on its own line, so the comment stays next to the object.
 
 `zgeoff/test-timeout-exception-ticket` fails a disable of `zgeoff/max-test-timeout` whose reason
 after `--` holds neither a ticket nor `floor:` with text. The `test-timeouts` check of
