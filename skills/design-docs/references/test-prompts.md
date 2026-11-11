@@ -1,8 +1,17 @@
 # Test prompts
 
-Give each test to its own fresh subagent: a new agent with none of your conversation, never a fork.
-Pass it the path of the design, the path of the code base, and the prompt below word for word. For a
-design doc, also pass the paths of its work items and decision records.
+Read [SKILL.md](../SKILL.md#check-it) first: it says which tests a design needs, and what to fix
+after each one. The design is the design doc, or the work item when no design doc exists.
+
+To run a test:
+
+1. Start a `general-purpose` subagent with none of your conversation. Never use a fork: a fork knows
+   what you meant, so it can't find where the design fails to say it.
+2. Write a line with the paths it reads: the design, the repo root of the code base, and, for a
+   design doc, its work items and decision records that exist. Leave out the code base when no code
+   exists yet.
+3. Under that line, paste the test's prompt below word for word.
+4. Run both tests of a design doc in parallel.
 
 ## Skim test
 
