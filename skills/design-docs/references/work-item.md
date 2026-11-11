@@ -24,6 +24,12 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 
 A hold that nobody releases returns its units to the shelf 15 minutes after it was placed.
 
+## Depends on
+
+<!-- The work items that must be done first, as links. Delete the section when there are none. -->
+
+- [Holds have an expiry time](<link to the issue>)
+
 ## Sketch
 
 <!-- The function or type inside the module that this work adds or changes. 20 lines at most: show only what changes. -->
