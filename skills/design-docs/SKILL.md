@@ -40,6 +40,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
 - [Keep it short](#keep-it-short): one doc per piece of work, one diagram, a few open questions.
+- [Prove acceptance](#prove-acceptance): each line names its evidence, a `bun verify` verdict where
+  the repo has one.
 - [Write a decision record](#write-a-decision-record): when the owner approves the choice, edited in
   place.
 - [Close out the design](#close-out-the-design): once the work is built, keep what lasts and delete
@@ -52,6 +54,7 @@ Hand back where the design went, each decision record you wrote, and what the tw
 - [Work item template](./references/work-item.md): writing the design part of a work item.
 - [Decision record template](./references/decision-record.md): writing or changing a decision
   record.
+- [Test prompts](./references/test-prompts.md): running the skim test and the builder test.
 
 ## Choose where the design goes
 
@@ -83,8 +86,7 @@ its comments, and may rename anything the module does not export.
 - Show each outside system the design reaches, such as a store or a queue, as an interface, with its
   adapters named in a comment.
 - Write each sketch in the format the code base uses: its language, its config format, its SQL
-  dialect. Show a table as its columns in a `text` block, one per line with the type and a comment,
-  when no SQL is settled.
+  dialect.
 
 ## State constraints as bullets
 
@@ -130,6 +132,16 @@ Write in the present tense, about the system that the design builds.
   needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
 
+## Prove acceptance
+
+Write each Acceptance line of a work item as a behaviour someone can observe, and name its evidence.
+
+- When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
+  `bun verify`, prove each behaviour a user sees with its feature's journey and the verdict
+  `bun verify done` records. Name the feature in the line.
+- Prove the rest with a test, and name the test's subject.
+- Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
+
 ## Write a decision record
 
 Write one when the table's condition holds: in the session, in review, or in the PR that adds the
@@ -137,11 +149,10 @@ design. When you design alone, put each choice in the design's Decisions section
 approves the design in review, add a record for each choice that meets the condition to the same PR,
 and set the design's status to agreed.
 
-Link no design from a record. The design doc is deleted at close-out, and the design links each
-record from its Decisions line instead. Write one decision per record. Keep it short: the decision
-in a few lines, the reasons as bullets with any measured figure, and the rejected options as a
-table. When the decision changes, edit the record as the
-[decision record template](./references/decision-record.md#change-a-record) says.
+Write one decision per record, and link no design from it: the design doc is deleted at close-out.
+End each Decisions line of the design with a link to its record. The
+[decision record template](./references/decision-record.md) holds the shape and how to change a
+record.
 
 ## Close out the design
 
@@ -154,18 +165,14 @@ done, the agent that finishes it closes out the design:
 
 ## Check it
 
-Run each test with a fresh subagent. Give it the design, the code base, and the test's prompt word
-for word. Fix what it finds, run it once more, fix that, and stop. For a work item, run only the
-builder test.
+Run the skim test and the builder test, each with a fresh subagent and its prompt from
+[Test prompts](./references/test-prompts.md). Fix what it finds, run it once more, fix that, and
+stop. For a work item, run only the builder test.
 
-1. **Skim test.** "Read this design the way a reviewer with two minutes would: the opening, the
-   diagram, the headings and the code. Then say what gets built, what its contracts are, and what
-   you would push back on." When the answer misses the point, rewrite the opening or the diagram.
-   Fix each push-back, or answer it in the PR.
-2. **Builder test.** "You build the first part of this design. List every question you would have to
-   ask before you start, and each place where you would have to guess at a contract." Fix each
-   question about a contract or a constraint. A question about a choice under "Builder decides"
-   needs no fix.
+- **Skim test:** when the answer misses the point, rewrite the opening or the diagram. Fix each
+  push-back, or answer it in the PR.
+- **Builder test:** fix each question about a contract or a constraint. A question about a choice
+  under "Builder decides" needs no fix.
 
 For a design doc or a decision record, run the docs checks and a cold read too, as the
 [docs-writing](../docs-writing/SKILL.md) skill says.

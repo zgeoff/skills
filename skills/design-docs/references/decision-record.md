@@ -5,6 +5,9 @@ While the owner still weighs the options, keep the question in the Open question
 design doc, or in the work item when there is no design doc. When a user asks you to record a
 decision, take the request as proof that the owner made it.
 
+Write one decision per record, and link no design from it. The design doc is deleted at close-out,
+so the design links the record instead.
+
 ## Write a record
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the

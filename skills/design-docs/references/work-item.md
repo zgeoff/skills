@@ -48,9 +48,12 @@ function releaseExpiredHolds(now: Date): Promise<number>; // returns the count r
 
 ## Acceptance
 
-<!-- Each line: what someone observes, and its evidence: a test, CI or a live check. -->
+<!-- Each line: what someone observes, and its evidence: a `bun verify` journey and its verdict when the repo has a verify CLI, or a test. Leave out a line that only a release can prove. -->
 
-- [ ] An expired hold's units are back on the shelf. Evidence: a test with a fake clock.
+- [ ] A buyer sees the units back on the shelf after their hold expires. Evidence: the `holds`
+      journey in `bun verify`, with its verdict.
+- [ ] An expired hold's units are back on the shelf within 1 minute. Evidence: a test with a fake
+      clock.
 - [ ] Releasing an expired hold returns success. Evidence: a test.
 
 ## Out of scope

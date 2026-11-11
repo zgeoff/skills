@@ -46,7 +46,7 @@ flowchart LR
 
 ## Contracts
 
-<!-- The call first, with a result in a comment that matches its type. Then the types, each one defined here or named with the module that owns it. Name the module that owns each new type in a comment. For an HTTP endpoint, show the request and the response in an `http` block. A rule for one field goes in a comment on that field.  -->
+<!-- The call first, with a result in a comment that matches its type. Then the types, each one defined here or named with the module that owns it. Name the module that owns each new type in a comment. For an HTTP endpoint, show the request and the response in an `http` block. For a table with no SQL settled, list its columns in a `text` block, one per line with the type and a comment. A rule for one field goes in a comment on that field.  -->
 
 ```ts
 const hold = await holds.place({ orderID, sku: 'BOLT-M6', units: 40 });
