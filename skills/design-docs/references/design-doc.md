@@ -11,8 +11,8 @@ builder are.
 3. Delete each `<!-- -->` comment.
 4. Delete Shape when the design is one function or one type. Delete Out of scope and Open questions
    when they have nothing to say. Keep every other section.
-5. Leave file paths out of the text and the code, because the builder finds a symbol by name. Links
-   to other docs are fine.
+5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
+   docs are fine.
 
 Avoid these mistakes:
 
@@ -118,7 +118,7 @@ through a contract, so each doc owns the contracts of its part.
 
 1. Make the folder `docs/design/<work>/`, with one doc per part, named after the part, such as
    `ledger.md`.
-2. Give the folder a `README.md` with the title, the Status line, the summary, a Shape diagram of
+2. Give the folder a `README.md` with the title, the header bullets, the summary, a Shape diagram of
    how the parts connect, a table of the docs, and each decision that spans parts.
-3. Give each doc the sections above, with its own Shape diagram and its own Status line.
+3. Give each doc the sections above, with its own Shape diagram and its own header bullets.
 4. Add one `../` to each link out of the folder, such as `../../decisions/`.

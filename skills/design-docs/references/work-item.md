@@ -1,10 +1,9 @@
 # Work item template
 
-A work item is an issue in the work tracker, such as a Linear or GitHub issue. Use this template for
-its description when the work changes only code inside one module. When the work changes a shared
-contract, write a design doc first with the [design doc template](./design-doc.md). A shared
-contract is a type, API, schema, event, file format or config key that code in more than one module
-reads or writes.
+A work item is an issue in the work tracker, such as a Linear or GitHub issue. Every piece of work
+gets one, and this template is its description. When the work changes a shared contract, as
+[SKILL.md](../SKILL.md#choose-where-the-design-goes) defines it, write a design doc too, with the
+[design doc template](./design-doc.md), and link it as step 5 says.
 
 To write the description:
 

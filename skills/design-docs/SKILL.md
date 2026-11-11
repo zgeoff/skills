@@ -36,8 +36,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
   could check.
 - [Leave the details to the builder](#leave-the-details-to-the-builder): settle the contracts, and
   list what the builder decides.
-- [Write the design, not its history](#write-the-design-not-its-history): present tense, with no
-  dates, names or losing options.
+- [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
+  options.
 - [Keep it short](#keep-it-short): one doc, short code blocks, a few open questions.
 - [Write a decision record](#write-a-decision-record): when the owner approves the choice, edited in
   place.
@@ -66,7 +66,6 @@ Count as a shared contract any type, API, schema, event, file format or config k
 than one module reads or writes. A config key that one module reads is not one.
 
 When a design doc exists, the work item links the doc's sections and repeats none of their text.
-Write a design doc only when the table says so.
 
 ## Show contracts as code
 
@@ -108,7 +107,7 @@ reads "you" as itself.
 When the design extends existing code, list the symbols it changes in the Touches bullet at the top
 of the design doc, and describe only the change.
 
-## Write the design, not its history
+## Write only the design
 
 Write in the present tense, about the system that the design builds.
 
@@ -136,10 +135,10 @@ design. When you design alone, put each choice in the design's Decisions section
 approves the design in review, add a record for each choice that meets the condition to the same PR,
 and set the design's status to agreed.
 
-A record stands alone and links no design, because the design doc is deleted at close-out. The
-design links each record from its Decisions line. Keep the record short: the decision in a few
-lines, the reasons as bullets with any measured figure, and the rejected options as a table. When
-the decision changes, edit the record as the
+Link no design from a record. The design doc is deleted at close-out, and the design links each
+record from its Decisions line instead. Keep the record short: the decision in a few lines, the
+reasons as bullets with any measured figure, and the rejected options as a table. When the decision
+changes, edit the record as the
 [decision record template](./references/decision-record.md#change-a-record) says.
 
 ## Close out the design
