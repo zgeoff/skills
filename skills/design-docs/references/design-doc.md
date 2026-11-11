@@ -25,9 +25,8 @@ Avoid these mistakes:
 
 - **Status:** draft
 - **Decision records:** [0012](../decisions/0012-holds-expire-after-15-minutes.md)
-- **Touches:** `placeOrder`, `StockLedger`
 
-<!-- Status is draft until the owner approves the design, then agreed. Decision records lists each record the design links; delete that bullet when there are none. Touches lists the existing symbols the design changes, never the new ones. -->
+<!-- Status is draft until the owner approves the design, then agreed. Decision records lists each record the design links; delete that bullet when there are none.  -->
 
 <!-- The summary: 2 or 3 sentences on what changes, for whom, and the approach in one line. -->
 

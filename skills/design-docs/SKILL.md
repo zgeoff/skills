@@ -106,8 +106,8 @@ Put a question under "Open questions" only when the owner, a spike or a measurem
 Name which one, and what the code does until then. Write "the owner", never "you": an agent reads
 "you" as itself.
 
-When the design extends existing code, list its 5 main entry points in the Touches bullet at the top
-of the design doc, and describe only the change.
+When the design extends existing code, describe only the change. The sketches name the code it
+touches, so the doc needs no separate list.
 
 ## Write only the design
 
