@@ -1,26 +1,29 @@
 # Decision record template
 
-Write a record only once the owner has decided. A choice still under discussion goes in the Open
-questions section of its design.
+Read [SKILL.md](../SKILL.md) first: it says who the owner is and when a decision needs a record.
+While the owner still weighs the options, keep the question in the Open questions section of the
+design doc, or in the work item when there is no design doc. When a user asks you to record a
+decision, take the request as proof that the owner made it.
 
-Copy the block below to `docs/decisions/NNNN-<slug>.md`. `NNNN` is the next free number, and
-`<slug>` is the title in kebab case, such as `0012-holds-expire-after-15-minutes.md`. Never reuse a
-number, and never delete a record.
+## Write a record
 
-Fill the block this way:
-
-- Replace the example values, which describe an invented warehouse service.
-- Set `Date` to the day the owner decided. `Status` is always `decided`.
-- Delete the `Design` line when no design doc exists.
-- List at least one rejected option. When nobody weighed another option, the choice needs no record.
-- Delete Consequences when nothing follows that the Decision does not already say.
+1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
+   folder is empty or missing.
+2. Copy the block below to `docs/decisions/NNNN-<slug>.md`, where `<slug>` is the title in kebab
+   case, such as `0012-holds-expire-after-15-minutes.md`.
+3. Replace the example values. They describe an invented warehouse service.
+4. Set `Date` to the day the owner decided.
+5. List each option the owner weighed and turned down. When the owner weighed no other option, write
+   no record, and ask the user which options were weighed.
+6. Delete Consequences when the decision leads to nothing beyond what the Decision section says.
+7. In the design doc, move the question out of Open questions, and link the record from its
+   Decisions line.
 
 ```markdown
 # 0012: Holds expire after 15 minutes
 
 - Date: 2026-03-01
 - Status: decided
-- Design: [order holds](../design/order-holds.md)
 
 ## Decision
 
@@ -45,15 +48,18 @@ never extends.
 - A buyer who takes longer than 15 minutes can lose the units at payment.
 ```
 
+`Status` stays `decided` for the life of the record. Other docs, code comments and PRs cite a record
+by its number, so keep every record and never give its number to another one.
+
 ## Change a record
 
 When the owner changes the decision, edit the record in place:
 
-1. Rewrite the title, Decision, Why and Consequences to state the new decision. Keep the file name
-   and the number, so links still work.
-2. Add an `Updated` line with the date, under `Date`.
-3. Move the old choice into Rejected alternatives, with why it lost.
-4. Add a `## Changes` section at the end, or a line to it, with the date and the change in one line.
+1. Rewrite the title, Decision, Why and Consequences to state the new decision. Keep the file name,
+   even though its slug no longer matches the title, so links keep working.
+2. Set the `Updated` line under `Date` to the day of the change. Add the line on the first change.
+3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
+4. Add a dated line to the `## Changes` section at the end, and add the section on the first change.
 
 ```markdown
 - Date: 2026-03-01
@@ -67,5 +73,5 @@ When the owner changes the decision, edit the record in place:
 - 2026-04-10: the expiry moved from 15 to 20 minutes.
 ```
 
-When the owner drops a decision with nothing in its place, rewrite the Decision to say the rule no
-longer applies, and add the line to `## Changes`.
+When the owner drops the decision and puts nothing in its place, rewrite the Decision section to say
+it no longer applies. Then do steps 2 and 4.

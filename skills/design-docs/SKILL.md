@@ -4,15 +4,16 @@ description:
   'Records a technical design as contracts and constraints: inline code sketches, constraint bullets
   and a diagram, in a work item for small work, a design doc for big work, and a decision record for
   a choice that outlives both. Holds the templates. Load it before you write or review a design, a
-  decision record or the design part of a work item, and at the end of a design session.'
+  decision record or the design part of a work item, at the end of a design session, and when work
+  with a design doc is built.'
 ---
 
 # Design docs
 
-Record a design for two readers. The owner, the person you work for who approves the design, skims
-it in two minutes and says yes or no. The builder, the agent or person who implements it, starts
-from it without asking. Both need the contracts as code and the rules as bullets. Settle what is
-costly to change later, and leave the builder the rest.
+Record a design for two readers. The owner is the person you work for, who approves the design. The
+owner skims it in two minutes and says yes or no. The builder is the agent or person who implements
+it, and starts from it without asking. Both need the contracts as code and the rules as bullets.
+Settle what is costly to change later, and leave the builder the rest.
 
 Avoid these mistakes:
 
@@ -20,15 +21,15 @@ Avoid these mistakes:
   sketches, review logs, "decided by you on 11 Nov";
 - writing to the owner, such as "a default you can change", where the builder needs the rule;
 - describing a contract in prose when a code block shows it;
-- one design spread over many small docs.
+- a doc per rule or per tool, where one doc per part would do.
 
-You're done when the skim test and the builder test in [Check it](#check-it) find nothing left to
-fix.
+Hand back where the design went, each decision record you wrote, and what the two tests in
+[Check it](#check-it) found.
 
 ## Key rules
 
-- [Choose where the design goes](#choose-where-the-design-goes): a work item for small work, a
-  design doc for a shared contract, a decision record for an approved choice.
+- [Choose where the design goes](#choose-where-the-design-goes): a work item always, a design doc
+  for a shared contract, a decision record for a lasting choice.
 - [Show contracts as code](#show-contracts-as-code): inline code sketches, the call first, then the
   types, with rules in comments.
 - [State constraints as bullets](#state-constraints-as-bullets): one rule per line, each one a test
@@ -38,8 +39,10 @@ fix.
 - [Write the design, not its history](#write-the-design-not-its-history): present tense, with no
   dates, names or losing options.
 - [Keep it short](#keep-it-short): one doc, short code blocks, a few open questions.
-- [Write a decision record](#write-a-decision-record): for a choice the owner approved, edited in
+- [Write a decision record](#write-a-decision-record): when the owner approves the choice, edited in
   place.
+- [Close out the design](#close-out-the-design): once the work is built, keep what lasts and delete
+  the design doc.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
 
 ## References
@@ -51,34 +54,33 @@ fix.
 
 ## Choose where the design goes
 
-A shared contract is a type, API, schema, event, config format or file format that code outside the
-change reads or writes.
+Give every piece of work a work item in the tracker. Add the others when their condition holds:
 
-| Write a         | When                                                                                | In                              |
-| --------------- | ----------------------------------------------------------------------------------- | ------------------------------- |
-| work item       | the work changes no shared contract, such as a new config key that one module reads | the work tracker                |
-| design doc      | the work adds or changes a shared contract, or spans several PRs that share one     | `docs/design/<work>.md`         |
-| decision record | the owner chose between options, and the choice will outlive the design             | `docs/decisions/NNNN-<slug>.md` |
+| Write a         | When                                                                                   | In                              |
+| --------------- | -------------------------------------------------------------------------------------- | ------------------------------- |
+| work item       | always; it holds the whole design when no design doc exists                            | the work tracker                |
+| design doc      | the work adds or changes a shared contract, or spans several PRs that share a contract | `docs/design/<work>.md`         |
+| decision record | the owner chose between options, and the choice will outlive the design                | `docs/decisions/NNNN-<slug>.md` |
 
-A design session with the owner can end in any of these, and needs no design doc unless the table
-calls for one. When work has both a design doc and a work item, the work item links the doc's
-sections and copies nothing from them.
+Count as a shared contract any type, API, schema, event, file format or config key that code in more
+than one module reads or writes. A config key that one module reads is not one.
 
-Once the work is built, the agent that lands its last PR moves what still describes the system into
-`docs/architecture/`, points each decision record's design link there, and deletes the design doc.
+When a design doc exists, the work item links the doc's sections and repeats none of their text.
+Write a design doc only when the table says so.
 
 ## Show contracts as code
 
 Write each contract as a code sketch: an inline code block that shows its shape. Never put sketches
 in separate files. The builder follows a sketch's shapes and the rules in its comments, and may
-change names inside a module and anything a comment marks as illustrative.
+rename anything the module does not export.
 
 - Show the call first, with a realistic result in a comment. Then show the types it needs. A
   contract with no call, such as a config key or a table, starts at its shape.
 - Put a rule that belongs to one field in a comment on that field.
 - Mark existing code you extend with `// …existing fields`, and show only what changes.
 - Name the module that owns each type in a comment. Leave file paths out: the builder has grep.
-- Show a port as an interface, with its adapters named in a comment.
+- Show each outside system the design reaches, such as a store or a queue, as an interface, with its
+  adapters named in a comment.
 - Write each sketch in the format the code base uses: its language, its config format, its SQL
   dialect. Show a table as its columns in a `text` block, one per line with the type and a comment,
   when no SQL is settled.
@@ -97,13 +99,14 @@ limit, a failure and what happens on it, or something that must never happen.
 
 Settle the contracts, the boundaries between parts, the invariants and the failure behaviour. List
 the choices you leave to the builder under "Builder decides", such as internal names, file layout,
-helper functions, error wording and test layout. The owner then sees what you left open on purpose.
+helper functions, error wording and test layout.
 
-Put a question under "Open questions" only when the owner, a spike or a measurement has to settle it
-before it can be built for good. Give it what the code does until then.
+Put a question under "Open questions" only when the owner, a spike or a measurement must settle it.
+Name which one, and say what the code does until then. Write "the owner", never "you": an agent
+reads "you" as itself.
 
-When the design extends existing code, list the symbols it changes in the `Touches` field of the
-doc's status line, and describe only the change. Leave out what the builder can read from the code.
+When the design extends existing code, list the symbols it changes in the Touches bullet at the top
+of the design doc, and describe only the change.
 
 ## Write the design, not its history
 
@@ -111,31 +114,42 @@ Write in the present tense, about the system that the design builds.
 
 - State each decision as the rule it set. Leave out who decided, when, and the options shown in the
   session.
-- Give a rejected option one line in its decision record. Until the record exists, give it a clause
-  in the Decisions line, such as "over a per-user cap, because…".
+- Put a rejected option in its decision record. Before the record exists, put it in the PR
+  description.
 - Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:
   where the text below differs, this list holds".
-- Keep review findings, fact checks and drafts in the PR or the session.
 
 ## Keep it short
 
-- Write one design doc per piece of work. When it passes about 400 lines with its code, split it as
-  the [design doc template](./references/design-doc.md#split-a-long-design) says.
+- Write one design doc per piece of work. When it passes about 400 lines with its code, split it
+  into one doc per part, as the
+  [design doc template](./references/design-doc.md#split-a-long-design) says.
 - Keep each code block under about 40 lines.
-- Draw one mermaid diagram of the main path near the top, with 10 nodes or fewer.
+- Start a design doc with one mermaid diagram of the main path, with 10 nodes or fewer. A work item
+  needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
 
 ## Write a decision record
 
-Write one for a choice between options that the owner approved, in a session, a review or the PR
-that adds the design. When you design alone, put each choice in the design's Decisions section. When
-the owner approves the design in review, add the records to the same PR, and set the design's status
-to agreed.
+Write one when the table's condition holds: in the session, in review, or in the PR that adds the
+design. When you design alone, put each choice in the design's Decisions section. When the owner
+approves the design in review, add a record for each choice that meets the condition to the same PR,
+and set the design's status to agreed.
 
-Keep it short: the decision in a few lines, the reasons as bullets with any measured figure, and the
-rejected options as a table. When the decision changes, edit the record in place, as the
-[decision record template](./references/decision-record.md#change-a-record) says. Never delete a
-record, and never reuse its number.
+A record stands alone and links no design, because the design doc is deleted at close-out. The
+design links each record from its Decisions line. Keep the record short: the decision in a few
+lines, the reasons as bullets with any measured figure, and the rejected options as a table. When
+the decision changes, edit the record as the
+[decision record template](./references/decision-record.md#change-a-record) says.
+
+## Close out the design
+
+A design doc lasts only until its work is built. When the last work item that the design covers is
+done, the agent that finishes it closes out the design:
+
+1. Move each fact that still describes the system into its doc in `docs/architecture/`.
+2. Check that each lasting choice has a decision record.
+3. Delete the design doc.
 
 ## Check it
 
@@ -145,8 +159,8 @@ builder test.
 
 1. **Skim test.** "Read this design the way a reviewer with two minutes would: the opening, the
    diagram, the headings and the code. Then say what gets built, what its contracts are, and what
-   you would push back on." When the answer misses the point of the design, rewrite the opening or
-   the diagram.
+   you would push back on." When the answer misses the point, rewrite the opening or the diagram.
+   Fix each push-back, or answer it in the PR.
 2. **Builder test.** "You build the first part of this design. List every question you would have to
    ask before you start, and each place where you would have to guess at a contract." Fix each
    question about a contract or a constraint. A question about a choice under "Builder decides"

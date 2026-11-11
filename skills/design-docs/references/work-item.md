@@ -1,19 +1,22 @@
 # Work item template
 
-Paste the block below into the description of an issue in the work tracker, such as a Linear or
-GitHub issue, and write your own title. Use it when the work changes no shared contract: no type,
-API, schema, event or file format that code outside the change reads or writes. When it changes one,
-write a design doc with the [design doc template](./design-doc.md) first.
+A work item is an issue in the work tracker, such as a Linear or GitHub issue. Use this template for
+its description when the work changes only code inside one module. When the work changes a shared
+contract, write a design doc first with the [design doc template](./design-doc.md). A shared
+contract is a type, API, schema, event, file format or config key that code in more than one module
+reads or writes.
 
-Fill the block this way:
+To write the description:
 
-- Replace the example values, which describe an invented warehouse service, and delete each
-  `<!-- -->` comment.
-- Keep Outcome and Acceptance. Delete any other section that would be empty.
-- When a design doc covers part of the work, put a link to the doc's section under each heading it
-  covers, and write only what the doc leaves out. Copy nothing from the doc.
-- When the design changes, rewrite the sections it changes, and untick each Acceptance line whose
-  evidence no longer holds. Put the reason for the change in a comment on the issue.
+1. Paste the block below, and write your own title.
+2. Replace the example values. They describe an invented warehouse service.
+3. Delete each `<!-- -->` comment.
+4. Keep Outcome and Acceptance. Delete each other section that has nothing to say.
+5. When a design doc covers some of the work, link the doc's section under each heading the doc
+   covers. Write only what the doc leaves out, and repeat none of the doc's text.
+
+When the plan for the work changes later, rewrite each section that changed. Untick each Acceptance
+line whose evidence no longer holds, and give the reason in a comment on the issue.
 
 ````markdown
 ## Outcome
@@ -22,15 +25,13 @@ Fill the block this way:
 
 A hold that nobody releases returns its units to the shelf 15 minutes after it was placed.
 
-## Contract
+## Sketch
 
-<!-- The type or signature this change adds or changes inside its own module, 20 lines at most. -->
+<!-- The function or type inside the module that this work adds or changes. 20 lines at most: show only what changes. -->
 
 ```ts
-interface Hold {
-  // …existing fields
-  expiresAt: string; // placed + 15 minutes
-}
+// holds module, called by the scheduler once a minute
+function releaseExpiredHolds(now: Date): Promise<number>; // returns the count released
 ```
 
 ## Constraints
@@ -42,12 +43,14 @@ interface Hold {
 
 ## Acceptance
 
-<!-- Each line: what someone observes, and its evidence: a test, CI or a live check. Tick a line when its evidence lands. -->
+<!-- Each line: what someone observes, and its evidence: a test, CI or a live check. -->
 
 - [ ] An expired hold's units are back on the shelf. Evidence: a test with a fake clock.
 - [ ] Releasing an expired hold returns success. Evidence: a test.
 
 ## Out of scope
+
+<!-- What a reader might expect this work to do, and it doesn't. -->
 
 - Extending a hold.
 ````

@@ -1,33 +1,35 @@
 # Design doc template
 
-Copy the block below to `docs/design/<work>.md`, where `<work>` names the work in kebab case, such
-as `order-holds.md`. The design doc has two readers: the project owner, who approves the design, and
-the builder, the agent or person who implements it. Read [SKILL.md](../SKILL.md) first for what goes
-in each section.
+Read [SKILL.md](../SKILL.md) first: it says what goes in each section and who the owner and the
+builder are.
 
-Fill the block this way:
+## Write a design doc
 
-- Replace the example values, which describe an invented warehouse service, and delete each
-  `<!-- -->` comment.
-- Keep the sections in this order. Delete Shape only when one code block shows the whole design, and
-  delete Open questions when nothing is open. Keep every other section.
-- Leave file paths out everywhere. The builder finds a symbol by name.
+1. Copy the block below to `docs/design/<work>.md`, where `<work>` names the work in kebab case,
+   such as `order-holds.md`.
+2. Replace the example values. They describe an invented warehouse service.
+3. Delete each `<!-- -->` comment.
+4. Delete Shape when the design is one function or one type. Delete Out of scope and Open questions
+   when they have nothing to say. Keep every other section.
+5. Leave file paths out of the text and the code, because the builder finds a symbol by name. Links
+   to other docs are fine.
 
 Avoid these mistakes:
 
-- a section of prose that retells a contract the Contracts section already shows;
-- an option the owner rejected, a date, or a note addressed to the owner;
+- prose that retells a contract the Contracts section shows;
+- an option the owner turned down, a dated note, or a note addressed to the owner;
 - an open question with nothing named to settle it, or one the builder could settle alone.
 
 ````markdown
 # <Work name>
 
-> **Status:** draft · **Decisions:** [0012](../decisions/0012-holds-expire-after-15-minutes.md) ·
-> **Touches:** `HoldStore`, `placeOrder`
+- **Status:** draft
+- **Decision records:** [0012](../decisions/0012-holds-expire-after-15-minutes.md)
+- **Touches:** `placeOrder`, `StockLedger`
 
-<!-- Status is draft until the owner approves the design, then agreed. List each decision record this design links, or delete Decisions when it has none. Touches lists the existing symbols the design changes. -->
+<!-- Status is draft until the owner approves the design, then agreed. Decision records lists each record the design links; delete that bullet when there are none. Touches lists the existing symbols the design changes, never the new ones. -->
 
-<!-- 2 or 3 sentences: what changes, for whom, and the approach in one line. -->
+<!-- The summary: 2 or 3 sentences on what changes, for whom, and the approach in one line. -->
 
 Orders hold stock while the buyer checks out, so two buyers can't pay for the last unit. A hold
 lives in the stock ledger and expires on its own.
@@ -45,11 +47,11 @@ flowchart LR
 
 ## Contracts
 
-<!-- The call first, with a realistic result in a comment, then the types. For an HTTP endpoint, show the request and the response in an `http` block. A rule that belongs to one field goes in a comment on that field. Each block under about 40 lines. -->
+<!-- The call first, with a result in a comment that matches its type. Then the types, each one defined here or named with the module that owns it. Name the module that owns each new type in a comment. For an HTTP endpoint, show the request and the response in an `http` block. A rule for one field goes in a comment on that field. Each block under about 40 lines. -->
 
 ```ts
 const hold = await holds.place({ orderID, sku: 'BOLT-M6', units: 40 });
-// → { holdID: 'h_8f2', expiresAt: '2026-03-02T10:15:00Z' }
+// → { holdID: 'h_8f2', units: 40, expiresAt: '2026-03-02T10:15:00Z' }
 //   or { error: 'insufficient-stock', available: 12 }
 ```
 
@@ -60,6 +62,9 @@ interface HoldStore {
   release(holdID: string): Promise<void>; // idempotent
 }
 
+type PlaceHold = { orderID: string; sku: string; units: number };
+type InsufficientStock = { error: 'insufficient-stock'; available: number };
+
 interface Hold {
   holdID: string;
   units: number; // > 0
@@ -69,7 +74,7 @@ interface Hold {
 
 ## Constraints
 
-<!-- One checkable rule per line: invariants, limits with numbers, failures and what happens on each, what must never happen. -->
+<!-- The rules the code must keep, one per line, each one a test could check: invariants, limits with numbers, failures and what happens on each, what must never happen. -->
 
 - Held units never exceed the units on the shelf.
 - When a hold expires, its units return to the shelf within 1 minute.
@@ -79,7 +84,7 @@ interface Hold {
 
 ## Decisions
 
-<!-- One line each: the rule, its reason, and a link to its decision record when one exists. A decision record holds a choice the owner approved; see SKILL.md. -->
+<!-- Each choice made between options, one line each: the choice, its reason, and a link to its decision record when one exists. A rule the code must keep goes in Constraints. -->
 
 - **Holds expire after 15 minutes.** A checkout that takes longer has been abandoned.
   [0012](../decisions/0012-holds-expire-after-15-minutes.md)
@@ -95,24 +100,25 @@ interface Hold {
 
 ## Out of scope
 
-<!-- What a reader might expect here and won't find, with where it lives or why not. -->
+<!-- What a reader might expect this work to do, and it doesn't, with where it lives or why not. -->
 
 - Holds across warehouses. Each warehouse holds its own stock.
 
 ## Open questions
 
-<!-- Each question: what settles it (the owner, a spike or a measurement), and what the code does until then. -->
+<!-- Each question: what settles it (the owner, a spike or a measurement), and what the code does until then. When it is settled, move the answer into Decisions and delete the question. -->
 
-- [ ] **Can staff extend a hold?** The owner settles it. Until then, a hold never extends.
+- **Can staff extend a hold?** The owner settles it. Until then, a hold never extends.
 ````
 
 ## Split a long design
 
-When a design passes about 400 lines with its code, split it into `docs/design/<work>/`, one doc per
-part, cut where one part calls another through a contract. Each doc owns the contracts of its part.
+Split a design that passes about 400 lines with its code. Cut it where one part calls another
+through a contract, so each doc owns the contracts of its part.
 
-- Name each doc after its part, such as `ledger.md` and `expiry.md`.
-- Give the folder a `README.md` with the opening, a Shape diagram of how the parts connect, and a
-  table of the docs.
-- Give each doc the sections above, with its own Shape diagram for its part, and the Status line.
-- Add one `../` to each link out of the folder, such as `../../decisions/`.
+1. Make the folder `docs/design/<work>/`, with one doc per part, named after the part, such as
+   `ledger.md`.
+2. Give the folder a `README.md` with the title, the Status line, the summary, a Shape diagram of
+   how the parts connect, a table of the docs, and each decision that spans parts.
+3. Give each doc the sections above, with its own Shape diagram and its own Status line.
+4. Add one `../` to each link out of the folder, such as `../../decisions/`.
