@@ -16,7 +16,7 @@ owner.
 
 Avoid these mistakes:
 
-- a task list where the outcome goes;
+- a list of tasks in the Outcome section;
 - a fact that stays in your head;
 - behaviour that the owner never asked for;
 - an owner's decision that you settled with a guess.
@@ -26,9 +26,10 @@ Avoid these mistakes:
 - [One item, one outcome](#one-item-one-outcome): split by outcome, never by size.
 - [Write it to the template](#write-it-to-the-template): Outcome, Context, Depends on, Acceptance,
   Out of scope and Permissions.
-- [Acceptance](#acceptance): one check per line, each with the evidence that proves it.
-- [Keep the owner's words](#keep-the-owners-words): add no behaviour, and leave the owner's
-  decisions as questions.
+- [Acceptance](#acceptance): one line for each thing someone observes, with the evidence that
+  proves it.
+- [Keep the owner's words](#keep-the-owners-words): copy the words that decide something, and ask
+  the owner before you add or change anything.
 - [Ready](#ready): the test an item passes before work starts.
 
 ## One item, one outcome
@@ -102,8 +103,8 @@ recording.
 - Make each line fail today and pass when the work is done.
 - Leave out a line that you can prove only after a release. The next agent can't show it in a
   pull request.
-- When a line tests something that doesn't exist yet, make sure this item builds it, or list the
-  item that does under Depends on.
+- When a line needs something that this item doesn't build, such as a fixture or an API, list the
+  item that builds it under Depends on.
 
 ## Keep the owner's words
 
@@ -115,14 +116,15 @@ answers, keep the question in Context, marked "For the owner:":
 
 - a change to the outcome;
 - behaviour that the outcome doesn't ask for;
-- a looser reading of a rule that the owner set;
+- a weaker form of a limit that the owner set, such as a higher spend limit;
 - a choice that costs money, touches security, or can't be undone.
 
 Ask nothing that the item or an earlier answer already settles.
 
 ## Ready
 
-File an item that isn't ready, and say what it lacks. An item is ready when all of these hold:
+When an item isn't ready, file it anyway, and say in your reply what it lacks. An item is ready
+when all of these hold:
 
 - An agent that reads only the item can say what done looks like.
 - Acceptance has at least one line, and each line names its evidence.
