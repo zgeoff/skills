@@ -1,12 +1,12 @@
 # Decision record template
 
-Read [SKILL.md](../SKILL.md) first: it says who the owner is and when a decision needs a record.
-While the owner still weighs the options, keep the question in the Open questions section of the
-design doc, or in the work item when there is no design doc. When a user asks you to record a
-decision, take the request as proof that the owner made it.
+Read [SKILL.md](../SKILL.md) first. It says who the owner is, holds the three tests a choice must
+pass before it gets a record, and says when to write one. While the owner still weighs the options,
+keep the question in the Open questions section of the design doc, or in the work item when there is
+no design doc.
 
-Write one decision per record, and link no design from it. The design doc is deleted at close-out,
-so the design links the record instead.
+When the owner asks you to record a decision, take the request as proof that the owner made it. When
+the choice fails one of the three tests, say which test before you write the record.
 
 ## Write a record
 
@@ -16,8 +16,8 @@ so the design links the record instead.
    case, such as `0012-holds-expire-after-15-minutes.md`.
 3. Replace the example values. They describe an invented warehouse service.
 4. Set `Date` to the day the owner decided.
-5. List each option the owner weighed and turned down. When the owner weighed no other option, write
-   no record, and ask the user which options were weighed.
+5. List each option the owner weighed and turned down. When you don't know which options the owner
+   weighed, ask the owner. When the owner weighed none, write no record.
 6. Delete Consequences when the decision leads to nothing beyond what the Decision section says.
 7. In the design doc, move the question out of Open questions, and link the record from its
    Decisions line.
