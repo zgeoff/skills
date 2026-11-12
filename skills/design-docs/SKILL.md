@@ -148,7 +148,8 @@ Write a record only for a choice that passes all three tests. The record lets th
 proposes a rejected option read why it lost.
 
 - **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
-  a one-line comment can make the reason plain, write the comment.
+  every change must pass one line, and a comment there can give the reason, write the comment. A
+  security boundary always passes this test.
 - **It is costly to reverse.** Reversing it takes a data migration, a change to a stored or wire
   format, a move of a security boundary, a break of an external contract, or weeks of rework.
 - **The rejected option was real.** A reasonable engineer would pick it on another day. When each
@@ -162,9 +163,9 @@ Put a choice that fails a test where its reader looks:
 | the reason for one piece of code | a code comment                                             |
 | build order                      | the work items                                             |
 
-Write a record once the owner approves the choice. Add it to the PR that adds the design doc. When
-the design lives in a work item, open a PR for the record alone. Until the owner approves, state the
-choice in the design's Decisions section.
+Write a record once the owner approves the choice. Add it to the PR that adds the design doc. With
+no design doc, open a PR for the record alone. Until the owner approves, state the choice in the
+design's Decisions section.
 
 Write one decision per record, and link no design from it: the design doc is deleted at close-out.
 When a Decisions line has a record, end the line with a link to it. The
