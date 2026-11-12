@@ -21,7 +21,6 @@ Avoid these mistakes:
   sketches, review logs, "decided by you on 11 Nov";
 - writing to the owner, such as "a default you can change", where the builder needs the rule;
 - describing a contract in prose when a code block shows it;
-
 - a doc per rule or per tool, where one doc per part would do.
 
 Hand back where the design went, each decision record you wrote, and what the two tests in
@@ -39,11 +38,12 @@ Hand back where the design went, each decision record you wrote, and what the tw
   list what the builder decides.
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
-- [Keep it short](#keep-it-short): one doc per piece of work, one diagram, a few open questions.
+- [Keep it short](#keep-it-short): one doc per piece of work, one diagram, under about 10 open
+  questions.
 - [Prove acceptance](#prove-acceptance): each line names its evidence, a `bun verify` verdict where
   the repo has one.
-- [Write a decision record](#write-a-decision-record): when the owner approves the choice, edited in
-  place.
+- [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
+  reversing it is costly, and the rejected option was real.
 - [Close out the design](#close-out-the-design): once the work is built, keep what lasts and delete
   the design doc.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
@@ -60,11 +60,11 @@ Hand back where the design went, each decision record you wrote, and what the tw
 
 Give every piece of work a work item in the tracker. Add the others when their condition holds:
 
-| Write a         | When                                                                    | In                              |
-| --------------- | ----------------------------------------------------------------------- | ------------------------------- |
-| work item       | always; it holds the whole design when no design doc exists             | the work tracker                |
-| design doc      | two or more work items build on a shared contract that is not built yet | `docs/design/<work>.md`         |
-| decision record | the owner chose between options, and the choice will outlive the design | `docs/decisions/NNNN-<slug>.md` |
+| Write a         | When                                                                                       | In                              |
+| --------------- | ------------------------------------------------------------------------------------------ | ------------------------------- |
+| work item       | always; it holds the whole design when no design doc exists                                | the work tracker                |
+| design doc      | two or more work items build on a shared contract that is not built yet                    | `docs/design/<work>.md`         |
+| decision record | the owner's choice passes the tests in [Write a decision record](#write-a-decision-record) | `docs/decisions/NNNN-<slug>.md` |
 
 Count as a shared contract any type, API, schema, event, file format or config key that code in more
 than one module reads or writes. A config key that one module reads is not one.
@@ -117,8 +117,8 @@ Write in the present tense, about the system that the design builds.
 
 - State each decision as the rule it set. Leave out who decided, when, and the options shown in the
   session.
-- Put a rejected option in its decision record. Before the record exists, put it in the PR
-  description.
+- Put a rejected option in its decision record. When the choice has no record, put the option in the
+  PR description.
 - Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:
   where the text below differs, this list holds".
 
@@ -144,13 +144,31 @@ Write each Acceptance line of a work item as a behaviour someone can observe, an
 
 ## Write a decision record
 
-Write one when the table's condition holds: in the session, in review, or in the PR that adds the
-design. When you design alone, put each choice in the design's Decisions section. When the owner
-approves the design in review, add a record for each choice that meets the condition to the same PR,
-and set the design's status to agreed.
+Write a record only for a choice that passes all three tests. The record lets the next person who
+proposes a rejected option read why it lost.
+
+- **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
+  every change must pass one line, and a comment there can give the reason, write the comment. A
+  security boundary always passes this test.
+- **It is costly to reverse.** Reversing it takes a data migration, a change to a stored or wire
+  format, a move of a security boundary, a break of an external contract, or weeks of rework.
+- **The rejected option was real.** A reasonable engineer would pick it on another day. When each
+  rejected option is a strawman, write no record.
+
+Put a choice that fails a test where its reader looks:
+
+| The choice                       | Goes in                                                    |
+| -------------------------------- | ---------------------------------------------------------- |
+| a contract, a shape or a rule    | the design doc, then the architecture doc once it is built |
+| the reason for one piece of code | a code comment                                             |
+| build order                      | the work items                                             |
+
+Write a record once the owner approves the choice. Add it to the PR that adds the design doc. With
+no design doc, open a PR for the record alone. Until the owner approves, state the choice in the
+design's Decisions section.
 
 Write one decision per record, and link no design from it: the design doc is deleted at close-out.
-End each Decisions line of the design with a link to its record. The
+When a Decisions line has a record, end the line with a link to it. The
 [decision record template](./references/decision-record.md) holds the shape and how to change a
 record.
 
@@ -160,7 +178,8 @@ A design doc lasts only until its work is built. When the last work item that th
 done, the agent that finishes it closes out the design:
 
 1. Move each fact that still describes the system into its doc in `docs/architecture/`.
-2. Check that each lasting choice has a decision record.
+2. Check that each choice that passes the tests in
+   [Write a decision record](#write-a-decision-record) has a record.
 3. Delete the design doc.
 
 ## Check it
