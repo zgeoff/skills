@@ -42,8 +42,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
   questions.
 - [Prove acceptance](#prove-acceptance): each line names its evidence, a `bun verify` verdict where
   the repo has one.
-- [Write a decision record](#write-a-decision-record): only for a choice a newcomer would undo, that
-  is costly to reverse, with a real rejected option.
+- [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
+  reversing it is costly, and the rejected option was real.
 - [Close out the design](#close-out-the-design): once the work is built, keep what lasts and delete
   the design doc.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
@@ -144,8 +144,8 @@ Write each Acceptance line of a work item as a behaviour someone can observe, an
 
 ## Write a decision record
 
-Write a record so that the next person who proposes a rejected option can read why it lost. Write
-one only for a choice that passes all three tests:
+Write a record only for a choice that passes all three tests. The record lets the next person who
+proposes a rejected option read why it lost.
 
 - **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
   a one-line comment can make the reason plain, write the comment.
@@ -162,9 +162,9 @@ Put a choice that fails a test where its reader looks:
 | the reason for one piece of code | a code comment                                             |
 | build order                      | the work items                                             |
 
-Write a record once the owner approves the choice, and add it to the PR that adds the design doc, or
-to a PR of its own when the design lives in a work item. Until the owner approves, state the choice
-in the design's Decisions section.
+Write a record once the owner approves the choice. Add it to the PR that adds the design doc. When
+the design lives in a work item, open a PR for the record alone. Until the owner approves, state the
+choice in the design's Decisions section.
 
 Write one decision per record, and link no design from it: the design doc is deleted at close-out.
 When a Decisions line has a record, end the line with a link to it. The

@@ -1,9 +1,8 @@
 # Decision record template
 
-Read [SKILL.md](../SKILL.md) first. It says who the owner is, holds the three tests a choice must
-pass before it gets a record, and says when to write one. While the owner still weighs the options,
-keep the question in the Open questions section of the design doc, or in the work item when there is
-no design doc.
+Read [SKILL.md](../SKILL.md) first: it says who the owner is, and when a choice needs a record.
+While the owner still weighs the options, keep the question in the Open questions section of the
+design doc, or in the work item when there is no design doc.
 
 When the owner asks you to record a decision, take the request as proof that the owner made it. When
 the choice fails one of the three tests, say which test before you write the record.
