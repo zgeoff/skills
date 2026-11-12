@@ -52,8 +52,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
 
 - [Design doc template](./references/design-doc.md): writing a design doc, or splitting a long one.
 - [Work item template](./references/work-item.md): writing the design part of a work item.
-- [Decision record template](./references/decision-record.md): writing or changing a decision
-  record.
+- [Decision record template](./references/decision-record.md): writing, changing or removing a
+  decision record.
 - [Test prompts](./references/test-prompts.md): running the skim test and the builder test.
 
 ## Choose where the design goes
@@ -169,8 +169,8 @@ design's Decisions section.
 
 Write one decision per record, and link no design from it: the design doc is deleted at close-out.
 When a Decisions line has a record, end the line with a link to it. The
-[decision record template](./references/decision-record.md) holds the shape and how to change a
-record.
+[decision record template](./references/decision-record.md) holds the shape, and how to change or
+remove a record.
 
 ## Close out the design
 
