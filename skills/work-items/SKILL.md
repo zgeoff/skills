@@ -11,7 +11,8 @@ description:
 
 Write each work item as the whole brief of the agent that picks it up. That agent has only the
 item: it never saw your conversation, the code you read, or what the owner told you. Hand back
-each item you filed or changed, and each question in it that waits on the owner.
+each item you filed or changed, whether it is ready, and each decision in it that waits on the
+owner.
 
 Avoid these mistakes:
 
@@ -33,21 +34,21 @@ Avoid these mistakes:
 ## One item, one outcome
 
 File one item for each outcome that can land by itself. Keep one outcome in one item, however
-large. The design step splits the build.
+large. Whoever designs the work splits it into pull requests.
 
-Write the title as the outcome, in plain lowercase: "expired holds return their units to the
-shelf".
+Write the title as the outcome, in plain lowercase, so that a list of titles reads as a list of
+results: "expired holds return their units to the shelf".
 
 ## Write it to the template
 
-Paste the block, replace the example values, and delete each `<!-- -->` comment. The example
-describes an invented warehouse service. Keep Outcome and Acceptance, and delete each other
-section that has nothing to say.
+Paste the block, and replace its example values, which describe an invented warehouse service.
+Delete each `<!-- -->` comment. Keep Outcome and Acceptance, and delete any other section that
+you leave empty.
 
 ```markdown
 ## Outcome
 
-<!-- 1 to 3 sentences: what is true when the work is done. For a bug, what happens now too. Give the end state. The builder picks the steps. -->
+<!-- 1 to 3 sentences: what is true when the work is done. For a bug, what happens now too. Give the end state. The next agent picks the steps. -->
 
 A hold that nobody releases returns its units to the shelf 15 minutes after it was placed. Today
 the units stay held until someone releases them by hand.
@@ -63,11 +64,11 @@ the units stay held until someone releases them by hand.
 
 <!-- Each work item that must be done first, as a link. -->
 
-- [Holds have an expiry time](<link to the item>)
+- [holds have an expiry time](<link to the item>)
 
 ## Acceptance
 
-<!-- One line for each thing someone observes, with its evidence. -->
+<!-- One line for each thing someone observes. Each line names the evidence that the next agent will show. -->
 
 - [ ] A buyer sees the units back on the shelf after their hold expires. Evidence: a recording.
 - [ ] An expired hold's units are back on the shelf within 1 minute. Evidence: a test with a fake
@@ -81,35 +82,36 @@ the units stay held until someone releases them by hand.
 
 ## Permissions
 
-<!-- Each thing the agent may do beyond its own branch and pull request, in the owner's words: a deploy, a paid API with its spend limit, a migration, a post under the owner's name. Grant nothing yourself. -->
+<!-- Each thing the next agent may do beyond its own branch and pull request, in the owner's words: a deploy, a paid API with its spend limit, a migration, a post under the owner's name. Grant nothing yourself. -->
 
 - Run the migration that adds the expiry column, after a backup.
 ```
 
-For work that ends in an answer, write `## Questions` in place of `## Out of scope`: each
+For work that ends in an answer, such as an investigation, add `## Questions to answer`: each
 question, and the decision that its answer informs.
 
-The design step adds its own sections, as the
-[work item template](../design-docs/references/work-item.md) shows. Leave those sections to it.
+Leave the Sketch and Constraints sections to whoever designs the work, as the
+[design-docs](../design-docs/references/work-item.md) skill says.
 
 ## Acceptance
 
-Write each line as one thing that someone observes, with its evidence: a test, a command and its
-output, a screenshot or a recording. A change that someone can see needs a screenshot or a
+Write each line as one thing that someone observes, and name the evidence that will prove it: a
+test, a command and its output, a screenshot or a recording. A change that someone can see needs a screenshot or a
 recording.
 
 - Make each line fail today and pass when the work is done.
-- Leave out a line that only a release or the live system can prove. The builder can't show it in
-  a pull request.
-- Check that the thing a line tests exists, or that this item or one it depends on builds it.
+- Leave out a line that you can prove only after a release. The next agent can't show it in a
+  pull request.
+- When a line tests something that doesn't exist yet, make sure this item builds it, or list the
+  item that does under Depends on.
 
 ## Keep the owner's words
 
 Copy the owner's words into the item where they decide something: a name, a value, an example.
-Tighten the scope and the acceptance lines yourself.
+Sharpen the wording of the outcome and the acceptance lines yourself.
 
-Put each of these to the owner as a question, with the options and your recommendation. Leave the
-question in the item until the owner answers:
+Ask the owner about each of these, with the options and your recommendation. Until the owner
+answers, keep the question in Context, marked "For the owner:":
 
 - a change to the outcome;
 - behaviour that the outcome doesn't ask for;
@@ -120,13 +122,13 @@ Ask nothing that the item or an earlier answer already settles.
 
 ## Ready
 
-An item is ready when all of these hold:
+File an item that isn't ready, and say what it lacks. An item is ready when all of these hold:
 
 - An agent that reads only the item can say what done looks like.
-- Acceptance has at least one line with evidence.
+- Acceptance has at least one line, and each line names its evidence.
 - Each item it depends on is done.
-- No question in it waits on the owner.
+- Context holds no "For the owner:" question.
 - No merged pull request already does the work.
 
-**Reply:** each item you filed or changed, whether it is ready, and each question that waits on
+**Reply:** each item you filed or changed, whether it is ready, and each decision that waits on
 the owner.
