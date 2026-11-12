@@ -19,7 +19,7 @@ which test it fails, and write the record only if the owner still wants it.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
    weighed, ask the owner. When the owner weighed none, write no record.
-6. When the decision leads to nothing beyond what the Decision section says, delete Consequences.
+6. When Consequences would only repeat the Decision section, delete it.
 7. In the design doc, move the question out of Open questions, and link the record from its
    Decisions line.
 
@@ -86,8 +86,8 @@ longer passes the three tests, ask the owner before you remove it.
 Do every step in the PR that deletes the record:
 
 1. Move each part of the decision that still holds into the doc that covers it: the architecture doc
-   in `docs/architecture/`, or the design in `docs/design/` when the work is not built. The Why and
-   the Rejected alternatives go with the file.
+   in `docs/architecture/`, or the design in `docs/design/` when the work is not built. Leave the
+   Why and the Rejected alternatives in the file you delete.
 2. Search the repo for the record's file name, and for its bare number, such as in a table cell or a
    code comment. Point each citation at the doc from step 1. When the sentence no longer needs the
    citation, delete it.
