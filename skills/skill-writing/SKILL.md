@@ -38,8 +38,8 @@ hand back each finding with its line and the rule it breaks, quoted.
   the code can't.
 - [Keep it short and true](#keep-it-short-and-true): under the word limit, with rules and no
   incidents.
-- [Check it](#check-it): the `@zgeoff/chex` checks, a cold read, then deslop last, with the proof in
-  the PR.
+- [Check it](#check-it): the `@zgeoff/chex` checks, a cold read, then deslop, with the proof in the
+  PR.
 
 ## References
 
@@ -151,12 +151,13 @@ Leave out anything time-bound, like "until the next release": it goes false unno
 
 2. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
    finds, give each changed file one more cold read, and stop.
-3. Last, run the `deslop` skill on each section you wrote or changed, the cold-read fixes included.
-   The checks in step 4 can't see padded prose, so a pass that clears them proves nothing here.
+3. Run the `deslop` skill on each section you wrote or changed, the cold-read fixes included. A
+   cold-read fix adds words, and the checks in step 4 don't catch padding.
 4. Run the checks again, and give the proof in a `## Checks` section of the PR description:
    - `- [x] chex prose, links and skill: cleared`, once the last run clears.
    - `- [x] Cold read: <fixed> fixed, <declined> declined`, counting every cold read.
-   - `- [x] Deslop: <edits> edits`, counting the `diff` blocks of that last pass.
+   - `- [x] Deslop: <edits> edits`, the number of `diff` blocks that the deslop skill handed back in
+     step 3.
 
    Under `Declined:`, give one line to each finding you declined and each gap in the rules, where a
    cold reader got stuck and no rule applies. With neither, write `Declined: none.` Each line holds:
