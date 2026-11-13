@@ -14,8 +14,8 @@ which test it fails, and write the record only if the owner still wants it.
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.
 2. Copy the block below to `docs/decisions/NNNN-<slug>.md`, where `<slug>` is the title in kebab
-   case, such as `0012-holds-expire-after-15-minutes.md`.
-3. Replace the example values. They describe an invented warehouse service.
+   case, such as `0012-urgent-emails-go-first.md`.
+3. Replace the example values. They describe an invented app.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
    weighed, ask the owner. When the owner weighed none, write no record.
@@ -24,32 +24,32 @@ which test it fails, and write the record only if the owner still wants it.
    Decisions line.
 
 ```markdown
-# 0012: Holds expire after 15 minutes
+# 0012: Urgent emails go first
 
 - Date: 2026-03-01
 - Status: decided
 
 ## Decision
 
-A hold on stock expires 15 minutes after it is placed, and its units return to the shelf. A hold
-never extends.
+An email marked urgent goes out before every bulk email that waits. The app keeps one queue and one
+email provider.
 
 ## Why
 
-- 97% of checkouts finish within 15 minutes (measured over 30 days).
-- A hold that never expires keeps stock off the shelf after a buyer leaves.
+- Password reset emails waited up to an hour behind the weekly newsletter (measured over 30 days).
+- One queue keeps one rate limit with the email provider.
 
 ## Rejected alternatives
 
-| Option                       | Why not                                                |
-| ---------------------------- | ------------------------------------------------------ |
-| no expiry, release on cancel | an abandoned checkout never cancels                    |
-| a hold that extends on use   | a busy checkout page could hold stock for hours        |
-| a 5-minute expiry            | 22% of checkouts would lose their units before payment |
+| Option                    | Why not                                                         |
+| ------------------------- | --------------------------------------------------------------- |
+| a second queue for urgent | two senders can't keep one rate limit with the provider         |
+| a second email provider   | a second bill, and a new sender reputation to build             |
+| a slower newsletter       | the newsletter takes 9 hours, and a reset still waits behind it |
 
 ## Consequences
 
-- A buyer who takes longer than 15 minutes can lose the units at payment.
+- A large batch of urgent emails delays the newsletter.
 ```
 
 `Status` stays `decided` for the life of the record. Cite a record with a relative link to its file.
@@ -74,7 +74,7 @@ When the owner changes the decision, edit the record in place:
 
 ## Changes
 
-- 2026-04-10: the expiry moved from 15 to 20 minutes.
+- 2026-04-10: urgent emails moved to a queue of their own.
 ```
 
 ## Remove a record
