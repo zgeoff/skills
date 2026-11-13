@@ -193,11 +193,21 @@ async function recordInstallation(dest: Dest, app: App, id: number) {
 }
 
 async function exchange(code: string, dest: Dest) {
+  // The code works once, so make the rescue file before spending it. When even that fails, the
+  // code stays unspent and exchange can run again.
+  const rescue = join(dirname(statePath), `rescued-${randomBytes(6).toString('hex')}.json`);
+  try {
+    await mkdir(dirname(rescue), { recursive: true });
+    await writePrivate(rescue, '');
+  } catch (error) {
+    stop(`cannot write ${rescue}, so the code is still unspent: ${(error as Error).message}`);
+  }
   const response = await fetch(`${api}/app-manifests/${encodeURIComponent(code)}/conversions`, {
     method: 'POST',
     headers: { accept: 'application/vnd.github+json', 'x-github-api-version': '2022-11-28' },
   });
   if (response.status !== 201) {
+    await rm(rescue, { force: true });
     stop(
       `GitHub refused the code (HTTP ${response.status}). A code works once, for one hour: create the App again`,
     );
@@ -214,21 +224,12 @@ async function exchange(code: string, dest: Dest) {
   try {
     await store(dest, app);
   } catch (error) {
-    // The code is spent, so keep the key somewhere before giving up. A fresh name never collides
-    // with an earlier rescue, and the temp folder is the last place left to try.
-    const name = `rescued-${app.slug}-${randomBytes(4).toString('hex')}.json`;
-    let rescue = join(dirname(statePath), name);
-    try {
-      await mkdir(dirname(rescue), { recursive: true });
-      await writePrivate(rescue, `${JSON.stringify(app, null, 2)}\n`);
-    } catch {
-      rescue = join(await mkdtemp(join(tmpdir(), 'github-app-rescue-')), name);
-      await writePrivate(rescue, `${JSON.stringify(app, null, 2)}\n`);
-    }
+    await writeFile(rescue, `${JSON.stringify(app, null, 2)}\n`);
     stop(
       `${(error as Error).message}. The keys are in ${rescue} (0600); move them, then delete the file`,
     );
   }
+  await rm(rescue, { force: true });
   await rm(statePath, { force: true });
   say(`stored the keys in ${describe(dest)}`);
   say(`client ID: ${app.client_id}`);
@@ -319,7 +320,10 @@ async function create(argv: string[]) {
       } catch (error) {
         process.stderr.write(`${(error as Error).message}\n`);
         finish(1);
-        return html(500, 'The App was created, but the agent could not finish. Tell the agent.');
+        return html(
+          500,
+          'The agent could not finish. Tell the agent what this page says, and keep the address.',
+        );
       }
     },
   });

@@ -331,7 +331,7 @@ test('it keeps the keys in a 0600 rescue file when 1Password refuses them', asyn
   const rescue = result.stderr.match(/keys are in (\S+) \(0600\)/)?.[1] ?? '';
 
   expect(result.exitCode).toBe(1);
-  expect(rescue.startsWith(join(ctx.directory, 'cache', 'rescued-kettle-bot-'))).toBe(true);
+  expect(rescue.startsWith(join(ctx.directory, 'cache', 'rescued-'))).toBe(true);
   expect((await stat(rescue)).mode & 0o777).toBe(0o600);
   expectNoSecret(result.stdout + result.stderr, ctx.pem);
 });
@@ -485,22 +485,25 @@ test('it calls the path --path names with the installation token', async () => {
   expect(result.exitCode).toBe(1);
 });
 
-test('it keeps the keys in a new rescue file when the usual rescue name is taken', async () => {
+test('it leaves the code unspent when it cannot make the rescue file', async () => {
   const ctx = await setupTest();
-  await mkdir(join(ctx.directory, 'cache', 'rescued-kettle-bot.json'), { recursive: true });
-  const { page, finished } = await ctx.serve(
-    ['create', '--manifest', ctx.manifestPath, '--dest', 'op:Agents/kettle-bot'],
-    { OP_FAIL_CREATE: '1' },
-  );
+  const { page, finished } = await ctx.serve([
+    'create',
+    '--manifest',
+    ctx.manifestPath,
+    '--dest',
+    'op:Agents/kettle-bot',
+  ]);
   const { action } = formOf(await (await fetch(`${page}/`)).text());
+  await rm(join(ctx.directory, 'cache'), { recursive: true });
+  await writeFile(join(ctx.directory, 'cache'), 'not a folder');
 
   await fetch(`${page}/callback?code=good-code&state=${action.searchParams.get('state')}`);
   const result = await finished;
-  const rescue = result.stderr.match(/keys are in (\S+) \(0600\)/)?.[1] ?? '';
 
   expect(result.exitCode).toBe(1);
-  expect((await stat(rescue)).mode & 0o777).toBe(0o600);
-  expect(JSON.parse(await readFile(rescue, 'utf8')).private_key).toBe(ctx.pem);
+  expect(result.stderr).toContain('so the code is still unspent');
+  expect(ctx.calls.filter((c) => c.path.startsWith('/app-manifests/'))).toStrictEqual([]);
 });
 
 test('it refuses a request whose Host is not its own loopback address', async () => {
