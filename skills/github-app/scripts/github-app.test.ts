@@ -86,7 +86,9 @@ case "$1 $2" in
     stat -c %a "$4" > ${JSON.stringify(join(directory, 'template.mode'))}
     echo "$4" > ${JSON.stringify(join(directory, 'template.path'))}
     cp "$4" ${JSON.stringify(join(directory, 'op-item.json'))} ;;
-  "item edit") exit 0 ;;
+  "item edit") echo "$*" > ${JSON.stringify(join(directory, 'op-edit.args'))} ;;
+  "read op:"*) field=\${2##*/}
+    jq -r --arg f "$field" '.fields[] | select(.id == $f) | .value' ${JSON.stringify(join(directory, 'op-item.json'))} ;;
   *) exit 2 ;;
 esac
 `,
@@ -525,4 +527,53 @@ test('it refuses a request whose Host is not its own loopback address', async ()
   expect(await form.text()).not.toMatch(/state=[0-9a-f]{48}/);
   expect(callback.status).toBe(421);
   expect(ctx.calls.filter((c) => c.path.startsWith('/app-manifests/'))).toStrictEqual([]);
+});
+
+test('it puts the https page from --redirect-url in the manifest', async () => {
+  const ctx = await setupTest();
+  const { page } = await ctx.serve([
+    'create',
+    '--manifest',
+    ctx.manifestPath,
+    '--redirect-url',
+    'https://github.com/acme/kettle',
+    '--dest',
+    `file:${join(ctx.directory, 'app.json')}`,
+  ]);
+
+  const { manifest } = formOf(await (await fetch(`${page}/`)).text());
+
+  expect(manifest.redirect_url).toBe('https://github.com/acme/kettle');
+});
+
+test('it verifies with the keys it reads back from 1Password, and records the installation there', async () => {
+  const ctx = await setupTest();
+  const rescue = join(ctx.directory, 'rescued.json');
+  await writeFile(
+    rescue,
+    JSON.stringify({
+      app_id: 1234,
+      client_id: 'Iv23liKettleBot',
+      slug: 'kettle-bot',
+      client_secret: secrets.client_secret,
+      webhook_secret: secrets.webhook_secret,
+      private_key: ctx.pem,
+    }),
+  );
+  await ctx.run(['import', '--from', rescue, '--dest', 'op:Agents/kettle-bot']);
+
+  const result = await ctx.run([
+    'verify',
+    '--dest',
+    'op:Agents/kettle-bot',
+    '--repo',
+    'acme/kettle',
+  ]);
+
+  expect(result.exitCode).toBe(0);
+  expect(result.stdout).toContain('HTTP 200');
+  expect(await readFile(join(ctx.directory, 'op-edit.args'), 'utf8')).toContain(
+    'installation_id[text]=4242',
+  );
+  expectNoSecret(result.stdout + result.stderr, ctx.pem);
 });

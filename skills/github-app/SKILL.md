@@ -21,8 +21,8 @@ exists for. Then hand back what the **Reply** line at the end lists.
 
 Avoid these:
 
-- **Let `create` check the destination before the human clicks.** The code works only once, so a
-  store that fails after the exchange leaves the keys only in a rescue file.
+- **Let `create` check the destination before the human clicks.** GitHub sends one code per App, so
+  a store that fails after the exchange leaves the keys only in a rescue file.
 - **Run `create` in the background.** Your shell's time limit stops a foreground run before the
   human clicks.
 - **Never run `create` again once GitHub made the App.** That makes a second App. Finish the first
@@ -94,9 +94,9 @@ list every key.
 ## Create it
 
 1. Pick the destination with the human. Suggest 1Password first.
-   - `op:<vault>/<item>`: a new 1Password item. Ask which vault, and name the item after the App.
-     Run `op whoami`, so you know `op` is signed in.
-   - `file:<path>`: a new 0600 JSON file outside every repo.
+   - For a new 1Password item, pass `op:<vault>/<item>`. Ask which vault, and name the item after
+     the App. Run `op whoami`, so you know `op` is signed in.
+   - For a new 0600 JSON file outside every repo, pass `file:<path>`.
 
    Before it serves the page, `create` stops when it can't open the vault, or when the item or the
    file exists.
@@ -120,15 +120,15 @@ list every key.
 
 When `create` exits 1, find the case that matches its last line:
 
-- **`The keys are in <rescue-file>`:** fix the cause, such as an `op` session that expired. Then
-  move the keys with `import`, which deletes the rescue file:
+- When it reads `The keys are in <rescue-file>`, fix the cause, such as an `op` session that
+  expired. Then move the keys with `import`, which deletes the rescue file:
 
   ```bash
   bun <skill_dir>/scripts/github-app.ts import --from <rescue-file> --dest op:<vault>/<item>
   ```
 
-- **`the code is still unspent`:** fix the cause, then run `exchange`, below.
-- **`no callback reached the server`:** go on to the next section.
+- When it ends `the code is still unspent`, fix the cause, then run `exchange`, below.
+- When it starts `no callback reached the server`, go on to the next section.
 
 ## When the callback never arrives
 
@@ -136,15 +136,15 @@ GitHub's docs don't say whether GitHub accepts a loopback `redirect_url`. When `
 or GitHub's page shows an error, stop the background `create` and ask the human what the browser's
 address bar shows.
 
-- **An address with `?code=` and `state=`:** GitHub made the App. Ask the human to paste the whole
-  address into the chat. Within an hour of their click, pipe it in. `exchange` checks the state that
-  `create` saved:
+- When the address carries `?code=` and `state=`, GitHub made the App. Ask the human to paste the
+  whole address into the chat. Within an hour of their click, pipe it in. `exchange` checks the
+  state that `create` saved:
 
   ```bash
   printf '%s\n' '<address>' | bun <skill_dir>/scripts/github-app.ts exchange --dest op:<vault>/<item>
   ```
 
-- **No such address:** GitHub made no App. Run `create` again with
+- When it carries no code, GitHub made no App. Run `create` again with
   `--redirect-url https://github.com/<owner>/<repo>`, or any https page the human can open. The
   human starts from the local address again. After they click **Create GitHub App**, GitHub sends
   the browser to the https page, with the code in the address. Take that address as in the bullet

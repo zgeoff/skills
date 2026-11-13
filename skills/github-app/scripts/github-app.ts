@@ -147,28 +147,19 @@ async function store(dest: Dest, app: App) {
 
 async function load(dest: Dest): Promise<App> {
   if (dest.kind === 'file') return JSON.parse(await readFile(dest.path, 'utf8'));
-  const got = await op([
-    'item',
-    'get',
-    dest.item,
-    '--vault',
-    dest.vault,
-    '--reveal',
-    '--format',
-    'json',
-  ]);
-  if (got.code !== 0) stop(`op cannot read "${dest.item}": ${got.stderr}`);
-  const fields: { id?: string; label?: string; value?: string }[] =
-    JSON.parse(got.stdout).fields ?? [];
-  const value = (name: string) =>
-    fields.find((f) => f.label === name || f.id === name)?.value ?? '';
+  // op read returns a multi-line PEM intact; verify needs only these three fields.
+  const read = async (field: string) => {
+    const got = await op(['read', `op://${dest.vault}/${dest.item}/${field}`]);
+    if (got.code !== 0) stop(`op cannot read ${field} of "${dest.item}": ${got.stderr}`);
+    return got.stdout.trim();
+  };
   return {
-    app_id: Number(value('app_id')),
-    client_id: value('client_id'),
-    slug: value('slug'),
-    client_secret: value('client_secret'),
-    webhook_secret: value('webhook_secret'),
-    private_key: value('private_key'),
+    app_id: 0,
+    client_id: await read('client_id'),
+    slug: await read('slug'),
+    client_secret: '',
+    webhook_secret: null,
+    private_key: await read('private_key'),
   };
 }
 
@@ -209,7 +200,7 @@ async function exchange(code: string, dest: Dest) {
   if (response.status !== 201) {
     await rm(rescue, { force: true });
     stop(
-      `GitHub refused the code (HTTP ${response.status}). A code works once, for one hour: create the App again`,
+      `GitHub refused the code (HTTP ${response.status}). GitHub sends one code per App, and the flow must finish within an hour of the click`,
     );
   }
   const body = await response.json();
