@@ -132,9 +132,9 @@ When `create` exits 1, find the case that matches its last line:
 
 ## When the callback never arrives
 
-GitHub's docs don't say whether GitHub accepts a loopback `redirect_url`. When `create` times out,
-or GitHub's page shows an error, stop the background `create` and ask the human what the browser's
-address bar shows.
+GitHub accepts the loopback `redirect_url`, so the callback fails only when the browser can't reach
+`127.0.0.1` on your machine. When `create` times out, or GitHub's page shows an error, stop the
+background `create` and ask the human what the browser's address bar shows.
 
 - When the address carries `?code=` and `state=`, GitHub made the App. Ask the human to paste the
   whole address into the chat. Within an hour of their click, pipe it in. `exchange` checks the
