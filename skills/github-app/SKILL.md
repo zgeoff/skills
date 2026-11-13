@@ -10,49 +10,54 @@ description:
 
 # Create a GitHub App
 
-Create the App from a manifest you write, so the human clicks twice and types nothing: once on the
-local page, once on GitHub's "Create GitHub App" button. The script receives the code, exchanges it
-for the keys and stores them. You never see the client secret, the webhook secret or the private
-key, and you never print them.
+Create the App from a manifest you write. The human clicks through two pages to create it and one to
+install it, and types nothing. [`scripts/github-app.ts`](./scripts/github-app.ts) receives GitHub's
+code, exchanges it for the keys and stores them. You never see the client secret, the webhook secret
+or the private key, and you never print them. You're done when `verify` returns HTTP 200 from the
+repo with an installation token. Then hand back the App's IDs, where its keys are and the
+installation ID.
 
-The common mistakes cost an App:
+Each of these mistakes leaves an App that the human deletes and creates again:
 
-- a destination that fails after the exchange, when the code is spent;
-- a server run in the foreground, which your shell kills before the human clicks;
-- broader permissions than the job needs.
+- a destination that `op` can't write to, found after GitHub spent the code;
+- a `create` run in the foreground, which your shell's time limit stops before the human clicks;
+- a second `create` after GitHub already made the App, which makes a second App;
+- more permissions than the job calls for.
 
 ## Key rules
 
-- [App or fine-grained token](#app-or-fine-grained-token): pick an App when a token can't hold the
-  permission, or when the identity must not be a person.
+- [App or fine-grained token](#app-or-fine-grained-token): build an App when no fine-grained
+  permission covers the endpoint.
 - [Write the manifest](#write-the-manifest): the least permissions, no events, the webhook off.
-- [Create it](#create-it): run the script in the background, hand the human one address.
-- [When the callback never arrives](#when-the-callback-never-arrives): the human pastes the address
-  GitHub sent them to.
-- [Install and verify](#install-and-verify): the human installs from the link, you prove a token.
-- [Change permissions later](#change-permissions-later): edit the App, then each installation's
-  owner accepts.
-- [Clean up](#clean-up): stop the server, delete the temporary files.
+- [Create it](#create-it): check the destination, run `create` in the background, hand the human one
+  address.
+- [When the callback never arrives](#when-the-callback-never-arrives): take the address from the
+  browser and run `exchange`.
+- [Install and verify](#install-and-verify): the human installs from the link, `verify` proves a
+  token.
+- [Change permissions later](#change-permissions-later): the human edits the App, each
+  installation's owner accepts.
+- [Clean up](#clean-up): delete the manifest, any rescue file, and any App nobody wants.
 
 ## App or fine-grained token
 
-Pick an App when any of these is true:
+Before you build an App, look up the endpoint that got 403 in GitHub's
+[Permissions required for fine-grained personal access tokens](https://docs.github.com/en/rest/authentication/permissions-required-for-fine-grained-personal-access-tokens).
 
-- The job reads or writes check runs on a private repo. Fine-grained tokens have no Checks
-  permission; an App token or a classic token with `repo` can read them. On a public repo, any token
-  reads them.
-- The work must not act as a person, or must outlive one person's access.
-- The token must expire within an hour without a human renewing it.
+- When the page lists the endpoint, grant that permission to the token. For example, the token reads
+  `commits/{ref}/statuses` once it has Commit statuses read.
+- When the page leaves the endpoint out, no fine-grained token can call it on a private repo. Check
+  runs and check suites are such endpoints: build an App, or use a classic token with `repo`. On a
+  public repo, any token reads them.
 
-Commit statuses are different: a fine-grained token reads them once it has the Commit statuses
-permission. When a fine-grained token gets 403, compare the endpoint against GitHub's
-[Permissions required for fine-grained personal access tokens](https://docs.github.com/en/rest/authentication/permissions-required-for-fine-grained-personal-access-tokens)
-before you build an App. An endpoint missing from that page has no fine-grained permission.
+Build an App also when the work must not act as a person, or must outlive one person's access. The
+job then mints its own token, which lasts one hour, and no person has a token to renew.
 
 ## Write the manifest
 
-Write it to a file in your scratch folder. Every key is in GitHub's
-[manifest parameters](https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-from-a-manifest#github-app-manifest-parameters).
+Write the manifest to a temporary folder outside the repo. GitHub's
+[manifest parameters](https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-from-a-manifest#github-app-manifest-parameters)
+list every key.
 
 ```json
 {
@@ -64,99 +69,104 @@ Write it to a file in your scratch folder. Every key is in GitHub's
 }
 ```
 
-- **`name`:** unique across all of GitHub. The human can change it on GitHub's page when it's taken,
-  so read the slug from the script's output.
-- **`default_permissions`:** grant only what the job calls. The keys you'll need most are `metadata`
-  (always read), `contents`, `pull_requests`, `checks`, `statuses` and `issues`, each `read` or
-  `write`. GitHub's
+- Pick a `name` that no other App on GitHub has. When it's taken, the human edits it on GitHub's
+  page, so take the slug from the script's output.
+- Set `url`, the App's homepage, to the repo the job serves.
+- Grant in `default_permissions` only what the job calls, each `read` or `write`. Put
+  `"metadata": "read"` in every App. The keys you'll use most are `contents`, `pull_requests`,
+  `checks`, `statuses` and `issues`. GitHub's
   [Permissions required for GitHub Apps](https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps)
-  lists the permission for each endpoint.
-- **`default_events`:** leave it empty unless a server will receive webhooks. The script turns the
-  webhook off with `hook_attributes.active: false` when the manifest has no `hook_attributes`.
-- **`public`:** `false` lets only the owner install it. Make it `true` only when other accounts must
-  install it.
-- **Owner:** the human's account by default. Pass `--org <org>` to create it under an org; the human
-  must be an owner of that org.
+  gives the permission for each endpoint.
+- Leave `default_events` empty unless a server will receive webhooks. With no `hook_attributes` in
+  the manifest, the script turns the webhook off.
+- Set `public` to `false`, so only the owner can install the App. Set it to `true` only when other
+  accounts must install it.
 
 ## Create it
 
-Pick the destination with the user:
-
-- `op:<vault>/<item>`: a new 1Password item. Ask which vault. The script hands `op item create` a
-  0600 template and deletes it, so no secret is on a command line.
-- `file:<path>`: a new 0600 JSON file, outside every repo.
-
-The script refuses a destination that already exists, before it serves anything.
-
-1. Start the script in the background. Your shell's time limit ends a foreground run before the
-   human clicks.
+1. Pick the destination with the human:
+   - `op:<vault>/<item>`, a new 1Password item. Ask which vault, and name the item after the App.
+     Run `op whoami` first: `create` stops when `op` can't open the vault or the item exists.
+   - `file:<path>`, a new 0600 JSON file outside every repo. `create` stops when the file exists.
+2. Start `create` with your shell tool's background mode. Add `--org <org>` to create the App under
+   an org that the human owns.
 
    ```bash
    bun <skill_dir>/scripts/github-app.ts create --manifest <manifest> --dest op:<vault>/<item>
    ```
 
-   `<skill_dir>` is this skill's folder, such as `.agents/skills/github-app`. Expect
-   `open http://127.0.0.1:<port>/ in a browser`.
+   `<skill_dir>` is this skill's folder, such as `.agents/skills/github-app`. Read the run's output
+   for `open http://127.0.0.1:<port>/ in a browser`.
 
-2. Give the human that address. They click **Continue to GitHub**, then **Create GitHub App**. Under
-   WSL, a Windows browser reaches the server on `127.0.0.1`, so give the address. A
-   `\\wsl.localhost\…` file path fails to open the page.
-3. Wait for the script to exit. Expect the client ID, App ID, slug and an install link on stdout,
-   and exit code 0.
+3. Give the human that address, even under WSL. A Windows browser reaches a server on WSL's
+   `127.0.0.1`, while `explorer.exe` fails to open an HTML file by its `\\wsl.localhost\…` path.
+   They click **Continue to GitHub**, then **Create GitHub App**.
+4. Wait for `create` to exit. Expect exit code 0, with the client ID, App ID, slug and install link
+   in its output.
 
-The server ignores a callback whose `state` differs from the one it put in the form. It exits after
-the first good callback, or after `--timeout` minutes (30 by default).
+When `create` exits 1 and names a rescue file, the store failed after GitHub spent the code. Fix the
+cause, such as an `op` session that expired, then move the keys:
 
-When it exits 1 with a "rescued" path, the store failed after the exchange. Move the keys from that
-0600 file into the destination, then delete the file.
+```bash
+bun <skill_dir>/scripts/github-app.ts import --from <rescue-file> --dest op:<vault>/<item>
+```
 
 ## When the callback never arrives
 
-GitHub's docs don't say whether it accepts a loopback `redirect_url`. If GitHub refuses it, or the
-browser can't reach the server:
+GitHub's docs don't say whether it accepts a loopback `redirect_url`. When `create` times out after
+30 minutes, or GitHub's page reports an error, ask the human what the browser shows.
 
-1. Run `create` again with `--redirect-url https://github.com/<owner>/<repo>`, any https page the
-   human can open.
-2. After **Create GitHub App**, GitHub sends the browser there with `?code=…&state=…`. Ask the human
-   to paste the whole address into the chat. The code works once, within an hour of the form.
-3. Pipe it in on stdin, with the same destination:
+- **An address with `?code=` and `state=`:** GitHub made the App. Never run `create` again for it.
+  Ask the human to paste the whole address into the chat, and pipe it in within an hour of the
+  click. `exchange` checks the state that `create` saved:
 
-   ```bash
-   printf '%s\n' '<address>' | bun <skill_dir>/scripts/github-app.ts exchange --dest op:<vault>/<item>
-   ```
+  ```bash
+  printf '%s\n' '<address>' | bun <skill_dir>/scripts/github-app.ts exchange --dest op:<vault>/<item>
+  ```
 
-`exchange` checks the state that `create` saved.
+- **No such address:** GitHub made no App. Run `create` again with
+  `--redirect-url https://github.com/<owner>/<repo>`, or any https page the human can open. The
+  human starts from the local page as before. GitHub then sends the browser to that page with the
+  code. Take the address as in the bullet above, and stop the background `create` once `exchange`
+  succeeds.
 
 ## Install and verify
 
 1. Give the human the install link, `https://github.com/apps/<slug>/installations/new`. Ask them to
    pick **Only select repositories** and the repos the job needs.
-2. When they're done, prove it:
+2. When they're done, run:
 
    ```bash
    bun <skill_dir>/scripts/github-app.ts verify --dest op:<vault>/<item> --repo <owner>/<repo>
    ```
 
-   Expect the installation ID and `HTTP 200`. The script signs a JWT with the client ID as `iss`, as
-   GitHub recommends. It finds the installation on `<owner>`, records `installation_id` beside the
-   keys, and calls the repo with an installation token.
+   Expect the installation ID and `HTTP 200`. When the App isn't installed on the repo, `verify`
+   prints the install link: send it to the human again.
 
-An installation token lasts one hour. A job mints its own each time from the client ID, the private
-key and the installation ID.
+3. To prove the endpoint the App exists for, add `--path`, such as
+   `--path '/repos/{repo}/commits/main/check-runs'`. The script puts `<owner>/<repo>` in place of
+   `{repo}`.
+
+`verify` records `installation_id` beside the keys. A job that uses the App reads the client ID, the
+private key and the installation ID from there, signs a JWT as `signJwt` in the script does, and
+mints a new token for each run.
 
 ## Change permissions later
 
 The human edits the App at **Settings → Developer settings → GitHub Apps → `<slug>` → Permissions &
-events**. Each installation keeps the old permissions until its owner accepts the new ones, from the
-request GitHub sends them or the installation's settings page. Run `verify` after they accept.
+events**. Each installation keeps the old permissions until its owner accepts the new ones, from
+GitHub's email or the installation's settings page. After they accept, run `verify` with a `--path`
+that needs the new permission.
 
 ## Clean up
 
-The script stops its server and deletes its template and state file when it exits. Then:
+`create` stops its server when it exits. `exchange` and `create` delete the saved state after a good
+exchange, and keep it after a timeout so `exchange` can still run. Then:
 
-- Delete the manifest from your scratch folder.
-- If the script was killed, delete the state file at `~/.cache/github-app/state.json`.
-- If an attempt left an App the human doesn't want, ask them to delete it from its settings page.
+- Delete the manifest.
+- Delete the saved state at `~/.cache/github-app/state.json` when no `exchange` is left to run.
+- Make sure no rescue file is left at the path `create` printed.
+- When an attempt left an App the human doesn't want, ask them to delete it from its settings page.
 
 **Reply:** the App's slug, client ID and App ID, the destination, the installation ID and the
-`verify` result, and anything the human still has to accept.
+`verify` result, and any permission change an installation owner still has to accept.

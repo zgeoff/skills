@@ -1,6 +1,6 @@
 import { expect, onTestFinished, test } from 'bun:test';
 import { createVerify, generateKeyPairSync } from 'node:crypto';
-import { chmod, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,12 @@ async function setupTest() {
   const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
   const pem = privateKey.export({ type: 'pkcs1', format: 'pem' }).toString();
   const calls: Call[] = [];
-  let installations: unknown[] = [{ id: 4242, account: { login: 'acme' } }];
+  let installed = true;
+  // A first page of installations that belong to other accounts, as on an App installed widely.
+  const otherInstallations = Array.from({ length: 30 }, (_, i) => ({
+    id: i + 1,
+    account: { login: `other-${i}` },
+  }));
 
   // Stands in for both api.github.com and github.com, so no test touches the network.
   const github = Bun.serve({
@@ -48,7 +53,12 @@ async function setupTest() {
         );
       }
       if (url.pathname.startsWith('/app-manifests/')) return new Response('', { status: 404 });
-      if (url.pathname === '/app/installations') return Response.json(installations);
+      if (url.pathname === '/app/installations') return Response.json(otherInstallations);
+      if (url.pathname === '/repos/acme/kettle/installation') {
+        return installed
+          ? Response.json({ id: 4242, account: { login: 'acme' } })
+          : new Response('', { status: 404 });
+      }
       if (url.pathname === '/app/installations/4242/access_tokens') {
         return Response.json({ token: secrets.token }, { status: 201 });
       }
@@ -165,7 +175,7 @@ esac
     manifestPath,
     run,
     serve,
-    setInstallations: (v: unknown[]) => (installations = v),
+    setInstalled: (v: boolean) => (installed = v),
   };
 }
 
@@ -318,10 +328,10 @@ test('it keeps the keys in a 0600 rescue file when 1Password refuses them', asyn
 
   await fetch(`${page}/callback?code=good-code&state=${action.searchParams.get('state')}`);
   const result = await finished;
-  const rescue = join(ctx.directory, 'cache', 'rescued-kettle-bot.json');
+  const rescue = result.stderr.match(/keys are in (\S+) \(0600\)/)?.[1] ?? '';
 
   expect(result.exitCode).toBe(1);
-  expect(result.stderr).toContain(rescue);
+  expect(rescue.startsWith(join(ctx.directory, 'cache', 'rescued-kettle-bot-'))).toBe(true);
   expect((await stat(rescue)).mode & 0o777).toBe(0o600);
   expectNoSecret(result.stdout + result.stderr, ctx.pem);
 });
@@ -378,10 +388,9 @@ test('it signs the JWT with the client ID, records the installation and proves a
   );
 
   const result = await ctx.run(['verify', '--dest', `file:${destPath}`, '--repo', 'acme/kettle']);
-  const jwt = (ctx.calls.find((c) => c.path === '/app/installations')?.authorization ?? '').replace(
-    'Bearer ',
-    '',
-  );
+  const jwt = (
+    ctx.calls.find((c) => c.path === '/repos/acme/kettle/installation')?.authorization ?? ''
+  ).replace('Bearer ', '');
   const [head, body, signature] = jwt.split('.');
   const claims = JSON.parse(Buffer.from(body ?? '', 'base64url').toString());
 
@@ -403,7 +412,7 @@ test('it signs the JWT with the client ID, records the installation and proves a
 
 test('it gives the install link when the App has no installation on the owner', async () => {
   const ctx = await setupTest();
-  ctx.setInstallations([]);
+  ctx.setInstalled(false);
   const destPath = join(ctx.directory, 'app.json');
   await writeFile(
     destPath,
@@ -419,4 +428,98 @@ test('it gives the install link when the App has no installation on the owner', 
 
   expect(result.exitCode).toBe(1);
   expect(result.stderr).toContain('/apps/kettle-bot/installations/new');
+});
+
+test('it imports a rescue file into 1Password and deletes the file', async () => {
+  const ctx = await setupTest();
+  const rescue = join(ctx.directory, 'rescued-kettle-bot.json');
+  await writeFile(
+    rescue,
+    JSON.stringify({
+      app_id: 1234,
+      client_id: 'Iv23liKettleBot',
+      slug: 'kettle-bot',
+      client_secret: secrets.client_secret,
+      webhook_secret: secrets.webhook_secret,
+      private_key: ctx.pem,
+    }),
+    { mode: 0o600 },
+  );
+
+  const result = await ctx.run(['import', '--from', rescue, '--dest', 'op:Agents/kettle-bot']);
+  const item = JSON.parse(await readFile(join(ctx.directory, 'op-item.json'), 'utf8'));
+
+  expect(result.exitCode).toBe(0);
+  expect(item.fields.find((f: { id: string }) => f.id === 'private_key').value).toBe(ctx.pem);
+  expect(await Bun.file(rescue).exists()).toBe(false);
+  expectNoSecret(result.stdout + result.stderr, ctx.pem);
+});
+
+test('it calls the path --path names with the installation token', async () => {
+  const ctx = await setupTest();
+  const destPath = join(ctx.directory, 'app.json');
+  await writeFile(
+    destPath,
+    JSON.stringify({
+      app_id: 1234,
+      client_id: 'Iv23liKettleBot',
+      slug: 'kettle-bot',
+      private_key: ctx.pem,
+    }),
+  );
+
+  const result = await ctx.run([
+    'verify',
+    '--dest',
+    `file:${destPath}`,
+    '--repo',
+    'acme/kettle',
+    '--path',
+    '/repos/{repo}/commits/main/check-runs',
+  ]);
+
+  expect(ctx.calls.at(-1)?.path).toBe('/repos/acme/kettle/commits/main/check-runs');
+  expect(result.stdout).toContain(
+    'GET /repos/acme/kettle/commits/main/check-runs with an installation token: HTTP 404',
+  );
+  expect(result.exitCode).toBe(1);
+});
+
+test('it keeps the keys in a new rescue file when the usual rescue name is taken', async () => {
+  const ctx = await setupTest();
+  await mkdir(join(ctx.directory, 'cache', 'rescued-kettle-bot.json'), { recursive: true });
+  const { page, finished } = await ctx.serve(
+    ['create', '--manifest', ctx.manifestPath, '--dest', 'op:Agents/kettle-bot'],
+    { OP_FAIL_CREATE: '1' },
+  );
+  const { action } = formOf(await (await fetch(`${page}/`)).text());
+
+  await fetch(`${page}/callback?code=good-code&state=${action.searchParams.get('state')}`);
+  const result = await finished;
+  const rescue = result.stderr.match(/keys are in (\S+) \(0600\)/)?.[1] ?? '';
+
+  expect(result.exitCode).toBe(1);
+  expect((await stat(rescue)).mode & 0o777).toBe(0o600);
+  expect(JSON.parse(await readFile(rescue, 'utf8')).private_key).toBe(ctx.pem);
+});
+
+test('it refuses a request whose Host is not its own loopback address', async () => {
+  const ctx = await setupTest();
+  const { page } = await ctx.serve([
+    'create',
+    '--manifest',
+    ctx.manifestPath,
+    '--dest',
+    `file:${join(ctx.directory, 'app.json')}`,
+  ]);
+  const port = new URL(page).port;
+  const asAttacker = { headers: { host: `attacker.example:${port}` } };
+
+  const form = await fetch(`${page}/`, asAttacker);
+  const callback = await fetch(`${page}/callback?code=good-code&state=any`, asAttacker);
+
+  expect(form.status).toBe(421);
+  expect(await form.text()).not.toMatch(/state=[0-9a-f]{48}/);
+  expect(callback.status).toBe(421);
+  expect(ctx.calls.filter((c) => c.path.startsWith('/app-manifests/'))).toStrictEqual([]);
 });

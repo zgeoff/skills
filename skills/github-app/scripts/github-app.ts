@@ -6,8 +6,11 @@
 //       serves the form on 127.0.0.1, takes GitHub's callback, exchanges the code, stores the keys
 //   github-app.ts exchange --dest <dest>
 //       reads the address GitHub redirected to from stdin, for when the callback never reached us
-//   github-app.ts verify --dest <dest> --repo <owner>/<name>
-//       signs a JWT, finds the installation, records its ID, and calls the repo with a token
+//   github-app.ts verify --dest <dest> --repo <owner>/<name> [--path <api-path>]
+//       signs a JWT, finds the installation, records its ID, and GETs the path (default: the
+//       repo itself) with an installation token; {repo} in the path stands for owner/name
+//   github-app.ts import --from <rescued-file> --dest <dest>
+//       stores keys that a failed store left in a rescue file, then deletes that file
 //
 // <dest> is op:<vault>/<item> (a 1Password item) or file:<path> (a 0600 JSON file).
 // Nothing here prints a secret: stdout carries the client ID, App ID, slug and URLs only.
@@ -211,10 +214,17 @@ async function exchange(code: string, dest: Dest) {
   try {
     await store(dest, app);
   } catch (error) {
-    // The code is spent, so keep the key somewhere before giving up.
-    const rescue = join(dirname(statePath), `rescued-${app.slug}.json`);
-    await mkdir(dirname(rescue), { recursive: true });
-    await writePrivate(rescue, `${JSON.stringify(app, null, 2)}\n`);
+    // The code is spent, so keep the key somewhere before giving up. A fresh name never collides
+    // with an earlier rescue, and the temp folder is the last place left to try.
+    const name = `rescued-${app.slug}-${randomBytes(4).toString('hex')}.json`;
+    let rescue = join(dirname(statePath), name);
+    try {
+      await mkdir(dirname(rescue), { recursive: true });
+      await writePrivate(rescue, `${JSON.stringify(app, null, 2)}\n`);
+    } catch {
+      rescue = join(await mkdtemp(join(tmpdir(), 'github-app-rescue-')), name);
+      await writePrivate(rescue, `${JSON.stringify(app, null, 2)}\n`);
+    }
     stop(
       `${(error as Error).message}. The keys are in ${rescue} (0600); move them, then delete the file`,
     );
@@ -266,7 +276,12 @@ async function create(argv: string[]) {
   const server = Bun.serve({
     hostname: '127.0.0.1',
     port: Number(values.port),
-    async fetch(request) {
+    async fetch(request, self) {
+      // Answer only to the loopback address, so a page that rebinds its own DNS name to
+      // 127.0.0.1 can't read the state or post a callback.
+      if (request.headers.get('host') !== `127.0.0.1:${self.port}`) {
+        return new Response('Wrong host.', { status: 421 });
+      }
       const url = new URL(request.url);
       const html = (status: number, body: string) =>
         new Response(
@@ -313,7 +328,7 @@ async function create(argv: string[]) {
   const timer = setTimeout(
     () => {
       process.stderr.write(
-        'no callback reached the server. If GitHub showed an address with ?code=, copy it and run: github-app.ts exchange --dest <dest>\n',
+        'no callback reached the server. If the browser shows an address with ?code=, pipe it to: github-app.ts exchange --dest <dest>\n',
       );
       finish(1);
     },
@@ -363,7 +378,7 @@ export function signJwt(clientId: string, privateKey: string, now = Math.floor(D
 async function verify(argv: string[]) {
   const { values } = parseArgs({
     args: argv,
-    options: { dest: { type: 'string' }, repo: { type: 'string' } },
+    options: { dest: { type: 'string' }, repo: { type: 'string' }, path: { type: 'string' } },
   });
   const dest = parseDest(values.dest);
   const [owner, repo] = values.repo?.split('/') ?? [];
@@ -377,16 +392,18 @@ async function verify(argv: string[]) {
   });
   const jwt = signJwt(app.client_id, app.private_key);
 
-  const list = await fetch(`${api}/app/installations`, { headers: headers(jwt) });
-  if (list.status !== 200) stop(`GET /app/installations returned HTTP ${list.status}`);
-  const installations: { id: number; account?: { login?: string } }[] = await list.json();
-  const installation = installations.find(
-    (i) => i.account?.login?.toLowerCase() === owner.toLowerCase(),
-  );
-  if (!installation)
+  // The repo's own installation endpoint needs no paging, unlike GET /app/installations.
+  const found = await fetch(`${api}/repos/${owner}/${repo}/installation`, {
+    headers: headers(jwt),
+  });
+  if (found.status === 404) {
     stop(
-      `the App has no installation on ${owner}. Install it: ${web}/apps/${app.slug}/installations/new`,
+      `the App is not installed on ${owner}/${repo}. Install it: ${web}/apps/${app.slug}/installations/new`,
     );
+  }
+  if (found.status !== 200)
+    stop(`GET /repos/${owner}/${repo}/installation returned HTTP ${found.status}`);
+  const installation: { id: number } = await found.json();
   await recordInstallation(dest, app, installation.id);
   say(`installation ID: ${installation.id} (recorded in ${describe(dest)})`);
 
@@ -400,9 +417,28 @@ async function verify(argv: string[]) {
       `POST access_tokens returned HTTP ${minted.status}; is ${repo} one of the installation's repos?`,
     );
   const { token } = await minted.json();
-  const probe = await fetch(`${api}/repos/${owner}/${repo}`, { headers: headers(token) });
-  say(`GET /repos/${owner}/${repo} with an installation token: HTTP ${probe.status}`);
+  const path = (values.path ?? '/repos/{repo}').replaceAll('{repo}', `${owner}/${repo}`);
+  const probe = await fetch(`${api}${path.startsWith('/') ? '' : '/'}${path}`, {
+    headers: headers(token),
+  });
+  say(`GET ${path} with an installation token: HTTP ${probe.status}`);
   return probe.status === 200 ? 0 : 1;
+}
+
+async function importRescued(argv: string[]) {
+  const { values } = parseArgs({
+    args: argv,
+    options: { from: { type: 'string' }, dest: { type: 'string' } },
+  });
+  if (!values.from) stop('name the rescue file: --from <file>');
+  const dest = parseDest(values.dest);
+  const app: App = JSON.parse(await readFile(values.from, 'utf8'));
+  if (!app.client_id || !app.private_key) stop(`${values.from} has no client_id or private_key`);
+  await checkDest(dest);
+  await store(dest, app);
+  await rm(values.from, { force: true });
+  say(`stored the keys in ${describe(dest)} and deleted ${values.from}`);
+  return 0;
 }
 
 async function main(argv: string[]) {
@@ -414,9 +450,11 @@ async function main(argv: string[]) {
       return exchangeFromStdin(rest);
     case 'verify':
       return verify(rest);
+    case 'import':
+      return importRescued(rest);
     default:
       return stop(
-        'usage: github-app.ts create|exchange|verify (see the comment at the top of the script)',
+        'usage: github-app.ts create|exchange|verify|import (see the comment at the top of the script)',
       );
   }
 }
