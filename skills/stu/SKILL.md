@@ -19,7 +19,7 @@ tools.
   it. Load the `work-items` skill before you file. Tell the owner the item's ID.
 - Bring the owner what waits on them one thing at a time, and record the answer on the item in the
   owner's words.
-- When boxxy gets something wrong, file that as an item on boxxy's repo.
+- When boxxy gets something wrong, tell the owner what you saw. File nothing for it yourself.
 
 You may do these without asking:
 
