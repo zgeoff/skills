@@ -9,9 +9,9 @@ description:
 
 # Work items
 
-Write each work item as the whole brief of the agent that picks it up. That agent has only the item:
-it never saw your conversation, the code you read, or what the owner told you. Hand back each item
-you filed or changed, whether it is ready, and each decision in it that waits on the owner.
+Write each work item as the whole brief of the agent that picks it up. That agent has only the item.
+Hand back each item you filed or changed, whether it is ready, and each decision in it that waits on
+the owner.
 
 Avoid these mistakes:
 
@@ -36,8 +36,8 @@ Avoid these mistakes:
 File one item for each outcome that can land by itself. Keep one outcome in one item, however large.
 Whoever designs the work splits it into pull requests.
 
-Write the title as the outcome, in plain lowercase, so that a list of titles reads as a list of
-results: "expired holds return their units to the shelf".
+Write the title as the outcome, in plain lowercase: "expired holds return their units to the shelf".
+A list of titles then reads as a list of results.
 
 ## Write it to the template
 
@@ -68,7 +68,7 @@ units stay held until someone releases them by hand.
 
 ## Acceptance
 
-<!-- One line for each thing someone observes. Each line names the evidence that the next agent will show. -->
+<!-- One line for each thing someone observes, with the evidence that the next agent will show. -->
 
 - [ ] A buyer sees the units back on the shelf after their hold expires. Evidence: a recording.
 - [ ] An expired hold's units are back on the shelf within 1 minute. Evidence: a test with a fake
@@ -87,8 +87,8 @@ units stay held until someone releases them by hand.
 - Run the migration that adds the expiry column, after a backup.
 ```
 
-For work that ends in an answer, such as an investigation, add `## Questions to answer`: each
-question, and the decision that its answer informs.
+For work that ends in an answer, such as an investigation, add `## Questions to answer`. List each
+question with the decision that its answer informs.
 
 Leave the Sketch and Constraints sections to whoever designs the work, as the
 [design-docs](../design-docs/references/work-item.md) skill says.
@@ -110,8 +110,8 @@ screenshot or a recording.
 Copy the owner's words into the item where they decide something: a name, a value, an example.
 Sharpen the wording of the outcome and the acceptance lines yourself.
 
-Ask the owner about each of these, with the options and your recommendation. Until the owner
-answers, keep the question in Context, marked "For the owner:":
+Keep each open question in Context, marked "For the owner", until the owner answers. Ask the owner,
+with the options and your recommendation, before you make:
 
 - a change to the outcome;
 - behaviour that the outcome doesn't ask for;
@@ -126,9 +126,9 @@ When an item isn't ready, file it anyway, and say in your reply what it lacks. A
 all of these hold:
 
 - An agent that reads only the item can say what done looks like.
-- Acceptance has at least one line, and each line names its evidence.
+- Acceptance has at least one line, with its evidence.
 - Each item it depends on is done.
-- Context holds no "For the owner:" question.
+- Context holds no "For the owner" question.
 - No merged pull request already does the work.
 
 **Reply:** each item you filed or changed, whether it is ready, and each decision that waits on the
