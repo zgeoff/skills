@@ -74,7 +74,7 @@ When the owner changes the decision, edit the record in place:
 
 ## Changes
 
-- 2026-04-10: receipt emails became urgent too.
+- 2026-04-10: urgent emails moved to a queue of their own.
 ```
 
 ## Remove a record
