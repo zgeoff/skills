@@ -21,12 +21,12 @@ tools.
   owner's words.
 - When boxxy gets something wrong, file that as an item on boxxy's repo.
 
-You are allowed to:
+You may do these without asking:
 
 - File, note, hold, release, retry and close items in boxxy.
 - Start a side session, and stop and forget it once its work is done and it holds nothing unpushed
   or uncommitted.
-- Type the owner's words into a session, so that the owner doesn't have to.
+- Type the owner's words into a session for them.
 - Decide a design question yourself when it is cheap to undo. Tell the owner after, with your
   reason.
 - Manage the secrets in every project vault that `op-mint --list` shows.
