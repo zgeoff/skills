@@ -36,55 +36,54 @@ Avoid these mistakes:
 File one item for each outcome that can land by itself. Keep one outcome in one item, however large.
 Whoever designs the work splits it into pull requests.
 
-Write the title as the outcome, in plain lowercase: "expired holds return their units to the shelf".
+Write the title as the outcome, in plain lowercase: "password reset emails arrive within a minute".
 A list of titles then reads as a list of results.
 
 ## Write it to the template
 
-Paste the block, and replace its example values, which describe an invented warehouse service.
-Delete each `<!-- -->` comment. Keep Outcome and Acceptance, and delete any other section that you
-leave empty.
+Paste the block, and replace its example values, which describe an invented app. Delete each
+`<!-- -->` comment. Keep Outcome and Acceptance, and delete any other section that you leave empty.
 
 ```markdown
 ## Outcome
 
 <!-- 1 to 3 sentences: what is true when the work is done. For a bug, what happens now too. Give the end state. The next agent picks the steps. -->
 
-A hold that nobody releases returns its units to the shelf 15 minutes after it was placed. Today the
-units stay held until someone releases them by hand.
+Someone who asks for a password reset gets the email within 1 minute. Today the email can take an
+hour.
 
 ## Context
 
 <!-- Each fact the next agent can't find alone: links, the files involved, earlier pull requests, the owner's decisions. For a bug, the steps that reproduce it, with their output. -->
 
-- Holds are placed in the `holds` module, which the checkout calls.
-- The owner chose 15 minutes, the length of a checkout session.
+- Reset emails wait in the same queue as the weekly newsletter, so a large newsletter delays them.
+- The owner wants reset emails sent first, and doesn't want a second email provider.
 
 ## Depends on
 
 <!-- Each work item that must be done first, as a link. -->
 
-- [holds have an expiry time](<link to the item>)
+- [the email queue sends urgent emails first](<link to the item>)
 
 ## Acceptance
 
 <!-- One line for each thing someone observes, with the evidence that the next agent will show. -->
 
-- [ ] A buyer sees the units back on the shelf after their hold expires. Evidence: a recording.
-- [ ] An expired hold's units are back on the shelf within 1 minute. Evidence: a test with a fake
-      clock.
+- [ ] A reset email arrives within 1 minute while a newsletter goes out. Evidence: a test that
+      queues 10,000 newsletter emails first.
+- [ ] The newsletter still reaches everyone on the list. Evidence: the newsletter tests.
 
 ## Out of scope
 
 <!-- Only what the owner or the request excludes. Invent no limit. -->
 
-- Extending a hold.
+- The wording of the reset email.
 
 ## Permissions
 
 <!-- Each thing the next agent may do beyond its own branch and pull request, in the owner's words: a deploy, a paid API with its spend limit, a migration, a post under the owner's name. Grant nothing yourself. -->
 
-- Run the migration that adds the expiry column, after a backup.
+- Deploy to staging, to try it with a real inbox.
 ```
 
 For work that ends in an answer, such as an investigation, add `## Questions to answer`. List each
