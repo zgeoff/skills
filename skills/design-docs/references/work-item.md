@@ -29,7 +29,7 @@ out.
 
 <!-- The work items that must be done first, as links. Delete the section when there are none. -->
 
-- [The email queue sends urgent emails first](<link to the issue>)
+- [The reset page sends its email through the emails module](<link to the issue>)
 
 ## Sketch
 

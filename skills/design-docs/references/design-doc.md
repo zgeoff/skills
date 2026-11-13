@@ -51,7 +51,7 @@ flowchart LR
 ```ts
 const email = await emails.send({ to, template: 'password-reset', priority: 'urgent' });
 // → { emailID: 'e_8f2', queuedAt: '2026-03-02T10:15:00Z' }
-//   or { error: 'unknown-template', template: 'pasword-reset' }
+//   or { error: 'unknown-template', template: 'password-reset' }
 ```
 
 ```ts
@@ -83,10 +83,10 @@ interface QueuedEmail {
 
 <!-- Each choice made between options, one line each: the choice, its reason, and a link to its decision record when one exists. A rule the code must keep goes in Constraints. -->
 
-- **Urgent emails go to the front of one queue.** A second queue needs a second sender.
+- **Urgent emails go first, in one queue.** One queue keeps one rate limit with the email provider.
   [0012](../decisions/0012-urgent-emails-go-first.md)
-- **The emails module is the only caller of the email provider.** Two callers can't keep one rate
-  limit.
+- **The emails module is the only caller of the email provider.** One caller can count every email
+  that goes out.
 
 ## Builder decides
 

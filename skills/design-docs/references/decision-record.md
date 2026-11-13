@@ -24,7 +24,7 @@ which test it fails, and write the record only if the owner still wants it.
    Decisions line.
 
 ```markdown
-# 0012: Urgent emails go to the front of one queue
+# 0012: Urgent emails go first
 
 - Date: 2026-03-01
 - Status: decided
