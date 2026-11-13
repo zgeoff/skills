@@ -19,7 +19,7 @@ context filling the gaps.
 
 When it reports, redraft each section you fix, never just the sentences it quoted. When you fixed
 anything, run one more cold read. Then run the [deslop](../deslop/SKILL.md) skill on each section
-you changed, and stop.
+you changed, and the scripted checks again.
 
 Hand back:
 
