@@ -9,10 +9,9 @@ description:
 
 # Work items
 
-Write each work item as the whole brief of the agent that picks it up. That agent has only the
-item: it never saw your conversation, the code you read, or what the owner told you. Hand back
-each item you filed or changed, whether it is ready, and each decision in it that waits on the
-owner.
+Write each work item as the whole brief of the agent that picks it up. That agent has only the item:
+it never saw your conversation, the code you read, or what the owner told you. Hand back each item
+you filed or changed, whether it is ready, and each decision in it that waits on the owner.
 
 Avoid these mistakes:
 
@@ -26,16 +25,16 @@ Avoid these mistakes:
 - [One item, one outcome](#one-item-one-outcome): split by outcome, never by size.
 - [Write it to the template](#write-it-to-the-template): Outcome, Context, Depends on, Acceptance,
   Out of scope and Permissions.
-- [Acceptance](#acceptance): one line for each thing someone observes, with the evidence that
-  proves it.
+- [Acceptance](#acceptance): one line for each thing someone observes, with the evidence that proves
+  it.
 - [Keep the owner's words](#keep-the-owners-words): copy the words that decide something, and ask
   the owner before you add or change anything.
 - [Ready](#ready): the test an item passes before work starts.
 
 ## One item, one outcome
 
-File one item for each outcome that can land by itself. Keep one outcome in one item, however
-large. Whoever designs the work splits it into pull requests.
+File one item for each outcome that can land by itself. Keep one outcome in one item, however large.
+Whoever designs the work splits it into pull requests.
 
 Write the title as the outcome, in plain lowercase, so that a list of titles reads as a list of
 results: "expired holds return their units to the shelf".
@@ -43,16 +42,16 @@ results: "expired holds return their units to the shelf".
 ## Write it to the template
 
 Paste the block, and replace its example values, which describe an invented warehouse service.
-Delete each `<!-- -->` comment. Keep Outcome and Acceptance, and delete any other section that
-you leave empty.
+Delete each `<!-- -->` comment. Keep Outcome and Acceptance, and delete any other section that you
+leave empty.
 
 ```markdown
 ## Outcome
 
 <!-- 1 to 3 sentences: what is true when the work is done. For a bug, what happens now too. Give the end state. The next agent picks the steps. -->
 
-A hold that nobody releases returns its units to the shelf 15 minutes after it was placed. Today
-the units stay held until someone releases them by hand.
+A hold that nobody releases returns its units to the shelf 15 minutes after it was placed. Today the
+units stay held until someone releases them by hand.
 
 ## Context
 
@@ -97,12 +96,12 @@ Leave the Sketch and Constraints sections to whoever designs the work, as the
 ## Acceptance
 
 Write each line as one thing that someone observes, and name the evidence that will prove it: a
-test, a command and its output, a screenshot or a recording. A change that someone can see needs a screenshot or a
-recording.
+test, a command and its output, a screenshot or a recording. A change that someone can see needs a
+screenshot or a recording.
 
 - Make each line fail today and pass when the work is done.
-- Leave out a line that you can prove only after a release. The next agent can't show it in a
-  pull request.
+- Leave out a line that you can prove only after a release. The next agent can't show it in a pull
+  request.
 - When a line needs something that this item doesn't build, such as a fixture or an API, list the
   item that builds it under Depends on.
 
@@ -123,8 +122,8 @@ Ask nothing that the item or an earlier answer already settles.
 
 ## Ready
 
-When an item isn't ready, file it anyway, and say in your reply what it lacks. An item is ready
-when all of these hold:
+When an item isn't ready, file it anyway, and say in your reply what it lacks. An item is ready when
+all of these hold:
 
 - An agent that reads only the item can say what done looks like.
 - Acceptance has at least one line, and each line names its evidence.
@@ -132,5 +131,5 @@ when all of these hold:
 - Context holds no "For the owner:" question.
 - No merged pull request already does the work.
 
-**Reply:** each item you filed or changed, whether it is ready, and each decision that waits on
-the owner.
+**Reply:** each item you filed or changed, whether it is ready, and each decision that waits on the
+owner.
