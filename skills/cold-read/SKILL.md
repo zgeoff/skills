@@ -18,8 +18,8 @@ Tell it nothing about what the file is for. If you do, it reads the file the way
 context filling the gaps.
 
 When it reports, redraft each section you fix, never just the sentences it quoted. When you fixed
-anything, run one more cold read. Then deslop each section you changed, run the scripted checks
-again, and stop.
+anything, run one more cold read. Then run the [deslop](../deslop/SKILL.md) skill on each section
+you changed, and stop.
 
 Hand back:
 
@@ -113,15 +113,14 @@ fresh. If you start from the sentences the cold reader quoted, you keep the shap
 
 1. If you fixed nothing after the first read, stop.
 2. Otherwise give each file you changed one more cold read, of the whole file, with a fresh
-   subagent, even when your fix changed one sentence. Act on its findings the same way. Run no third
-   read, whatever the second read finds.
-3. Run the [deslop](../deslop/SKILL.md) skill on each section you changed after either read. Your
+   subagent, even when your fix changed one sentence. Run no third read, whatever the second read
+   finds.
+3. Act on the second read's findings the same way, with one difference. When the second read gets
+   stuck in a section you redrafted, restructure that section: empty it, and write it again in a new
+   order. Name it as restructured in your reply.
+4. Run the [deslop](../deslop/SKILL.md) skill on each section you changed after either read. Your
    fixes add words, and some of them are padding.
-4. Run the scripted checks from [Run it](#run-it) again, and stop.
-
-When the second read gets stuck in a section you redrafted, restructure that section: empty it,
-write it again in a new order, and hand it back as restructured. Fix a guess or a rule break there
-as you would any other.
+5. Run the scripted checks from [Run it](#run-it) again, and stop.
 
 ## Show the user, when asked
 
