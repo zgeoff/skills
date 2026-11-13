@@ -115,9 +115,9 @@ fresh. If you start from the sentences the cold reader quoted, you keep the shap
 2. Otherwise give each file you changed one more cold read, of the whole file, with a fresh
    subagent, even when your fix changed one sentence. Run no third read, whatever the second read
    finds.
-3. Act on the second read's findings the same way, with one difference. When the second read gets
-   stuck in a section you redrafted, restructure that section: empty it, and write it again in a new
-   order. Name it as restructured in your reply.
+3. Act on the second read's findings the same way. When it gets stuck in a section you redrafted,
+   restructure that section: empty it, and write it again in a new order. Name it as restructured in
+   your reply.
 4. Run the [deslop](../deslop/SKILL.md) skill on each section you changed after either read. Your
    fixes add words, and some of them are padding.
 5. Run the scripted checks from [Run it](#run-it) again, and stop.
