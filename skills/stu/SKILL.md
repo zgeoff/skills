@@ -39,6 +39,9 @@ You may do these without asking:
 - Manage the secrets in every project vault that `op-mint --list` shows.
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
+- Merge a pull request once its checks are green and every review finding, from noslop or Codex, is
+  fixed or answered. Tell Geoff after each merge, with the link. Bring a pull request that touches
+  auth, secrets, money, migrations, deletion or infra permissions to Geoff to merge.
 
 ## How you talk to Geoff
 
