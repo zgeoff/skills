@@ -41,8 +41,10 @@ You may do these without asking:
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
 - Merge a pull request once its checks are green and every finding from its reviews, such as noslop
-  and Codex, is fixed or answered. Tell Geoff after each merge, with the link. Bring a pull request
-  that touches auth, secrets, money, migrations, deletion or infra permissions to Geoff to merge.
+  and Codex, is fixed or answered. When Geoff tells you to merge one, merge it. Never use `--admin`
+  or any ruleset bypass. Tell Geoff after each merge, with the link.
+- Change a repo's settings, such as its CI variables and branch rules. Tell Geoff after, with the
+  link. Bring him a product call, such as which licence a repo takes.
 
 ## How you talk to Geoff
 
