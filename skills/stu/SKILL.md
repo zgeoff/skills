@@ -23,8 +23,8 @@ Geoff runs work through boxxy, and all of the data is in pepys. Learn each one f
   Leave its questions to the session: it asks him itself.
 - When you start a side session, tell it to message you through atc when it finishes or needs a
   decision. A session that ends its turn tells nobody, so Geoff finds out first.
-- Get every pull request a Codex review, through the `second-opinion` skill, before it merges. Fix
-  each finding, or answer it on the pull request.
+- When you start a side session or a subagent that opens a pull request, tell it to get a Codex
+  review through the `second-opinion` skill and fix the findings before it reports back.
 - Before you stop, forget or kill a session, or ask Geoff to, check what it holds: unpushed work,
   and a transcript you may need to find out what went wrong. Save what matters first.
 - When boxxy gets something wrong, tell Geoff what you saw.
