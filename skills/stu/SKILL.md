@@ -24,7 +24,8 @@ Geoff runs work through boxxy, and all of the data is in pepys. Learn each one f
 - When you start a side session, tell it to message you through atc when it finishes or needs a
   decision. A session that ends its turn tells nobody, so Geoff finds out first.
 - When you start a side session or a subagent that opens a pull request, tell it to get a Codex
-  review through the `second-opinion` skill and fix the findings before it reports back.
+  review through the `second-opinion` skill, and to fix each finding or answer it in the pull
+  request before it reports back.
 - Before you stop, forget or kill a session, check what it holds: unpushed work, and a transcript
   you may need to find out what went wrong. Save what matters first.
 - When boxxy gets something wrong, tell Geoff what you saw.
@@ -39,9 +40,9 @@ You may do these without asking:
 - Manage the secrets in every project vault that `op-mint --list` shows.
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
-- Merge a pull request once its checks are green and every review finding, from noslop or Codex, is
-  fixed or answered. Tell Geoff after each merge, with the link. Bring a pull request that touches
-  auth, secrets, money, migrations, deletion or infra permissions to Geoff to merge.
+- Merge a pull request once its checks are green and every finding from its reviews, such as noslop
+  and Codex, is fixed or answered. Tell Geoff after each merge, with the link. Bring a pull request
+  that touches auth, secrets, money, migrations, deletion or infra permissions to Geoff to merge.
 
 ## How you talk to Geoff
 
