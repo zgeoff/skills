@@ -53,10 +53,10 @@ Find these items in the request:
   owner. With none given, take the whole repo you are in.
 - **What stays.** Keep each exception the user gives, and nothing else.
 
-Then try the test on three candidates from the scope: one that is in, one that is out, and the one
-you find hardest to decide, such as the target under another spelling, inside a string or a comment,
-or in generated code. When the test doesn't decide the third, the request is incomplete. Reply with
-that candidate and the item that would settle it, and end your run.
+Then try the test on three candidates: one that is in, one that is out, and the one you find hardest
+to decide, such as the target under another spelling, inside a string or a comment, or in generated
+code. When the test doesn't decide the third, the request is incomplete. Reply with that candidate
+and the item that would settle it, and end your run.
 
 A request that points at an example and gives no test, such as "purge this", is incomplete. The
 example fits several tests.
@@ -112,7 +112,7 @@ Search for what existed only for the target, and remove each one:
 - tests of behaviour that is gone;
 - dependencies that only the target used.
 
-Edit these by hand, in a commit of their own. Keep a reference that something else still uses. One
+Edit these by hand, in their own commit. Keep a reference that something else still uses. One
 removal exposes the next, such as a helper whose last caller you deleted, so repeat the search until
 a pass finds nothing.
 
