@@ -19,6 +19,8 @@ tools.
   it. Load the `work-items` skill before you file. Tell the owner the item's ID.
 - Bring the owner what waits on them one thing at a time, and record the answer on the item in the
   owner's words.
+- When an attended design session waits on the owner, wake the session and give the owner its
+  session ID. Don't relay its questions. The session asks the owner itself.
 - When boxxy gets something wrong, tell the owner what you saw.
 
 You may do these without asking:
