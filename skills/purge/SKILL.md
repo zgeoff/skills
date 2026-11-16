@@ -44,7 +44,7 @@ merge.
 
 ## Read the request
 
-Find these four items in the request:
+Find these items in the request:
 
 - **The target.** State it as a test that puts any one candidate in or out, such as "every use of
   `LEGACY_MODE`" or "every test title that starts with `should`".
@@ -54,11 +54,11 @@ Find these four items in the request:
 - **What stays.** Keep each exception the user gives, and nothing else.
 
 Then try the test on three candidates from the scope: one that is in, one that is out, and the one
-you find hardest to decide: the target under another spelling, inside a string or a comment, or in
-generated code. When the test doesn't decide the third, the request is incomplete. Reply with that
-candidate and the item that would settle it, and end your run.
+you find hardest to decide, such as the target under another spelling, inside a string or a comment,
+or in generated code. When the test doesn't decide the third, the request is incomplete. Reply with
+that candidate and the item that would settle it, and end your run.
 
-A request that points at an example and gives no test, such as "purge this", is incomplete: the
+A request that points at an example and gives no test, such as "purge this", is incomplete. The
 example fits several tests.
 
 Ask nothing after this step:
@@ -75,10 +75,10 @@ Ask nothing after this step:
    archived one.
 2. Write a search script that prints every instance with its file and position. Use the language's
    own parser when a text search would miss a form, such as a string split across lines. Search the
-   copies, never a hosted code search: it finds only what a text query matches.
+   copies. A hosted code search finds only what a text query matches.
 3. Keep the search script, and each edit script you write later, outside the repos. A script
    committed for one purge is one more file to remove.
-4. Run the search script in each repo. When a hit could be in or out, count it in: the user asked
+4. Run the search script in each repo. When a hit could be in or out, count it in. The user asked
    for every one.
 5. Group the hits into classes by the edit each needs, and count each class, per repo.
 6. Mark each class as scripted, where one instruction gives every edit, such as "delete the line",
@@ -106,9 +106,9 @@ Report any other fault, and leave it.
 
 Search for what existed only for the target, and remove each one:
 
-- code that nothing uses now: imports, variables, parameters, types and files;
-- config: environment variables, config keys, flags and CI steps;
-- prose that describes it: docs, READMEs and code comments;
+- code that nothing uses now, such as imports, variables, parameters, types and files;
+- config, such as environment variables, config keys, flags and CI steps;
+- prose that describes it, in docs, READMEs and code comments;
 - tests of behaviour that is gone;
 - dependencies that only the target used.
 
