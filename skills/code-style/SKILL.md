@@ -59,12 +59,12 @@ metadata:
   shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
 - Split a function in two when it reads something, branches on what it read, and then writes,
   removes or runs something:
-  - a pure function that takes the values read and returns what to do. Give it a verb from a no-I/O
-    row of the [verb table](#function-names), such as `collect` or `pick`, so the
+  - Write a pure function that takes the values read and returns what to do. Give it a verb from a
+    no-I/O row of the [verb table](#function-names), such as `collect` or `pick`. The
     [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
-    rule in `@zgeoff/oxlint-config` keeps I/O out of it;
-  - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
-    verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
+    rule in `@zgeoff/oxlint-config` then keeps I/O out of it.
+  - Write a thin function that does the reads, calls the pure one, and acts on its result. Give it
+    the I/O verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
 - Write the pure function first, then the thin one around it. Test each edge case of the pure one
   with a `test.each` row of plain data. A combined function needs a stand-in for every read and
   write, so its edges go untested.
@@ -151,14 +151,13 @@ Give any other function any verb that fits, except a banned verb from the last b
 - Use `read` for every I/O lookup, whether or not it can miss. When it can't miss, leave `null` and
   `undefined` out of its return type, and throw when its source fails.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
-  Two kinds keep their own verb:
-  - a function with an I/O verb that returns a success flag, such as `removeFile`;
-  - a function whose name starts with `use`, `on` or `handle`.
+  Keep the verb the function has when it:
+  - has an I/O verb and returns a success flag, such as `removeFile`;
+  - has a name that starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
 - You may start a name with `resolve` whether or not it does I/O.
 - Never start a name with one of these verbs. They say nothing about I/O or a miss:
   - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
-  - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
-    `read`;
+  - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database lookup, use `read`;
   - `handle`, outside a callback.
