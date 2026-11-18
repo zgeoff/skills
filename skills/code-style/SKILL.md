@@ -23,8 +23,8 @@ metadata:
   `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a file has
   only a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
-  type or constant just above its first use: the main export's types go between the imports and the
-  main export.
+  type or constant just above its first use: the main export's types and constants go between the
+  imports and the main export.
 - When two or more non-test files use a type, put it in `types.ts` in the nearest folder that holds
   them all. Create that `types.ts` when the folder has none. Keep a type that one file uses in that
   file.
@@ -69,9 +69,9 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function before you write the thin one around it, and test each edge case with one
-  `test.each` row of plain data. In one combined function, each case needs a stand-in for every read
-  and write, so edges go untested.
+- Write and test the pure function before the thin one, with one `test.each` row of plain data per
+  edge case. In one combined function, each case needs a stand-in for every read and write, so edges
+  go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
 - Never add an option, parameter or extension point before a caller passes it.
