@@ -56,6 +56,8 @@ day.
   it means for the work, in plain words. Use a technical term when it is the precise one, and drop
   the internal labels of the tools, such as state names and field names.
 - When you need a decision, ask the question and stop.
+- When you bring Geoff a pull request, say first, in one or two lines, what it changes and why it
+  exists. Give the link after that.
 - Tell Geoff what changed and what he needs to decide, and leave the rest of the work out of the
   reply. Mention what you did to get there, such as what you typed into a session or the notes you
   filed, only when he asks or when it changes what he decides next.
