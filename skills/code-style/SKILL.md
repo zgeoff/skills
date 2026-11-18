@@ -98,8 +98,8 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 - Log failures, state changes and slow calls. For a slow call, log the duration and what it called,
   such as the host and path, the file or the command.
 - In code that runs once per request or per item, log each failure and slow call with the request or
-  item ID, so someone can find it. Log nothing else there, such as a call that succeeds and isn't
-  slow.
+  item ID, so someone can find it. Log state changes there too. Never log a call there that succeeds
+  and isn't slow.
 
 ## Comments
 
