@@ -13,9 +13,9 @@ metadata:
 
 ## References
 
-- [State, waiting and file locks](./references/state-and-waiting.md): writing code that saves or
-  sends a status, keeps a long-lived object with states, sleeps, waits for an event or a promise, or
-  locks a file across processes.
+- [State, processes and codemods](./references/state-processes-and-codemods.md): writing code that
+  saves or sends a status, keeps a long-lived object with states, sleeps or waits, locks a file
+  across processes, or sends data to another process or package; writing a one-off codemod.
 
 ## Files and modules
 
@@ -55,8 +55,6 @@ metadata:
 
 ## Structure
 
-- Send data between processes or packages through the repo's typed interface: its RPC layer, a
-  shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
 - Split a function in two when it reads something, branches on what it read, and then writes,
   removes or runs something:
   - a pure function that takes the values read and returns what to do. Give it a verb from a no-I/O
@@ -93,8 +91,12 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 - Never check again what the value's source already guarantees, such as its type, a schema parse or
   a library's documented behaviour. An example is a `null` check on a field the schema requires.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. Never log each call of code that runs once per request
-  or per item.
+- Log failures, state changes and slow calls. In code that runs once per request or per item, log
+  each failure with the failed item's ID, so someone can find the item, and never log a call that
+  succeeds.
+- Count a call outside the process, such as to the network, a database, the disk or a subprocess, as
+  slow after 1 second, or after the timeout or other budget the code sets for it. Log how long it
+  took and what it called.
 
 ## Comments
 
@@ -108,11 +110,6 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
   comment. When code in another package depends on an invariant of yours, also state it in the doc
   under `docs/` for that part of the system.
 - Don't name another declaration in a comment; state the fact, so a rename can't leave it stale.
-
-## One-off codemods
-
-- Put a one-off codemod in the PR description, in a `<details>` block with the command that ran it,
-  never in the repo.
 
 ## Function names
 

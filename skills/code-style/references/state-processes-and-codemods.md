@@ -1,4 +1,4 @@
-# State, waiting and file locks
+# State, processes and codemods
 
 ## State
 
@@ -24,3 +24,13 @@
   describes. Structure has the caller pass in every other piece of I/O.
 - Write your own lock only for a need `withFileLock` can't meet, such as a shared read lock, and
   name the need in a comment.
+
+## Data between processes
+
+- Send data between processes or packages through the repo's typed interface: its RPC layer, a
+  shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
+
+## One-off codemods
+
+- Put a one-off codemod in the PR description, in a `<details>` block with the command that ran it,
+  never in the repo.
