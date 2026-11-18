@@ -24,7 +24,7 @@ Avoid these mistakes:
 - a doc per rule or per tool, where one doc per part would do.
 
 Hand back where the design went, each decision record you wrote, and what the two tests in
-[Check it](#check-it) found.
+[Check it](#check-it) found and what you fixed.
 
 ## Key rules
 
@@ -40,18 +40,16 @@ Hand back where the design went, each decision record you wrote, and what the tw
   options.
 - [Keep it short](#keep-it-short): one doc per piece of work, one diagram, under about 10 open
   questions.
-- [Prove acceptance](#prove-acceptance): each line names its evidence, a `bun verify` verdict where
-  the repo has one.
 - [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
-- [Close out the design](#close-out-the-design): once the work is built, keep what lasts and delete
-  the design doc.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
 
 ## References
 
-- [Design doc template](./references/design-doc.md): writing a design doc, or splitting a long one.
-- [Work item template](./references/work-item.md): writing the design part of a work item.
+- [Design doc template](./references/design-doc.md): writing a design doc, splitting a long one, or
+  closing one out once its work is built.
+- [Work item template](./references/work-item.md): writing the design part of a work item, or its
+  Acceptance lines.
 - [Decision record template](./references/decision-record.md): writing, changing or removing a
   decision record.
 - [Test prompts](./references/test-prompts.md): running the skim test and the builder test.
@@ -132,16 +130,6 @@ Write in the present tense, about the system that the design builds.
   needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
 
-## Prove acceptance
-
-Write each Acceptance line of a work item as a behaviour someone can observe, and name its evidence.
-
-- When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
-  `bun verify`, prove each behaviour a user sees with its feature's journey and the verdict
-  `bun verify done` records. Name the feature in the line.
-- Prove the rest with a test, and name the test's subject.
-- Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
-
 ## Write a decision record
 
 Write a record only for a choice that passes all three tests. The record lets the next person who
@@ -157,30 +145,14 @@ proposes a rejected option read why it lost.
 
 Put a choice that fails a test where its reader looks:
 
-| The choice                       | Goes in                                                    |
-| -------------------------------- | ---------------------------------------------------------- |
-| a contract, a shape or a rule    | the design doc, then the architecture doc once it is built |
-| the reason for one piece of code | a code comment                                             |
-| build order                      | the work items                                             |
+| The choice                       | Goes in                                                          |
+| -------------------------------- | ---------------------------------------------------------------- |
+| a contract, a shape or a rule    | the design doc, then the architecture doc once the work is built |
+| the reason for one piece of code | a code comment                                                   |
+| build order                      | the work items                                                   |
 
-Write a record once the owner approves the choice. Add it to the PR that adds the design doc. With
-no design doc, open a PR for the record alone. Until the owner approves, state the choice in the
-design's Decisions section.
-
-Write one decision per record, and link no design from it: the design doc is deleted at close-out.
-When a Decisions line has a record, end the line with a link to it. The
-[decision record template](./references/decision-record.md) holds the shape, and how to change or
-remove a record.
-
-## Close out the design
-
-A design doc lasts only until its work is built. When the last work item that the design covers is
-done, the agent that finishes it closes out the design:
-
-1. Move each fact that still describes the system into its doc in `docs/architecture/`.
-2. Check that each choice that passes the tests in
-   [Write a decision record](#write-a-decision-record) has a record.
-3. Delete the design doc.
+Write, change or remove a record as the [decision record template](./references/decision-record.md)
+says.
 
 ## Check it
 

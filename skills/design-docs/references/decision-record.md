@@ -9,7 +9,18 @@ When the owner asks you to record a decision, take the request as proof that the
 that choice fails one of the [three tests](../SKILL.md#write-a-decision-record), tell the owner
 which test it fails, and write the record only if the owner still wants it.
 
+- [Write a record](#write-a-record)
+- [Change a record](#change-a-record)
+- [Remove a record](#remove-a-record)
+
 ## Write a record
+
+While a choice waits for the owner's approval, state it in the design's Decisions section. Write its
+record once the owner approves it. Add the record to the PR that adds the design doc. With no design
+doc, open a PR for the record alone.
+
+Write one decision per record, and link no design from it: the agent that
+[closes out](./design-doc.md#close-out-a-design-doc) the design deletes the design doc.
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.
@@ -19,9 +30,9 @@ which test it fails, and write the record only if the owner still wants it.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
    weighed, ask the owner. When the owner weighed none, write no record.
-6. When Consequences would only repeat the Decision section, delete it.
-7. In the design doc, move the question out of Open questions, and link the record from its
-   Decisions line.
+6. When Consequences would only repeat the Decision section, delete Consequences.
+7. In the design doc, move the question out of Open questions, and end the choice's Decisions line
+   with a link to the record.
 
 ```markdown
 # 0012: Urgent emails go first
@@ -61,9 +72,9 @@ When the owner changes the decision, edit the record in place:
 
 1. Rewrite the title, Decision, Why and Consequences to state the new decision. Keep the file name,
    even though its slug no longer matches the title, so links keep working.
-2. Set the `Updated` line under `Date` to the day of the change. Add the line on the first change.
+2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
-4. Add a dated line to the `## Changes` section at the end, and add the section on the first change.
+4. On the first change, add a `## Changes` section at the end. Add a dated line to it.
 
 ```markdown
 - Date: 2026-03-01
@@ -86,8 +97,8 @@ longer passes the three tests, ask the owner before you remove it.
 Do every step in the PR that deletes the record:
 
 1. Move each part of the decision that still holds into the doc that covers it: the architecture doc
-   in `docs/architecture/`, or the design in `docs/design/` when the work is not built. Leave the
-   Why and the Rejected alternatives in the file you delete.
+   in `docs/architecture/`, or the design in `docs/design/` when the work is not built. Move neither
+   the Why nor the Rejected alternatives: they go with the deleted file.
 2. Search the repo for the record's file name, and for its bare number, such as in a table cell or a
    code comment. Point each citation at the doc from step 1. When the sentence no longer needs the
    citation, delete it.
