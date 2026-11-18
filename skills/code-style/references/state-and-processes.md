@@ -1,10 +1,11 @@
 # State, waiting and processes
 
-Use the module or tool each section names. A hand-written version drifts from the code it copies,
-and no type check catches the drift. Never write:
+Use the tool or pattern each section names to save a status, wait, lock a file, or send data to
+another process or package. A version you write yourself skips the checks the named one makes.
+Never:
 
-- a second module that writes a saved status;
-- code that parses a request body or command-line arguments itself.
+- write a saved status from more than one module;
+- parse a request body or command-line arguments yourself.
 
 ## State
 
@@ -33,5 +34,6 @@ and no type check catches the drift. Never write:
 
 ## Data between processes and packages
 
-- Send data between processes or packages through the repo's typed interface: its RPC layer, a
-  shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
+- Send data between processes or packages through a typed interface the repo already has, such as
+  its RPC layer, a shared schema or its CLI parser. Never match a route, parse a body or read
+  arguments by hand.

@@ -93,14 +93,12 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 - Never check again what the value's source already guarantees, such as a field its schema requires,
   its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Count a call outside the process, such as to the network, a database, the disk or a subprocess, as
-  slow past the latency target the code or the repo sets for it, or past 1 second when neither sets
-  one.
+- Treat a call outside the process, such as to the network, a database, the disk or a subprocess, as
+  slow past 1 second. When the code or the repo sets a latency target for the call, use that target.
 - Log failures, state changes and slow calls. For a slow call, log the duration and what it called,
   such as the host and path, the file or the command.
-- In code that runs once per request or per item, log each failure and each slow call with the
-  request or item ID. Log state changes there too. Never log a call there that succeeds and isn't
-  slow.
+- In code that runs once per request or per item, put the request or item ID in each log line. Never
+  log a call there that succeeds and isn't slow.
 
 ## Comments
 
