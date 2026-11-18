@@ -1,9 +1,10 @@
 # Work item template
 
 A work item is an issue in the work tracker, such as a Linear or GitHub issue. Every piece of work
-gets one, and this template is its description. When the work changes a shared contract, as
-[SKILL.md](../SKILL.md#choose-where-the-design-goes) defines it, write a design doc too, with the
-[design doc template](./design-doc.md), and link it as step 5 says.
+gets one, and this template is its description. When
+[Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
+design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
+says.
 
 To write the description:
 
@@ -62,11 +63,12 @@ function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `pri
 
 ## Acceptance
 
-<!-- Each line: what someone observes, and its evidence: a `bun verify` journey and its verdict when the repo has a verify CLI, or a test. Leave out a line that only a release can prove. -->
+<!-- Each line: what someone observes, and its evidence: a `bun verify` journey and its verdict when the repo has a verify CLI, or a test. Leave out a line that only a release or a live run can prove. -->
 
 - [ ] Someone gets the reset email within 1 minute while a newsletter goes out. Evidence: the
       `password-reset` journey in `bun verify`, with its verdict.
-- [ ] An urgent email leaves the queue before 10,000 bulk emails that wait. Evidence: a test.
+- [ ] An urgent email leaves the queue before 10,000 bulk emails that wait. Evidence: a test of the
+      queue's order.
 - [ ] The newsletter still reaches everyone on the list. Evidence: the newsletter tests.
 
 ## Out of scope

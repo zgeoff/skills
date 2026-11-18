@@ -1,6 +1,6 @@
 # Design doc template
 
-Read [SKILL.md](../SKILL.md) first: it says what goes in each section and who the owner and the
+Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and the
 builder are.
 
 - [Write a design doc](#write-a-design-doc)
@@ -10,7 +10,7 @@ builder are.
 ## Write a design doc
 
 1. Copy the block below to `docs/design/<work>.md`, where `<work>` names the work in kebab case,
-   such as `urgent-emails.md`.
+   such as `urgent-emails`.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
 4. Delete Shape when the design is one function or one type. Delete Out of scope and Open questions

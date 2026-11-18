@@ -44,7 +44,8 @@ hand back each finding with its line and the rule it breaks, quoted.
 ## References
 
 - [Kinds of skill](./references/skill-kinds.md): writing a new skill, its `description`, a rule set
-  or a project skill, or adding a command, a mistake to avoid, a step or a reply line to any skill.
+  or a project skill. Read it too before you add a command, a mistake to avoid, a step or a reply
+  line to any skill.
 - [Writing a reference](./references/writing-references.md): writing or editing a file in a skill's
   `references/`, a subagent's brief included.
 

@@ -24,7 +24,7 @@ Avoid these mistakes:
 - a doc per rule or per tool, where one doc per part would do.
 
 Hand back where the design went, each decision record you wrote, and what the two tests in
-[Check it](#check-it) found.
+[Check it](#check-it) found and what you fixed.
 
 ## Key rules
 
@@ -145,11 +145,11 @@ proposes a rejected option read why it lost.
 
 Put a choice that fails a test where its reader looks:
 
-| The choice                       | Goes in                                                    |
-| -------------------------------- | ---------------------------------------------------------- |
-| a contract, a shape or a rule    | the design doc, then the architecture doc once it is built |
-| the reason for one piece of code | a code comment                                             |
-| build order                      | the work items                                             |
+| The choice                       | Goes in                                                          |
+| -------------------------------- | ---------------------------------------------------------------- |
+| a contract, a shape or a rule    | the design doc, then the architecture doc once the work is built |
+| the reason for one piece of code | a code comment                                                   |
+| build order                      | the work items                                                   |
 
 Write, change or remove a record as the [decision record template](./references/decision-record.md)
 says.
