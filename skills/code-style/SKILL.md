@@ -27,14 +27,14 @@ metadata:
   imports and the main export, and a helper's above that helper.
 - Put a type that more than one file uses in the module's `types.ts`. Keep a type that one file uses
   in that file.
-- Make objects with factory functions. Write a class only for a custom error, such as
+- Make objects with factory functions. Write a class only for a custom error:
   `class QuotaError extends Error`.
 
 ## Names
 
 - Write an acronym in capitals: `parseCLIArgs`, `userID`, `packageURL`. At the start of a camelCase
   name, write it in lowercase: `cliPath`, `idToken`.
-- Name a value for what it holds, in full words, such as `session` and `manager`.
+- Name a value for what it holds, in full words: `session`, `manager`.
 - Use a short name only from this list:
   - `x` and `y` for coordinates, `z` for zod, `$` for Bun's shell, `_` for an unused value;
   - `ctx`, `id`, `db`, `args`, `params`, `repo` and `info`.
@@ -68,7 +68,7 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, then the thin one around it. Then test each edge case with one
+- Write the pure function first, then the thin one around it, and test each edge case with one
   `test.each` row of plain data. In one combined function, each case needs a stand-in for every read
   and write, so the edges go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
@@ -76,16 +76,16 @@ metadata:
 - Never add an option, a parameter or an extension point before a caller passes it.
 
 ```ts
-export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
-  return tasks.filter((task) => task.dueAt < now && task.remindedAt === null);
-}
-
 export async function runReminders(dependencies: ReminderDependencies): Promise<void> {
   const tasks = await dependencies.db.readOpenTasks();
 
   for (const task of collectDueReminders(tasks, dependencies.clock.now())) {
     await dependencies.mail.writeReminder(task.owner, task.id);
   }
+}
+
+export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
+  return tasks.filter((task) => task.dueAt < now && task.remindedAt === null);
 }
 ```
 
@@ -152,8 +152,8 @@ section, such as `fetch` or `process`.
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
   behind a helper whose name hides it. Check those by hand.
-- Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
-  Two kinds of boolean function keep their own verb:
+- Start a boolean function with `is`, `has`, `can` or `should`, or `probe` when it does I/O, even
+  when another verb reads well. Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
