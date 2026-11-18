@@ -50,7 +50,8 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- In review, flag every new assertion, approved or not.
+- When an assertion has to stay, follow [Pull requests](./references/pull-requests.md). In review,
+  flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -93,13 +94,13 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
   its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
 - Count a call outside the process, such as to the network, a database, the disk or a subprocess, as
-  slow when it takes longer than 1 second, or longer than a latency target the code or the repo sets
-  for it.
+  slow past the latency target the code or the repo sets for it, or past 1 second when neither sets
+  one.
 - Log failures, state changes and slow calls. For a slow call, log the duration and what it called,
   such as the host and path, the file or the command.
-- In code that runs once per request or per item, log each failure and slow call with the request or
-  item ID, so someone can find it. Log state changes there too. Never log a call there that succeeds
-  and isn't slow.
+- In code that runs once per request or per item, log each failure and each slow call with the
+  request or item ID. Log state changes there too. Never log a call there that succeeds and isn't
+  slow.
 
 ## Comments
 
