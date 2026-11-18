@@ -19,8 +19,8 @@ While a choice waits for the owner's approval, state it in the design's Decision
 record once the owner approves it. Add the record to the PR that adds the design doc. With no design
 doc, open a PR for the record alone.
 
-Write one decision per record, and link no design from it: the design doc is deleted at
-[close-out](./design-doc.md#close-out-a-design-doc).
+Write one decision per record, and link no design from it: the agent that
+[closes out](./design-doc.md#close-out-a-design-doc) the design deletes the design doc.
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.

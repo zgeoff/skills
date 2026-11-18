@@ -8,7 +8,7 @@ says.
 
 To write the description:
 
-1. Paste the block below, and write your own title.
+1. Paste the block under [Template](#template), and write your own title.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
@@ -63,7 +63,7 @@ function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `pri
 
 ## Acceptance
 
-<!-- Each line: what someone observes, and its evidence: a `bun verify` journey and its verdict when the repo has a verify CLI, or a test. Leave out a line that only a release or a live run can prove. -->
+<!-- Each line: what someone observes, and its evidence. -->
 
 - [ ] Someone gets the reset email within 1 minute while a newsletter goes out. Evidence: the
       `password-reset` journey in `bun verify`, with its verdict.

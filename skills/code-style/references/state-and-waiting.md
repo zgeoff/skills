@@ -18,8 +18,9 @@
 
 ## File locks
 
-- Lock a file across processes only with `withFileLock` from `@zgeoff/std/with-file-lock`. Import it
-  directly in the thin function that [Structure](../SKILL.md#structure) describes. It is the one
-  piece of I/O that the caller doesn't pass in. Read, decide and write in its callback, so the lock
-  spans all three. Write your own lock only for a need it can't meet, such as a lock readers share,
-  and name the need in a comment.
+- Lock a file across processes only with `withFileLock` from `@zgeoff/std/with-file-lock`. Read,
+  decide and write in its callback, so the lock spans all three.
+- Import `withFileLock` directly in the thin function that [Structure](../SKILL.md#structure)
+  describes. Structure has the caller pass in every other piece of I/O.
+- Write your own lock only for a need `withFileLock` can't meet, such as a shared read lock, and
+  name the need in a comment.

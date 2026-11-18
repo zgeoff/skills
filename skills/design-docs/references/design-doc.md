@@ -131,6 +131,6 @@ A design doc lasts only until its work is built. When the last work item that th
 done, the agent that finishes it closes out the design:
 
 1. Move each fact that still describes the system into its doc in `docs/architecture/`.
-2. Check that each choice that passes the tests in
+2. Check that each choice that passes the three decision-record tests in
    [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
 3. Delete the design doc.
