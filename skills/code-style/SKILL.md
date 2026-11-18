@@ -25,8 +25,8 @@ metadata:
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
   type or constant just above its first use: the main export's types and constants between the
   imports and the main export, and a helper's above that helper.
-- Put a type that more than one file uses in the module's `types.ts`. Keep a type that one file uses
-  in that file.
+- Put a type that several non-test files use in `types.ts` in the nearest folder holding them all,
+  and create it when the folder has none. Keep a type that one file uses in that file.
 - Make objects with factory functions. Write a class only for a custom error:
   `class QuotaError extends Error`.
 
@@ -44,15 +44,15 @@ metadata:
 
 - Branch on a union with `match(value)…exhaustive()` from `ts-pattern`, never `switch`, so a new
   member fails the type check.
-- End with `.otherwise()` only when the value comes from outside the program, such as a string read
-  from input that no schema has parsed.
+- End with `.otherwise()` only for a value from outside the program, such as input that no schema
+  has parsed.
 
 ## Types
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- When an assertion has to stay, get the maintainer's approval in the PR, and add a lint disable
-  comment that gives the reason. In review, flag every new assertion, approved or not.
+- When an assertion has to stay, get the maintainer's approval in the PR, and disable the lint rule
+  in a comment that gives the reason. In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -68,12 +68,12 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, then the thin one around it, and test each edge case with one
+- Write the pure function before you write the thin one around it, and test each edge case with one
   `test.each` row of plain data. In one combined function, each case needs a stand-in for every read
-  and write, so the edges go untested.
+  and write, so edges go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
-- Never add an option, a parameter or an extension point before a caller passes it.
+- Never add an option, parameter or extension point before a caller passes it.
 
 ```ts
 export async function runReminders(dependencies: ReminderDependencies): Promise<void> {
@@ -96,8 +96,8 @@ export function collectDueReminders(tasks: readonly Task[], now: number): Task[]
 - Never check again what the value's type, a schema parse or a library's documented behaviour
   already guarantees, such as a `null` check on a required field.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. Never log each call of code that runs once per request
-  or per item.
+- Log failures, state changes and slow calls. Never log each call of code that runs per request or
+  per item.
 
 ## Comments
 
@@ -120,8 +120,8 @@ export function collectDueReminders(tasks: readonly Task[], now: number): Task[]
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a banned verb from the last bullet of this
-section, such as `fetch` or `process`.
+Give any other function any verb that fits, except the banned verbs below, such as `fetch` or
+`process`.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
