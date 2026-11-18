@@ -57,6 +57,9 @@ metadata:
 
 - Send data between processes or packages through the repo's typed interface: its RPC layer, a
   shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
+- Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
+- Never write a wrapper that only passes its arguments on.
+- Never add an option, a parameter or an extension point before a caller passes it.
 - Split a function in two when it reads something, branches on what it read, and then writes,
   removes or runs something:
   - a pure function that takes the values read and returns what to do. Give it a verb from a no-I/O
@@ -68,9 +71,6 @@ metadata:
 - Write the pure function first, from the values you will read, then the thin one around it. You
   then test each edge case with one `test.each` row of plain data. In one combined function, each
   case needs a stand-in for every read and write, so the edges go untested.
-- Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
-- Never write a wrapper that only passes its arguments on.
-- Never add an option, a parameter or an extension point before a caller passes it.
 
 ```ts
 export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
