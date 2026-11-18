@@ -1,11 +1,8 @@
 # State, waiting and processes
 
-Use the tool or pattern each section names to save a status, wait, lock a file, or send data to
-another process or package. A version you write yourself skips the checks the named one makes.
-Never:
-
-- write a saved status from more than one module;
-- parse a request body or command-line arguments yourself.
+Use the tool or pattern each section names when you save or send a status, wait, lock a file, or
+send data to another process or package. Avoid writing one status from two modules, and writing your
+own lock, wait or parser in place of the one named.
 
 ## State
 
