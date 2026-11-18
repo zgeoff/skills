@@ -1,8 +1,10 @@
 # State, waiting and processes
 
-Keep each status, wait, lock and message between processes in the one module or tool named below.
-Avoid a hand-written copy, such as a second module that writes the status or a body parsed by hand:
-it drifts from the original, and no type check catches it.
+Use the module or tool each section names. A hand-written version drifts from the code it copies,
+and no type check catches the drift. Never write:
+
+- a second module that writes a saved status;
+- code that parses a request body or command-line arguments itself.
 
 ## State
 
