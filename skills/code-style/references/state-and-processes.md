@@ -1,4 +1,8 @@
-# State, processes and codemods
+# State, waiting and processes
+
+Keep each status, wait, lock and message between processes in the one module or tool named below.
+Avoid a hand-written copy, such as a second module that writes the status or a body parsed by hand:
+it drifts from the original, and no type check catches it.
 
 ## State
 
@@ -21,16 +25,11 @@
 - Lock a file across processes only with `withFileLock` from `@zgeoff/std/with-file-lock`. Read,
   decide and write in its callback, so the lock spans all three.
 - Import `withFileLock` directly in the thin function that [Structure](../SKILL.md#structure)
-  describes. Structure has the caller pass in every other piece of I/O.
+  describes. Have the thin function's caller pass in every other piece of I/O, as Structure says.
 - Write your own lock only for a need `withFileLock` can't meet, such as a shared read lock, and
   name the need in a comment.
 
-## Data between processes
+## Data between processes and packages
 
 - Send data between processes or packages through the repo's typed interface: its RPC layer, a
   shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
-
-## One-off codemods
-
-- Put a one-off codemod in the PR description, in a `<details>` block with the command that ran it,
-  never in the repo.

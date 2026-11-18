@@ -13,9 +13,11 @@ metadata:
 
 ## References
 
-- [State, processes and codemods](./references/state-processes-and-codemods.md): writing code that
-  saves or sends a status, keeps a long-lived object with states, sleeps or waits, locks a file
-  across processes, or sends data to another process or package; writing a one-off codemod.
+- [State, waiting and processes](./references/state-and-processes.md): code that saves or sends a
+  status, keeps states in a long-lived object, sleeps or waits, locks a file, or sends data to
+  another process.
+- [Pull requests](./references/pull-requests.md): a one-off codemod, or a type assertion that has to
+  stay.
 
 ## Files and modules
 
@@ -48,8 +50,6 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- When an assertion has to stay, get the maintainer's approval in the PR, and add a lint disable
-  comment that gives the reason. In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -88,15 +88,16 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 
 - Return an expected outcome, such as a miss or bad input from outside, as a value of the return
   type. Throw only what the caller can't plan for.
-- Never check again what the value's source already guarantees, such as its type, a schema parse or
-  a library's documented behaviour. An example is a `null` check on a field the schema requires.
+- Never check again what the value's source already guarantees, such as a field its schema requires,
+  its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. In code that runs once per request or per item, log
-  each failure with the failed item's ID, so someone can find the item, and never log a call that
-  succeeds.
+- Log failures, state changes and slow calls.
+- In code that runs once per request or per item, log each failure and slow call with the request or
+  item ID, so someone can find it. Never log a call there that succeeds in time.
 - Count a call outside the process, such as to the network, a database, the disk or a subprocess, as
-  slow after 1 second, or after the timeout or other budget the code sets for it. Log how long it
-  took and what it called.
+  slow past 1 second, which a healthy call rarely reaches. When the code sets a budget for the call,
+  such as a timeout or a latency target, use that budget in place of 1 second. Log the duration and
+  the host and path, or the query's name.
 
 ## Comments
 
