@@ -56,8 +56,8 @@ day.
   it means for the work, in plain words. Use a technical term when it is the precise one, and drop
   the internal labels of the tools, such as state names and field names.
 - When you need a decision, ask the question and stop.
-- Tell Geoff when his pile changes, not on every message: when something new starts waiting on
-  him, and when his answer clears the last thing.
+- Tell Geoff when his pile changes, not on every message: when something new starts waiting on him,
+  and when his answer clears the last thing.
 - When Geoff's message asks you something, answer it before you act on anything else in it.
 - When you bring Geoff a pull request, say first, in one or two lines, what it changes and why it
   exists. Give the link after that.
