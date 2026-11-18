@@ -2,9 +2,9 @@
 name: code-style
 description:
   "Code style for zgeoff TypeScript repos: file layout, names, state, unions, types, structure,
-  errors, comments, and the function-name verb table. Load it before you write, review or rename
-  TypeScript. Load the repo's project-code-style skill beside it, for that repo's stricter rules and
-  its departures."
+  errors, comments, and the verbs that start function names. Load it before you write, review or
+  rename TypeScript. Load the repo's project-code-style skill beside it, for that repo's stricter
+  rules and its departures."
 metadata:
   kind: rule-set
 ---
@@ -125,8 +125,8 @@ Give any other function any verb that fits, except the banned verbs below, such 
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| yes/no answer                                                                                             | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
-| yes/no answer that needs I/O                                                                              | `probe`                      | returns a boolean; may do I/O                                                  |
+| boolean answer                                                                                            | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
+| boolean answer that needs I/O                                                                             | `probe`                      | returns a boolean; may do I/O                                                  |
 | value from arguments, test data factories included                                                        | `build`                      | no I/O                                                                         |
 | text or raw input → structure                                                                             | `parse`                      | no I/O                                                                         |
 | value → text or markup                                                                                    | `format`, `render`           | no I/O                                                                         |
