@@ -20,12 +20,13 @@ metadata:
 ## Files and modules
 
 - Give each file one main export, and name the file after it: `parse-cli-args.ts` exports
-  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a module has
+  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a file has
   only a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
-  type or constant just above its first use: the main export's between the imports and the main
-  export, and a helper's above that helper.
-- Put a type that several files use in the module's `types.ts`, and keep any other in its file.
+  type or constant just above its first use: the main export's types and constants between the
+  imports and the main export, and a helper's above that helper.
+- Put a type that more than one file uses in the module's `types.ts`. Keep a type that one file uses
+  in that file.
 - Make objects with factory functions. Write a class only for a custom error, such as
   `class QuotaError extends Error`.
 
@@ -33,7 +34,7 @@ metadata:
 
 - Write an acronym in capitals: `parseCLIArgs`, `userID`, `packageURL`. At the start of a camelCase
   name, write it in lowercase: `cliPath`, `idToken`.
-- Name a value for what it holds, in full words: `session`, not `s`; `manager`, not `mgr`.
+- Name a value for what it holds, in full words, such as `session` and `manager`.
 - Use a short name only from this list:
   - `x` and `y` for coordinates, `z` for zod, `$` for Bun's shell, `_` for an unused value;
   - `ctx`, `id`, `db`, `args`, `params`, `repo` and `info`.
@@ -67,9 +68,9 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, from the values you will read, then the thin one around it. Then
-  test each edge case with one `test.each` row of plain data. In one combined function, each case
-  needs a stand-in for every read and write, so the edges go untested.
+- Write the pure function first, then the thin one around it. Then test each edge case with one
+  `test.each` row of plain data. In one combined function, each case needs a stand-in for every read
+  and write, so the edges go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
 - Never add an option, a parameter or an extension point before a caller passes it.
@@ -92,8 +93,8 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 
 - Return an expected outcome, such as a miss or bad input from outside, as a value of the return
   type. Throw only what the caller can't plan for.
-- Never check again what the value's source already guarantees, such as its type, a schema parse or
-  a library's documented behaviour. An example is a `null` check on a field the schema requires.
+- Never check again what the value's type, a schema parse or a library's documented behaviour
+  already guarantees, such as a `null` check on a required field.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
 - Log failures, state changes and slow calls. Never log each call of code that runs once per request
   or per item.
@@ -119,8 +120,8 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a banned verb from the last bullet, such as
-`fetch` or `process`.
+Give any other function any verb that fits, except a banned verb from the last bullet of this
+section, such as `fetch` or `process`.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
