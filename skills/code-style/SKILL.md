@@ -14,10 +14,8 @@ metadata:
 ## References
 
 - [State, waiting and processes](./references/state-and-processes.md): code that saves or sends a
-  status, keeps states in a long-lived object, sleeps or waits, locks a file, or sends data to
-  another process or package.
-- [Pull requests](./references/pull-requests.md): a one-off codemod, or a type assertion that has to
-  stay.
+  status, keeps states in a long-lived object, waits, locks a file, or sends data to another process
+  or package.
 
 ## Files and modules
 
@@ -50,8 +48,8 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- When an assertion has to stay, follow [Pull requests](./references/pull-requests.md). In review,
-  flag every new assertion, approved or not.
+- When an assertion has to stay, get the maintainer's approval in the PR, and add a lint disable
+  comment that gives the reason. In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -93,12 +91,12 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 - Never check again what the value's source already guarantees, such as a field its schema requires,
   its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. Count a call outside the process, such as to the
-  network, a database, the disk or a subprocess, as slow past the latency target the code or the
-  repo sets for it, or past 1 second when neither sets one. For a slow call, log the duration and
-  what it called, such as the host and path, the file or the command.
-- In code that runs once per request or per item, put the request or item ID in each log line. Never
-  log a call there that succeeds, isn't slow and changes no state.
+- Log failures, state changes and slow calls. A call outside the process, such as to the network, a
+  database, a disk or a subprocess, is slow past the code's or repo's latency target, or past 1
+  second with no target. Log a slow call's duration and target: a host and path, a file or a
+  command.
+- In per-request or per-item code, put the request or item ID in each log line. Never log a call
+  there that succeeds, isn't slow and changes no state.
 
 ## Comments
 
@@ -112,6 +110,11 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
   comment. When code in another package depends on an invariant of yours, also state it in the doc
   under `docs/` for that part of the system.
 - Don't name another declaration in a comment; state the fact, so a rename can't leave it stale.
+
+## One-off codemods
+
+- Put a one-off codemod in the PR description, in a `<details>` block with the command that ran it,
+  never in the repo.
 
 ## Function names
 
