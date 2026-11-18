@@ -2,9 +2,9 @@
 name: code-style
 description:
   "Code style for zgeoff TypeScript repos: file layout, names, state, unions, types, structure,
-  errors, comments, and the verbs that start function names. Load it before you write, review or
-  rename TypeScript. Load the repo's project-code-style skill beside it, for that repo's stricter
-  rules and its departures."
+  errors, comments, and the function-name verb table. Load it before you write, review or rename
+  TypeScript. Load the repo's project-code-style skill beside it, for that repo's stricter rules and
+  its departures."
 metadata:
   kind: rule-set
 ---
@@ -23,10 +23,11 @@ metadata:
   `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a file has
   only a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
-  type or constant just above its first use: the main export's types and constants between the
-  imports and the main export, and a helper's above that helper.
-- Put a type that several non-test files use in `types.ts` in the nearest folder holding them all,
-  and create it when the folder has none. Keep a type that one file uses in that file.
+  type or constant just above its first use: the main export's types go between the imports and the
+  main export.
+- When two or more non-test files use a type, put it in `types.ts` in the nearest folder that holds
+  them all. Create that `types.ts` when the folder has none. Keep a type that one file uses in that
+  file.
 - Make objects with factory functions. Write a class only for a custom error:
   `class QuotaError extends Error`.
 
@@ -34,7 +35,7 @@ metadata:
 
 - Write an acronym in capitals: `parseCLIArgs`, `userID`, `packageURL`. At the start of a camelCase
   name, write it in lowercase: `cliPath`, `idToken`.
-- Name a value for what it holds, in full words: `session`, `manager`.
+- Name a value for what it holds, in full words: `session`, not `s`; `manager`, not `mgr`.
 - Use a short name only from this list:
   - `x` and `y` for coordinates, `z` for zod, `$` for Bun's shell, `_` for an unused value;
   - `ctx`, `id`, `db`, `args`, `params`, `repo` and `info`.
@@ -51,8 +52,8 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
-- When an assertion has to stay, get the maintainer's approval in the PR, and disable the lint rule
-  in a comment that gives the reason. In review, flag every new assertion, approved or not.
+- When an assertion has to stay, get the maintainer's approval in the PR, and add a lint disable
+  comment that gives the reason. In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 
@@ -93,11 +94,11 @@ export function collectDueReminders(tasks: readonly Task[], now: number): Task[]
 
 - Return an expected outcome, such as a miss or bad input from outside, as a value of the return
   type. Throw only what the caller can't plan for.
-- Never check again what the value's type, a schema parse or a library's documented behaviour
-  already guarantees, such as a `null` check on a required field.
+- Never check again what the value's source already guarantees, such as its type, a schema parse or
+  a library's documented behaviour. An example is a `null` check on a field the schema requires.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. Never log each call of code that runs per request or
-  per item.
+- Log failures, state changes and slow calls. Never log each call of code that runs once per request
+  or per item.
 
 ## Comments
 
@@ -152,8 +153,8 @@ Give any other function any verb that fits, except the banned verbs below, such 
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
   behind a helper whose name hides it. Check those by hand.
-- Start a boolean function with `is`, `has`, `can` or `should`, or `probe` when it does I/O, even
-  when another verb reads well. Two kinds of boolean function keep their own verb:
+- Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
+  Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
