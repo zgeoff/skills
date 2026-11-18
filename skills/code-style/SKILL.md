@@ -13,9 +13,9 @@ metadata:
 
 ## References
 
-- [State, waiting and file locks](./references/state-and-waiting.md): writing code that saves or
-  sends a status, keeps a long-lived object with states, sleeps, waits for an event or a promise, or
-  locks a file across processes.
+- [State, waiting and processes](./references/state-and-processes.md): code that saves or sends a
+  status, keeps states in a long-lived object, waits, locks a file, or sends data to another process
+  or package.
 
 ## Files and modules
 
@@ -59,8 +59,6 @@ metadata:
 
 ## Structure
 
-- Send data between processes or packages through the repo's typed interface: its RPC layer, a
-  shared schema, or its CLI parser. Never match a route, parse a body or read arguments by hand.
 - Split a function in two when it reads something, branches on what it read, and then writes,
   removes or runs something:
   - a pure function that takes the values read and returns what to do. Give it a verb from a no-I/O
@@ -94,11 +92,14 @@ export function collectDueReminders(tasks: readonly Task[], now: number): Task[]
 
 - Return an expected outcome, such as a miss or bad input from outside, as a value of the return
   type. Throw only what the caller can't plan for.
-- Never check again what the value's source already guarantees, such as its type, a schema parse or
-  a library's documented behaviour. An example is a `null` check on a field the schema requires.
+- Never check again what the value's source already guarantees, such as a field its schema requires,
+  its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. Never log each call of code that runs once per request
-  or per item.
+- Log failures, state changes and slow calls. A call to the network, a database, a disk or a
+  subprocess is slow past the code's or repo's latency target, or past 1 second without one. Log a
+  slow call's duration and what it called.
+- In per-request or per-item code, put the request or item ID in each log line. Never log a call
+  there that succeeds, isn't slow and changes no state.
 
 ## Comments
 
