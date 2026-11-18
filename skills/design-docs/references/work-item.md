@@ -1,23 +1,25 @@
 # Work item template
 
 A work item is an issue in the work tracker, such as a Linear or GitHub issue, and covers one
-outcome that can land by itself. This template is its description. When
-[Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
-design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
+outcome that can ship on its own. This template is its description. When work items share a contract
+that is not built yet, as [Choose where the design goes](../SKILL.md#choose-where-the-design-goes)
+says, write a design doc too, with the [design doc template](./design-doc.md), and link it as step 5
 says.
 
 To write the description:
 
-1. Paste the block under [Template](#template), and write your own title.
+1. Paste what is inside the block under [Template](#template). Write your own title in the tracker's
+   title field.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
-   [Prove acceptance](#prove-acceptance) says. Delete each other section that has nothing to say.
-5. When a design doc covers some of the work, link the doc's section under each heading the doc
-   covers. Write only what the doc leaves out, and repeat none of the doc's text.
+   [Prove acceptance](#prove-acceptance) says. Delete each other section you have nothing to put in.
+5. When a design doc covers some of the work, link the doc's section under each heading of this
+   template that the doc covers, such as Sketch or Constraints. Write only what the doc leaves out,
+   and repeat none of the doc's text.
 
-When the plan for the work changes later, rewrite each section that changed. Untick each Acceptance
-line whose evidence no longer holds, and give the reason in a comment on the issue.
+When the plan for the work changes, rewrite each section the new plan affects. Untick each
+Acceptance line whose evidence no longer holds, and give the reason in a comment on the work item.
 
 ## Prove acceptance
 
@@ -27,7 +29,7 @@ Write each Acceptance line as a behaviour someone can observe, and name its evid
   `bun verify`, prove each behaviour a user sees with its feature's journey and the verdict
   `bun verify done` records. Name the feature in the line.
 - Prove the rest with a test, and name the test's subject.
-- Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
+- Leave out a line that only a release or a live run can prove: a PR merges before either one runs.
 
 ## Template
 
@@ -47,7 +49,7 @@ out.
 
 ## Sketch
 
-<!-- The function or type inside the module that this work adds or changes. 20 lines at most: show only what changes. -->
+<!-- Each function or type that this work item adds or changes, with its module named in a comment. 20 lines at most: show only what changes. -->
 
 ```ts
 // emails module, called by the password reset page

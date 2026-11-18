@@ -1,7 +1,8 @@
 # Design doc template
 
-Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and the
-builder are.
+Copy the template here to write a design doc, split one that passes about 400 lines, and close one
+out once its work items are done. Read [SKILL.md](../SKILL.md) first, for what goes in each section
+and for who the owner and the builder are.
 
 - [Write a design doc](#write-a-design-doc)
 - [Split a long design](#split-a-long-design)
@@ -9,12 +10,12 @@ builder are.
 
 ## Write a design doc
 
-1. Copy the block below to `docs/design/<work>.md`, where `<work>` names the work in kebab case,
-   such as `urgent-emails`.
+1. Copy what is inside the block below to `docs/design/<work>.md`. `<work>` names what the work
+   items build, in kebab case, such as `urgent-emails`.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
-4. Delete Shape when the design is one function or one type. Delete Out of scope and Open questions
-   when they have nothing to say. Keep every other section.
+4. When the design is one function or one type, delete Shape. When you have nothing to put in Out of
+   scope or Open questions, delete it. Keep every other section.
 5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
    docs are fine.
 
@@ -43,17 +44,17 @@ gets a priority, so an urgent email goes out before every newsletter email that 
 
 ```mermaid
 flowchart LR
-  page[reset page] -->|"emails.send"| queue[email queue]
+  page[reset page] -->|"emailQueue.send"| queue[email queue]
   queue -->|"urgent first"| sender
   sender --> provider[email provider]
 ```
 
 ## Contracts
 
-<!-- The call first, with a result in a comment that matches its type. Then the types, each one defined here or named with the module that owns it. Name the module that owns each new type in a comment. For an HTTP endpoint, show the request and the response in an `http` block. For a table with no SQL settled, list its columns in a `text` block, one per line with the type and a comment. A rule for one field goes in a comment on that field.  -->
+<!-- The call first, with a result in a comment that matches its type. Then the types: define each new type here, with the module that owns it in a comment, and name each existing type with the module that owns it. For an HTTP endpoint, show the request and the response in an `http` block. For a table with no SQL settled, list its columns in a `text` block, one per line with the type and a comment. A rule for one field goes in a comment on that field.  -->
 
 ```ts
-const email = await emails.send({ to, template: 'password-reset', priority: 'urgent' });
+const email = await emailQueue.send({ to, template: 'password-reset', priority: 'urgent' });
 // → { emailID: 'e_8f2', queuedAt: '2026-03-02T10:15:00Z' }
 //   or { error: 'unknown-template', template: 'password-reset' }
 ```
@@ -117,21 +118,26 @@ interface QueuedEmail {
 
 Split a design that passes about 400 lines with its code into one doc per
 [part](../SKILL.md#choose-where-the-design-goes). Cut it where one part calls another through a
-contract, so each doc owns the contracts of its part.
+contract. Put each contract in the doc of the part that owns it.
 
 1. Make the folder `docs/design/<work>/`, with one doc per part, named after the part, such as
-   `queue.md`.
-2. Give the folder a `README.md` with the title, the header bullets, the summary, a Shape diagram of
-   how the parts connect, a table of the docs, and each decision that spans parts.
-3. Give each doc the sections above, with its own Shape diagram and its own header bullets.
+   `emails.md`.
+2. Give the folder a `README.md` that holds:
+   - the title, the header bullets and the summary;
+   - a Shape diagram of how the parts connect;
+   - a table of the docs;
+   - each decision that spans parts.
+3. Give each part's doc every section of the template in [Write a design doc](#write-a-design-doc),
+   with its own header bullets, summary and Shape diagram.
 4. Add one `../` to each link out of the folder, such as `../../decisions/`.
 
 ## Close out a design doc
 
-A design doc lasts only until its work is built. When the last work item that the design covers is
-done, the agent that finishes it closes out the design:
+A design doc lasts only until its work items are done. When the last work item that the design doc
+covers is done, the agent that finishes it closes out the design doc:
 
 1. Move each fact that still describes the system into its doc in `docs/architecture/`.
 2. Check that each choice that passes the three decision-record tests in
    [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
-3. Delete the design doc.
+3. Delete the design doc, or the whole folder of a split design. Point each link to it at the
+   architecture doc from step 1.

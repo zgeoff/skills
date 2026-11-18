@@ -2,11 +2,11 @@
 name: design-docs
 description:
   'Records a technical design as contracts and constraints: inline code sketches, constraint bullets
-  and a diagram. Each work item holds its own design. When two or more work items build on a shared
-  contract that is not built yet, a design doc holds that contract. A decision record holds a choice
-  that outlives both. Holds the templates. Load it before you write or review a design, a decision
-  record or the design part of a work item, at the end of a design session, and when work with a
-  design doc is built.'
+  and a diagram. A work item holds the design of one outcome. When two or more work items build on a
+  shared contract that is not built yet, a design doc holds that contract. A decision record holds a
+  choice that outlives the design doc and its work items. Holds the templates. Load it before you
+  write or review a design, a decision record or the design sections of a work item, at the end of a
+  design session, and when work with a design doc is built.'
 ---
 
 # Design docs
@@ -22,10 +22,10 @@ Avoid these mistakes:
   sketches, review logs, "decided by you on 11 Nov";
 - writing to the owner, such as "a default you can change", where the builder needs the rule;
 - describing a contract in prose when a code block shows it;
-- a design doc per rule or per tool, where one doc for the work items that share its contracts would
-  do.
+- a separate design doc for each rule or tool, where one doc should cover every work item on the
+  same shared contracts.
 
-Hand back where the design went, each decision record you wrote, and what the two tests in
+Hand back where the design went, each decision record you wrote, and what the tests in
 [Check it](#check-it) found and what you fixed.
 
 ## Key rules
@@ -40,8 +40,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
   list what the builder decides.
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
-- [Keep it short](#keep-it-short): one diagram, a split by part past about 400 lines, under about 10
-  open questions.
+- [Keep it short](#keep-it-short): one diagram, one doc per part past about 400 lines, under about
+  10 open questions.
 - [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
@@ -49,7 +49,7 @@ Hand back where the design went, each decision record you wrote, and what the tw
 ## References
 
 - [Design doc template](./references/design-doc.md): writing a design doc, splitting a long one, or
-  closing one out once its work is built.
+  closing one out once its work items are done.
 - [Work item template](./references/work-item.md): writing the design sections of a work item, or
   its Acceptance lines.
 - [Decision record template](./references/decision-record.md): writing, changing or removing a
@@ -58,8 +58,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
 
 ## Choose where the design goes
 
-Write a work item in the tracker for each outcome that can land by itself. Add the others when their
-condition holds:
+Write a work item in the tracker for each outcome that can ship on its own. Add the others when
+their condition holds:
 
 | Write a         | When                                                                                       | In                              |
 | --------------- | ------------------------------------------------------------------------------------------ | ------------------------------- |
@@ -68,8 +68,8 @@ condition holds:
 | decision record | the owner's choice passes the tests in [Write a decision record](#write-a-decision-record) | `docs/decisions/NNNN-<slug>.md` |
 
 Count as a shared contract any type, API, schema, event, file format or config key that code in more
-than one module reads or writes. A config key that one module reads is not one. Count as a part any
-section of the system that owns its own contracts, such as a module or a service.
+than one module reads or writes. A config key that one module reads is not a shared contract. Count
+as a part any section of the system that owns its own contracts, such as a module or a service.
 
 Write one design doc for all the work items that build on its shared contracts. Each of those work
 items links the doc's sections and repeats none of their text.
@@ -79,7 +79,7 @@ items links the doc's sections and repeats none of their text.
 Write each contract as a code sketch: an inline code block that shows its shape. Sketch only what
 crosses a module boundary, and leave out a parameter, a generic or an option that no caller uses
 yet. Never put sketches in separate files. The builder follows a sketch's shapes and the rules in
-its comments, and may rename anything the module does not export.
+its comments, and may rename anything its module does not export.
 
 - Show the call first, with a realistic result in a comment. Then show the types it needs. A
   contract with no call, such as a config key or a table, starts at its shape.
@@ -112,14 +112,14 @@ Name which one, and what the code does until then. Write "the owner", never "you
 "you" as itself.
 
 When the design extends existing code, describe only the change. The sketches name the code it
-touches, so the doc needs no separate list.
+touches, so the design needs no separate list.
 
 ## Write only the design
 
 Write in the present tense, about the system that the design builds.
 
-- State each decision as the rule it set. Leave out who decided, when, and the options shown in the
-  session.
+- State each decision as the rule it set. Leave out who decided, when, and the options you showed
+  the owner.
 - Put a rejected option in its decision record. When the choice has no record, put the option in the
   PR description.
 - Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:
@@ -127,10 +127,11 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- When a design doc passes about 400 lines with its code, split it into one doc per part, as the
+- When a design doc passes about 400 lines with its code, split it into one doc per
+  [part](#choose-where-the-design-goes), as the
   [design doc template](./references/design-doc.md#split-a-long-design) says.
-- Start a design doc with one mermaid diagram of the main path, with 10 nodes or fewer. A work item
-  needs none.
+- Start a design doc with one mermaid diagram of the main path, with 10 nodes or fewer. A work item,
+  or a design of one function or type, needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
 
 ## Write a decision record
@@ -139,8 +140,8 @@ Write a record only for a choice that passes all three tests. The record lets th
 proposes a rejected option read why it lost.
 
 - **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
-  every change must pass one line, and a comment there can give the reason, write the comment. A
-  security boundary always passes this test.
+  the choice lives in one line of code, write the reason in a comment there. A security boundary
+  always passes this test.
 - **It is costly to reverse.** Reversing it takes a data migration, a change to a stored or wire
   format, a move of a security boundary, a break of an external contract, or weeks of rework.
 - **The rejected option was real.** A reasonable engineer would pick it on another day. When each
@@ -148,11 +149,11 @@ proposes a rejected option read why it lost.
 
 Put a choice that fails a test where its reader looks:
 
-| The choice                       | Goes in                                                          |
-| -------------------------------- | ---------------------------------------------------------------- |
-| a contract, a shape or a rule    | the design doc, then the architecture doc once the work is built |
-| the reason for one piece of code | a code comment                                                   |
-| build order                      | the work items                                                   |
+| The choice                       | Goes in                                                                                                         |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| a contract, a shape or a rule    | the design doc or the work item, then the architecture doc in `docs/architecture/` once its work items are done |
+| the reason for one piece of code | a code comment                                                                                                  |
+| build order                      | the work items                                                                                                  |
 
 Write, change or remove a record as the [decision record template](./references/decision-record.md)
 says.
@@ -160,16 +161,16 @@ says.
 ## Check it
 
 Run the skim test and the builder test, each with a fresh subagent and its prompt from
-[Test prompts](./references/test-prompts.md). Fix what it finds, run it once more, fix that, and
-stop. For a work item, run only the builder test.
+[Test prompts](./references/test-prompts.md). Fix what the test finds, run the test once more, fix
+that, and stop. For a work item, run only the builder test.
 
-- **Skim test:** when the answer misses the point, rewrite the opening or the diagram. Fix each
-  push-back, or answer it in the PR.
+- **Skim test:** when the subagent misses the point, rewrite the opening or the diagram. Fix each
+  thing it would push back on, or answer it in the PR.
 - **Builder test:** fix each question about a contract or a constraint. A question about a choice
   under "Builder decides" needs no fix.
 
 For a design doc or a decision record, run the docs checks and a cold read too, as the
 [docs-writing](../docs-writing/SKILL.md) skill says.
 
-**Reply:** where the design went, each decision record you wrote, and what the two tests found and
-what you fixed.
+**Reply:** where the design went, each decision record you wrote, and what the tests found and what
+you fixed.

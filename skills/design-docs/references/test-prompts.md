@@ -1,24 +1,27 @@
 # Test prompts
 
-Read [SKILL.md](../SKILL.md) first. It defines the work item, the design doc and the decision
-record, and its "Check it" section says which tests to run and what to fix after each one.
+Read [SKILL.md](../SKILL.md) first, for when to write a work item, a design doc and a decision
+record. Its [Check it](../SKILL.md#check-it) section lists which tests to run and what to fix after
+each one.
 
 ## Run a test
 
 1. Start a `general-purpose` subagent that has none of your conversation. Never use a fork. A fork
-   shares your intent, and the test must find where the design leaves that intent out.
-2. Give it a labelled list of what it reads, in this form. Leave out a line that has nothing in it.
+   knows your intent, so it fills the gaps the test is there to find.
+2. Give it a labelled list of what it reads, in this form. Leave out each line that has nothing in
+   it, and leave out `Work item to build` for the skim test.
 
    ```text
-   Design: <path to the design doc, or the work item's text pasted below>
+   Design: <path to the design doc, or "the work item after the prompt">
    Work items: <the issue links or paths the design doc lists>
    Decision records: <the paths the design doc links>
    Code: <the repo root; leave out when no code exists yet>
-   Work item to build: <the work item to build first, for the builder test>
+   Work item to build: <one work item the design covers; for a design in a work item, that work item>
    ```
 
-3. Under the list, paste the test's prompt word for word.
-4. For a design doc, run both tests in parallel.
+3. Under the list, paste the test's prompt word for word. For a design in a work item, paste the
+   work item's text after the prompt.
+4. For a design doc, run both tests in parallel. For a work item, run only the builder test.
 
 ## Skim test
 

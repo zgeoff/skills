@@ -1,9 +1,9 @@
 # Decision record template
 
-Read [SKILL.md](../SKILL.md) first: it says who the owner is, and when a choice needs a record. This
-file holds the record's shape, and how to write, change and remove one. While the owner still weighs
-the options, keep the question in the Open questions section of the design doc, or in the work item
-when there is no design doc.
+Read [SKILL.md](../SKILL.md) first, for who the owner is and when a choice needs a record. This file
+holds the record's shape, and how to write, change and remove one. While the owner still weighs the
+options, keep the question in the Open questions section of the design doc, or in the work item when
+there is no design doc.
 
 When the owner asks you to record a decision, take the request as proof that the owner made it. When
 that choice fails one of the [three tests](../SKILL.md#write-a-decision-record), tell the owner
@@ -16,20 +16,20 @@ which test it fails, and write the record only if the owner still wants it.
 ## Write a record
 
 While a choice waits for the owner's approval, state it in the design's Decisions section. Write its
-record once the owner approves it. Add the record to the PR that adds the design doc. With no design
-doc, open a PR for the record alone.
+record once the owner approves it. Add the record to the PR that adds the design doc. When the
+design doc is already merged, or there is none, open a PR for the record alone.
 
-Write one decision per record, and link no design from it: the agent that
-[closes out](./design-doc.md#close-out-a-design-doc) the design deletes the design doc.
+Write one decision per record, and never link a design doc from it: the agent that
+[closes out](./design-doc.md#close-out-a-design-doc) a design doc deletes it.
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.
 2. Copy the block below to `docs/decisions/NNNN-<slug>.md`, where `<slug>` is the title in kebab
-   case, such as `0012-urgent-emails-go-first.md`.
+   case without its number, such as `urgent-emails-go-first` in `0012-urgent-emails-go-first.md`.
 3. Replace the example values. They describe an invented app.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
-   weighed, ask the owner. When the owner weighed none, write no record.
+   weighed, ask the owner. When the owner weighed none, don't write a record.
 6. When Consequences would only repeat the Decision section, delete Consequences.
 7. In the design doc, move the question out of Open questions, and end the choice's Decisions line
    with a link to the record.
@@ -64,7 +64,7 @@ email provider.
 ```
 
 `Status` stays `decided` for the life of the record. Cite a record with a relative link to its file.
-That way, `chex links` fails on a citation of a record that is gone.
+That way, a link check fails on a citation of a record that is gone.
 
 ## Change a record
 
@@ -72,7 +72,8 @@ When the owner changes the decision, edit the record in place:
 
 1. Rewrite the title, Decision, Why and Consequences to state the new decision. Keep the file name,
    even though its slug no longer matches the title, so links keep working.
-2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
+2. On the first change, add an `Updated` line under `Date`. On each change, set it to the day of
+   that change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
 4. On the first change, add a `## Changes` section at the end. Add a dated line to it.
 
@@ -90,18 +91,19 @@ When the owner changes the decision, edit the record in place:
 
 ## Remove a record
 
-Remove a record when its decision is dropped with nothing in its place. When the owner replaces the
-decision with another one, change the record instead. When you find a record whose decision no
-longer passes the three tests, ask the owner before you remove it.
+When the owner drops a decision with nothing in its place, remove its record. When the owner
+replaces the decision with another one, change the record instead. When you find a record whose
+decision no longer passes the three tests, ask the owner before you remove it.
 
 Do every step in the PR that deletes the record:
 
-1. Move each rule of the decision that still holds into the doc that covers it: the architecture doc
-   in `docs/architecture/`, or the design in `docs/design/` when the work is not built. Move neither
-   the Why nor the Rejected alternatives: they go with the deleted file.
-2. Search the repo for the record's file name, and for its bare number, such as in a table cell or a
-   code comment. Point each citation at the doc from step 1. When the sentence no longer needs the
-   citation, delete it.
+1. Move each rule of the decision that still holds into the doc that covers it. That doc is the
+   architecture doc in `docs/architecture/`, or the design doc in `docs/design/` while its work
+   items are not done. Leave the Why and the Rejected alternatives out: they go with the deleted
+   file.
+2. Search the repo for the record's file name. Search it too for the record's number alone, such as
+   `0012`, which a table cell or a code comment may hold. Point each citation at the doc from
+   step 1. When the sentence no longer needs the citation, delete it.
 3. Delete the record with `git rm`.
 4. Renumber each later record, so the numbers stay consecutive. For each one, rename the file with
    `git mv`, change the number in its heading, and rewrite each citation of it.
