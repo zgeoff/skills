@@ -95,10 +95,9 @@ export function collectDueReminders(tasks: readonly Task[], now: number): Task[]
 - Never check again what the value's source already guarantees, such as a field its schema requires,
   its type, or a library's documented behaviour.
 - Call `invariant()` from `tiny-invariant` on a state that only a bug can reach.
-- Log failures, state changes and slow calls. A call outside the process, such as to the network, a
-  database, a disk or a subprocess, is slow past the code's or repo's latency target, or past 1
-  second with no target. Log a slow call's duration and target: a host and path, a file or a
-  command.
+- Log failures, state changes and slow calls. A call to the network, a database, a disk or a
+  subprocess is slow past the code's or repo's latency target, or past 1 second without one. Log a
+  slow call's duration and what it called.
 - In per-request or per-item code, put the request or item ID in each log line. Never log a call
   there that succeeds, isn't slow and changes no state.
 
