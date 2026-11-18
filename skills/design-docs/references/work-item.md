@@ -13,39 +13,40 @@ To write the description:
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
    [Prove acceptance](#prove-acceptance) says. Delete each other section that has nothing to say.
-5. When a design doc covers some of the work, link the doc's section under each heading the doc
-   covers. Write only what the doc leaves out, and repeat none of the doc's text.
+5. When a design doc covers some of the work, link the doc's section under each heading of the work
+   item that the doc covers. Write only what the doc leaves out, and repeat none of the doc's text.
 
 When the plan for the work changes later, rewrite each section that changed. Untick each Acceptance
 line whose evidence no longer holds, and give the reason in a comment on the issue.
 
 ## Prove acceptance
 
-Write each Acceptance line as a behaviour someone can observe, and name its evidence.
+Write each Acceptance line as a behaviour someone can observe, and name its evidence:
 
-- When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
-  `bun verify`, prove each behaviour a user sees with its feature's verdict. Name the feature in the
-  line.
-- Prove each other line with a test, and name the test's subject. With no verify CLI, prove every
-  line with a test.
+- When the repo has a wringer verify CLI, prove each behaviour a user sees with its feature's
+  verdict. Name the feature in the line.
+- Prove each other line with a test, and name what the test covers. In a repo with no verify CLI,
+  prove every line with a test.
 - Leave out a line that only a release or production traffic can prove, such as a rate on a
   production dashboard. A PR never proves such a line before it merges.
 
-The verify CLI uses these terms as wringer's
-[terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them. Read
-that page for the others, such as fingerprint and target.
+An agent runs a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`.
+The CLI uses these terms as wringer's
+[terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them:
 
-- **Feature:** a named part of the repo that has its own verdict. Its `paths` are the globs of the
-  files whose change can alter its behaviour.
-- **Journey:** the commands that use one feature, and the end state that shows it works. The repo's
-  `verify` skill gives one journey for each feature.
-- **Verdict:** the record that `bun verify done` writes: a feature works at its current fingerprint,
-  on one target. A verdict goes stale once its feature's fingerprint changes.
+- A **feature** is a named part of the repo that has its own verdict. Its `paths` are the globs of
+  the files whose change can alter its behaviour.
+- A **journey** is the commands that use one feature, and the end state that shows it works. The
+  repo's `verify` skill gives one journey for each feature.
+- A **verdict** is the record that `bun verify done` writes. It states that a feature works at its
+  current fingerprint, on one target. A verdict goes stale once its feature's fingerprint changes.
+
+Read the terms page for the other terms, such as fingerprint and target.
 
 In CI, `bun verify gate` fails a PR when a changed feature has no verdict at its current
-fingerprint. A reviewer matches each Acceptance line to `bun verify gate` by the feature it names.
-Whoever builds the work earns the verdict: they drive the feature's journey, then run
-`bun verify done`.
+fingerprint. When the Acceptance line names the feature, a reviewer finds the line's verdict among
+the ones `bun verify gate` checks. To earn that verdict, the builder drives the feature's journey,
+then runs `bun verify done`.
 
 ## Template
 
