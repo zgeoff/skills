@@ -64,7 +64,7 @@ metadata:
     [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
-    verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
+    verb that fits, such as `run`, `write` or `remove`. Keep every decision out of it.
 - Write the pure function first, then the thin one around it. Test each edge case with one
   `test.each` row of plain data. In one combined function, each case needs a stand-in for every read
   and write, so the edges go untested.
@@ -104,9 +104,9 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 - Never restate what the code or a test shows.
 - Never write history or project state in a comment, such as "previously", an issue number or "not
   wired yet". Put it in the commit.
-- Put what callers rely on in a test name, such as `it returns null for an unknown ID`, not in a
-  comment. When code in another package depends on an invariant of yours, also state it in the doc
-  under `docs/` for that part of the system.
+- Put what callers rely on in a test name, such as `it returns null for an unknown ID`. When code in
+  another package depends on an invariant of yours, also state it in the doc under `docs/` for that
+  part of the system.
 - Don't name another declaration in a comment; state the fact, so a rename can't leave it stale.
 
 ## One-off codemods
@@ -130,7 +130,7 @@ Give any other function any verb that fits, except a banned verb from the last b
 | lookup that can miss                                                                                      | `find`                       | no I/O; can return null or undefined                                           |
 | lookup that can't miss                                                                                    | `get`                        | no I/O; never returns null or undefined                                        |
 | many values gathered from a traversal                                                                     | `collect`                    | no I/O                                                                         |
-| the same data in another form                                                                             | `to`                         | no I/O                                                                         |
+| cheap change of representation                                                                            | `to`                         | no I/O                                                                         |
 | content in from outside the process                                                                       | `read`                       | may do I/O                                                                     |
 | content out to outside the process                                                                        | `write`                      | may do I/O                                                                     |
 | subprocess or task                                                                                        | `run`                        | may do I/O                                                                     |
