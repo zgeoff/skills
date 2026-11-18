@@ -107,6 +107,7 @@ screenshot or a recording.
 ## Keep the owner's words
 
 Copy the owner's words into the item where they decide something: a name, a value, an example.
+Quote the owner only in a private tracker such as Linear. In an item on a public repo, write what they decided in your own words.
 Sharpen the wording of the outcome and the acceptance lines yourself.
 
 Keep each open question in Context, marked "For the owner", until the owner answers. Ask the owner,
