@@ -148,8 +148,8 @@ Give any other function any verb that fits, except a banned verb from the last b
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule checks the verbs, but it can't see I/O inside an npm package or behind a helper whose name
   hides it. Check those by hand.
-- Use `read` for an I/O lookup that can't miss, too. Declare neither `null` nor `undefined` in its
-  return type, and throw when its source fails.
+- Use `read` for every I/O lookup, whether or not it can miss. When it can't miss, leave `null` and
+  `undefined` out of its return type, and throw when its source fails.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
   Two kinds keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
@@ -160,5 +160,5 @@ Give any other function any verb that fits, except a banned verb from the last b
 - Never start a name with one of these verbs. They say nothing about I/O or a miss:
   - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
   - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
-    `read`, with `null` in its return type;
+    `read`;
   - `handle`, outside a callback.
