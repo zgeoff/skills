@@ -1,14 +1,14 @@
 # Work item template
 
-A work item is an issue in the work tracker, such as a Linear or GitHub issue. Every piece of work
-gets one, and this template is its description. When
+Write each work item's description from this template. A work item is an issue in the work tracker,
+such as a Linear or GitHub issue, and every piece of work gets one. When
 [Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
 design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
 says.
 
 To write the description:
 
-1. Paste the block under [Template](#template), and write your own title.
+1. Paste what is inside the block under [Template](#template), and write your own title.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
@@ -25,14 +25,15 @@ Write each Acceptance line as a behaviour someone can observe, and name its evid
 
 - When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
   `bun verify`, prove each behaviour a user sees with its feature's verdict. Name the feature in the
-  line. CI runs `bun verify gate`, which fails a PR when a changed feature has no verdict at its
-  current fingerprint, and the name lets a reviewer match the line to that check.
-- Prove the rest with a test, and name the test's subject.
-- Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
+  line.
+- Prove each other line with a test, and name the test's subject. With no verify CLI, prove every
+  line with a test.
+- Leave out a line that only a release or production traffic can prove, such as a rate on a
+  production dashboard. A PR never proves such a line before it merges.
 
 The verify CLI uses these terms as wringer's
 [terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them. Read
-that page for the rest, such as a fingerprint and a target.
+that page for the others, such as fingerprint and target.
 
 - **Feature:** a named part of the repo that has its own verdict. Its `paths` are the globs of the
   files whose change can alter its behaviour.
@@ -41,7 +42,10 @@ that page for the rest, such as a fingerprint and a target.
 - **Verdict:** the record that `bun verify done` writes: a feature works at its current fingerprint,
   on one target. A verdict goes stale once its feature's fingerprint changes.
 
-To earn a feature's verdict, drive its journey, then run `bun verify done`.
+In CI, `bun verify gate` fails a PR when a changed feature has no verdict at its current
+fingerprint. A reviewer matches each Acceptance line to `bun verify gate` by the feature it names.
+Whoever builds the work earns the verdict: they drive the feature's journey, then run
+`bun verify done`.
 
 ## Template
 
@@ -65,7 +69,8 @@ out.
 
 ```ts
 // emails module, called by the password reset page
-function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `priority: 'urgent'` goes first
+type SendEmail = { to: string; template: TemplateName; priority: 'urgent' | 'bulk' };
+function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // the queue sends each `urgent` email first
 ```
 
 ## Constraints
@@ -83,7 +88,8 @@ function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `pri
       `password-reset` feature's verdict from `bun verify done`.
 - [ ] An urgent email leaves the queue before 10,000 bulk emails that wait. Evidence: a test of the
       queue's order.
-- [ ] The newsletter still reaches everyone on the list. Evidence: the newsletter tests.
+- [ ] The newsletter still reaches everyone on the list. Evidence: the `newsletter` feature's
+      verdict from `bun verify done`.
 
 ## Out of scope
 
