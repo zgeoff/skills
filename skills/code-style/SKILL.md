@@ -50,6 +50,7 @@ metadata:
 
 - Use a type guard, an annotation, `satisfies` or a schema parse, and never a type assertion. The
   one exception is `as const`.
+- In review, flag every new assertion, approved or not.
 - Never let `any` reach a typed value. Make it `unknown` and narrow it, or parse it. `JSON.parse`
   returns `any`.
 

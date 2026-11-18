@@ -10,8 +10,6 @@ Never commit a one-off codemod.
 - In the PR description, say why the assertion has to stay, and ask the maintainer to approve it.
   The maintainer approves in a review or a comment.
 - Disable the lint rule on that line only, with a comment that gives the reason.
-- When you review a PR, flag each assertion its diff adds, approved or not, so each one gets a
-  second look.
 
 ## One-off codemods
 
