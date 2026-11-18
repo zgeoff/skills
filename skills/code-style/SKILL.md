@@ -151,7 +151,7 @@ Give any other function any verb that fits, except a banned verb from the last b
 - Use `read` for every I/O lookup, whether or not it can miss. When it can't miss, leave `null` and
   `undefined` out of its return type, and throw when its source fails.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
-  Keep the verb the function has when it:
+  Keep another verb when the function:
   - has an I/O verb and returns a success flag, such as `removeFile`;
   - has a name that starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
