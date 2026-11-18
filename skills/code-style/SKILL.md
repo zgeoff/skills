@@ -65,9 +65,9 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, from the values you will read, then the thin one around it. You
-  then test each edge case with one `test.each` row of plain data. In one combined function, each
-  case needs a stand-in for every read and write, so the edges go untested.
+- Write the pure function first, then the thin one around it. Test each edge case of the pure one
+  with a `test.each` row of plain data. A combined function needs a stand-in for every read and
+  write, so its edges go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
 - Never add an option, a parameter or an extension point before a caller passes it.
@@ -117,8 +117,7 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a banned verb from the last bullet of this
-section, such as `fetch` or `process`.
+Give any other function any verb that fits, except a banned verb from the last bullet below.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
@@ -132,7 +131,7 @@ section, such as `fetch` or `process`.
 | lookup that can't miss                                                                                    | `get`                        | no I/O; never returns null or undefined                                        |
 | many values gathered from a traversal                                                                     | `collect`                    | no I/O                                                                         |
 | cheap change of representation                                                                            | `to`                         | no I/O                                                                         |
-| content in from outside the process                                                                       | `read`                       | may do I/O                                                                     |
+| content in from outside the process                                                                       | `read`                       | may do I/O; null or undefined on a miss only when its return type says so      |
 | content out to outside the process                                                                        | `write`                      | may do I/O                                                                     |
 | subprocess or task                                                                                        | `run`                        | may do I/O                                                                     |
 | resource brought into existence                                                                           | `create`                     | may do I/O                                                                     |
@@ -147,18 +146,19 @@ section, such as `fetch` or `process`.
 
 - Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
-  rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
-  behind a helper whose name hides it. Check those by hand.
+  rule checks the verbs, but it can't see I/O inside an npm package or behind a helper whose name
+  hides it. Check those by hand.
+- Use `read` for an I/O lookup that can't miss, too. Declare neither `null` nor `undefined` in its
+  return type, and throw when its source fails.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
-  Two kinds of boolean function keep their own verb:
+  Two kinds keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
-- You may start a name with `resolve` whether or not it does I/O, such as for a pure lookup or a
-  filesystem search.
+- You may start a name with `resolve` whether or not it does I/O.
 - Never start a name with one of these verbs. They say nothing about I/O or a miss:
   - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
   - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
-    `read` and return `null`;
+    `read`, as its row says;
   - `handle`, outside a callback.
