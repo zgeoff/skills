@@ -32,5 +32,5 @@ Read this design the way a reviewer with two minutes would: the opening, the dia
 ## Builder test
 
 ```text
-Plan the build of the work item named above, and edit no file. Give three lists. First, each question about a contract or a constraint that you would have to ask before you start, including each place where you would have to guess at a contract. Second, each detail you would decide yourself without asking. Third, each passage of the design you would skip as noise for that work item.
+Plan how you would build the work item named above, and edit no file. Give three lists. First, each question about a contract or a constraint that you would have to ask before you start, including each place where you would have to guess at a contract. Second, each detail you would decide yourself without asking. Third, each passage of the design you would skip as noise for that work item.
 ```

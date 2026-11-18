@@ -137,7 +137,7 @@ A design doc lasts only until its work items are done. When the last work item t
 covers is done, the agent that finishes it closes out the design doc:
 
 1. Move each fact that still describes the system into the doc in `docs/architecture/` that covers
-   that part of the system.
+   that fact.
 2. Check that each choice that passes the three decision-record tests in
    [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
 3. Delete the design doc, or the whole folder of a split design. Point each link to it at the

@@ -128,7 +128,7 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- When a design doc passes about 400 lines with its code, split it into one doc per
+- When a design doc grows past about 400 lines, code blocks included, split it into one doc per
   [part](#choose-where-the-design-goes), as the
   [design doc template](./references/design-doc.md#split-a-long-design-doc) says.
 - Give a design doc one mermaid diagram of the main path, under Shape, with 10 nodes or fewer. A

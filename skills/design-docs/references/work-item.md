@@ -14,9 +14,9 @@ To write the description:
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
    [Prove acceptance](#prove-acceptance) says. Delete each other section you have nothing to put in.
-5. When a design doc covers this work item, put a link to the doc's matching section under each
-   heading it covers, such as its Contracts under Sketch. Under that heading, write only what the
-   doc leaves out, and repeat none of the doc's text.
+5. When a design doc covers this work item, link the doc's matching section under each heading here
+   that the doc covers, such as the doc's Contracts under Sketch. Under that heading, write only
+   what the doc leaves out, and repeat none of the doc's text.
 
 When the outcome or the design of the work item changes, rewrite each section the change affects.
 Untick each Acceptance line whose evidence no longer holds, and give the reason in a comment on the

@@ -102,7 +102,7 @@ Do every step in the PR that deletes the record:
    the doc that covers it. That doc is the architecture doc in `docs/architecture/`, or the design
    doc in `docs/design/` while its work items are not done. Leave the Why and the Rejected
    alternatives out: they go with the deleted file.
-2. Search the repo for the record's file name. Search it too for the record's number alone, such as
+2. Search the repo for the record's file name. Then search for the record's number alone, such as
    `0012`, which a table cell or a code comment may hold. Point each citation at the doc from
    step 1. When the sentence no longer needs the citation, delete it.
 3. Delete the record with `git rm`.
