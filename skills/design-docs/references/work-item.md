@@ -24,10 +24,24 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 Write each Acceptance line as a behaviour someone can observe, and name its evidence.
 
 - When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
-  `bun verify`, prove each behaviour a user sees with its feature's journey and the verdict
-  `bun verify done` records. Name the feature in the line.
+  `bun verify`, prove each behaviour a user sees with its feature's verdict. Name the feature in the
+  line. CI runs `bun verify gate`, which fails a PR when a changed feature has no verdict at its
+  current fingerprint, and the name lets a reviewer match the line to that check.
 - Prove the rest with a test, and name the test's subject.
 - Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
+
+The verify CLI uses these terms as wringer's
+[terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them. Read
+that page for the rest, such as a fingerprint and a target.
+
+- **Feature:** a named part of the repo that has its own verdict. Its `paths` are the globs of the
+  files whose change can alter its behaviour.
+- **Journey:** the commands that use one feature, and the end state that shows it works. The repo's
+  `verify` skill gives one journey for each feature.
+- **Verdict:** the record that `bun verify done` writes: a feature works at its current fingerprint,
+  on one target. A verdict goes stale once its feature's fingerprint changes.
+
+To earn a feature's verdict, drive its journey, then run `bun verify done`.
 
 ## Template
 
@@ -66,7 +80,7 @@ function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `pri
 <!-- Each line: what someone observes, and its evidence. -->
 
 - [ ] Someone gets the reset email within 1 minute while a newsletter goes out. Evidence: the
-      `password-reset` journey in `bun verify`, with its verdict.
+      `password-reset` feature's verdict from `bun verify done`.
 - [ ] An urgent email leaves the queue before 10,000 bulk emails that wait. Evidence: a test of the
       queue's order.
 - [ ] The newsletter still reaches everyone on the list. Evidence: the newsletter tests.
