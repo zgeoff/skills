@@ -15,7 +15,7 @@ metadata:
 
 - [State, waiting and processes](./references/state-and-processes.md): code that saves or sends a
   status, keeps states in a long-lived object, sleeps or waits, locks a file, or sends data to
-  another process.
+  another process or package.
 - [Pull requests](./references/pull-requests.md): a one-off codemod, or a type assertion that has to
   stay.
 
