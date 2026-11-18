@@ -362,10 +362,16 @@ function base64url(data: string | Buffer) {
   return Buffer.from(data).toString('base64url');
 }
 
-export function signJwt(clientId: string, privateKey: string, now = Math.floor(Date.now() / 1000)) {
+export function signJwt(
+  clientId: string,
+  privateKey: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+) {
   // GitHub recommends the client ID as iss, iat 60 s back for clock drift, and exp at most 10 min.
   const head = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const body = base64url(JSON.stringify({ iat: now - 60, exp: now + 540, iss: clientId }));
+  const body = base64url(
+    JSON.stringify({ iat: nowSeconds - 60, exp: nowSeconds + 540, iss: clientId }),
+  );
   const signature = createSign('RSA-SHA256').update(`${head}.${body}`).sign(privateKey);
   return `${head}.${body}.${base64url(signature)}`;
 }
