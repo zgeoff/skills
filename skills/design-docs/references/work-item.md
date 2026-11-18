@@ -10,12 +10,25 @@ To write the description:
 1. Paste the block below, and write your own title.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
-4. Keep Outcome and Acceptance. Delete each other section that has nothing to say.
+4. Keep Outcome and Acceptance, and write the Acceptance lines as
+   [Prove acceptance](#prove-acceptance) says. Delete each other section that has nothing to say.
 5. When a design doc covers some of the work, link the doc's section under each heading the doc
    covers. Write only what the doc leaves out, and repeat none of the doc's text.
 
 When the plan for the work changes later, rewrite each section that changed. Untick each Acceptance
 line whose evidence no longer holds, and give the reason in a comment on the issue.
+
+## Prove acceptance
+
+Write each Acceptance line as a behaviour someone can observe, and name its evidence.
+
+- When the repo has a verify CLI built on [wringer](https://github.com/zgeoff/wringer), run as
+  `bun verify`, prove each behaviour a user sees with its feature's journey and the verdict
+  `bun verify done` records. Name the feature in the line.
+- Prove the rest with a test, and name the test's subject.
+- Leave out a line that only a release or a live run can prove. No PR can prove it before it merges.
+
+## Template
 
 ````markdown
 ## Outcome

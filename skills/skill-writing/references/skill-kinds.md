@@ -25,6 +25,13 @@ skill's `scripts/` folder. Put the script's test beside it, such as `check.test.
 `check.sh`. Make sure the repo's test command runs that test. Tell the agent to run the script, not
 read it.
 
+## The frontmatter
+
+Write the `description` in the third person: the agent reads it as a label, not an order. The
+description is all the agent sees when it picks a skill, so say what the skill does and when to load
+it, in the words a task would use. `chex skill` fails when the `name` differs from the skill's
+folder name.
+
 ## A machinery skill
 
 Write a machinery skill in the repo it covers, at `.claude/skills/<name>/SKILL.md`. Say what it

@@ -3,6 +3,10 @@
 Read [SKILL.md](../SKILL.md) first: it says what goes in each section and who the owner and the
 builder are.
 
+- [Write a design doc](#write-a-design-doc)
+- [Split a long design](#split-a-long-design)
+- [Close out a design doc](#close-out-a-design-doc)
+
 ## Write a design doc
 
 1. Copy the block below to `docs/design/<work>.md`, where `<work>` names the work in kebab case,
@@ -120,3 +124,13 @@ through a contract, so each doc owns the contracts of its part.
    how the parts connect, a table of the docs, and each decision that spans parts.
 3. Give each doc the sections above, with its own Shape diagram and its own header bullets.
 4. Add one `../` to each link out of the folder, such as `../../decisions/`.
+
+## Close out a design doc
+
+A design doc lasts only until its work is built. When the last work item that the design covers is
+done, the agent that finishes it closes out the design:
+
+1. Move each fact that still describes the system into its doc in `docs/architecture/`.
+2. Check that each choice that passes the tests in
+   [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
+3. Delete the design doc.

@@ -9,7 +9,18 @@ When the owner asks you to record a decision, take the request as proof that the
 that choice fails one of the [three tests](../SKILL.md#write-a-decision-record), tell the owner
 which test it fails, and write the record only if the owner still wants it.
 
+- [Write a record](#write-a-record)
+- [Change a record](#change-a-record)
+- [Remove a record](#remove-a-record)
+
 ## Write a record
+
+Write a record once the owner approves the choice. Until the owner approves, state the choice in the
+design's Decisions section. Add the record to the PR that adds the design doc. With no design doc,
+open a PR for the record alone.
+
+Write one decision per record, and link no design from it: the design doc is deleted at
+[close-out](./design-doc.md#close-out-a-design-doc).
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.
@@ -20,8 +31,8 @@ which test it fails, and write the record only if the owner still wants it.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
    weighed, ask the owner. When the owner weighed none, write no record.
 6. When Consequences would only repeat the Decision section, delete it.
-7. In the design doc, move the question out of Open questions, and link the record from its
-   Decisions line.
+7. In the design doc, move the question out of Open questions, and end the choice's Decisions line
+   with a link to the record.
 
 ```markdown
 # 0012: Urgent emails go first
