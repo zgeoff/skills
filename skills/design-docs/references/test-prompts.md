@@ -26,7 +26,7 @@ and what to fix after each one.
 ## Skim test
 
 ```text
-Read this design the way a reviewer with two minutes would: the opening, the diagram if there is one, the headings and the code sketches. Open no other file. Then say what gets built, what its contracts are, and what you would push back on. Also say how many lines you read before you understood the point, and the 3 places that slowed you most.
+Read this design the way a reviewer with two minutes would: the opening, the diagram if there is one, the headings and the code sketches. Open no file outside the design, except the docs of a split design. Then say what gets built, what its contracts are, and what you would push back on. Also say how many lines you read before you understood the point, and the 3 places that slowed you most.
 ```
 
 ## Builder test
