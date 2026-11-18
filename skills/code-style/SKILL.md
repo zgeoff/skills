@@ -148,8 +148,8 @@ Give any other function any verb that fits, except a banned verb from the last b
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
   behind a helper whose name hides it. Check those by hand.
-- Start a pure function that calculates a value, such as a total, with `build`: `buildOrderTotal`.
-  Use `to` only for the same data in another form, such as `toPosixPath`.
+- Start a pure function that calculates a value, such as a total, with `build`, as in
+  `buildOrderTotal`. Use `to` only for the same data in another form, such as `toPosixPath`.
 - Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
   Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
