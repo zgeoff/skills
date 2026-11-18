@@ -11,5 +11,7 @@ permissions:
   contents: read
 
 jobs:
+  # reports as `pr / checks`, the summary check name every zgeoff repo's main ruleset requires
   checks:
+    name: pr
     uses: ./.github/workflows/checks.yml
