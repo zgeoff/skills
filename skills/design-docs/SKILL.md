@@ -2,10 +2,11 @@
 name: design-docs
 description:
   'Records a technical design as contracts and constraints: inline code sketches, constraint bullets
-  and a diagram, in a work item for small work, a design doc for big work, and a decision record for
-  a choice that outlives both. Holds the templates. Load it before you write or review a design, a
-  decision record or the design part of a work item, at the end of a design session, and when work
-  with a design doc is built.'
+  and a diagram. Each work item holds its own design. When two or more work items build on a shared
+  contract that is not built yet, a design doc holds that contract. A decision record holds a choice
+  that outlives both. Holds the templates. Load it before you write or review a design, a decision
+  record or the design part of a work item, at the end of a design session, and when work with a
+  design doc is built.'
 ---
 
 # Design docs
@@ -21,15 +22,16 @@ Avoid these mistakes:
   sketches, review logs, "decided by you on 11 Nov";
 - writing to the owner, such as "a default you can change", where the builder needs the rule;
 - describing a contract in prose when a code block shows it;
-- a doc per rule or per tool, where one doc per part would do.
+- a design doc per rule or per tool, where one doc for the work items that share its contracts would
+  do.
 
 Hand back where the design went, each decision record you wrote, and what the two tests in
 [Check it](#check-it) found and what you fixed.
 
 ## Key rules
 
-- [Choose where the design goes](#choose-where-the-design-goes): a work item always, a design doc
-  for a shared contract, a decision record for a lasting choice.
+- [Choose where the design goes](#choose-where-the-design-goes): a work item per outcome, a design
+  doc for a shared contract that is not built yet, a decision record for a lasting choice.
 - [Show contracts as code](#show-contracts-as-code): inline code sketches, the call first, then the
   types, with rules in comments.
 - [State constraints as bullets](#state-constraints-as-bullets): one rule per line, each one a test
@@ -38,8 +40,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
   list what the builder decides.
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
-- [Keep it short](#keep-it-short): one doc per piece of work, one diagram, under about 10 open
-  questions.
+- [Keep it short](#keep-it-short): one diagram, a split by part past about 400 lines, under about 10
+  open questions.
 - [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
@@ -48,15 +50,16 @@ Hand back where the design went, each decision record you wrote, and what the tw
 
 - [Design doc template](./references/design-doc.md): writing a design doc, splitting a long one, or
   closing one out once its work is built.
-- [Work item template](./references/work-item.md): writing the design part of a work item, or its
-  Acceptance lines.
+- [Work item template](./references/work-item.md): writing the design sections of a work item, or
+  its Acceptance lines.
 - [Decision record template](./references/decision-record.md): writing, changing or removing a
   decision record.
 - [Test prompts](./references/test-prompts.md): running the skim test and the builder test.
 
 ## Choose where the design goes
 
-Give every piece of work a work item in the tracker. Add the others when their condition holds:
+Write a work item in the tracker for each outcome that can land by itself. Add the others when their
+condition holds:
 
 | Write a         | When                                                                                       | In                              |
 | --------------- | ------------------------------------------------------------------------------------------ | ------------------------------- |
@@ -65,9 +68,11 @@ Give every piece of work a work item in the tracker. Add the others when their c
 | decision record | the owner's choice passes the tests in [Write a decision record](#write-a-decision-record) | `docs/decisions/NNNN-<slug>.md` |
 
 Count as a shared contract any type, API, schema, event, file format or config key that code in more
-than one module reads or writes. A config key that one module reads is not one.
+than one module reads or writes. A config key that one module reads is not one. Count as a part any
+section of the system that owns its own contracts, such as a module or a service.
 
-When a design doc exists, the work item links the doc's sections and repeats none of their text.
+Write one design doc for all the work items that build on its shared contracts. Each of those work
+items links the doc's sections and repeats none of their text.
 
 ## Show contracts as code
 
@@ -122,10 +127,8 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- Write one design doc per piece of work. Give work that ships on its own its own work item, and its
-  own doc when it needs one. When a doc passes about 400 lines with its code, split it into one doc
-  per part, as the [design doc template](./references/design-doc.md#split-a-long-design) says.
-
+- When a design doc passes about 400 lines with its code, split it into one doc per part, as the
+  [design doc template](./references/design-doc.md#split-a-long-design) says.
 - Start a design doc with one mermaid diagram of the main path, with 10 nodes or fewer. A work item
   needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.

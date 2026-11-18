@@ -115,8 +115,9 @@ interface QueuedEmail {
 
 ## Split a long design
 
-Split a design that passes about 400 lines with its code. Cut it where one part calls another
-through a contract, so each doc owns the contracts of its part.
+Split a design that passes about 400 lines with its code into one doc per
+[part](../SKILL.md#choose-where-the-design-goes). Cut it where one part calls another through a
+contract, so each doc owns the contracts of its part.
 
 1. Make the folder `docs/design/<work>/`, with one doc per part, named after the part, such as
    `queue.md`.

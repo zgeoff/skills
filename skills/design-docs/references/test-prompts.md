@@ -14,7 +14,7 @@ record, and its "Check it" section says which tests to run and what to fix after
    Work items: <the issue links or paths the design doc lists>
    Decision records: <the paths the design doc links>
    Code: <the repo root; leave out when no code exists yet>
-   Part to build: <the work item to build first, for the builder test>
+   Work item to build: <the work item to build first, for the builder test>
    ```
 
 3. Under the list, paste the test's prompt word for word.
@@ -29,5 +29,5 @@ Read this design the way a reviewer with two minutes would: the opening, the dia
 ## Builder test
 
 ```text
-You build the part named above. Give three lists. First, each question about a contract or a constraint that you would have to ask before you start, including each place where you would have to guess at a contract. Second, each detail you would decide yourself without asking. Third, what in the design is noise for the part you build.
+You build the work item named above. Give three lists. First, each question about a contract or a constraint that you would have to ask before you start, including each place where you would have to guess at a contract. Second, each detail you would decide yourself without asking. Third, what in the design is noise for the work item you build.
 ```

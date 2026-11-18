@@ -1,7 +1,7 @@
 # Work item template
 
-A work item is an issue in the work tracker, such as a Linear or GitHub issue. Every piece of work
-gets one, and this template is its description. When
+A work item is an issue in the work tracker, such as a Linear or GitHub issue, and covers one
+outcome that can land by itself. This template is its description. When
 [Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
 design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
 says.

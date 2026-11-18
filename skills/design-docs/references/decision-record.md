@@ -96,7 +96,7 @@ longer passes the three tests, ask the owner before you remove it.
 
 Do every step in the PR that deletes the record:
 
-1. Move each part of the decision that still holds into the doc that covers it: the architecture doc
+1. Move each rule of the decision that still holds into the doc that covers it: the architecture doc
    in `docs/architecture/`, or the design in `docs/design/` when the work is not built. Move neither
    the Why nor the Rejected alternatives: they go with the deleted file.
 2. Search the repo for the record's file name, and for its bare number, such as in a table cell or a
