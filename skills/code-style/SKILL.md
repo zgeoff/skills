@@ -143,9 +143,9 @@ Give any other function any verb that fits, except a verb the last bullet below 
 | prop or parameter that takes an event callback                                                            | `on`                         | follows the framework's callback convention                                    |
 | function passed to an `on` prop, or a function that handles a framework lifecycle event such as a request | `handle`                     | follows the framework's callback convention                                    |
 | a test file's per-test fixture                                                                            | `setupTest`                  | as the testing skill's [setupTest](../testing/SKILL.md#setuptest) section says |
-| stored state put in place for a test, through the production module when the module can make that state   | `seed`                       | may do I/O; test code only ([seeding rules](../testing/references/seeding.md)) |
+| stored state a test puts in place, through the production module when that module can create the state    | `seed`                       | may do I/O; test code only ([seeding rules](../testing/references/seeding.md)) |
 
-- Keep a pure function pure all the way down: a `build` that calls a `read` does I/O. The
+- Keep a pure function pure all the way down: never call a `read` from a `build`. The
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
   behind a helper whose name hides it. Check those by hand.
