@@ -1,11 +1,11 @@
 # Design doc template
 
-Copy the template here to write a design doc, split one that passes about 400 lines, and close one
-out once its work items are done. Read [SKILL.md](../SKILL.md) first, for what goes in each section
-and for who the owner and the builder are.
+Copy the template here to write a design doc, split one that grows past about 400 lines, and close
+one out once its work items are done. Read [SKILL.md](../SKILL.md) first, for what goes in each
+section and for who the owner and the builder are.
 
 - [Write a design doc](#write-a-design-doc)
-- [Split a long design](#split-a-long-design)
+- [Split a long design doc](#split-a-long-design-doc)
 - [Close out a design doc](#close-out-a-design-doc)
 
 ## Write a design doc
@@ -15,7 +15,7 @@ and for who the owner and the builder are.
 2. Replace the example values. They describe an invented app.
 3. Delete each `<!-- -->` comment.
 4. When the design is one function or one type, delete Shape. When you have nothing to put in Out of
-   scope or Open questions, delete it. Keep every other section.
+   scope or Open questions, delete that section. Keep every other section.
 5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
    docs are fine.
 
@@ -103,7 +103,7 @@ interface QueuedEmail {
 
 ## Out of scope
 
-<!-- What a reader might expect this work to do, and it doesn't, with where it lives or why not. -->
+<!-- What a reader might expect these work items to do, and it doesn't, with where it lives or why not. -->
 
 - A second email provider. One provider sends every email.
 
@@ -114,9 +114,9 @@ interface QueuedEmail {
 - **Is a receipt email urgent?** The owner settles it. Until then, only a password reset is urgent.
 ````
 
-## Split a long design
+## Split a long design doc
 
-Split a design that passes about 400 lines with its code into one doc per
+Split a design doc that grows past about 400 lines, code blocks included, into one doc per
 [part](../SKILL.md#choose-where-the-design-goes). Cut it where one part calls another through a
 contract. Put each contract in the doc of the part that owns it.
 
@@ -127,8 +127,8 @@ contract. Put each contract in the doc of the part that owns it.
    - a Shape diagram of how the parts connect;
    - a table of the docs;
    - each decision that spans parts.
-3. Give each part's doc every section of the template in [Write a design doc](#write-a-design-doc),
-   with its own header bullets, summary and Shape diagram.
+3. Give each part's doc the sections of the template in [Write a design doc](#write-a-design-doc),
+   kept or deleted as its step 4 says, with its own header bullets, summary and Shape diagram.
 4. Add one `../` to each link out of the folder, such as `../../decisions/`.
 
 ## Close out a design doc
@@ -136,7 +136,8 @@ contract. Put each contract in the doc of the part that owns it.
 A design doc lasts only until its work items are done. When the last work item that the design doc
 covers is done, the agent that finishes it closes out the design doc:
 
-1. Move each fact that still describes the system into its doc in `docs/architecture/`.
+1. Move each fact that still describes the system into the doc in `docs/architecture/` that covers
+   that part of the system.
 2. Check that each choice that passes the three decision-record tests in
    [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
 3. Delete the design doc, or the whole folder of a split design. Point each link to it at the

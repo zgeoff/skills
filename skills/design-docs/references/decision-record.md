@@ -19,13 +19,13 @@ While a choice waits for the owner's approval, state it in the design's Decision
 record once the owner approves it. Add the record to the PR that adds the design doc. When the
 design doc is already merged, or there is none, open a PR for the record alone.
 
-Write one decision per record, and never link a design doc from it: the agent that
-[closes out](./design-doc.md#close-out-a-design-doc) a design doc deletes it.
+Write one decision per record. Never link a design doc from the record: the agent that
+[closes out](./design-doc.md#close-out-a-design-doc) a design doc deletes the design doc.
 
 1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
    folder is empty or missing.
-2. Copy the block below to `docs/decisions/NNNN-<slug>.md`, where `<slug>` is the title in kebab
-   case without its number, such as `urgent-emails-go-first` in `0012-urgent-emails-go-first.md`.
+2. Copy the block below to `docs/decisions/NNNN-<slug>.md`. `<slug>` is the title in kebab case
+   without its number, such as `urgent-emails-go-first` in `0012-urgent-emails-go-first.md`.
 3. Replace the example values. They describe an invented app.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
@@ -75,7 +75,8 @@ When the owner changes the decision, edit the record in place:
 2. On the first change, add an `Updated` line under `Date`. On each change, set it to the day of
    that change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
-4. On the first change, add a `## Changes` section at the end. Add a dated line to it.
+4. On the first change, add a `## Changes` section at the end. On each change, add a dated line to
+   it.
 
 ```markdown
 - Date: 2026-03-01
@@ -97,10 +98,10 @@ decision no longer passes the three tests, ask the owner before you remove it.
 
 Do every step in the PR that deletes the record:
 
-1. Move each rule of the decision that still holds into the doc that covers it. That doc is the
-   architecture doc in `docs/architecture/`, or the design doc in `docs/design/` while its work
-   items are not done. Leave the Why and the Rejected alternatives out: they go with the deleted
-   file.
+1. Find each rule in the Decision and Consequences sections that is still true. Move each one into
+   the doc that covers it. That doc is the architecture doc in `docs/architecture/`, or the design
+   doc in `docs/design/` while its work items are not done. Leave the Why and the Rejected
+   alternatives out: they go with the deleted file.
 2. Search the repo for the record's file name. Search it too for the record's number alone, such as
    `0012`, which a table cell or a code comment may hold. Point each citation at the doc from
    step 1. When the sentence no longer needs the citation, delete it.

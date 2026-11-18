@@ -1,10 +1,10 @@
 # Work item template
 
-A work item is an issue in the work tracker, such as a Linear or GitHub issue, and covers one
-outcome that can ship on its own. This template is its description. When work items share a contract
-that is not built yet, as [Choose where the design goes](../SKILL.md#choose-where-the-design-goes)
-says, write a design doc too, with the [design doc template](./design-doc.md), and link it as step 5
-says.
+Use this template for a work item's description. A work item is an issue in the work tracker, such
+as a Linear or GitHub issue, and covers one outcome that can ship on its own. When work items share
+a contract that is not built yet, as
+[Choose where the design goes](../SKILL.md#choose-where-the-design-goes) says, write a design doc
+too, with the [design doc template](./design-doc.md), and link it as step 5 says.
 
 To write the description:
 
@@ -14,12 +14,13 @@ To write the description:
 3. Delete each `<!-- -->` comment.
 4. Keep Outcome and Acceptance, and write the Acceptance lines as
    [Prove acceptance](#prove-acceptance) says. Delete each other section you have nothing to put in.
-5. When a design doc covers some of the work, link the doc's section under each heading of this
-   template that the doc covers, such as Sketch or Constraints. Write only what the doc leaves out,
-   and repeat none of the doc's text.
+5. When a design doc covers this work item, put a link to the doc's matching section under each
+   heading it covers, such as its Contracts under Sketch. Under that heading, write only what the
+   doc leaves out, and repeat none of the doc's text.
 
-When the plan for the work changes, rewrite each section the new plan affects. Untick each
-Acceptance line whose evidence no longer holds, and give the reason in a comment on the work item.
+When the outcome or the design of the work item changes, rewrite each section the change affects.
+Untick each Acceptance line whose evidence no longer holds, and give the reason in a comment on the
+work item.
 
 ## Prove acceptance
 
@@ -36,7 +37,7 @@ Write each Acceptance line as a behaviour someone can observe, and name its evid
 ````markdown
 ## Outcome
 
-<!-- 1 or 2 sentences: what is true when the work is done. -->
+<!-- 1 or 2 sentences: what is true when the work item is done. -->
 
 Someone who asks for a password reset gets the email within 1 minute, even while a newsletter goes
 out.
@@ -75,7 +76,7 @@ function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // `pri
 
 ## Out of scope
 
-<!-- What a reader might expect this work to do, and it doesn't. -->
+<!-- What a reader might expect this work item to do, and it doesn't. -->
 
 - The wording of the reset email.
 ````
