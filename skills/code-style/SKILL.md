@@ -65,9 +65,9 @@ metadata:
     rule in `@zgeoff/oxlint-config` then keeps I/O out of it.
   - Write a thin function that does the reads, calls the pure one, and acts on its result. Give it
     the I/O verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, then the thin one around it. Test each edge case of the pure one
-  with a `test.each` row of plain data. A combined function needs a stand-in for every read and
-  write, so its edges go untested.
+- Write and test the pure function before you write the thin one around it. Test each edge case of
+  the pure one with a `test.each` row of plain data. A combined function needs a stand-in for every
+  read and write, so its edges go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
 - Never add an option, a parameter or an extension point before a caller passes it.
