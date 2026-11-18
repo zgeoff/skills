@@ -131,7 +131,7 @@ Give any other function any verb that fits, except a banned verb from the last b
 | lookup that can't miss                                                                                    | `get`                        | no I/O; never returns null or undefined                                        |
 | many values gathered from a traversal                                                                     | `collect`                    | no I/O                                                                         |
 | cheap change of representation                                                                            | `to`                         | no I/O                                                                         |
-| content in from outside the process                                                                       | `read`                       | may do I/O; null or undefined on a miss only when its return type says so      |
+| content in from outside the process                                                                       | `read`                       | may do I/O; can miss only if its return type includes null or undefined        |
 | content out to outside the process                                                                        | `write`                      | may do I/O                                                                     |
 | subprocess or task                                                                                        | `run`                        | may do I/O                                                                     |
 | resource brought into existence                                                                           | `create`                     | may do I/O                                                                     |
@@ -160,5 +160,5 @@ Give any other function any verb that fits, except a banned verb from the last b
 - Never start a name with one of these verbs. They say nothing about I/O or a miss:
   - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
   - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
-    `read`, as its row says;
+    `read`, with `null` in its return type;
   - `handle`, outside a callback.
