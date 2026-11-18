@@ -117,13 +117,13 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a banned verb from the last bullet of this
-section, such as `fetch` or `process`.
+Give any other function any verb that fits, except a verb the last bullet below bans, such as
+`fetch` or `process`.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| yes/no answer                                                                                             | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
-| yes/no answer that needs I/O                                                                              | `probe`                      | returns a boolean; may do I/O                                                  |
+| yes-or-no answer                                                                                          | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
+| yes-or-no answer that needs I/O                                                                           | `probe`                      | returns a boolean; may do I/O                                                  |
 | value from arguments, test data factories included                                                        | `build`                      | no I/O                                                                         |
 | text or raw input → structure                                                                             | `parse`                      | no I/O                                                                         |
 | value → text or markup                                                                                    | `format`, `render`           | no I/O                                                                         |
@@ -149,8 +149,9 @@ section, such as `fetch` or `process`.
   [`zgeoff/verb-contract`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
   rule in `@zgeoff/oxlint-config` checks the verbs, but it can't see I/O inside an npm package or
   behind a helper whose name hides it. Check those by hand.
-- Start a boolean function with `is`, `has`, `can` or `should` even when another verb reads well.
-  Two kinds of boolean function keep their own verb:
+- Start a boolean function with `probe` when it needs I/O, such as `probeLockFile`, which checks for
+  a lock file on disk. Otherwise start it with `is`, `has`, `can` or `should`, even when another
+  verb reads well. Two kinds of boolean function keep their own verb:
   - a function with an I/O verb that returns a success flag, such as `removeFile`;
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
