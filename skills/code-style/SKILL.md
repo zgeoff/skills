@@ -20,12 +20,16 @@ metadata:
 ## Files and modules
 
 - Give each file one main export, and name the file after it: `parse-cli-args.ts` exports
-  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a module has
+  `parseCLIArgs`. `index.ts`, `types.ts` and `constants.ts` have no main export. When a file has
   only a side effect, name it for what it does: `augment-bun-test.ts`.
 - Order a file as imports, the main export, then its helpers in the order it calls them. Put each
-  type or constant just above its first use.
-- Make objects with factory functions, and never write a class. The one exception is a custom error,
-  such as `class QuotaError extends Error`.
+  type or constant just above its first use: the main export's types and constants go between the
+  imports and the main export.
+- When two or more non-test files use a type, put it in `types.ts` in the nearest folder that holds
+  them all. Create that `types.ts` when the folder has none. Keep a type that one file uses in that
+  file.
+- Make objects with factory functions. Write a class only for a custom error:
+  `class QuotaError extends Error`.
 
 ## Names
 
@@ -41,8 +45,8 @@ metadata:
 
 - Branch on a union with `match(value)…exhaustive()` from `ts-pattern`, never `switch`, so a new
   member fails the type check.
-- End with `.otherwise()` only when the value comes from outside the program, such as a string read
-  from input that no schema has parsed.
+- End with `.otherwise()` only for a value from outside the program, such as input that no schema
+  has parsed.
 
 ## Types
 
@@ -65,24 +69,24 @@ metadata:
     rule in `@zgeoff/oxlint-config` keeps I/O out of it;
   - a thin function that does the reads, calls the pure one, and acts on its result. Give it the I/O
     verb that fits, such as `run`, `write` or `remove`, and no decision of its own.
-- Write the pure function first, from the values you will read, then the thin one around it. You
-  then test each edge case with one `test.each` row of plain data. In one combined function, each
-  case needs a stand-in for every read and write, so the edges go untested.
+- Write and test the pure function before the thin one, with one `test.each` row of plain data per
+  edge case. In one combined function, each case needs a stand-in for every read and write, so edges
+  go untested.
 - Reach I/O through dependencies the caller passes in. Create real clients only in the entry point.
 - Never write a wrapper that only passes its arguments on.
-- Never add an option, a parameter or an extension point before a caller passes it.
+- Never add an option, parameter or extension point before a caller passes it.
 
 ```ts
-export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
-  return tasks.filter((task) => task.dueAt < now && task.remindedAt === null);
-}
-
 export async function runReminders(dependencies: ReminderDependencies): Promise<void> {
   const tasks = await dependencies.db.readOpenTasks();
 
   for (const task of collectDueReminders(tasks, dependencies.clock.now())) {
     await dependencies.mail.writeReminder(task.owner, task.id);
   }
+}
+
+export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
+  return tasks.filter((task) => task.dueAt < now && task.remindedAt === null);
 }
 ```
 
@@ -117,13 +121,13 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
 ## Function names
 
 When a function's job has a row, start its name with that row's verb, and keep the row's guarantee.
-Give any other function any verb that fits, except a banned verb from the last bullet of this
-section, such as `fetch` or `process`.
+Give any other function any verb that fits, except the banned verbs below, such as `fetch` or
+`process`.
 
 | Job                                                                                                       | Verb                         | Guarantee                                                                      |
 | --------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| yes/no answer                                                                                             | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
-| yes/no answer that needs I/O                                                                              | `probe`                      | returns a boolean; may do I/O                                                  |
+| boolean answer                                                                                            | `is`, `has`, `can`, `should` | returns a boolean; no I/O                                                      |
+| boolean answer that needs I/O                                                                             | `probe`                      | returns a boolean; may do I/O                                                  |
 | value from arguments, test data factories included                                                        | `build`                      | no I/O                                                                         |
 | text or raw input → structure                                                                             | `parse`                      | no I/O                                                                         |
 | value → text or markup                                                                                    | `format`, `render`           | no I/O                                                                         |
@@ -155,8 +159,7 @@ section, such as `fetch` or `process`.
   - a function whose name starts with `use`, `on` or `handle`.
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
-- You may start a name with `resolve` whether or not it does I/O, such as for a pure lookup or a
-  filesystem search.
+- You may start a name with `resolve` whether or not it does I/O.
 - Never start a name with one of these verbs. They say nothing about I/O or a miss:
   - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
   - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
