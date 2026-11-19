@@ -17,6 +17,8 @@ installs and never edits, such as testing. A shared rule set is a shared skill m
   covers the topic of a repo's tool, describe the tool in the project skill, such as the repo's test
   harness in project-testing.
 
+When a skill fits none of these kinds, write a machinery skill.
+
 In a machinery skill or a method skill, write the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. Leave
 that opening out of a rule set and out of a project skill.
@@ -40,38 +42,34 @@ differs from the skill's folder name.
 ## A machinery skill
 
 Write a machinery skill in the repo it covers, at `.agents/skills/<name>/SKILL.md`. Say what it
-covers in the opening paragraph. Then give each of these a `##` section:
+covers in the opening paragraph. Then give the commands a `##` section: a table when there's more
+than one, with a column for the command and a column for what it needs to run, such as a running
+database or an environment variable. Name the columns for what they hold, such as Command and Needs.
 
-- the commands, in a table when there's more than one, with a column for the command and a column
-  for what it needs to run, such as a running database or an environment variable. Name the columns
-  for what they hold, such as Command and Needs;
-- the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
+When an agent made a mistake that the repo's code doesn't stop, add a `##` section of mistakes to
+avoid, as [Keep it short and true](../SKILL.md#keep-it-short-and-true) says. Give each mistake a
+bullet with the fact, then what to do about it.
 
-Name the main mistakes in the opening paragraph too, as SKILL.md says, and give each one its bullet
-in the mistakes section.
+End the skill with a reply line when the agent edits code or hands something back, such as a report
+or a deployed version:
 
-Add a mistake only if an agent with the source open would still lose time to it. A made-up example
-of a mistake worth adding, in a skill at `.agents/skills/<name>/SKILL.md`:
+- When the agent edits code, name what changed in the reply line.
+- When the agent hands something back, give it in the reply line. When the agent writes for a
+  reader, also name the reader in the opening paragraph, next to what the agent hands back.
 
-```markdown
-- **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
-  process, so a test that changes a theme file calls `resetThemes()` first.
-```
-
-When the agent only runs commands, end the skill without a reply line. When the agent writes
-something for a reader, such as a report, name the reader in the opening paragraph, next to what the
-agent hands back. Then end the skill with a reply line.
+When the agent only runs commands and hands nothing back, end the skill without a reply line.
 
 ## A method skill
 
 Put these in the opening paragraph, beside the job:
 
 - the attitude you want the agent to take to the work, such as "treat a comment as stale until the
-  code agrees with it", and the mistakes the agent avoids when it holds that attitude;
+  code agrees with it";
 - who reads the agent's output, and what they do with it.
 
-After `## Key rules` and `## References`, write numbered steps, each with the decision the agent
-makes in it, such as when to stop. End with a reply line.
+After `## Key rules`, and `## References` when the skill has any, write one `##` heading for each
+step, with no number in it. Under each, say what the agent does in that step and the decision it
+makes, such as when to stop. End with a reply line.
 
 When the user can also start the skill, such as with a slash command, still address the whole skill
 to the agent. Put how to word the answer for the user in its own section, such as "When the user
@@ -106,7 +104,9 @@ skill wins. Read the shared rule set before you write, so you know which rules t
 which it follows.
 
 Put the repo's own rules in the `project-` folder, and never edit a shared skill's folder. The next
-update of the shared skills overwrites that folder. In the zgeoff repos,
+update of the shared skills overwrites that folder. The repo's setup creates the `.claude/skills`
+link. Never create the link while you write a project skill, and never tell the skill's agent to
+create it. In the zgeoff repos,
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) makes that
 update, and never touches a `project-` folder.
 
@@ -118,14 +118,15 @@ order:
    Where. Give it the rows in [Facts rows](#facts-rows), in that order. Write "none" in the Where
    cell of a row that doesn't apply. Leave `## Facts` out of every other project skill, such as
    project-docs-writing.
-2. Write `## Departures`, with one bullet for each shared rule the repo replaces. Open each bullet
-   with what the repo does, link the shared rule's section, and give the reason. Write "None." when
-   the repo follows every rule. In project-code-style, keep `## Departures` in this format, and add
-   these limits:
+2. Write `## Departures`, with one bullet for each shared rule the repo replaces. Give a stricter
+   rule that replaces a shared rule a bullet too. Open each bullet with what the repo does, link the
+   shared rule's section, and give the reason. Write "None." when the repo follows every rule. Put a
+   stricter rule that replaces no shared rule in a topic section from step 3. In project-code-style,
+   keep `## Departures` in this format, and add these limits:
    - List a departure only for code whose shape another tool sets, such as a plugin whose shape a
      host's API decides.
-   - Put each stricter rule the repo adds in a topic section from step 3, never under Departures.
-     The [code-style](../../code-style/SKILL.md) skill allows a repo to add stricter rules.
+   - Put every stricter rule in a topic section from step 3, even one that replaces a shared rule. A
+     repo may add stricter rules, as the [code-style](../../code-style/SKILL.md) skill says.
 3. Then add one `##` section for each topic of the repo that the shared rule set can't know, such as
    a test harness or a test helper.
 

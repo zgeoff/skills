@@ -38,8 +38,10 @@ Make each fix this way:
   - an in-memory RPC link;
   - an injected transport.
 
-  Start the program under test as a process only in `e2e/`. Use `run` from `@zgeoff/testing/process`
-  for a program that exits, and `start` for one that keeps running, as
+  Start the program under test as a process only in `e2e/`. A script is any file under `scripts/`,
+  or a script that a CI step runs. A command-line program that the package ships is the program
+  under test, so only `e2e/` starts it. Use `run` from `@zgeoff/testing/process` for a program that
+  exits, and `start` for one that keeps running, as
   [End-to-end suites](./system-tests.md#end-to-end-suites) says.
 
   The test of a script is the exception: it starts its script as a process outside `e2e/`. Keep it
@@ -192,6 +194,9 @@ describes. For the CI job that runs each command, see the ci-design skill.
 For a Rust crate, run these tests through cargo-nextest, as
 [Rust tests that need a real system](./system-tests.md#rust-tests-that-need-a-real-system)
 describes.
+
+When a repo adds a lane, measure its tests on CI and set the lane's timeout about a quarter above
+the slowest, as [A test over its limit](#a-test-over-its-limit) does for one test.
 
 ## A test over its limit
 
