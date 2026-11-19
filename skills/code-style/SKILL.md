@@ -39,7 +39,7 @@ metadata:
 - Use a short name only from this list:
   - `x` and `y` for coordinates, `z` for zod, `$` for Bun's shell, `_` for an unused value;
   - `ctx`, `id`, `db`, `args`, `params`, `repo` and `info`.
-- End a name with its unit, on a timestamp too: `timeoutMs`, `dueAtMs`, never `ms` alone.
+- End a name with its unit, timestamps too: `dueAtMs`, never `ms`.
 
 ## Unions
 
