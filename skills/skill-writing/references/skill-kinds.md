@@ -1,6 +1,9 @@
 # Kinds of skill
 
-Pick the kind before you write:
+Pick the kind before you write. The kind depends on whether a shared rule set covers the skill's
+topic, so first look in the repo's `.agents/skills/` for the shared skills: the skills the repo
+installs and never edits, such as testing. A shared rule set is a shared skill marked as
+[a rule set](#a-rule-set). When the repo installs none, no shared rule set covers the topic.
 
 - When the skill covers one repo's tools, such as its migrations or its deploy scripts, and no
   shared rule set covers that topic, write [a machinery skill](#a-machinery-skill).
@@ -8,10 +11,11 @@ Pick the kind before you write:
   [a method skill](#a-method-skill).
 - When the skill holds rules the agent applies while it writes something else, such as a code style,
   write [a rule set](#a-rule-set).
-- When the skill holds one repo's facts for a shared rule set, and the repo's own rules that replace
-  shared ones, write [a project skill](#a-project-skill), such as project-testing beside testing.
-  When a shared rule set covers the topic of a repo's tool, put the tool in the project skill, such
-  as the repo's test harness in project-testing.
+- When the skill holds one repo's facts for a shared rule set, write
+  [a project skill](#a-project-skill), such as project-testing beside testing. Put the repo's own
+  rules that replace the shared rule set's rules in the project skill too. When a shared rule set
+  covers the topic of a repo's tool, describe the tool in the project skill, such as the repo's test
+  harness in project-testing.
 
 In a machinery skill or a method skill, write the opening that
 [SKILL.md](../SKILL.md#open-with-the-job-and-the-key-rules) sets out, and add the parts below. Leave
@@ -22,8 +26,8 @@ agent hands back, such as "**Reply:** each risk with its proof".
 
 In a skill of any kind, put a mechanical step, one with no judgment in it, in a script in the
 skill's `scripts/` folder. Put the script's test beside it, such as `check.test.ts` beside
-`check.sh`. Make sure the repo's test command runs that test. Tell the agent to run the script, not
-read it.
+`check.sh`. Run the repo's test command, and check that its output lists that test. When it doesn't,
+change the command so it does. Tell the agent to run the script, not read it.
 
 ## The frontmatter
 
@@ -35,15 +39,19 @@ differs from the skill's folder name.
 
 ## A machinery skill
 
-Write a machinery skill in the repo it covers, at `.claude/skills/<name>/SKILL.md`. Say what it
+Write a machinery skill in the repo it covers, at `.agents/skills/<name>/SKILL.md`. Say what it
 covers in the opening paragraph. Then give each of these a `##` section:
 
 - the commands, in a table when there's more than one, with a column for the command and a column
-  for what it needs to run, such as a running database or an environment variable;
+  for what it needs to run, such as a running database or an environment variable. Name the columns
+  for what they hold, such as Command and Needs;
 - the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
 
+Name the main mistakes in the opening paragraph too, as SKILL.md says, and give each one its bullet
+in the mistakes section.
+
 Add a mistake only if an agent with the source open would still lose time to it. A made-up example
-of a mistake worth adding, in a skill at `.claude/skills/<name>/SKILL.md`:
+of a mistake worth adding, in a skill at `.agents/skills/<name>/SKILL.md`:
 
 ```markdown
 - **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
@@ -65,8 +73,9 @@ Put these in the opening paragraph, beside the job:
 After `## Key rules` and `## References`, write numbered steps, each with the decision the agent
 makes in it, such as when to stop. End with a reply line.
 
-When the user can also start the skill, such as with a slash command, write it for the agent. Put
-how to word the answer for the user in its own section, such as "When the user asked the question".
+When the user can also start the skill, such as with a slash command, still address the whole skill
+to the agent. Put how to word the answer for the user in its own section, such as "When the user
+asked the question".
 
 ## A rule set
 
@@ -75,7 +84,8 @@ title. Then put `## References`, when it has any, and the rule sections, one `##
 out the opening paragraph, `## Key rules` and the reply line: the agent reads a rule set for the
 rule that fits what it is writing, and hands nothing back.
 
-In its SKILL.md:
+Follow these rules in its SKILL.md. Write each file in its `references/` as
+[Writing a reference](./writing-references.md) says.
 
 - Start each bullet with what the agent does, with a ban, or with the condition the rule applies
   under: "Name a value for what it holds", "No classes, except a custom error", "When a test changes
@@ -88,11 +98,12 @@ In its SKILL.md:
 
 ## A project skill
 
-Write a project skill in the repo it describes, at `.claude/skills/project-<name>/SKILL.md`, where
+Write a project skill in the repo it describes, at `.agents/skills/project-<name>/SKILL.md`, where
 `<name>` is the shared rule set it sits beside, such as `project-testing` beside testing. The shared
-skills and the project skills sit side by side in `.claude/skills/`. The agent loads both, and where
-they disagree, the project skill wins. Read the shared skill before you write, so you know which
-rules the repo replaces and which it follows.
+skills and the project skills sit side by side in `.agents/skills/`, and `.claude/skills` links to
+that folder, so Claude Code finds them. The agent loads both, and where they disagree, the project
+skill wins. Read the shared rule set before you write, so you know which rules the repo replaces and
+which it follows.
 
 Put the repo's own rules in the `project-` folder, and never edit a shared skill's folder. The next
 update of the shared skills overwrites that folder. In the zgeoff repos,
@@ -109,39 +120,43 @@ order:
    project-docs-writing.
 2. Write `## Departures`, with one bullet for each shared rule the repo replaces. Open each bullet
    with what the repo does, link the shared rule's section, and give the reason. Write "None." when
-   the repo follows every rule. In project-code-style only, follow the two bullets below in place of
-   the Departures rule. The [code-style](../../code-style/SKILL.md) skill allows a repo to add
-   rules:
-   - Put each stricter rule in a topic section from step 3, never under Departures.
+   the repo follows every rule. In project-code-style, keep `## Departures` in this format, and add
+   these limits:
    - List a departure only for code whose shape another tool sets, such as a plugin whose shape a
      host's API decides.
-3. Then add one `##` section for each topic of the repo that the shared skill can't know, such as a
-   test harness or a test helper.
+   - Put each stricter rule the repo adds in a topic section from step 3, never under Departures.
+     The [code-style](../../code-style/SKILL.md) skill allows a repo to add stricter rules.
+3. Then add one `##` section for each topic of the repo that the shared rule set can't know, such as
+   a test harness or a test helper.
 
-Never repeat a rule the shared skill states. The agent reads both, and two copies drift apart.
+Never repeat a rule the shared rule set states. The agent reads both, and two copies drift apart.
 
 ### Facts rows
 
 Say where each fact lives. Link the file that holds it with a path relative to the skill, such as
-`../../../config/ci.json` from `.claude/skills/<project-skill>/SKILL.md`, and name the key that
+`../../../config/ci.json` from `.agents/skills/<project-skill>/SKILL.md`, and name the key that
 holds the fact. Then the row stays true when the value changes, and
 [`chex links`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails when the file moves.
 
+- When the fact is a folder, such as the test utils, link the folder.
+- When several files hold a fact, link each one.
 - When a command shows the fact and no file holds it, write the command in place of the link.
 - When neither a file nor a command holds the fact, write the value itself, such as the
-  [test budget](../../ci-design/SKILL.md#jobs).
+  [test budget](../../ci-design/SKILL.md#jobs). Write the budget's figure even when a workflow sets
+  a timeout. [Jobs](../../ci-design/SKILL.md#jobs) sets each timeout from the budget, so the two
+  figures differ.
 
-Each row below names a project skill, a fact, and what goes in the Where cell of its `## Facts`
-table. The shared skills define each fact: the test budget in [Jobs](../../ci-design/SKILL.md#jobs)
-in ci-design, and the test commands in
+For each row below, write the Where value in the `## Facts` table of the project skill that the row
+names. The shared rule sets define each fact: the test budget in
+[Jobs](../../ci-design/SKILL.md#jobs) in ci-design, and the test commands in
 [Where each test runs](../../testing/references/slow-tests.md#where-each-test-runs) in testing.
 
-| Project skill     | Fact            | Where                                                                                                                                              |
-| ----------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                                                                                 |
-| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                                                                                      |
-| project-testing   | Test commands   | the config that gives each test command its folder or file suffix, and its timeout, such as `rig.config.ts`; link each file when several hold them |
-| project-testing   | Test utils      | the folder to search before you write a test helper                                                                                                |
+| Project skill     | Fact            | Where                                                                                                   |
+| ----------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| project-ci-design | Test budget     | the figure itself, such as "3 min"                                                                      |
+| project-ci-design | Required checks | the command that lists the checks the `main` ruleset requires                                           |
+| project-testing   | Test commands   | the config that sets each test command's folder or file suffix and its timeout, such as `rig.config.ts` |
+| project-testing   | Test utils      | the folder to search before you write a test helper                                                     |
 
 A made-up project-ci-design skill:
 
