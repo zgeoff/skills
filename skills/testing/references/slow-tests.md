@@ -159,8 +159,9 @@ describes. For the CI job that runs each command, see the ci-design skill.
 - Give each test that calls a live model the `.model-api` suffix, wherever it lives.
 - Give a test that calls another live API a suffix and a command named for that API, such as a
   made-up `.payments` that `bun run test:payments` runs.
-- Name one real system in a suffix, never a speed. Prefer a specific suffix to the generic `.host`,
-  such as a made-up `.kvm` for a test that boots a VM.
+- Name one real system in a suffix, never a speed. When a suffix names the system the test needs,
+  such as a made-up `.kvm` for a test that boots a VM, give the test that suffix in place of the
+  generic `.host`.
 - Add a suffix of the repo's own only for a real system from the list in
   [Tests that need a real system](#tests-that-need-a-real-system). Declare it under `lanes` in
   `rig.config.ts`, with its `suffix` and its timeout in `limit`, such as `'15s'`. The repo's lint
