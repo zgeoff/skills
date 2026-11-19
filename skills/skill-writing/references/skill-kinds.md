@@ -46,8 +46,9 @@ than one, with a column for the command and a column for what it needs to run, s
 database or an environment variable. Name the columns for what they hold, such as Command and Needs.
 
 When an agent has made a mistake that the source doesn't prevent, add a `##` section of mistakes to
-avoid, each as a bullet that gives the fact and then what to do about it. Add each only as SKILL.md
-says: after an agent made it, with where. Write no such section before then.
+avoid, each as a bullet that gives the fact and then what to do about it. Add each only as
+[Keep it short and true](../SKILL.md#keep-it-short-and-true) says. Write no such section before
+then.
 
 When the agent only runs commands, end the skill without a reply line. When the agent edits code,
 end with a reply line that names what changed. When the agent writes something for a reader, such as
