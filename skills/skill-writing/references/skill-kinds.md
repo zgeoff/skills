@@ -35,7 +35,7 @@ differs from the skill's folder name.
 
 ## A machinery skill
 
-Write a machinery skill in the repo it covers, at `.claude/skills/<name>/SKILL.md`. Say what it
+Write a machinery skill in the repo it covers, at `.agents/skills/<name>/SKILL.md`. Say what it
 covers in the opening paragraph. Then give each of these a `##` section:
 
 - the commands, in a table when there's more than one, with a column for the command and a column
@@ -43,7 +43,7 @@ covers in the opening paragraph. Then give each of these a `##` section:
 - the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
 
 Add a mistake only if an agent with the source open would still lose time to it. A made-up example
-of a mistake worth adding, in a skill at `.claude/skills/<name>/SKILL.md`:
+of a mistake worth adding, in a skill at `.agents/skills/<name>/SKILL.md`:
 
 ```markdown
 - **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
@@ -88,11 +88,12 @@ In its SKILL.md:
 
 ## A project skill
 
-Write a project skill in the repo it describes, at `.claude/skills/project-<name>/SKILL.md`, where
+Write a project skill in the repo it describes, at `.agents/skills/project-<name>/SKILL.md`, where
 `<name>` is the shared rule set it sits beside, such as `project-testing` beside testing. The shared
-skills and the project skills sit side by side in `.claude/skills/`. The agent loads both, and where
-they disagree, the project skill wins. Read the shared skill before you write, so you know which
-rules the repo replaces and which it follows.
+skills and the project skills sit side by side in `.agents/skills/`, and `.claude/skills` links to
+that folder, so Claude Code finds them. The agent loads both, and where they disagree, the project
+skill wins. Read the shared skill before you write, so you know which rules the repo replaces and
+which it follows.
 
 Put the repo's own rules in the `project-` folder, and never edit a shared skill's folder. The next
 update of the shared skills overwrites that folder. In the zgeoff repos,
@@ -123,7 +124,7 @@ Never repeat a rule the shared skill states. The agent reads both, and two copie
 ### Facts rows
 
 Say where each fact lives. Link the file that holds it with a path relative to the skill, such as
-`../../../config/ci.json` from `.claude/skills/<project-skill>/SKILL.md`, and name the key that
+`../../../config/ci.json` from `.agents/skills/<project-skill>/SKILL.md`, and name the key that
 holds the fact. Then the row stays true when the value changes, and
 [`chex links`](https://github.com/zgeoff/tools/tree/main/packages/chex) fails when the file moves.
 
