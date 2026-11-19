@@ -35,9 +35,8 @@ The user sets two variables on the machine:
 Never set either variable yourself. Never write the value of either one in a file you commit.
 
 Keep the raw token out of the machine's environment. Read it with `op read` inside the command that
-needs it. Never export it. A command that reads the token only from its environment is the
-exception: set the token for that command only, as
-[Publish a verify report](#publish-a-verify-report) does.
+needs it. Never export it. When a command reads the token only from its environment, set the token
+for that command only, as [Publish a verify report](#publish-a-verify-report) does.
 
 Run every command in this skill from the root of the checkout. Pick the path before you capture
 anything. Take the first row that matches:
@@ -97,9 +96,9 @@ op read "$VERIFY_UPLOAD_TOKEN_REF" > /dev/null
 ## Upload it
 
 Write a label first: a few words on what the file shows, such as
-`Settings page with the new layout`. Leave out square brackets, which break the Markdown line, and
-apostrophes, which break the shell quotes in the commands below. The file host stores the label, and
-you use it as the alt text on both paths.
+`Settings page with the new layout`. Leave out square brackets and apostrophes. Square brackets
+break the Markdown line, and apostrophes break the shell quotes in the commands below. The file host
+stores the label, and you use it as the alt text on both paths.
 
 Set `expires` to `30d` on both paths. Without `expires`, the file host deletes the file after 7
 days, which breaks the image in a PR that stays open longer than a week. Never set `expires` to
