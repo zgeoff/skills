@@ -30,7 +30,7 @@ another command only because it is slow.
 | runs a linter or checker binary over text the code builds                      | a real process start          | Check the text with a script in `scripts/`.                                                                                          |
 | needs a real system that `bun run test` can't host                             | a VM, the kernel or a browser | Put it where [Where each test runs](#where-each-test-runs) says.                                                                     |
 
-Each fix in more detail:
+Make each fix this way:
 
 - To call the code in the test process, call one of these:
   - its handler;
@@ -182,9 +182,9 @@ describes. For the CI job that runs each command, see the ci-design skill.
   Give it its `suffix` and its timeout in `limit`, such as `'15s'`, as the
   [rig README](https://github.com/zgeoff/tools/tree/main/packages/rig#configuration) shows. The
   repo's lint rules read each timeout from `rig.config.ts`. Then run `rig init`, which adds the
-  `test:<name>` script and changes nothing else. List the suffix, its command and its timeout in the
-  Facts table of the repo's project-testing skill. Put the measured test times in the pull request
-  that adds the suffix.
+  `test:<name>` script. List the suffix, its command and its timeout in the Facts table of the
+  repo's project-testing skill. Put the measured test times in the pull request that adds the
+  suffix.
 - Put the code that starts the real system, such as the code that starts a VM, in a helper with its
   own test beside it. Keep the helper in `src/test-utils/` of the package that owns what it starts,
   as [Where a test lives](../SKILL.md#where-a-test-lives) says.
@@ -235,8 +235,9 @@ warning, unless a comment on that setting holds a ticket or `floor:`.
 
 ## The run mode and workers
 
-- Run the tests with `bun run test`, which runs `rig unit`. To set the worker count, set
-  `TEST_WORKERS`. Otherwise rig picks it from the host's cores and memory.
+- Run the tests with `bun run test`, which runs `rig unit`. It runs the files in random order, with
+  no isolation between them. To set the worker count, set `TEST_WORKERS`. Otherwise rig picks it
+  from the host's cores and memory.
 - When you call `bun test` yourself, pass `--randomize`. Pass `--no-isolate` with every
   `--parallel=<N>`. `--parallel` implies `--isolate`, which runs each test file in a fresh global
   object. With isolation on, the suite runs slower, and a leak between files never fails a test.
@@ -246,6 +247,6 @@ warning, unless a comment on that setting holds a ticket or `floor:`.
   need.
 - Name a resource that each worker keeps across its files, such as a database cloned from the
   per-run template, after the worker's process ID. In the helper that hands it out, open it when it
-  exists and create it when it doesn't. Never drop it in a test file's `afterAll`. That hook runs
-  when its file ends, and the worker's later files still use the resource. The cleanup at the start
-  of the next run, in [Per-run templates](#per-run-templates), removes it.
+  exists and create it when it doesn't. Never drop it in `afterAll`, because that hook can run after
+  every file. The cleanup at the start of the next run, in [Per-run templates](#per-run-templates),
+  removes it.
