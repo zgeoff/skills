@@ -167,7 +167,7 @@ The command reads the address from `VERIFY_UPLOAD_URL` and the raw token from `V
 Set the token from 1Password for this command only:
 
 ```bash
-VERIFY_UPLOAD_TOKEN="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" bun verify publish --pr <n>
+(token="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" && VERIFY_UPLOAD_TOKEN="$token" bun verify publish --pr <n>)
 ```
 
 Push the branch and open the PR first. Without an open PR, the command fails. Expect `ok: true` and
