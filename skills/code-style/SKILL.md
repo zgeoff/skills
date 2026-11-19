@@ -39,7 +39,7 @@ metadata:
 - Use a short name only from this list:
   - `x` and `y` for coordinates, `z` for zod, `$` for Bun's shell, `_` for an unused value;
   - `ctx`, `id`, `db`, `args`, `params`, `repo` and `info`.
-- End a name with its unit: `timeoutMs`, never `ms` alone.
+- End a name with its unit, timestamps too: `dueAtMs`, never `ms`.
 
 ## Unions
 
@@ -83,8 +83,8 @@ export async function runReminders(dependencies: ReminderDependencies): Promise<
   }
 }
 
-export function collectDueReminders(tasks: readonly Task[], now: number): Task[] {
-  return tasks.filter((task) => task.dueAt < now && task.remindedAt === null);
+export function collectDueReminders(tasks: readonly Task[], nowMs: number): Task[] {
+  return tasks.filter((task) => task.dueAtMs < nowMs && task.remindedAtMs === null);
 }
 ```
 
