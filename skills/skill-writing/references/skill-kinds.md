@@ -26,9 +26,8 @@ agent hands back, such as "**Reply:** each risk with its proof".
 
 In a skill of any kind, put a mechanical step, one with no judgment in it, in a script in the
 skill's `scripts/` folder. Put the script's test beside it, such as `check.test.ts` beside
-`check.sh`, and write it as the testing skill says for a shell script. Run the repo's test command,
-and check that its output lists that test. When it doesn't, change the command so it does. Tell the
-agent to run the script, not read it.
+`check.sh`. Run the repo's test command, and check that its output lists that test. When it doesn't,
+change the command so it does. Tell the agent to run the script, not read it.
 
 ## The frontmatter
 
