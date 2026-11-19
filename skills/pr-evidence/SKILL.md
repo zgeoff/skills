@@ -21,10 +21,13 @@ the file, so keep every token, secret and piece of personal data out of it.
   it shows.
 - [Upload it](#upload-it): with a label and a 30-day expiry, and check the file host's response.
 - [Put it in the PR](#put-it-in-the-pr): the label as the alt text, under the entry it proves.
+- [Publish a verify report](#publish-a-verify-report): fill the raw token for the one
+  `bun verify publish` command.
 
 ## Pick the upload path
 
-Pick the path before you capture anything. Take the first row that matches:
+Run every command in this skill from the root of the checkout. Pick the path before you capture
+anything. Take the first row that matches:
 
 | Check                                                                        | Path                                        |
 | ---------------------------------------------------------------------------- | ------------------------------------------- |
@@ -32,15 +35,16 @@ Pick the path before you capture anything. Take the first row that matches:
 | `test -n "$VERIFY_UPLOAD_URL" && test -n "$VERIFY_UPLOAD_TOKEN_REF"` is true | `curl`                                      |
 | neither                                                                      | none: stop and tell the user                |
 
-The user sets these variables on the machine:
+The user sets these two variables on the machine:
 
 - `VERIFY_UPLOAD_URL`: the file host's upload address, such as
   `https://files.example.com/api/files`.
 - `VERIFY_UPLOAD_TOKEN_REF`: where 1Password keeps the upload token, as a full
   `op://<vault>/<item>/<field>` reference.
 
+Never set either variable yourself, and never write the value of either one in a file you commit.
 The machine never holds the raw token in its environment. Read the token with `op read` inside the
-one command that needs it, as the commands below do, and never export it.
+one command that needs it, and never export it.
 
 The `curl` path also needs the 1Password `op` CLI, signed in. Run this check:
 
@@ -48,13 +52,12 @@ The `curl` path also needs the 1Password `op` CLI, signed in. Run this check:
 op read "$VERIFY_UPLOAD_TOKEN_REF" > /dev/null
 ```
 
-When it fails, stop and give the user `op`'s error. Never set any of these variables yourself, and
-never write a value of one in a file you commit.
+When it fails, stop and give the user `op`'s error.
 
 ## Save and capture
 
-1. Save each file in `.scratch/` at the root of the checkout. When git doesn't ignore that folder
-   yet, add it to the clone's own exclude file, which changes no tracked file:
+1. Save each file in `.scratch/`. When git doesn't ignore that folder yet, add it to the clone's own
+   exclude file, which changes no tracked file:
 
    ```bash
    git check-ignore -q .scratch/ || echo .scratch/ >> "$(git rev-parse --git-path info/exclude)"
@@ -62,20 +65,24 @@ never write a value of one in a file you commit.
    ```
 
 2. Name the file for what it shows, in lowercase letters, digits and hyphens, such as
-   `login-form-email-error.png`. The name is part of the URL.
-3. Capture a web page with headless Chromium:
+   `settings-page-layout.png`. The name is part of the URL.
+3. Start the app, then capture the page with headless Chromium. The binary may be `chromium`,
+   `chromium-browser` or `google-chrome`, and each takes these flags:
 
    ```bash
-   chromium --headless --hide-scrollbars --window-size=1280,800 --screenshot=.scratch/login-form-email-error.png http://localhost:3000/login
+   chromium --headless --hide-scrollbars --window-size=1280,800 --screenshot=.scratch/settings-page-layout.png http://localhost:3000/settings
    ```
 
-   Expect the PNG at the `--screenshot` path. For an SVG or a diagram, pass its `file://` URL in
-   place of the page's URL. Save a recording as MP4 or WebM. GitHub shows PNG, JPEG, GIF, WebP and
-   AVIF in the PR as an image, MP4 and WebM as a link, and offers any other format as a download.
+   Expect the PNG at the `--screenshot` path. This command captures what the URL shows on a fresh
+   load. For a state that needs a sign-in or a click, such as a form error, script the browser with
+   a tool such as Playwright. For an SVG or an HTML file, pass its `file://` URL in place of the
+   page's URL.
 
-   When `command -v chromium` prints nothing, use another screenshot tool that runs without a person
-   at the screen, or stop and tell the user. For a recording, use any recorder on the machine, or
-   stop and tell the user when the machine has none.
+   When none of the Chromium binaries is installed, use another screenshot tool that runs without a
+   person at the screen, or stop and tell the user. For a recording, use any recorder on the
+   machine, or stop and tell the user when the machine has none. Save a recording as MP4 or WebM.
+   GitHub shows PNG, JPEG, GIF, WebP and AVIF in the PR as an image, MP4 and WebM as a link, and
+   offers any other format as a download.
 
 4. View the image before you upload it, with a tool that shows you images, such as your file-read
    tool. Check that it shows the change, and holds no token, secret or personal data. When you can't
@@ -83,18 +90,19 @@ never write a value of one in a file you commit.
 
 ## Upload it
 
-Write a label first: a few words on what the file shows, such as `Login form with the email error`.
-Leave out square brackets, which break the Markdown line. The file host stores the label, and you
-use it as the alt text on both paths.
+Write a label first: a few words on what the file shows, such as
+`Settings page with the new layout`. Leave out square brackets, which break the Markdown line, and
+apostrophes, which break the shell quotes in the commands below. The file host stores the label, and
+you use it as the alt text on both paths.
 
 Set `expires` to `30d` on both paths. Without `expires`, the file host deletes the file after 7
 days, which breaks the image in a PR that stays open longer than a week. Never set `expires` to
-`never`: the image only needs to last through the review.
+`never`: the image needs to last only through the review.
 
 - With the `cloud` CLI:
 
   ```bash
-  cloud up .scratch/login-form-email-error.png --label 'Login form with the email error' --expires 30d --md
+  cloud up .scratch/settings-page-layout.png --label 'Settings page with the new layout' --expires 30d --md
   ```
 
   Expect the Markdown line, with the label as the alt text. On a failure it prints an error, prints
@@ -104,23 +112,15 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
 - With `curl`, pass the label with `--form-string`. `-F` cuts a label at a `;`.
 
   ```bash
-  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "$VERIFY_UPLOAD_TOKEN_REF")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$VERIFY_UPLOAD_URL"
+  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "$VERIFY_UPLOAD_TOKEN_REF")" -F file=@.scratch/settings-page-layout.png --form-string 'label=Settings page with the new layout' -F expires=30d "$VERIFY_UPLOAD_URL"
   ```
 
-  Expect a JSON body, then `HTTP 201`. Check that the body's `expiresAt`, an ISO 8601 timestamp,
-  falls on the date 30 days from today, in UTC. Then write the line from the body's `label` and
-  `url`: `![<label>](<url>)`.
+  Expect a JSON body, then `HTTP 201`. Check that the date in the body's `expiresAt`, an ISO 8601
+  timestamp, is 30 days from today in UTC, give or take one day. Then write the line from the body's
+  `label` and `url`: `![<label>](<url>)`.
 
   Any other status means the upload failed, and the body's `message` holds the reason. When the
   upload fails or `expiresAt` is wrong, stop and tell the user.
-
-- A project's verify report uploads through the same two variables. Its `bun verify publish` command
-  reads the address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`. Fill the
-  token for that one command:
-
-  ```bash
-  VERIFY_UPLOAD_TOKEN="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" bun verify publish --pr <n>
-  ```
 
 ## Put it in the PR
 
@@ -134,8 +134,25 @@ number `<n>`:
    code block. When no entry matches, put it at the end.
 3. Write the body back: `gh pr edit <n> --body-file .scratch/pr-body.md`. Expect the PR's URL.
 
-For an issue, use `gh issue view` and `gh issue edit` the same way. For a reply to a review comment,
-post the line with
-`gh api repos/<owner>/<repo>/pulls/<n>/comments/<comment id>/replies -f body='<line>'`.
+For an issue, use `gh issue view` and `gh issue edit` the same way.
+
+For a reply to a review comment, find the comment's `id` in
+`gh api repos/<owner>/<repo>/pulls/<n>/comments`, where `<owner>/<repo>` is the PR's repo. Then post
+the line:
+
+```bash
+gh api repos/<owner>/<repo>/pulls/<n>/comments/<comment id>/replies -f body='<line>'
+```
+
+## Publish a verify report
+
+When the repo has a `bun verify` script, its `bun verify publish` command uploads the verify report
+and writes it into the PR itself, so skip the steps above for the report. The command reads the
+address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`. Fill that token from
+1Password for the one command, and never export it:
+
+```bash
+VERIFY_UPLOAD_TOKEN="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" bun verify publish --pr <n>
+```
 
 **Reply:** the Markdown line you added.
