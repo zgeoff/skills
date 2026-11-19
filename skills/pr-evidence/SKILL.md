@@ -121,8 +121,8 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
   (token="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" && curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$token" -F file=@.scratch/settings-page-layout.png --form-string 'label=Settings page with the new layout' -F expires=30d "$VERIFY_UPLOAD_URL")
   ```
 
-  A failed `op read` stops the command before `curl` runs. The subshell keeps the token out of your
-  shell.
+  The subshell keeps the token out of your shell. When `op read` fails, `curl` never runs and no
+  `HTTP` line prints: stop, and give the user the `op` error.
 
   Expect a JSON body, then `HTTP 201`. Check that the date in the body's `expiresAt`, an ISO 8601
   timestamp, is 30 days from today in UTC, give or take one day. Then write the line from the body's
@@ -163,14 +163,14 @@ report, skip [Save and capture](#save-and-capture), [Upload it](#upload-it) and
 The command needs both variables set, even on a machine with the `cloud` CLI. Run the `test -n`
 check and the `op read` check from [Pick the upload path](#pick-the-upload-path) first.
 
-The command reads the address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`.
-Set the token from 1Password for this command only:
+Push the branch and open the PR first: without an open PR, the command fails. The command reads the
+address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`. Set the token from
+1Password for this command only:
 
 ```bash
 (token="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" && VERIFY_UPLOAD_TOKEN="$token" bun verify publish --pr <n>)
 ```
 
-Push the branch and open the PR first. Without an open PR, the command fails. Expect `ok: true` and
-the PR's URL in the output. On a failure, stop and tell the user.
+Expect `ok: true` and the PR's URL in the output. On a failure, stop and tell the user.
 
 **Reply:** the Markdown line you added, or the PR URL that `bun verify publish` printed.
