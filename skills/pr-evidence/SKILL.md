@@ -118,8 +118,11 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
 - With `curl`, pass the label with `--form-string`. `-F` cuts a label at a `;`.
 
   ```bash
-  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "$VERIFY_UPLOAD_TOKEN_REF")" -F file=@.scratch/settings-page-layout.png --form-string 'label=Settings page with the new layout' -F expires=30d "$VERIFY_UPLOAD_URL"
+  (token="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" && curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$token" -F file=@.scratch/settings-page-layout.png --form-string 'label=Settings page with the new layout' -F expires=30d "$VERIFY_UPLOAD_URL")
   ```
+
+  A failed `op read` stops the command before `curl` runs. The subshell keeps the token out of your
+  shell.
 
   Expect a JSON body, then `HTTP 201`. Check that the date in the body's `expiresAt`, an ISO 8601
   timestamp, is 30 days from today in UTC, give or take one day. Then write the line from the body's
