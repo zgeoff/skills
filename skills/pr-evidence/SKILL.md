@@ -171,6 +171,7 @@ address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`. S
 (token="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" && VERIFY_UPLOAD_TOKEN="$token" bun verify publish --pr <n>)
 ```
 
-Expect `ok: true` and the PR's URL in the output. On a failure, stop and tell the user.
+Expect `ok: true` and the PR's URL in the output. When `op read` fails, `publish` never runs: stop,
+and give the user the `op` error. On any other failure, stop and tell the user.
 
 **Reply:** the Markdown line you added, or the PR URL that `bun verify publish` printed.
