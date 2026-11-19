@@ -162,8 +162,13 @@ Give any other function any verb that fits, except the banned verbs below, such 
 - Never use `make`, `with`, `use`, `on` or `to` as a whole name. Follow it with a noun, such as
   `toPosixPath`.
 - You may start a name with `resolve` whether or not it does I/O.
-- Never start a name with one of these verbs. They say nothing about I/O or a miss:
-  - `process`, `manage`, `do`, `perform`, `execute` or `compute`;
-  - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. For a database read that can miss, use
-    `read` and return `null`;
-  - `handle`, outside a callback.
+- Never start a name with one of these verbs. The
+  [`zgeoff/function-verb`](https://github.com/zgeoff/tools/blob/main/docs/architecture/oxlint-config-code-style.md)
+  rule flags each one.
+  - `process`, `manage`, `do`, `perform`, `execute` or `compute`. They name no job, so name what the
+    function does, such as `run` for a subprocess or `build` for a value from arguments;
+  - `fetch`, `save`, `store`, `delete`, `search` or `lookup`. The table gives that job a verb and a
+    guarantee: use `read` for `fetch`, `write` for `save` and `store`, `remove` for `delete`, and
+    `find` for `search` and `lookup`. For a database read that can miss, use `read` and return
+    `null`;
+  - `handle`, outside its table row. Anywhere else, name what the function does.
