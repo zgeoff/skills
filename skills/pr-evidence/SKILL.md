@@ -9,9 +9,10 @@ description:
 # PR evidence
 
 Upload a screenshot or a recording to the user's file host, a web service that stores the file and
-gives back a URL. Put that URL in the PR as a Markdown line, and hand back the line. Never commit an
-image just to show a change: it stays in the repo's history forever. Anyone with the link can open
-the file, so keep every token, secret and piece of personal data out of it.
+gives back a URL. Put that URL in the PR as a Markdown line, and hand back the line. For a verify
+report, hand back the PR URL that its publish command prints. Never commit an image just to show a
+change: it stays in the repo's history forever. Anyone with the link can open the file, so keep
+every token, secret and piece of personal data out of it.
 
 ## Key rules
 
@@ -166,6 +167,7 @@ Set the token from 1Password for this command only:
 VERIFY_UPLOAD_TOKEN="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" bun verify publish --pr <n>
 ```
 
-Expect the PR's URL in the output. On a failure, stop and tell the user.
+Push the branch and open the PR first. Without an open PR, the command fails. Expect `ok: true` and
+the PR's URL in the output. On a failure, stop and tell the user.
 
 **Reply:** the Markdown line you added, or the PR URL that `bun verify publish` printed.
