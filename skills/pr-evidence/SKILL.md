@@ -16,7 +16,7 @@ the file, so keep every token, secret and piece of personal data out of it.
 ## Key rules
 
 - [Pick the upload path](#pick-the-upload-path): the `cloud` CLI, or `curl` to the address in
-  `PR_EVIDENCE_URL`; otherwise stop before you capture.
+  `VERIFY_UPLOAD_URL`; otherwise stop before you capture.
 - [Save and capture](#save-and-capture): each file in `.scratch/`, kept out of git, named for what
   it shows.
 - [Upload it](#upload-it): with a label and a 30-day expiry, and check the file host's response.
@@ -26,27 +26,26 @@ the file, so keep every token, secret and piece of personal data out of it.
 
 Pick the path before you capture anything. Take the first row that matches:
 
-| Check                                                                                               | Path                                        |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `command -v cloud` prints a path                                                                    | the `cloud` CLI, the file host's own client |
-| `test -n "$PR_EVIDENCE_URL" && test -n "${PR_EVIDENCE_TOKEN_PATH:-$PR_EVIDENCE_TOKEN_REF}"` is true | `curl`                                      |
-| neither                                                                                             | none: stop and tell the user                |
+| Check                                                                        | Path                                        |
+| ---------------------------------------------------------------------------- | ------------------------------------------- |
+| `command -v cloud` prints a path                                             | the `cloud` CLI, the file host's own client |
+| `test -n "$VERIFY_UPLOAD_URL" && test -n "$VERIFY_UPLOAD_TOKEN_REF"` is true | `curl`                                      |
+| neither                                                                      | none: stop and tell the user                |
 
 The user sets these variables on the machine:
 
-- `PR_EVIDENCE_URL`: the file host's upload address, such as `https://files.example.com/api/files`.
-- `PR_EVIDENCE_TOKEN_PATH`: where 1Password keeps the upload token, as `<vault>/<item>/<field>`.
-- `PR_EVIDENCE_TOKEN_REF`: the same place as an `op://<vault>/<item>/<field>` reference. A machine
-  sets this one or the token path, and the token path wins when both are set.
+- `VERIFY_UPLOAD_URL`: the file host's upload address, such as
+  `https://files.example.com/api/files`.
+- `VERIFY_UPLOAD_TOKEN_REF`: where 1Password keeps the upload token, as a full
+  `op://<vault>/<item>/<field>` reference.
 
-`op run` resolves every `op://` value in its environment, and fails on one its token can't read. So
-the token path has no `op://` prefix. Build the reference only inside an `op read` call, as the
-commands below do, and never export it.
+The machine never holds the raw token in its environment. Read the token with `op read` inside the
+one command that needs it, as the commands below do, and never export it.
 
 The `curl` path also needs the 1Password `op` CLI, signed in. Run this check:
 
 ```bash
-op read "op://${PR_EVIDENCE_TOKEN_PATH:-${PR_EVIDENCE_TOKEN_REF#op://}}" > /dev/null
+op read "$VERIFY_UPLOAD_TOKEN_REF" > /dev/null
 ```
 
 When it fails, stop and give the user `op`'s error. Never set any of these variables yourself, and
@@ -105,7 +104,7 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
 - With `curl`, pass the label with `--form-string`. `-F` cuts a label at a `;`.
 
   ```bash
-  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "op://${PR_EVIDENCE_TOKEN_PATH:-${PR_EVIDENCE_TOKEN_REF#op://}}")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$PR_EVIDENCE_URL"
+  curl -sS -w '\nHTTP %{http_code}\n' --oauth2-bearer "$(op read "$VERIFY_UPLOAD_TOKEN_REF")" -F file=@.scratch/login-form-email-error.png --form-string 'label=Login form with the email error' -F expires=30d "$VERIFY_UPLOAD_URL"
   ```
 
   Expect a JSON body, then `HTTP 201`. Check that the body's `expiresAt`, an ISO 8601 timestamp,
@@ -114,6 +113,14 @@ days, which breaks the image in a PR that stays open longer than a week. Never s
 
   Any other status means the upload failed, and the body's `message` holds the reason. When the
   upload fails or `expiresAt` is wrong, stop and tell the user.
+
+- A project's verify report uploads through the same two variables. Its `bun verify publish` command
+  reads the address from `VERIFY_UPLOAD_URL` and the raw token from `VERIFY_UPLOAD_TOKEN`. Fill the
+  token for that one command:
+
+  ```bash
+  VERIFY_UPLOAD_TOKEN="$(op read "$VERIFY_UPLOAD_TOKEN_REF")" bun verify publish --pr <n>
+  ```
 
 ## Put it in the PR
 
