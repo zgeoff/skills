@@ -6,7 +6,8 @@ installs and never edits, such as testing. A shared rule set is a shared skill m
 [a rule set](#a-rule-set). When the repo installs none, no shared rule set covers the topic.
 
 - When the skill covers one repo's tools, such as its migrations or its deploy scripts, and no
-  shared rule set covers that topic, write [a machinery skill](#a-machinery-skill).
+  shared rule set covers that topic, write [a machinery skill](#a-machinery-skill). A skill that
+  fits none of these kinds is a machinery skill too.
 - When the skill teaches a way of working, such as finding out why code is the way it is, write
   [a method skill](#a-method-skill).
 - When the skill holds rules the agent applies while it writes something else, such as a code style,
@@ -40,38 +41,30 @@ differs from the skill's folder name.
 ## A machinery skill
 
 Write a machinery skill in the repo it covers, at `.agents/skills/<name>/SKILL.md`. Say what it
-covers in the opening paragraph. Then give each of these a `##` section:
+covers in the opening paragraph. Then give the commands a `##` section: a table when there's more
+than one, with a column for the command and a column for what it needs to run, such as a running
+database or an environment variable. Name the columns for what they hold, such as Command and Needs.
 
-- the commands, in a table when there's more than one, with a column for the command and a column
-  for what it needs to run, such as a running database or an environment variable. Name the columns
-  for what they hold, such as Command and Needs;
-- the mistakes to avoid, each as a bullet that gives the fact and then what to do about it.
+When an agent has made a mistake that the source doesn't prevent, add a `##` section of mistakes to
+avoid, each as a bullet that gives the fact and then what to do about it. Add each only as SKILL.md
+says: after an agent made it, with where. Write no such section before then.
 
-Name the main mistakes in the opening paragraph too, as SKILL.md says, and give each one its bullet
-in the mistakes section.
-
-Add a mistake only if an agent with the source open would still lose time to it. A made-up example
-of a mistake worth adding, in a skill at `.agents/skills/<name>/SKILL.md`:
-
-```markdown
-- **The theme cache outlives a test.** [`loadTheme`](../../../src/theme/load-theme.ts) memoises per
-  process, so a test that changes a theme file calls `resetThemes()` first.
-```
-
-When the agent only runs commands, end the skill without a reply line. When the agent writes
-something for a reader, such as a report, name the reader in the opening paragraph, next to what the
-agent hands back. Then end the skill with a reply line.
+When the agent only runs commands, end the skill without a reply line. When the agent edits code,
+end with a reply line that names what changed. When the agent writes something for a reader, such as
+a report, name the reader in the opening paragraph, next to what the agent hands back. Then end the
+skill with a reply line.
 
 ## A method skill
 
 Put these in the opening paragraph, beside the job:
 
 - the attitude you want the agent to take to the work, such as "treat a comment as stale until the
-  code agrees with it", and the mistakes the agent avoids when it holds that attitude;
+  code agrees with it";
 - who reads the agent's output, and what they do with it.
 
-After `## Key rules` and `## References`, write numbered steps, each with the decision the agent
-makes in it, such as when to stop. End with a reply line.
+After `## Key rules` and `## References`, write one `##` heading for each step, with no number in
+it. Under each, give the decision the agent makes in that step, such as when to stop. End with a
+reply line.
 
 When the user can also start the skill, such as with a slash command, still address the whole skill
 to the agent. Put how to word the answer for the user in its own section, such as "When the user
@@ -106,7 +99,8 @@ skill wins. Read the shared rule set before you write, so you know which rules t
 which it follows.
 
 Put the repo's own rules in the `project-` folder, and never edit a shared skill's folder. The next
-update of the shared skills overwrites that folder. In the zgeoff repos,
+update of the shared skills overwrites that folder. Repo setup owns the `.claude/skills` link: a
+project skill expects it, and never creates it when it is missing. In the zgeoff repos,
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) makes that
 update, and never touches a `project-` folder.
 
@@ -126,6 +120,10 @@ order:
      host's API decides.
    - Put each stricter rule the repo adds in a topic section from step 3, never under Departures.
      The [code-style](../../code-style/SKILL.md) skill allows a repo to add stricter rules.
+
+   In a project skill other than project-code-style, a stricter rule that replaces no shared rule
+   also goes in a topic section, never under Departures.
+
 3. Then add one `##` section for each topic of the repo that the shared rule set can't know, such as
    a test harness or a test helper.
 
