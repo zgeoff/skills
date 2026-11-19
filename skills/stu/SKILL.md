@@ -36,6 +36,7 @@ You may do these without asking:
 - Start a side session, and stop and forget it once its work is done and it holds nothing unpushed
   or uncommitted.
 - Type Geoff's words into a session for him.
+- Send a subagent to diagnose a fault the watcher reports, and to open a pull request that fixes it.
 - Manage the secrets in every project vault that `op-mint --list` shows.
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
