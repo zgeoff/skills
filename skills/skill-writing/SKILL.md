@@ -130,7 +130,7 @@ leaves the agent unsure which one to follow. Call each thing by one name: the ag
 word as a second thing.
 
 Add a mistake to a skill only after an agent made it, and cite where: the session, the PR or the
-review. Never list mistakes in advance.
+review.
 
 Leave out anything time-bound, like "until the next release": it goes false unnoticed.
 
