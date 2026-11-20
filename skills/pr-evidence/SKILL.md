@@ -16,8 +16,9 @@ every token, secret and piece of personal data out of it.
 
 ## Key rules
 
-- [Pick the upload path](#pick-the-upload-path): the `cloud` CLI, or `curl` to the address in
-  `VERIFY_UPLOAD_URL`; otherwise stop before you capture.
+- [Pick the upload path](#pick-the-upload-path): the `cloud` CLI, or `curl` with the
+  `VERIFY_UPLOAD_URL` and `VERIFY_UPLOAD_TOKEN_REF` variables. When the `curl` path's variables are
+  unset, find their values yourself, and stop when you can't find exactly one address.
 - [Save and capture](#save-and-capture): each file in `.scratch/`, kept out of git, named for what
   it shows.
 - [Upload it](#upload-it): with a label and a 30-day expiry, and check the file host's response.
@@ -26,27 +27,21 @@ every token, secret and piece of personal data out of it.
 
 ## Pick the upload path
 
-The user sets two variables on the machine:
+Run every command in this skill from the root of the checkout. Pick the path before you capture
+anything. Take the first row that matches:
+
+| Check                                                                        | Path                                                        |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `command -v cloud` prints a path                                             | the `cloud` CLI, the file host's own client                 |
+| `test -n "$VERIFY_UPLOAD_URL" && test -n "$VERIFY_UPLOAD_TOKEN_REF"` is true | `curl`                                                      |
+| neither                                                                      | `curl`, after you [find the variables](#find-the-variables) |
+
+The `curl` path reads two variables:
 
 - `VERIFY_UPLOAD_URL`: the file host's upload address, such as
   `https://files.example.com/api/files`.
 - `VERIFY_UPLOAD_TOKEN_REF`: where 1Password keeps the upload token, as a full
   `op://<vault>/<item>/<field>` reference.
-
-Never set either variable yourself. Never write the value of either one in a file you commit.
-
-Keep the raw token out of the machine's environment. Read it with `op read` inside the command that
-needs it. Never export it. When a command reads the token only from its environment, set the token
-for that command only, as [Publish a verify report](#publish-a-verify-report) does.
-
-Run every command in this skill from the root of the checkout. Pick the path before you capture
-anything. Take the first row that matches:
-
-| Check                                                                        | Path                                        |
-| ---------------------------------------------------------------------------- | ------------------------------------------- |
-| `command -v cloud` prints a path                                             | the `cloud` CLI, the file host's own client |
-| `test -n "$VERIFY_UPLOAD_URL" && test -n "$VERIFY_UPLOAD_TOKEN_REF"` is true | `curl`                                      |
-| neither                                                                      | none: stop and tell the user                |
 
 The `curl` path also needs the 1Password `op` CLI, signed in. Run this check, and when it fails,
 stop and give the user `op`'s error:
@@ -54,6 +49,34 @@ stop and give the user `op`'s error:
 ```bash
 op read "$VERIFY_UPLOAD_TOKEN_REF" > /dev/null
 ```
+
+The raw token is the secret. Read it with `op read` inside the command that needs it, and never
+export it. When a command reads the token only from its environment, set the token for that command
+only, as [Publish a verify report](#publish-a-verify-report) does.
+
+### Find the variables
+
+Neither variable holds a secret. Find each value that is unset:
+
+1. List each upload address in the docs of the repos beside this one. The repo that deploys the file
+   host has its address in a runbook. The command starts from the main checkout, so it works from a
+   worktree too:
+
+   ```bash
+   grep -rhos 'https://[^ "]*/api/files' "$(git rev-parse --path-format=absolute --git-common-dir)"/../../*/docs | grep -v example | sort -u
+   ```
+
+   When it prints no address, or more than one, stop and tell the user.
+
+2. Build the token reference from the vault named after this repo. This command prints it, with the
+   repo name taken from the git remote:
+
+   ```bash
+   echo "op://$(basename -s .git "$(git remote get-url origin)")/files-upload-token/credential"
+   ```
+
+Set both variables at the start of each command that needs them, because an agent's shell may drop
+variables between commands. Never write either value in a file you commit.
 
 ## Save and capture
 
