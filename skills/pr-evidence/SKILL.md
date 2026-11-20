@@ -58,9 +58,8 @@ only, as [Publish a verify report](#publish-a-verify-report) does.
 
 Neither variable holds a secret. Find each value that is unset:
 
-1. List each upload address in the docs of the repos beside this one. The repo that deploys the file
-   host has its address in a runbook. The command starts from the main checkout, so it works from a
-   worktree too:
+1. List each upload address in the docs of the repos beside this one. The command starts from the
+   main checkout, so it works from a worktree too:
 
    ```bash
    grep -rhos 'https://[^ "]*/api/files' "$(git rev-parse --path-format=absolute --git-common-dir)"/../../*/docs | grep -v example | sort -u
@@ -75,8 +74,8 @@ Neither variable holds a secret. Find each value that is unset:
    echo "op://$(basename -s .git "$(git remote get-url origin)")/files-upload-token/credential"
    ```
 
-Set both variables at the start of each command that needs them, because an agent's shell may drop
-variables between commands. Never write either value in a file you commit.
+Set both variables on each command that needs them, because an agent's shell may drop them between
+commands. Never write either value in a file you commit.
 
 ## Save and capture
 
