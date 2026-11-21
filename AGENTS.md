@@ -74,9 +74,9 @@ can install a skill, so a skill never writes in an owner of its own.
 
 When your pull request changes a skill's `SKILL.md`, or a file under its `references/`, do every
 step in the "Check it" section of [skill-writing](skills/skill-writing/SKILL.md). Run
-`bun run check` in place of the chex command in step 1 of "Check it". This repo has no PR template,
-so add a `## Checks` heading to the PR description yourself. Under it, put the three ticked lines
-and the `Declined:` list from step 4 of "Check it", or `Declined: none.`
+`bun run check` in place of the chex command in step 1 of "Check it". Build the PR description from
+[the PR template](.github/PULL_REQUEST_TEMPLATE.md), and fill in its Checks section as step 4 of
+"Check it" says.
 
 A pull request that changes no `SKILL.md` and no file under `references/` needs only green CI.
 

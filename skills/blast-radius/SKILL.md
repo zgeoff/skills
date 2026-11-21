@@ -35,8 +35,8 @@ and prove it with code you run: an argument you only wrote down can be wrong and
 - [Prove it](#prove-it): run code that checks the fact; when you can't, say how far you got.
 - [Sort the risks](#sort-the-risks): real, ruled out or open, with the cheapest test for each real
   one.
-- [Write it into the PR](#write-it-into-the-pr): the fact, its proof and the risks, under the PR
-  template's testing heading.
+- [Write it into the PR](#write-it-into-the-pr): the fact and how far you got in the Description,
+  each risk that waits on the user under Next steps.
 - [Reply](#reply): the fact, how far you got, and the risks.
 - [When the user asks what it could break](#when-the-user-asks-what-it-could-break): the change and
   how far it reaches, drawn one step at a time, in chat.
@@ -125,40 +125,39 @@ report the risks and stop.
 
 ## Write it into the PR
 
-Put the fact, its proof and the risks in the PR description, under the PR template's heading for
-testing. When the template has none, add a Verification section. When the PR isn't open yet, add
-them when you open it. An invented example:
+Build the PR description from the repo's PR template. When the PR isn't open yet, write these in
+when you open it:
+
+- Give each fact that makes the change safe its own bullet in the Description. End it with how far
+  you got: "Ran it", "Found the line", "Traced it" or "Unproven".
+- Put the proof, each risk you ruled out and each open one in a `<details>` block at the end of the
+  Description.
+- Put each real risk that waits on the user under **Needs the owner** in Next steps, as a checkbox.
+
+An invented example:
 
 ```markdown
-**Safe because:** `clearPrefix("session:")` deletes only keys with that prefix. Ran it.
+- `clearPrefix("session:")` deletes only keys with that prefix. Ran it.
 
-<details><summary>Proof</summary>
+<details><summary>Proof and ruled out</summary>
 
 (the script, then its output)
-
-</details>
-
-**Real risks**
-
-- A key named `session:` with no suffix gets deleted too. [cache.ts L40-44](permalink). Hit by real
-  use: rarely, because only a bug writes a key with no session id. Cost: one user logged out. Check:
-  a test that sets `session:` and clears the prefix. Waits on your call: delete such keys or keep
-  them.
-
-**Ruled out**
 
 - The admin cache shares the store but uses the `admin:` prefix, so the clear never reaches it.
 - No caller outside `src/cache`: searched the repo for `clearPrefix`.
 
-**Open**
+</details>
 
-- None.
+## Next steps
+
+**Needs the owner**
+
+- [ ] Delete a key named `session:` with no suffix, or keep it. It gets deleted today, and only a
+      bug writes one. [cache.ts L40-44](permalink)
 ```
 
-After "Safe because:", say how far you got: "Ran it", "Found the line", "Traced it" or "Unproven".
-When the change needs several facts, give each its own "Safe because:" line. Push first, then link
-each line of code with a GitHub permalink at the head commit, so the reviewer lands on the exact
-lines. Update the links after a later push.
+Push first, then link each line of code with a GitHub permalink at the head commit, so the reviewer
+lands on the exact lines. Update the links after a later push.
 
 ## When the user asks what it could break
 
