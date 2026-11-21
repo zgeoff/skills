@@ -17,8 +17,8 @@ builder are.
    when they have nothing to say. Keep every other section.
 5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
    docs are fine.
-6. Show each contract once, in Contracts. In another section, name the contract and leave its shape
-   to the sketch.
+6. Show each contract once, as a code block in Contracts. In another section, name the contract and
+   leave its shape to that block.
 
 ````markdown
 # <Work name>

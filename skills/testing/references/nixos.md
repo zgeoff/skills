@@ -45,9 +45,9 @@ behaviour it checks, such as `with subtest("api restarts after a config switch")
 - Share an expensive VM between subtests, as
   [End-to-end suites](./system-tests.md#end-to-end-suites) describes. You don't need a VM per
   subtest to keep them apart.
-- Wait on a condition of the driver, such as `wait_for_unit` or `wait_until_succeeds`, where you'd
-  sleep. [System tests](./system-tests.md) rules out a sleep. Pass `timeout=` to each driver wait.
-  The default is 15 minutes, so a hang holds the run that long.
+- Wait for a condition with a driver method, such as `wait_for_unit` or `wait_until_succeeds`, and
+  never with a sleep, as [System tests](./system-tests.md) says. Pass `timeout=` to each driver
+  wait. The default is 15 minutes, so a hang holds the run that long.
 - Run the real service, systemd and kernel in the guest. Never stub the thing under test. For
   timers, see
   [Native timers and scenario delays](./system-tests.md#native-timers-and-scenario-delays).

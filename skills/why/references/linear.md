@@ -19,7 +19,8 @@ tickets in every search.
      Anyone can edit a ticket after the commit. For a decision with no commit, use the date the
      decision was recorded. Quote what existed before that date, and mark anything later with
      "(later: <date>)". When your tool shows only a last-updated date, and it comes after, mark the
-     whole description as possibly later. Date projects and their documents the same way.
+     whole description as possibly later. Date a project description and each project document the
+     same way, by its own edits.
    - Report a filled-in template line, such as "Why: improve the experience", as indirect evidence
      at most, and say it is template text.
 3. When someone marked the ticket as a duplicate of another, add the other ticket.

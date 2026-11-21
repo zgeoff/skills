@@ -24,8 +24,9 @@ flags.
   sentence with its value, such as `"stops after 3 attempts"`. Create each row's state inside the
   row. Pass no mutable state from a parent test to its subtests: when one subtest changes it, the
   subtests after it break.
-- When cases collide on shared state, give each case its own state. A random ID per case leaves the
-  shared state in place, and a later test fails on it.
+- When two cases write the same shared state, such as one database row, give each case its own copy,
+  such as its own row. A random ID per case hides the clash: the shared state stays, and a later
+  test fails on it.
 - Keep the inputs that make a row differ from the others in that row. You may share a definition
   that no row changes, such as a server config.
 - You may report a failure with an `if`, such as `if got != want { t.Errorf(...) }`. This `if`

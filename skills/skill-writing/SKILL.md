@@ -133,14 +133,14 @@ Call each thing by one name. The agent reads a second word as a second thing.
 
 Remove the cause:
 
-1. Change the code, a type, a lint rule or an error message so the wrong move fails, in the order
-   [correct](../correct/SKILL.md) gives.
-2. When the cause is outside your control, rewrite the step the agent followed so the right action
-   is the instruction: "Pass `--region` to each deploy command. The CLI defaults to the region you
-   used last."
+1. Change the code, a type, a lint rule or an error message so the wrong move fails, as
+   [correct](../correct/SKILL.md) says.
+2. When you can't change the cause, rewrite the step the agent followed so the right action is the
+   instruction: "Pass `--region` to each deploy command. The CLI defaults to the region you used
+   last."
 
-Never write a list of mistakes or a warning: either leaves the wrong step in place. Edit the rule
-that covers the mistake, and add no second rule.
+Never write a list of mistakes or a warning about one: it leaves the wrong step in place. Edit the
+rule that covers the mistake, or add one when none does.
 
 ## Check it
 
@@ -152,8 +152,8 @@ that covers the mistake, and add no second rule.
    ```
 
    While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder that holds
-   its SKILL.md. When a check flags a sentence you like, rewrite it, and tell your caller which
-   sentence and check: the check may be wrong.
+   its SKILL.md. When a check flags a sentence you like, rewrite it so the check passes, and name
+   the sentence and the check to your caller.
 
 2. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
    finds, give each changed file one more cold read, and stop.
