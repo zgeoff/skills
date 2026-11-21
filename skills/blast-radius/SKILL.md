@@ -125,16 +125,17 @@ report the risks and stop.
 
 ## Write it into the PR
 
-Build the PR description from the repo's PR template, or edit the description of an open PR. When
-the repo has no template, use a `## Description` and a `## Next steps` heading yourself. When its
-template uses other headings, put the fact and the proof under its summary heading, and the risks
-under its heading for follow-up work.
+Build the PR description from the repo's PR template, or edit the description of an open PR. The
+bullets below name the shared template's sections. When the repo's template uses other headings, put
+the Description parts under its summary heading and the Next steps parts under its heading for
+follow-up work. When the repo has no template, use a `## Description` and a `## Next steps` heading
+yourself.
 
-- Give the fact that makes the change safe one of the Description's bullets, of which the template
-  allows 4. End it with how far you got: "Ran it", "Found the line", "Traced it" or "Unproven".
+- Give the fact that makes the change safe one of the Description's bullets, within the template's
+  bullet limit. End it with how far you got: "Ran it", "Found the line", "Traced it" or "Unproven".
 - Put the proof, each other fact, each risk you ruled out and each open one in a `<details>` block
   at the end of the Description, after any contract code block. A script in it counts toward the
-  template's limit of 50 lines, so link a longer one.
+  template's limit on a code block, so link a longer one.
 - Put each real risk that waits on the user under **Needs the owner** in Next steps, as a checkbox
   that asks for the decision. Add what the risk costs a user and the test that would show it.
 
