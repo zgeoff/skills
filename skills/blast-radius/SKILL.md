@@ -125,14 +125,15 @@ report the risks and stop.
 
 ## Write it into the PR
 
-Build the PR description from the repo's PR template. When the PR isn't open yet, write these in
-when you open it:
+Build the PR description from the repo's PR template, or edit the description of an open PR. When
+the repo has no template, use a `## Description` and a `## Next steps` heading yourself.
 
-- Give each fact that makes the change safe its own bullet in the Description. End it with how far
-  you got: "Ran it", "Found the line", "Traced it" or "Unproven".
-- Put the proof, each risk you ruled out and each open one in a `<details>` block at the end of the
-  Description.
-- Put each real risk that waits on the user under **Needs the owner** in Next steps, as a checkbox.
+- Give the fact that makes the change safe one of the Description's bullets, which number 4 at most.
+  End it with how far you got: "Ran it", "Found the line", "Traced it" or "Unproven".
+- Put the proof, each other fact, each risk you ruled out and each open one in a `<details>` block
+  at the end of the Description.
+- Put each real risk that waits on the user under **Needs the owner** in Next steps, as a checkbox
+  that holds its cost and its check.
 
 An invented example:
 
@@ -152,8 +153,8 @@ An invented example:
 
 **Needs the owner**
 
-- [ ] Delete a key named `session:` with no suffix, or keep it. It gets deleted today, and only a
-      bug writes one. [cache.ts L40-44](permalink)
+- [ ] Delete a key named `session:` with no suffix, or keep it. Cost: one user logged out. Check: a
+      test that sets `session:` and clears the prefix. [cache.ts L40-44](permalink)
 ```
 
 Push first, then link each line of code with a GitHub permalink at the head commit, so the reviewer

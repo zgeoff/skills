@@ -158,15 +158,16 @@ the rule that covers the mistake, or add one.
    finds, give each changed file one more cold read, and stop.
 3. Run the `deslop` skill on each section you wrote or changed, the cold-read fixes included. A
    cold-read fix adds words, and the checks in step 4 don't catch padding.
-4. Run the checks again. Build the PR description from the repo's `PULL_REQUEST_TEMPLATE.md` in
-   `.github/`, and tick two lines in its `## Checks` section, each with the short hash of the commit
-   you checked:
+4. Run the checks again, and commit. Build the PR description from the repo's
+   `PULL_REQUEST_TEMPLATE.md` in `.github/`. Tick two lines in its `## Checks` section, both with
+   the short hash of that commit:
    - `- [x] Deslop (<commit>)`
    - `- [x] Cold read (<commit>)`
 
-   Leave `- [ ] chex` as it is: CI ticks it when the checks clear. After a later commit that changes
-   a skill or a doc, run steps 2 and 3 again and update both hashes. The PR-body check fails a hash
-   older than that commit.
+   Leave `- [ ] chex` as it is: CI ticks it when the checks clear. When the repo has no template,
+   add a `## Checks` section with those three lines yourself. When a later commit changes a skill, a
+   README or a file under `docs/`, run steps 2 and 3 again on what it changed, and put that commit's
+   hash on both lines. The PR-body check fails a hash older than the last such commit.
 
    Tell the user or your caller each finding you declined, and each gap in the rules, where a cold
    reader got stuck and no rule applies.
