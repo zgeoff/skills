@@ -6,18 +6,10 @@ your return, such as Gaps and Leads.
 Commits and PRs hold the written reason closest to the code. Run steps 3 to 5 on the anchor's
 commits and PRs first. Then go back to the commit that added the target.
 
-Mistakes to avoid:
-
-- **The first commit listed is the newest.** `git log` lists newest first, and the newest commit may
-  only move or rename the code. Add `--reverse` and read from the top.
-- **A shallow clone gives the wrong commit.** Its oldest commit looks as if it added every file, so
-  every history search, such as `git log -S`, stops there. Check the clone first.
-- **`-S` on a name misses a changed value.** It finds the commit that added the name. When the value
-  changed later, such as from 5 to 3, search for the line with the value too.
-
 1. When `git rev-parse --is-shallow-repository` prints `true`, run `git fetch --unshallow`. When the
    fetch fails, put the missing history under Gaps. Go on, and mark every history result as
-   unreliable.
+   unreliable. In a shallow clone, the oldest commit looks as if it added every file, so every
+   history search stops there.
 2. Find each commit that changed the target, scoped to its files:
 
    ```bash
@@ -25,12 +17,13 @@ Mistakes to avoid:
    git log --reverse -G '<regex>' --oneline -- <file>
    ```
 
-   `-S` finds the commits that change how many times an exact string appears. `-G` finds the commits
-   whose changed lines match a pattern, such as `MAX_RETRIES\s*=\s*3`. `-G` also catches a changed
-   value. Run both, with the target's name and with its whole line. Run each command once for each
-   of the target's files. Skip a commit that only moves, renames or formats the code. When the
-   history stops at a move, `git show --stat <hash>` on the move shows the old path. Search again
-   there.
+   `--reverse` lists the oldest commit first. Read from the top: the newest commit may only move or
+   rename the code. `-S` finds the commits that change how many times an exact string appears. `-G`
+   finds the commits whose changed lines match a pattern, such as `MAX_RETRIES\s*=\s*3`. `-G` also
+   catches a changed value. Run both, with the target's name and with its whole line. Run each
+   command once for each of the target's files. Skip a commit that only moves, renames or formats
+   the code. When the history stops at a move, `git show --stat <hash>` on the move shows the old
+   path. Search again there.
 
 3. Read each commit with `git show <hash>`. The other files it changed, and the names of its tests,
    can show why. Report what they show as indirect evidence.

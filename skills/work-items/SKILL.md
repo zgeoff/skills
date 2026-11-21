@@ -13,13 +13,6 @@ Write each work item as the whole brief of the agent that picks it up. That agen
 Hand back each item you filed or changed, whether it is ready, and each decision in it that waits on
 the owner.
 
-Avoid these mistakes:
-
-- a list of tasks in the Outcome section;
-- a fact that stays in your head;
-- behaviour that the owner never asked for;
-- an owner's decision that you settled with a guess.
-
 ## Key rules
 
 - [One item, one outcome](#one-item-one-outcome): split by outcome, never by size.

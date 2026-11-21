@@ -15,14 +15,6 @@ owner skims it in two minutes and says yes or no. The builder is the agent or pe
 it, and starts from it without asking. Settle what is costly to change later, and leave the builder
 the rest.
 
-Avoid these mistakes:
-
-- committing how the design was reached in place of the design: the options shown, the losing
-  sketches, review logs, "decided by you on 11 Nov";
-- writing to the owner, such as "a default you can change", where the builder needs the rule;
-- describing a contract in prose when a code block shows it;
-- a doc per rule or per tool, where one doc per part would do.
-
 Hand back where the design went, each decision record you wrote, and what the two tests in
 [Check it](#check-it) found and what you fixed.
 
@@ -113,8 +105,10 @@ touches, so the doc needs no separate list.
 
 Write in the present tense, about the system that the design builds.
 
-- State each decision as the rule it set. Leave out who decided, when, and the options shown in the
-  session.
+- State each decision as the rule it set. Leave out who decided, when, the options shown in the
+  session, the losing sketches and the review logs.
+- Write each rule for the builder, such as "the default is 30 days". When you write to the owner
+  instead, such as "a default you can change", the builder gets no rule.
 - Put a rejected option in its decision record. When the choice has no record, put the option in the
   PR description.
 - Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:
