@@ -32,16 +32,18 @@ server. It builds the one MSW network of the test process, patches the global `f
 the hooks that enable the network before the tests, reset it after each test and disable it at the
 end.
 
-1. Create a `network.ts` file in a `mocks/` folder, and list it under `[test] preload` in
-   `bunfig.toml`, beside the [test preload](./cleanup.md#the-test-preload). A call from a test file
-   registers its hooks for that file only.
-2. In it, call `createTestNetwork` with a `handlers` array that spreads the handler array that each
-   package exports, such as `billingHandlers`, for every package whose tests run in the process.
-   Export what it returns as `network`. A reset removes each handler that a test added with
-   `network.use(...)`, and keeps the default handlers.
-3. A request that no handler matches makes the test fail after it ends, and the error lists each
-   such request.
-4. Call `network.use(...)` in a test to add a handler until the test ends.
+1. Create a `network.ts` file in a `mocks/` folder.
+2. In it, call `createTestNetwork`, and export what it returns as `network`. In its `handlers`
+   option, spread the default handlers of every package whose tests run in the process, such as
+   `billingHandlers`.
+3. List the file under `[test] preload` in `bunfig.toml`, beside the
+   [test preload](./cleanup.md#the-test-preload). When a test file calls `createTestNetwork` itself,
+   the hooks cover that file only.
+4. In a test, add a handler with `network.use(...)`. The reset after the test removes it and keeps
+   the default handlers.
+
+Expect a test to fail after it ends when it sends a request that no handler matches. The error lists
+each such request.
 
 ```ts
 import { createTestNetwork } from '@zgeoff/testing/fetch';
