@@ -9,7 +9,7 @@ AWS SDK v3 client. Give that client a stand-in `send`.
 | -------------------------------------------------------------- | ---------------------------------------------------------------- |
 | A CLI the code runs, from the repo or installed, such as `git` | The real binary, spawned                                         |
 | A shell script                                                 | The real script, through bats or Bun's `$` ([Shell](./shell.md)) |
-| The filesystem                                                 | A real temp folder per test, made with `mkdtemp`                 |
+| The filesystem                                                 | A real temp folder per test, made with `createTempDir`           |
 | A database                                                     | The real engine, isolated per test ([Database](./database.md))   |
 | A remote HTTP or RPC service                                   | MSW handlers ([HTTP mocking](./http.md))                         |
 | A service that runs in a container, such as Redis              | The real service in a container                                  |

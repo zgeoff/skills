@@ -1,17 +1,20 @@
 # Shell script testing
 
+Write a stand-in for each program or server that the script calls and the test can't use, such as a
+fake `gh` on `PATH` or a stub webhook.
+
 Test a shell script with bats when any of these holds:
 
 - the repo already has bats, with `bats` in its dev dependencies;
-- the repo will test more than 5 shell scripts, counting the one you add;
-- the tests share a stand-in written in shell, such as a stub server.
+- the repo has tests for 5 shell scripts or more, before you add yours;
+- your tests and the repo's other shell tests share a stand-in written in shell, such as a stub
+  server.
 
 Then write a `<script>.bats` file beside the script, as [bats suites](#bats-suites) says. Otherwise,
 write a `<script>.test.ts` file beside it, which runs the real script through Bun's `$` shell, as
-[Bun's $ shell](#buns--shell) says. When a repo sets up bats, leave its `$` tests where they are.
-
-A stand-in is a fake of something the test can't use: a program on `PATH`, such as a fake `gh`, or a
-server, such as a stub webhook. The rules in [SKILL.md](../SKILL.md) cover both kinds of test.
+[Bun's $ shell](#buns--shell) says. When you add bats to a repo, leave its `$` tests as they are,
+and write each new test in bats. The rules in [SKILL.md](../SKILL.md) cover bats tests and `$` tests
+alike.
 
 Never write a ShellSpec suite, or a hand-written runner: a `test-*.sh` file that runs cases and
 counts failures itself. bats already runs the cases, times them out and reports each failure. Check
@@ -28,7 +31,8 @@ every script with [ShellCheck](#shellcheck), whichever tool tests it.
    calls `node_modules/.bin/bats`, so CI and a laptop run the same version. It sets `BATS_LIB_PATH`
    to the root `node_modules`, and passes `--timing` and `--print-output-on-failure`, so a failed
    test shows what the command printed. It lists the `.bats` files that git tracks and passes them
-   to bats.
+   to bats. It takes an optional group as its first argument and passes it on as
+   `--filter-tags suite:<group>`, as [Write each test](#write-each-test) says.
 3. Add a `setup.bash` in a `bats/` folder beside the repo's other test utils. It holds what every
    file shares:
    - `bats_require_minimum_version 1.5.0`, which `run -<status>` needs. bats then warns about a
@@ -36,7 +40,7 @@ every script with [ShellCheck](#shellcheck), whichever tool tests it.
    - `bats_load_library bats-support` and `bats_load_library bats-assert`, which find the libraries
      through `BATS_LIB_PATH`.
    - `export BATS_TEST_TIMEOUT="${BATS_TEST_TIMEOUT:-30}"`, a 30-second default.
-   - The function that stops the timeout watchdog, below.
+   - The function in [Stop the timeout watchdog](#stop-the-timeout-watchdog).
 4. Have every file load `setup.bash` from both `setup_file` and `setup`, with a path relative to
    `$BATS_TEST_DIRNAME`. bats reads the timeout before a test's `setup` runs, so only `setup_file`
    can set the default. A function that `setup_file` loads never reaches the tests, so `setup` loads
@@ -74,8 +78,9 @@ new version still needs this.
 - Pass `--separate-stderr` to `run` when the test checks stderr apart from stdout.
 - Keep each stand-in server as a shell function in the `bats/` test utils folder, and `load` it.
   Stop it in `teardown`, after the watchdog.
-- Write a stand-in program as [Programs the script calls](#programs-the-script-calls) says, in a
-  folder under `$BATS_TEST_TMPDIR`. Put that folder first on `PATH` with `export`.
+- Write each stand-in program as an executable shell file with the program's name, in a folder under
+  `$BATS_TEST_TMPDIR`. Make it append its arguments to a log file in that folder and print the
+  answer the test needs. Put the folder first on `PATH` with `export`, and assert the log.
 
 Sort the files into groups, one per CI job, so a job that needs Docker runs only the files that need
 it. Tag each file with its group on the line after the shebang, as in
@@ -86,6 +91,9 @@ another group's job provides. The run script takes the group and passes
 ## Bun's $ shell
 
 ### Running the script
+
+Add `@zgeoff/testing` to the repo's dev dependencies if it isn't there. Make the temp folders and
+the stand-ins below with its `fs` and `bin` subpaths.
 
 Call the script through `$` this way:
 
@@ -99,8 +107,7 @@ Call the script through `$` this way:
 - Chain `.nothrow()`, so a nonzero exit returns its result instead of throwing. Chain `.quiet()`, so
   the script's output stays out of the test run's output.
 - When the script reads or writes files, or runs `git`, set its working directory with `.cwd(dir)`.
-  Make `dir` with `mkdtemp`, and remove it in `onTestFinished`, as [Cleanup](../SKILL.md#cleanup)
-  shows.
+  Make `dir` with `createTempDir` from `@zgeoff/testing/fs`, which removes it after the test.
 - When you set the environment with `.env({ … })`, spread `process.env` into it. `.env()` replaces
   the whole environment, so without it the script loses `PATH` and can't find `bash`, `git` or any
   other program.
@@ -114,14 +121,20 @@ Read `stdout` and `stderr` with `.toString()` before a string matcher. `$` retur
 ### Programs the script calls
 
 When the script calls a program that the test can't run, such as `gh` against GitHub, write a
-stand-in program:
+stand-in for it with `createStubBin` from `@zgeoff/testing/bin`.
 
-1. Write an executable file with the program's name into a temp folder. Start it with a
-   `#!/usr/bin/env bash` line.
-2. `chmod` it to `0o755`.
-3. Make it print the fixed answer the test needs. When it must answer differently for each argument,
-   or record its calls, follow [Test data](../SKILL.md#test-data).
-4. Put that folder first on `PATH` in `.env()`.
+1. Make a folder for the stand-ins with `createTempDir`.
+2. Call `createStubBin(folder, '<program>', { answers })`, with one answer for each call the test
+   expects, such as `{ args: ['pr', 'view'], stdout: '{"number":7}\n' }`. An answer matches a call
+   whose arguments start with its `args`, and can also set `exitCode` and `stderr`. The first unused
+   answer that matches answers each call, and the last one answers again once all are used. A call
+   that no answer matches exits 97.
+3. Put the folder first on `PATH` in `.env()`.
+4. Read the calls the script made with the stand-in's `readCalls()`, and assert their `argv`, which
+   holds the arguments without the program's name.
+
+When the stand-in must run its own logic, pass `{ script }` in place of `answers`, with the
+stand-in's own shell script.
 
 When the script waits, such as between polls, make it read the wait from an environment variable,
 with the real wait as the default. In the test, set the variable to `0`, so the test never waits in
