@@ -136,8 +136,7 @@ Remove the cause:
 1. Change the code, a type, a lint rule or an error message so the wrong move fails, as
    [correct](../correct/SKILL.md) says.
 2. When you can't change the cause, rewrite the step the agent followed so the right action is the
-   instruction: "Pass `--region` to each deploy command. The CLI defaults to the region you used
-   last."
+   instruction: "Pass `--region` to each deploy command. The CLI defaults to your last region."
 
 Never write a list of mistakes or a warning about one: it leaves the wrong step in place. Edit the
 rule that covers the mistake, or add one when none does.
