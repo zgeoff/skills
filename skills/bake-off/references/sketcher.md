@@ -51,9 +51,9 @@ under **Considered** in your reply.
 When the design your approach leads to can't meet a requirement, keep the design, and say which
 requirement it fails under **Requirements**.
 
-Read and search the repo, run no build, test or script in it, and write only in your folder. The
-other subagents read the same repo at the same time, so a file you change there changes their
-sketches too.
+Read and search the repo with read-only commands, such as `grep` and `git log`. Run no build, test
+or script in it, and write only in your folder. The other subagents read the same repo at the same
+time, so a file you change there changes their sketches too.
 
 ## Your reply
 

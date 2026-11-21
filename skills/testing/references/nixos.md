@@ -40,8 +40,9 @@ behaviour it checks, such as `with subtest("api restarts after a config switch")
 - Run the steps that depend on each other, such as a `switch-to-configuration` and a check of the
   restarted service, in one subtest.
 - Before a subtest that doesn't depend on the one before it, reset the machine to its starting
-  state, or boot a fresh one, so it inherits no tokens, files, mounts or service settings. Give the
-  reset its own subtest: dirty the state, run the reset and check the starting state.
+  state, or boot a fresh one. The subtest then inherits no tokens, files, mounts or service
+  settings. Give the reset its own subtest: dirty the state, run the reset and check the starting
+  state.
 - Share an expensive VM between subtests, as
   [End-to-end suites](./system-tests.md#end-to-end-suites) describes. You don't need a VM per
   subtest to keep them apart.

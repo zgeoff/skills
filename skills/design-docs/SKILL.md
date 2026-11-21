@@ -107,8 +107,8 @@ Write in the present tense, about the system that the design builds.
 
 - State each decision as the rule it set. Leave out who decided, when, the options shown in the
   session, the losing sketches and the review logs.
-- Write each rule for the builder, such as "the default is 30 days". A line written to the owner,
-  such as "a default you can change", leaves the builder without the rule.
+- Write each rule for the builder, such as "the default is 30 days". When you write to the owner
+  instead, such as "a default you can change", the builder gets no rule.
 - Put a rejected option in its decision record. When the choice has no record, put the option in the
   PR description.
 - Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:

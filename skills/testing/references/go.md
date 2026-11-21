@@ -22,11 +22,11 @@ flags.
   such as `TestRetryStopsAfterLastAttempt`.
 - Write a fixed table of cases as named `t.Run` subtests, one per row. Name each subtest as a short
   sentence with its value, such as `"stops after 3 attempts"`. Create each row's state inside the
-  row. Pass no mutable state from a parent test to its subtests: when one subtest changes it, the
+  row. Never pass mutable state from a parent test to its subtests: when one subtest changes it, the
   subtests after it break.
 - When two cases write the same shared state, such as one database row, give each case its own copy,
-  such as its own row. A random ID per case hides the clash: the shared state stays, and a later
-  test fails on it.
+  such as its own row. When you give each case a random ID instead, the shared state stays, and a
+  later test fails on it.
 - Keep the inputs that make a row differ from the others in that row. You may share a definition
   that no row changes, such as a server config.
 - You may report a failure with an `if`, such as `if got != want { t.Errorf(...) }`. This `if`
@@ -111,8 +111,9 @@ program writes to a path it hard-codes, such as `/var/lib/<app_name>`, see
 
 When you set up or change the CI job for Go tests in a project that uses gotestsum:
 
-- Run gotestsum with the project's `go test` flags, `-race` included. Retry no failed test, such as
-  with `--rerun-fails`, and skip none behind a check of the environment. Both hide a flaky test.
+- Run gotestsum with the project's `go test` flags, `-race` included. Never retry a failed test,
+  such as with `--rerun-fails`, or skip one behind a check of the environment. Both hide a flaky
+  test.
 - Keep its JSON output, from `--jsonfile`, as a CI artifact.
 - Print the slowest cases, with `gotestsum tool slowest`.
 - Pin gotestsum with a `tool` line in `go.mod`, which needs Go 1.24 or later.
