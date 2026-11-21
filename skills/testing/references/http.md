@@ -28,9 +28,8 @@ Contents:
 ## The test network
 
 Mock `fetch` with `createTestNetwork` from `@zgeoff/testing/fetch`, never with a hand-written MSW
-server. It builds the one MSW network of the test process, patches the global `fetch`, and registers
-the hooks that enable the network before the tests, reset it after each test and disable it at the
-end.
+server. It builds the test process's one MSW network and patches the global `fetch`. Its hooks turn
+the network on before the tests, reset it after each test, and turn it off at the end.
 
 1. Create a `network.ts` file in a `mocks/` folder.
 2. In it, call `createTestNetwork`, and export what it returns as `network`. In its `handlers`
@@ -54,8 +53,8 @@ export const network = createTestNetwork({
 });
 ```
 
-Never create a second network. `createTestNetwork` throws when the process has one already, because
-two networks patch the same `fetch`.
+Never create a second network. `createTestNetwork` throws when the process has one already. Two
+networks would patch the same `fetch`.
 
 When a suite starts its own HTTP server on the loopback interface and sends real requests to it, the
 network lets calls to `127.0.0.1`, `[::1]` and `localhost` through to Bun's own `fetch`. To use
