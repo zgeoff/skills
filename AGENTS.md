@@ -78,8 +78,8 @@ step in the "Check it" section of [skill-writing](skills/skill-writing/SKILL.md)
 [the PR template](.github/PULL_REQUEST_TEMPLATE.md), and fill in its Checks section as step 4 of
 "Check it" says.
 
-A pull request that changes no skill and no README needs only green CI: delete the template's Checks
-section.
+A pull request that changes no skill, no README and no file under `docs/` needs only green CI:
+delete the template's Checks section.
 
 ## Commits and pull requests
 
