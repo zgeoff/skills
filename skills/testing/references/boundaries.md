@@ -5,16 +5,16 @@ Find the boundary your code talks to in this table, and give the test what its r
 one exception is an SDK client that makes every call through one `send(command)` method, such as an
 AWS SDK v3 client. Give that client a stand-in `send`.
 
-| Boundary                                                       | The test uses                                                  |
-| -------------------------------------------------------------- | -------------------------------------------------------------- |
-| A CLI the code runs, from the repo or installed, such as `git` | The real binary, spawned                                       |
-| A shell script                                                 | The real script, through Bun's `$` ([Shell](./shell.md))       |
-| The filesystem                                                 | A real temp folder per test, made with `mkdtemp`               |
-| A database                                                     | The real engine, isolated per test ([Database](./database.md)) |
-| A remote HTTP or RPC service                                   | MSW handlers ([HTTP mocking](./http.md))                       |
-| A service that runs in a container, such as Redis              | The real service in a container                                |
-| An SDK client that makes every call through one `send` method  | A stand-in `send`                                              |
-| A worker the repo spawns and talks to over its own messages    | A stateful stand-in ([System tests](./system-tests.md))        |
+| Boundary                                                       | The test uses                                                    |
+| -------------------------------------------------------------- | ---------------------------------------------------------------- |
+| A CLI the code runs, from the repo or installed, such as `git` | The real binary, spawned                                         |
+| A shell script                                                 | The real script, through bats or Bun's `$` ([Shell](./shell.md)) |
+| The filesystem                                                 | A real temp folder per test, made with `createTempDir`           |
+| A database                                                     | The real engine, isolated per test ([Database](./database.md))   |
+| A remote HTTP or RPC service                                   | MSW handlers ([HTTP mocking](./http.md))                         |
+| A service that runs in a container, such as Redis              | The real service in a container                                  |
+| An SDK client that makes every call through one `send` method  | A stand-in `send`                                                |
+| A worker the repo spawns and talks to over its own messages    | A stateful stand-in ([System tests](./system-tests.md))          |
 
 ## Stand-ins
 
