@@ -17,12 +17,8 @@ builder are.
    when they have nothing to say. Keep every other section.
 5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
    docs are fine.
-
-Avoid these mistakes:
-
-- prose that retells a contract the Contracts section shows;
-- an option the owner turned down, a dated note, or a note addressed to the owner;
-- an open question with nothing named to settle it, or one the builder could settle alone.
+6. Show each contract once, in Contracts. In another section, name the contract and leave its shape
+   to the sketch.
 
 ````markdown
 # <Work name>

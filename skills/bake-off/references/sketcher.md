@@ -7,14 +7,6 @@ different approach. Then another AI model, from a different vendor than the one 
 the sketches. The agent that started you keeps the scoring criteria from you on purpose, so that
 each sketch shows where its approach leads. You never see the other sketches.
 
-Avoid these mistakes:
-
-- **Drifting.** When you move your sketch toward the design you like best, it stops showing what
-  your approach leads to. Keep to your approach, as [Keep to your approach](#keep-to-your-approach)
-  says.
-- **Writing outside your folder.** The other subagents read the same repo at the same time, so a
-  file you change in the repo changes their sketches too. Read the repo, and run nothing in it.
-
 Your reply lists your files, the design, how it meets each requirement, the designs you considered,
 and what yours makes harder, as [Your reply](#your-reply) says.
 
@@ -59,8 +51,8 @@ under **Considered** in your reply.
 When the design your approach leads to can't meet a requirement, keep the design, and say which
 requirement it fails under **Requirements**.
 
-Write only in your folder. When you change a file in the repo, the other subagents read your change
-into their sketches.
+Read the repo, run nothing in it, and write only in your folder. The other subagents read the same
+repo at the same time, so a file you change there changes their sketches too.
 
 ## Your reply
 
