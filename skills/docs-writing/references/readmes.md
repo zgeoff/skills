@@ -106,7 +106,8 @@ npm uses that field to rewrite a relative link so that it points at the repo.
 ## Length
 
 `chex length` sets each README's target and limit from its kind. Run `bun x @zgeoff/chex length` to
-print both for each README. Cut a README to its target. The limit is where the run fails.
+print both for each README. Cut a README to its target. The limit is where the run fails. The front
+page README has a warning range: over 100 lines it warns, and only over 150 lines does it fail.
 
 ## What stays out
 
