@@ -37,13 +37,12 @@ end.
    option, spread the default handlers of every package whose tests run in the process, such as
    `billingHandlers`.
 3. List the file under `[test] preload` in `bunfig.toml`, beside the
-   [test preload](./cleanup.md#the-test-preload). When a test file calls `createTestNetwork` itself,
-   the hooks cover that file only.
+   [test preload](./cleanup.md#the-test-preload), so the network covers every test file.
 4. In a test, add a handler with `network.use(...)`. The reset after the test removes it and keeps
    the default handlers.
 
-Expect a test to fail after it ends when it sends a request that no handler matches. The error lists
-each such request.
+Expect a test to fail after it ends when it sends a request that no handler matches. The failure
+lists each such request's URL.
 
 ```ts
 import { createTestNetwork } from '@zgeoff/testing/fetch';
