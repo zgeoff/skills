@@ -138,8 +138,8 @@ Remove the cause:
 2. When you can't change the cause, rewrite the step the agent followed so the right action is the
    instruction: "Pass `--region` to each deploy command. The CLI defaults to your last region."
 
-Never write a list of mistakes or a warning about one: either leaves the wrong step in place. Edit
-the rule that covers the mistake, or add one when none does.
+Never write a list of mistakes or a warning about one. The agent still follows the wrong step. Edit
+the rule that covers the mistake, or add one.
 
 ## Check it
 
@@ -151,8 +151,8 @@ the rule that covers the mistake, or add one when none does.
    ```
 
    While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder that holds
-   its SKILL.md. When a check flags a sentence you like, rewrite it to pass, and name the sentence
-   and the check to the user or your caller.
+   its SKILL.md. When a check flags a sentence you like, rewrite it until the check passes, and name
+   the sentence and the check to the user or your caller.
 
 2. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
    finds, give each changed file one more cold read, and stop.
