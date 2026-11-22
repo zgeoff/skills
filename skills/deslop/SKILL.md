@@ -39,9 +39,9 @@ When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-y
 ## Key rules
 
 - [Text you wrote](#text-you-wrote): a fresh subagent deslops it, and you check its changes.
-- [What to fix](#what-to-fix): in every file, first make the reader the subject, use plain names,
-  turn lead-ins and described processes into instructions, and fix a "so" that doesn't follow; then
-  the cleanup.
+- [What to fix](#what-to-fix): in every file, make the reader the subject, use plain names, turn
+  lead-ins and described processes into instructions, fix a "so" that doesn't follow, and do the
+  cleanup.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
 - [Change the structure](#change-the-structure): rebuild a section that still reads oddly after two
@@ -76,8 +76,8 @@ The rules behind these faults live in the [skill-writing](../skill-writing/SKILL
 "Write it plainly". Fix every fault below in every kind of text: a skill, a doc, AGENTS.md, a PR
 description, an issue, a commit message or a code comment.
 
-Items 1 to 5 leave the reader unsure what a sentence means, so fix them first. Items 6 to 10 are
-cleanup.
+Fix every fault in one pass, line by line. Items 1 to 5 leave the reader unsure what a sentence
+means, so never leave one of them in place. Items 6 to 10 are cleanup.
 
 1. **Make a person or the reader the subject.** A thing that acts like a person hides who does the
    work. So does a sentence that states a rule as what "a [noun]" does, such as "a new bed fails
@@ -180,7 +180,8 @@ it off only when the sentence is too long to read in one go.
 - The shape of numbered steps, templates, tables and report formats. An agent copies a format into
   its own output exactly. You may still edit the wording of a sentence inside a step.
 - Commands and code blocks.
-- The frontmatter. The skill-writing skill sets its form.
+- The form of the frontmatter. The skill-writing skill sets it. Fix a prose-check failure in its
+  wording.
 - A term that a check or a script depends on, such as a heading a script greps for. Search the repo
   for a term before you rename it. Rename a made-up label that only other prose uses, as
   [What to fix](#what-to-fix) says.
