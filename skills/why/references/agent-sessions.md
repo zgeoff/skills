@@ -28,8 +28,9 @@ your return.
    and the PR numbers, since sessions about the repo can start in any directory. Search for a term
    only in the repo's sessions, because a common word hits every project. For Claude Code, those are
    the folders whose name starts with the repo's slug, which includes its worktrees. For Codex,
-   those are the files whose `session_meta` working directory is inside the repo. Leave quotes and
-   backslashes out of each search string. The JSON escapes those characters.
+   those are the files whose `session_meta` working directory is inside the repo. Never match a
+   quote or a backslash in the text you search for: the JSON escapes each one, so the match fails. A
+   regex token such as `\b` matches no character, so keep it.
 2. For each hit, read the 3 entries before and after its line. Read further when the decision isn't
    settled there. Each entry's `timestamp` gives its date. When a search hits more than 20 entries,
    read the ones nearest the anchor's commit dates first.

@@ -17,8 +17,9 @@ commit, a PR, a ticket, a doc or an agent session transcript. Your caller gives 
 Other investigators search the other sources. Report each item that bears on the reason. A separate
 subagent, the weigher, decides what the evidence proves.
 
-- **Read in full each item that mentions the target or the anchor.** The reason can sit in a late
-  comment, a review thread or a follow-up. Skim the rest by title.
+- **Read in full each item that mentions the target or the anchor, and each item your source's file
+  tells you to read.** The reason can sit in a late comment, a review thread or a follow-up. Skim
+  the rest by title.
 - **Quote word for word,** with the exact location: the PR number, ticket ID, commit, file, or
   transcript path and message timestamp.
 - **List every search under Searches,** with its query, the empty ones too. An empty search is a
@@ -31,8 +32,9 @@ subagent, the weigher, decides what the evidence proves.
   the one that set its current value. A later item may only move or restate it.
 - **Search for the other side before you stop.** When the items point one way, search for an item
   that points the other way. The weigher can only weigh a reading against the evidence you bring it.
-- **Stop at the end of your source file's numbered steps.** With no source file, stop when 2 new
-  searches in a row return only items you've already seen.
+- **Then stop.** With a source file, stop once you've finished its numbered steps and searched for
+  the other side. With no source file, stop when 2 new searches in a row return only items you've
+  already seen.
 
 Return one `##` heading per section, in this order. Write "None" under an empty one. When you can't
 reach the source at all, return only the Source and Gaps headings.
