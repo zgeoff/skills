@@ -34,7 +34,7 @@ Hand back:
 - [Run it](#run-it): your answers first, then one fresh subagent per file, or one for several short
   files, told nothing about the change.
 - [Act on it](#act-on-it): turn each finding into a change in the repo: a fix to the file or the
-  rules file, or a rule that closes a gap. Hand on a finding for a rules file or a file someone else
+  rules file, or a rule that closes a gap. Hand on a finding for a file another session or person
   owns.
 - [Read it again](#read-it-again): at most 3 reads of a file in a pull request, stopping at a clean
   read, then deslop what you changed.
@@ -71,8 +71,8 @@ Hand back:
    question this file has no need to answer, such as commands in a skill that runs none. When your
    answer to question 5 gives a limit no reason, note it as a gap only when the limit looks
    arbitrary to someone without your context. When the rules have a reference for the file's kind,
-   such as READMEs, a question that reference doesn't ask for doesn't apply. When a question applies
-   and you can't answer it, note it as a gap in the file or in the rules.
+   such as READMEs, write "doesn't apply" for each question outside that reference. When a question
+   applies and you can't answer it, note it as a gap in the file or in the rules.
 5. Spawn one `general-purpose` subagent for each file you check, in parallel. A skill's SKILL.md and
    each of its references are separate files. Give files of 10 lines or fewer, such as package
    READMEs, to one subagent together, and list each on the prompt's file line. Never use a fork: a
@@ -93,8 +93,8 @@ Hand back:
 ## Act on it
 
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
-same facts, in any words. Where your answer is "doesn't apply", count two answers as matching: "Not
-answered", and an answer that says the file covers no such thing.
+same facts, in any words. Where your answer is "doesn't apply", count either "Not answered" or an
+answer that says the file covers no such thing as a match.
 
 Turn every finding into a change to text in the repo, or hand it on as the last two bullets below
 say. Another session never sees a call you made only in your head. Its cold reader raises the same
@@ -125,7 +125,7 @@ finding again.
 - **Hand a shared-rules gap to your caller** when another session owns that rules file, and count
   the finding as acted on.
 - **Hand each finding to the file's owner** when someone else owns the file, such as a skill another
-  agent writes for itself, or a file only the user may change. Read it, and edit nothing.
+  agent writes for itself, or a file only the user may change. Read the file, and edit nothing.
 
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.
@@ -140,9 +140,9 @@ Give each file at most 3 reads in one pull request, or in one task when there's 
 1. When a read is clean, go to step 4.
 2. Otherwise read the file again, whole, with a fresh subagent and the same prompt. Keep your
    answers, unless you changed what the file is meant to say.
-3. Act on each read the same way. After the third read, go to step 4, and hand back each answer that
-   still differs. No read checks a fix you make after the third read, so hand back each such fix as
-   unread.
+3. Act on each read as [Act on it](#act-on-it) says. After the third read, go to step 4, and hand
+   back each answer that still differs. You get no read to check a fix you make after the third
+   read, so hand back each such fix as unread.
 4. Run the [deslop](../deslop/SKILL.md) skill on each section you changed, then the scripted checks
    from [Run it](#run-it).
 

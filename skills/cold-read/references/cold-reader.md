@@ -10,30 +10,31 @@ says something the author didn't mean. So answer from what the file says, never 
 sensible.
 
 You're done when you hand back one report for each file, in the format under
-[The report](#the-report), or the one line on a missing input that [What to read](#what-to-read)
-asks for.
+[The report](#the-report), or one of the one-line reports in [What to read](#what-to-read).
 
 ## What to read
 
-Your prompt gives you the file, what it is (a doc or a skill), and the rules files. When it gives
-several files, answer for each file from that file alone, and hand back one report per file. When
-you can't read a file, report that alone for that file. When the prompt leaves out one of these,
-report that alone and stop. Answers without them would mislead the author.
+In your prompt, find the file, what it is (a doc or a skill), and the rules files. When one of these
+is missing, hand back one line that names it, and stop. Answers without it would mislead the author.
+When there are several files, answer for each file from that file alone, and hand back one report
+per file. When you can't read a file, hand back one line that says so in place of that file's
+report.
 
-Read the file. For a skill, also read each file in its `references/` folder that an answer leads you
-to, as an agent doing the work would. For a file in a skill's `references/`, also read each section
-of its SKILL.md that links to the file: an agent opens the reference from there. Read the rules
-files only for [Contradictions](#contradictions). Skip linked code, linked docs, the repo and its
-history. The real reader may have them, but the file has to work without them.
+Read the file. For a skill, also read each file in its `references/` folder that you need for an
+answer, as an agent doing the work would. For a file in a skill's `references/`, also read each
+section of its SKILL.md that links to the file: an agent opens the reference from there. Read the
+rules files only for [Contradictions](#contradictions). Skip any other linked code or doc, the repo
+and its history. The real reader may have them, but the file has to work without them.
 
 ## The questions
 
 Answer each question in two to four plain sentences of your own, with the line numbers you relied
 on. Give only what the file says. Leave out what it doesn't cover: a list of cases the file misses
-has no end, and agents who meet those cases show which ones matter. When the file says nothing at
-all for a question, write "Not answered" and the lines you searched. When it gives two answers,
+has no end, and agents who meet those cases show which ones matter. When you find nothing in the
+file for a question, write "Not answered" and the lines you searched. When you find two answers,
 quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
-back, write that. Write "doesn't apply" for each question this table gives for the file's kind:
+back, write that. For each kind of file in this table, write "doesn't apply" for the questions in
+its second column:
 
 | Kind of file                                                    | Questions that don't apply |
 | --------------------------------------------------------------- | -------------------------- |
@@ -45,10 +46,10 @@ back, write that. Write "doesn't apply" for each question this table gives for t
 | The README of a package                                         | 1, 3 and 4                 |
 | The docs index, `README.md` in `docs/`                          | 1, 2 and 4                 |
 
-The SKILL.md line that links a reference says when to open it, and SKILL.md holds the hand-back. A
-brief, such as this file, holds its own hand-back. An agent never decides when to load a file it
-always has loaded. A reader opens an architecture doc before they change the subsystem, and a
-package README or the docs index only points at other docs.
+You learn when to open a reference from the SKILL.md line that links it, and you find its hand-back
+in SKILL.md. A brief, such as this file, holds its own hand-back. An agent never decides when to
+load a file it always has loaded. A reader opens an architecture doc before they change the
+subsystem, and a package README or the docs index only points at other docs.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
@@ -79,7 +80,7 @@ it, and skip wording, voice and style. Other checks cover them.
 
 ## The report
 
-Return only this report, or the one line on a missing input from [What to read](#what-to-read).
+Hand back only this report, or one of the one-line reports in [What to read](#what-to-read).
 
 ```text
 ## Cold read: <path>
