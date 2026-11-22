@@ -70,8 +70,9 @@ time and median in this skill as [Run times](./references/run-times.md) says.
   of runs on `main`, set twice the budget plus the job's median time outside its tests.
 - Set twice the median time on a job with no tests, and never less than 5 minutes.
 - Set the repo variable `BUN_CHECK_TIMEOUT_MINUTES` to the slowest test job's timeout.
-  `bun-checks.yml` gives that timeout to each job that runs tests, and 5 minutes to each job that
-  runs none. In a workflow you write that calls `bun-checks.yml`, pass the variable the way
+  `bun-checks.yml` gives that one timeout to each of its jobs that runs tests, and 5 minutes to each
+  of its jobs that runs none. Set each job you write by the bullets above. In a workflow you write
+  that calls `bun-checks.yml`, pass the variable the way
   [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/src/workflow-callers/pr.yml) does.
 
 ## Reusable workflows
