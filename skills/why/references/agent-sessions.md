@@ -1,13 +1,15 @@
 # Agent sessions
 
-Your caller also gave you investigator.md, which defines the target, the anchor and the sections of
-your return, such as Gaps and Leads.
+Read this file after investigator.md when your caller makes you the investigator for agent sessions.
+investigator.md defines the target, the anchor and the sections of your return, such as Gaps and
+Leads. You're done after step 5.
 
 The user makes decisions in chats with agents, and the chat can be the only record. A user's
-decision is one the user typed, or one an agent proposed and the user's next message said yes to.
-Report it as direct evidence, quoting both messages when the agent proposed it, with the user as the
-author. A transcript's entries of type `user` also hold launch prompts, tool results, task notices
-and messages from other agents. These look like the user typed them.
+decision is one the user typed, or one an agent proposed on its own and the user's next message said
+yes to. A yes to a message with several proposals is indirect evidence, as step 4 says. Report it as
+direct evidence, quoting both messages when the agent proposed it, with the user as the author. A
+transcript's entries of type `user` also hold launch prompts, tool results, task notices and
+messages from other agents. These look like the user typed them.
 
 A transcript is a `.jsonl` file with one entry per line. The transcripts live on the user's machine:
 

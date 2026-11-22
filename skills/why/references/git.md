@@ -1,10 +1,16 @@
 # Git and GitHub
 
-Your caller also gave you investigator.md, which defines the target, the anchor and the sections of
-your return, such as Gaps and Leads.
+Read this file after investigator.md when your caller makes you the investigator for commits and
+PRs. investigator.md defines the target, the anchor and the sections of your return, such as Gaps
+and Leads.
 
-Commits and PRs hold the written reason closest to the code. Run steps 3 to 5 on the anchor's
-commits and PRs first. Then go back to the commit that added the target.
+Commits and PRs hold the written reason closest to the code. Work in this order:
+
+- Run step 1.
+- Run steps 3 to 5 on the anchor's commits and PRs.
+- Run steps 2 to 7 in order, to go back to the commit that added the target.
+
+You're done after step 7.
 
 1. When `git rev-parse --is-shallow-repository` prints `true`, run `git fetch --unshallow`. When the
    fetch fails, put the missing history under Gaps. Go on, and mark every history result as

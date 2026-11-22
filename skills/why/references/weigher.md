@@ -5,7 +5,7 @@ the way it is. The record is what people wrote at the time. Add no reason the re
 reason you add reads as one somebody wrote.
 
 - When the evidence fits several stories, give them all.
-- Open a citation before you trust it.
+- Open the citations the answer leans on most before you trust them.
 - Never build a reason from the shape of the code.
 - Never assume whoever wrote the code did the right thing.
 
@@ -31,8 +31,8 @@ leads. List under Unknown any lead your caller didn't follow.
 ## Sort the reasons
 
 A reason is one answer to the question, such as "the cap protects a rate-limited API". Put each
-reason the evidence holds in Found, Inferred or Competing stories. Unknown holds what was searched
-and not found.
+reason the evidence holds in Found, Inferred or Competing stories. Unknown holds the gaps, as its
+bullet says.
 
 - **Found.** Direct evidence states the reason: a PR body, a review comment, a ticket, a code
   comment, a decision record, or an agent session where the user made the call. A reason an agent
@@ -45,9 +45,9 @@ and not found.
   incident ticket, with no review."
 - **Competing stories.** Indirect evidence fits more than one reason. Give each reason with the
   evidence for and against it. Don't pick one.
-- **Unknown.** What the investigators looked for and didn't find, with their queries. An invented
-  example: "Searched Linear for 'retry budget' and 'backoff', the 6 PRs on this file, and its agent
-  sessions. None gives a reason."
+- **Unknown.** What the investigators looked for and didn't find, with their queries, then each lead
+  nobody followed and each reason you dropped. An invented example: "Searched Linear for 'retry
+  budget' and 'backoff', the 6 PRs on this file, and its agent sessions. None gives a reason."
 
 When two investigators quote items that disagree, put both quotes beside the reason they bear on. A
 Found reason with a quote against it stays Found.
@@ -78,7 +78,8 @@ Write it in this order:
 2. Found: each reason with its quote and link.
 3. Inferred: each reason with its chain of evidence.
 4. Competing stories, when the evidence fits more than one reason.
-5. Unknown: what was searched and not found, with the queries.
+5. Unknown: what was searched and not found, with the queries; each lead nobody followed; each
+   reason you dropped.
 6. Sources: one line each, with what was searched, or the gap or skip and its reason. When the repo
    has no `## Evidence sources` section, say so here.
 7. Confidence, in one line: how many reasons are Found, and how many citations you opened and
