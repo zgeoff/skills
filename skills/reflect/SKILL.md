@@ -23,7 +23,8 @@ each lesson before anything changes.
 - **Skip a one-off.** A lesson counts when it would change what an agent does next time.
 
 Hand back the Accepted, Rejected and Backlog lists, then wait for the user to approve each Accepted
-lesson. After you apply the approved ones, hand back each file you changed and what changed.
+lesson. After you apply the approved ones, hand back each file you changed and what changed. You're
+done when each approved lesson is in its file.
 
 ## Key rules
 
@@ -48,8 +49,8 @@ folder named after the working directory where the session started, with each `/
 by `-`. In Codex, it's a `rollout-*.jsonl` file somewhere under `~/.codex/sessions/`; search it
 recursively. Find the file that holds a short phrase from this session's first user message with
 `grep -l`, which prints file names and nothing else. When several match, take the newest. Pass its
-path to the reviewers, and don't read it yourself. Open only that file: the others hold the user's
-other conversations.
+path to the reviewers, and don't read it yourself. It can be longer than your context holds, and
+each reviewer reads it whole. Open only that file. The others hold the user's other conversations.
 
 When you can't find it, write a summary of this session as a numbered list: each correction from the
 user, each mistake, and each tool or command that cost time. Paste it into each reviewer's

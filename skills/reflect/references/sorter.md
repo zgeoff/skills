@@ -22,12 +22,14 @@ Run each lesson through these tests, in order, and stop at the first it fails:
 2. **Changes what an agent does:** an agent that reads it would act differently.
 3. **Specific enough** that an agent knows when it applies.
 4. **Goes in a real file:** the Goes in line gives a skill the session used, its description,
-   AGENTS.md or a new skill. Open that path, from the repo root.
+   AGENTS.md or a new skill. Open that path, from the repo root. For a new skill, check that no
+   skill of that name exists yet.
 5. **Not covered already:** read the file the lesson goes in. Fail the lesson when the file states
    it clearly. When the file states it weakly, or where an agent would miss it, pass the lesson, as
    a change that rewords or moves the file's text.
 6. **Found by two reviewers:** two reviewers looking for different kinds of lesson rarely invent the
-   same one. Pass a lesson one reviewer found only when no earlier test was a close call.
+   same one. A lesson that only one reviewer found passes only when no earlier test was a close
+   call.
 
 Put a lesson that fails a test in Rejected. Put one that passes them all in Backlog when a lint
 rule, a script or a test could enforce it, and in Accepted otherwise. When a check could enforce
