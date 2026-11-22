@@ -1,8 +1,9 @@
 # Commands
 
-Work down the sections in the user's order of preference, one model each. A section lists the
-model's family, its command and the rules for running it. Skip a model of your own family, unless
-[Who to ask](../SKILL.md#who-to-ask) sends you to it as the fallback.
+The sections run in the user's order of preference, one model each. Run the first model whose
+family isn't yours, and move down the list only when it fails, as
+[Who to ask](../SKILL.md#who-to-ask) says. A section lists the model's family, its command and the
+rules for running it.
 
 For every model:
 
@@ -21,7 +22,7 @@ Family: OpenAI. In the user's runs, Codex answered a question in 40 seconds to 2
 review in 3 to 9 minutes.
 
 ```bash
-codex exec -s read-only -c model=gpt-6.1-sol -c model_reasoning_effort=medium \
+codex exec -s read-only -c model=gpt-6.2-sol -c model_reasoning_effort=medium \
   -o <reply.md> "$(cat <prompt.md>)" < /dev/null
 ```
 
@@ -34,7 +35,7 @@ codex exec -s read-only -c model=gpt-6.1-sol -c model_reasoning_effort=medium \
 - **Outside a git repo,** add `--skip-git-repo-check`.
 - **Pass the model with `-c model=`.** Without it, Codex uses the model in its config file, which
   can differ from the one the user picked. When the user names another model, put its name in place
-  of `gpt-6.1-sol`.
+  of `gpt-6.2-sol`.
 - **Run the `codex` CLI itself.** A plugin that wraps Codex inside another agent can default to
   write mode in your working tree.
 

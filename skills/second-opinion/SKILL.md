@@ -27,7 +27,7 @@ did, in the shape the **Reply** line at the end gives for each job.
 - [Who to ask](#who-to-ask): another model family, at medium effort; your own family only as a
   fallback, and say so.
 - [Write the prompt](#write-the-prompt): the question and the facts, never your conclusion.
-- [Ask for a reply shape](#ask-for-a-reply-shape): one shape per job, with a cap on findings.
+- [Ask for a reply shape](#ask-for-a-reply-shape): one shape per job.
 - [After the answer](#after-the-answer): reproduce each finding before you act, and say which model
   said what.
 
@@ -53,7 +53,7 @@ Ask a model from another family. [Commands](./references/commands.md) lists the 
 order of preference: take the first one whose family isn't yours. A model of your own family shares
 your training, and with it your blind spots.
 
-Run its command as written. The Codex command runs gpt-6.1-sol and the Claude command runs Opus 5.5,
+Run its command as written. The Codex command runs gpt-6.2-sol and the Claude command runs Opus 5.5,
 both at medium effort. Change the model or the effort only when the user asks.
 
 When the model fails to run, or gives no reply in 15 minutes, stop it and try the next model in the
@@ -91,14 +91,12 @@ Leave out your transcript and the answer you expect.
 
 End the prompt with the shape of the reply you want:
 
-- **Review:** at most 3 findings, each with where it is, what triggers it, what happens, and the
-  check that shows the fault. When the reviewer can run that check, the command and its output. Zero
+- **Review:** every finding, each with where it is, what triggers it, what happens, and the check
+  that shows the fault. When the reviewer can run that check, the command and its output. Zero
   findings is a valid answer.
 - **Diagnosis:** the evidence for each possible cause, the next check to run, and which cause each
   possible result of that check points to.
 - **Judge:** a score for each sketch on each criterion, with a reason, then a pick.
-
-With a cap of 3, the reviewer has to rank its findings, and you get the worst ones first.
 
 ## After the answer
 
@@ -122,5 +120,6 @@ decides what to do with them.
 
 - **Review:** each finding, whether you reproduced it, and what you did about it, then the dropped
   nits.
-- **Diagnosis:** each cause the model gave, the check you ran, and the cause it confirmed.
+- **Diagnosis:** each cause the model gave, the check you ran, the cause it confirmed, your fix,
+  and what the re-check found.
 - **Judge:** the scores, the pick, and the reason for the pick.
