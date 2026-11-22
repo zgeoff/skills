@@ -14,7 +14,8 @@ Tell the user where the work stands, and what they need to decide. The user reme
 message before the gap, and nothing after it. When this session lost track of the work too, after a
 compaction or in a new session, work out where it stands before you tell them anything. Open the
 reply with one sentence on what waits on the user. Then say what happened, and list the decisions:
-each step only the user can take.
+each step only the user can take. You're done when you've sent the reply and started the work that
+waits on no one, as [The decisions](#the-decisions) says.
 
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
@@ -26,7 +27,7 @@ each step only the user can take.
 ## Key rules
 
 - [Catch yourself up](#catch-yourself-up): only when this session lost track, from the handoff doc,
-  the chat history, and the current branches, PRs and tickets.
+  the current branches, PRs and tickets, and then the chat history.
 - [What happened](#what-happened): one sentence on what waits, then under 100 words, with a diagram
   when it helps.
 - [The decisions](#the-decisions): each with its link, what it changes for the product's users, the
@@ -39,14 +40,13 @@ doesn't count. Otherwise read, in this order:
 
 1. The handoff doc, when the repo has one in `.handoff/`. Check it against the current state, as the
    [pickup](../pickup/SKILL.md) skill says.
-2. Your chat history on the work: in Claude Code, the `.jsonl` files under `~/.claude/projects/`, in
-   the folder for this working directory, newest first. Search them for the branch names and PR
-   numbers from step 3 before you read one whole, so do step 3 first when you don't have them. In
-   another tool, skip this step.
-3. The current state:
+2. The current state:
    - the branches and worktrees;
    - each PR's state and checks, with `gh pr view`;
    - each ticket named in a PR body.
+3. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
+   directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names
+   and PR numbers from step 2 before you read one whole. In another tool, skip this step.
 
 When the chat history shows three or more tries at the same fix, load the [why](../why/SKILL.md)
 skill to find what was tried, and use its answer as evidence for a decision.
