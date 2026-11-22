@@ -61,7 +61,11 @@ Hand back:
    [The questions](./references/cold-reader.md#the-questions) for that kind of file, in a scratch
    file, before you spawn anything. Answer with what the file is meant to tell a reader. When you
    didn't write the file, take that from the file, the skills or docs that point at it, and the
-   repo. When you can't answer a question, that's a gap in the file, or in the rules: note it.
+   repo. Write "doesn't apply" for a question this kind of file has no need to answer, such as
+   commands in a skill that runs none, or a next step in an architecture doc. When the rules give
+   the file's kind a reference, such as READMEs, a question that reference doesn't ask for doesn't
+   apply. When a question does apply and you can't answer it, that's a gap in the file, or in the
+   rules: note it.
 5. Spawn one `general-purpose` subagent for each file you check, in parallel. A skill's SKILL.md and
    each of its references are separate files. Never use a fork: a fork inherits your conversation.
 6. Give each subagent this prompt and nothing else. `<skill_dir>` is the absolute path of the folder
@@ -81,7 +85,8 @@ Hand back:
 ## Act on it
 
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
-same facts, in any words.
+same facts, in any words. Where your answer is "doesn't apply", "Not answered" matches it, and so
+does an answer that says the file covers no such thing.
 
 End every finding as a change to text in the repo. Another session never sees a call you only made
 in your head, so its cold reader raises the same finding again.

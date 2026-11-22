@@ -37,9 +37,9 @@ brief or AGENTS.md:
 
 1. When do you load or open this file, and what is its job?
 2. What do you hand back, and how do you know you're done?
-3. What do you do, in what order? Name each command and what it needs.
+3. What do you do, in what order? Name each command the file gives, and what it needs.
 4. What does the file tell you to do when a step fails?
-5. What does the file tell you never to do, and why?
+5. What limits does the file set on what you do, and what reason does it give for each?
 
 For a doc, which is any other file, such as a README or a file in `docs/`:
 
