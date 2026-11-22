@@ -120,6 +120,6 @@ decides what to do with them.
 
 - **Review:** each finding, whether you reproduced it, and what you did about it, then the dropped
   nits.
-- **Diagnosis:** each cause the model gave, the check you ran, the cause it confirmed, your fix,
-  and what the re-check found.
+- **Diagnosis:** each cause the model gave, the check you ran, the cause it confirmed, your fix, and
+  what the re-check found.
 - **Judge:** the scores, the pick, and the reason for the pick.

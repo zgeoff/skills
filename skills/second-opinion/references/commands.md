@@ -1,9 +1,8 @@
 # Commands
 
-The sections run in the user's order of preference, one model each. Run the first model whose
-family isn't yours, and move down the list only when it fails, as
-[Who to ask](../SKILL.md#who-to-ask) says. A section lists the model's family, its command and the
-rules for running it.
+The sections run in the user's order of preference, one model each. Run the first model whose family
+isn't yours, and move down the list only when it fails, as [Who to ask](../SKILL.md#who-to-ask)
+says. A section lists the model's family, its command and the rules for running it.
 
 For every model:
 
