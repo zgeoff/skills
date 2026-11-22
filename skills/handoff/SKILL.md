@@ -3,8 +3,8 @@ name: handoff
 description:
   "Writes the handoff doc another agent needs to carry on the work without asking anything: the
   goal, where it stands with evidence, what's decided, what the next agent may do without asking,
-  what waits on someone, the next action, where things are, the mistakes to avoid, and what was
-  ruled out. Load it for /handoff, and before you stop work that another session will pick up."
+  what waits on someone, the next action, where things are, the steps that cost you time, and what
+  was ruled out. Load it for /handoff, and before you stop work that another session will pick up."
 ---
 
 # Handoff
@@ -69,8 +69,9 @@ under its own `##` heading. Under a section with nothing in it, write "None".
      scratch folder can vanish;
    - running processes, previews and containers, which you leave running, each with how to stop it;
    - where each secret lives, never its value.
-8. **Mistakes to avoid.** What cost you time and would cost the next agent the same, each with what
-   to do.
+8. **Do it this way.** Each step that cost you time and would cost the next agent the same, written
+   as the instruction to follow, with its reason, such as "Run the tests from `api/`. From the repo
+   root, the integration tests don't run."
 9. **Ruled out.** Each approach tried or rejected, and why, so nobody tries it again.
 
 ## Check it
