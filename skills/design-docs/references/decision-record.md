@@ -82,8 +82,8 @@ When the owner changes the decision, edit the record in place:
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
 4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A reader who
    remembers the old decision sees when it changed. The
-   [docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows this list as its
-   one exception to keeping history out of `docs/`.
+   [docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows a decision record
+   to hold its history, against the rule that keeps history out of `docs/`.
 
 ```markdown
 - Date: 2026-03-01
