@@ -27,8 +27,9 @@ alone.
 Write one decision per record, and link no design from it: the agent that
 [closes out](./design-doc.md#close-out-a-design-doc) the design deletes the design doc.
 
-1. Find the highest number in `docs/decisions/`, and take the next one. Start at `0001` when the
-   folder is empty or missing.
+1. Run `git log --all --name-only --format= -- docs/decisions/` to list every file name the folder
+   has held, deleted records included. Take the number after the highest one. Start at `0001` when
+   it lists none.
 2. Copy the block below to `docs/decisions/NNNN-<slug>.md`, where `<slug>` is the title in kebab
    case, such as `0012-urgent-emails-go-first.md`.
 3. Replace the example values. They describe an invented app.
@@ -111,9 +112,7 @@ Do every step in the PR that deletes the record:
    code comment. Point each citation at the doc from step 1. When the sentence no longer needs the
    citation, delete the citation.
 3. Delete the record with `git rm`.
-4. Renumber each later record, so the numbers stay consecutive. For each one, rename the file with
-   `git mv`, change the number in its heading, and rewrite each citation of it.
 
-Renumber even though it breaks links from outside the repo, such as in old PRs. Those links then
-point at the wrong record, or at none. Inside the repo, a gap in the numbers reads as a missing
-record. Leave a link to a file at one commit's SHA as it is: that commit still holds the old file.
+Leave the later records' numbers as they are, and never reuse the deleted number. Links from outside
+the repo, such as in old PRs, then still point at the right record. To see the record and why it
+went, run `git log` on the deleted file.
