@@ -7,8 +7,9 @@ words". Under it, write one line on why. Then give each place you changed its ow
 `-` before and `+` after, so the lines show in colour. When the fault is outside What to fix, use
 the heading "Prose check" or "Structure". Never show the whole file: the agent has it.
 
-End with short bulleted lists, each with its reasons:
+End with one bulleted list, each item with its reason:
 
-- each line the prose check flagged that you kept, and each fault you chose not to fix;
+- each candidate the prose check printed that you kept, and each fault What to fix lets you keep,
+  such as a contrast frame the reader needs;
 - each fault in a doc that you left for docs-writing;
 - each other file that uses a label you renamed.

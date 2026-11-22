@@ -42,7 +42,8 @@ Hand back:
 
 ## Run it
 
-1. From the repo root, run the scripted checks, and fix each failure in a file you changed:
+1. From the repo root, run the scripted checks, and fix each failure in a file you changed. When the
+   repo has a `check:docs` script, run the checks it lists in place of this command:
 
    ```bash
    bun x @zgeoff/chex prose length links readmes skill
@@ -63,9 +64,10 @@ Hand back:
    didn't write the file, take that from the file, the skills or docs that point at it, and the
    repo. Write "doesn't apply" for a question this kind of file has no need to answer, such as
    commands in a skill that runs none, or a next step in an architecture doc. For a file in a
-   skill's `references/`, questions 1 and 2 don't apply: the SKILL.md line that links it says when
-   to open it, and SKILL.md holds the hand-back. For a rule set and its references, questions 2 and
-   4 don't apply. When your answer to question 5 gives a limit no reason, note it as a gap only when
+   skill's `references/` that isn't a subagent's brief, questions 1 and 2 don't apply: the SKILL.md
+   line that links it says when to open it, and SKILL.md holds the hand-back. For a file that only
+   sets a format, question 4 doesn't apply. For a rule set and its references, questions 2 and 4
+   don't apply. When your answer to question 5 gives a limit no reason, note it as a gap only when
    the limit looks arbitrary to someone without your context. When the rules have a reference for
    the file's kind, such as READMEs, a question that reference doesn't ask for doesn't apply. When a
    question applies and you can't answer it, note it as a gap in the file or in the rules.
@@ -91,13 +93,14 @@ Compare each of the cold reader's answers with yours. Count an answer as matchin
 same facts, in any words. Where your answer is "doesn't apply", "Not answered" matches it, and so
 does an answer that says the file covers no such thing.
 
-Turn every finding into a change to text in the repo. Another session never sees a call you made
-only in your head. Its cold reader raises the same finding again.
+Turn every finding into a change to text in the repo, or hand it to the caller as the last bullet
+below says. Another session never sees a call you made only in your head. Its cold reader raises the
+same finding again.
 
 - **Fix the file** when the answer differs, says "Not answered", or quotes two answers, and when the
-  file contradicts itself or breaks a rule that is right for it. Fix it too when the cold reader
-  misread a sentence: a fresh reader misread it, so the next one can. When the answer lives in code,
-  say which file holds it and link that file, without copying the code.
+  file contradicts itself or a rule that is right for it. Fix it too when the cold reader misread a
+  sentence: a fresh reader misread it, so the next one can. When the answer lives in code, say which
+  file holds it and link that file, without copying the code.
 - **Fix the rules file** when the file contradicts a rule and both are right for their own case.
   Write the exception into the rule, so no later reader raises it.
 - **Close a gap** when you couldn't write your own answer, or a fix needs a rule no rules file has.

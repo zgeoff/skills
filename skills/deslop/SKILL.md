@@ -24,13 +24,15 @@ Leave everything else as it is, and add no new content.
 - **Fix the faults in What to fix, even when someone asks you to write like a named writer.** When
   you copy a writer's voice, you copy their faults too. Name the fault each change fixes, such as a
   contrast frame.
-- **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced.
+- **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced: put
+  the old line back.
 - **Leave a blunt line blunt.** Leave a short, flat line as it is: it may already work.
 
-You're done when every line has had one pass, you've reread each rewrite, and the prose check
-passes. Write your edits into the file, then hand back the changes as
-[Show the changes](#show-the-changes) says. For text outside a file, such as a PR description, hand
-back the changes and leave the source alone.
+You're done when every line of the text, or of the sections your caller named, has had one pass,
+you've reread each rewrite, and the prose check passes, or you skipped it as
+[Check each rewrite](#check-each-rewrite) allows. Write your edits into the file, then hand back the
+changes as [Show the changes](#show-the-changes) says. For text outside a file, such as a PR
+description, hand back the changes and leave the source alone.
 
 When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-you-wrote) says.
 
@@ -65,7 +67,7 @@ Deslop these sections: <each heading you wrote or changed>
 ```
 
 Read each change it hands back. Revert any that changes a fact, breaks a format, cuts a rule's
-reason, or renames a term another file uses. Then run the prose check.
+reason, or renames a term a check or script depends on. Then run the prose check.
 
 ## What to fix
 
@@ -131,8 +133,8 @@ The rules behind these faults live in the [skill-writing](../skill-writing/SKILL
 
 7. **Make a person or the reader the subject.** A thing that acts like a person hides who does the
    work. So does a sentence that states a rule as what "a [noun]" does, such as "a new bed" below.
-   Start each such sentence with what the reader does. Keep a definition, and a fact about a named
-   tool.
+   Start each such sentence with what the reader does. Keep a definition of a term the reader
+   already uses, and a fact about a named tool. Item 9 covers a made-up label.
 
    ```diff
    - The seed packet decides how deep each seed goes.
