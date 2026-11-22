@@ -83,8 +83,7 @@ can cause issues".
 
 ## What goes in
 
-**Describe the system as it is now.** Leave these out, because each goes false without anyone
-noticing:
+**Describe the system as it is now.** Leave these out:
 
 - history and plans;
 - temporary states;
@@ -92,8 +91,8 @@ noticing:
 - words that make sense only next to the old version, such as "the new endpoint", or an "also" that
   means "in addition to before".
 
-A design and a decision record are the exceptions, as [The docs/ tree](./references/docs-tree.md)
-says.
+Each goes false without anyone noticing. A design and a decision record are the exceptions, as
+[The docs/ tree](./references/docs-tree.md) says.
 
 **Cut what a reader can get from the code.** Picture a reader who has the code open. If a paragraph
 tells them nothing new, delete the whole paragraph. Keep a fact that shows only across several
@@ -102,12 +101,12 @@ files.
 **After a bug fix, rewrite the sentence the fix made false.** Don't add a paragraph. A doc that
 grows a paragraph per fix turns into a changelog.
 
-**Give each doc one job, and each fact one doc that owns it.** A doc serves one reader doing one
-task. Explain each fact, with its reason, in one doc, and link to that doc from the others. When two
-docs disagree, check the owning doc against the code, and replace the other copy with a link.
+**Give each doc one job, and each fact one doc that owns it.** Write each doc for one reader doing
+one task. Explain each fact, with its reason, in one doc, and link to that doc from the others. When
+two docs disagree, check the owning doc against the code, and replace the other copy with a link.
 
 **In a code comment,** write why the code is the way it is. The rules in this section and the house
-rules apply to it. A comment that turns off a check also holds its expiry and the PR's link, as the
+rules apply to it. When a comment turns off a check, give it an expiry and the PR's link, as the
 [correct](../correct/SKILL.md) skill says.
 
 ## House rules
@@ -160,9 +159,9 @@ A short line that sums up a rule is fine when the rule sits next to it in full.
   per cell.
 - **Procedures.** Number the steps, and give the expected outcome after each one that has one:
   "Expect: HTTP 202".
-- **Headings.** Name what the section is about. A role name such as "Overview" fits any section, so
-  it tells the reader nothing. A section name that a skill's output format sets is a format: keep
-  it. Use no horizontal rule between sections: the headings already split them.
+- **Headings.** Name what the section is about. A role name such as "Overview" fits any section and
+  tells the reader nothing. Keep a section name that a skill's output format sets: it's a format.
+  Use no horizontal rule between sections: the headings already split them.
 - **Formatting.** Tag every code block with a language, and link with a path relative to the file.
   Name what each placeholder stands for (`<service_id>`, never `xxx`), so the reader knows what to
   put there.

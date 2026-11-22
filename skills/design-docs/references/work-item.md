@@ -22,12 +22,12 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 ## Prove acceptance
 
 Write each Acceptance line and its evidence as [Acceptance](../../work-items/SKILL.md#acceptance) in
-the work-items skill says: that skill owns the rule. When the repo has a wringer verify CLI, prove
-each behaviour a user sees with its feature's verdict, and name the feature in the line. When you
-can name no evidence for a line, rewrite the line as a behaviour that a test or a verdict can prove.
+the work-items skill says. When the repo has a wringer verify CLI, prove each behaviour a user sees
+with its feature's verdict, and name the feature in the line. When you can name no evidence for a
+line, rewrite the line as a behaviour that a test or a verdict can prove.
 
-An agent runs a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`.
-The CLI uses these terms as wringer's
+Run a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`. The CLI
+uses these terms as wringer's
 [terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them:
 
 - A **feature** is a named part of the repo that has its own verdict. Its `paths` are the globs of

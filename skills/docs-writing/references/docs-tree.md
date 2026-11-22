@@ -64,8 +64,8 @@ the cap and leaves it harder to use, so don't do them:
 
 Load the [design-docs](../../design-docs/SKILL.md) skill before you write a design or a decision
 record. It sets where a design lives, its shape, and when a decision record is written and how it
-changes. A design in `docs/design/<work>.md`, or in `docs/design/<work>/` once it is split or has a
-spike, is deleted once its code is built, and a decision record stays until its decision is dropped.
+changes. Keep a design in `docs/design/<work>.md`, or in `docs/design/<work>/` once it is split or
+has a spike. Delete it once its code is built. Keep a decision record until its decision is dropped.
 
 ## Spikes
 

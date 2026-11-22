@@ -4,8 +4,8 @@ Show an agent each change, so it can check each one and revert what it rejects.
 
 Give each kind of fault you fixed one `###` heading, named in a few words, such as "Cut drama
 words". Under it, write one line on why. Then give each place you changed its own `diff` block, with
-`-` before and `+` after, so the lines show in colour. When the fault is outside What to fix, use
-the heading "Prose check" or "Structure". Never show the whole file: the agent has it.
+`-` before and `+` after. A `diff` block shows the lines in colour. When the fault is outside What
+to fix, use the heading "Prose check" or "Structure". Never show the whole file: the agent has it.
 
 End with one bulleted list, each item with its reason:
 

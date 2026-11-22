@@ -84,23 +84,23 @@ Hand back:
    ```
 
    Leave out what the file is for and what changed. The real reader won't know either. When a
-   subagent ends without its report, ask it once for the report. A read with no report doesn't
-   count.
+   subagent ends without its report, ask it once for the report. Don't count a read with no report.
 
 ## Act on it
 
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
-same facts, in any words. Where your answer is "doesn't apply", "Not answered" matches it, and so
-does an answer that says the file covers no such thing.
+same facts, in any words. Where your answer is "doesn't apply", count two answers as matching: "Not
+answered", and an answer that says the file covers no such thing.
 
 Turn every finding into a change to text in the repo, or hand it to the caller as the last bullet
 below says. Another session never sees a call you made only in your head. Its cold reader raises the
 same finding again.
 
-- **Fix the file** when the answer differs, says "Not answered", or quotes two answers, and when the
-  file contradicts itself or a rule that is right for it. Fix it too when the cold reader misread a
-  sentence: a fresh reader misread it, so the next one can. When the answer lives in code, say which
-  file holds it and link that file, without copying the code.
+- **Fix the file** when the answer differs, quotes two answers, or says "Not answered" to a question
+  your answer says applies. Fix it when the file contradicts itself or a rule that is right for it.
+  Fix it too when the cold reader misread a sentence: a fresh reader misread it, so the next one
+  can. When the answer lives in code, say which file holds it and link that file, without copying
+  the code.
 - **Fix the rules file** when the file contradicts a rule and both are right for their own case.
   Write the exception into the rule, so no later reader raises it.
 - **Close a gap** when you couldn't write your own answer, or a fix needs a rule no rules file has.

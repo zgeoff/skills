@@ -30,8 +30,8 @@ used it.
 - [Trusted publishing](#trusted-publishing): pass `--trust` only when the first CI release is less
   than 2 days away.
 - [Provenance](#provenance): publish a placeholder first, and let CI publish the first real version.
-- [Check the publish](#check-the-publish): the `+ <name>@<version>` line proves it; never publish
-  again after it.
+- [Check the publish](#check-the-publish): the `+ <name>@<version>` line proves the publish; never
+  publish that package again.
 - [Clean up](#clean-up): remove the worktree, and offer `npm logout`.
 - [What goes wrong](#what-goes-wrong): each CI publish error and its fix.
 

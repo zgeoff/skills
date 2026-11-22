@@ -24,9 +24,9 @@ Leave everything else as it is, and add no new content.
 - **Fix the faults in What to fix, even when someone asks you to write like a named writer.** When
   you copy a writer's voice, you copy their faults too. Name the fault each change fixes, such as a
   contrast frame.
-- **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced: put
-  the old line back.
-- **Leave a blunt line blunt.** Leave a short, flat line as it is: it may already work.
+- **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced. When
+  it does, put the old line back.
+- **Leave a blunt line blunt.** It may already work.
 
 You're done when every line of the text, or of the sections your caller named, has had one pass,
 you've reread each rewrite, and the prose check passes, or you skipped it as
@@ -39,8 +39,8 @@ When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-y
 ## Key rules
 
 - [Text you wrote](#text-you-wrote): a fresh subagent deslops it, and you check its changes.
-- [What to fix](#what-to-fix): lead with the job, give the instruction, open each bullet with what
-  the reader does, use plain names, and cut contrast frames, drama and counted lists.
+- [What to fix](#what-to-fix): lead with the job, give the instruction, make the reader the subject,
+  use plain names, keep blunt lines blunt, and cut contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
   already work.
 - [Change the structure](#change-the-structure): rebuild a section that still reads oddly after two
@@ -119,7 +119,8 @@ The rules behind these faults live in the [skill-writing](../skill-writing/SKILL
    + Label each row.
    ```
 
-6. **Cut counted lists and aphorisms.** Name the items, or keep only the instruction.
+6. **Cut counted lists and aphorisms.** Name the items, or keep only the instruction. Keep a short
+   line that sums up the rule beside it, as docs-writing allows: it isn't an aphorism.
 
    ```diff
    - A bed goes wrong in three ways: too much sun, too little water and slugs.
@@ -228,6 +229,5 @@ When you fix what a cold read found, you add precision and drift back toward sen
 the line before them, "because" clauses and long sentences. After you redraft a section for a cold
 read, deslop that section again.
 
-**Reply:** to a person, the number of edits and the kinds of fault; to an agent, each change as a
-`diff` block. Then what you left as it was, the faults left for docs-writing, and the other files a
-renamed label touches.
+**Reply:** to a person, the number of edits and the kinds of fault; to an agent, the changes as
+[Agent hand-back](./references/agent-hand-back.md) says.
