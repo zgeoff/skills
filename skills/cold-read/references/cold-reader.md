@@ -28,9 +28,9 @@ reader may have them, but the file has to work without them.
 Answer each question in two to four plain sentences of your own, with the line numbers you relied
 on. Give only what the file says. Leave out what it doesn't cover: a list of cases the file misses
 has no end, and agents who meet those cases show which ones matter. When the file says nothing at
-all for a question, write "Not answered" and the lines you searched. When it answers two ways, quote
-both lines. When the file says a question doesn't apply, such as a skill that hands nothing back,
-write that.
+all for a question, write "Not answered" and the lines you searched. When it gives two answers,
+quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
+back, write that.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
@@ -56,8 +56,8 @@ Answer all five, in order, before you open the rules files.
 Report each pair of sentences that can't both be true. Take each sentence from this file or from a
 rules file. Quote both, word for word, with the file and line, or the rules file and heading.
 
-Report nothing else from the rules files. A sentence that breaks a rule without contradicting it
-belongs to other checks, and so do wording, voice and style.
+Report nothing else from the rules files. Skip a sentence that breaks a rule without contradicting
+it, and skip wording, voice and style. Other checks cover them.
 
 ## The report
 

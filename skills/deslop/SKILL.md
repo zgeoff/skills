@@ -163,7 +163,8 @@ The rules behind these faults live in the [skill-writing](../skill-writing/SKILL
    ```
 
 10. **Turn a lead-in and a colon into a sentence.** Write the verb that a lead-in, such as
-    "Watering:" or "Exception:", leaves the reader to guess.
+    "Watering:" or "Exception:", leaves the reader to guess. In a skill, keep the labelled lines
+    that skill-writing asks for, such as the Key rules lines.
 
     ```diff
     - - Watering: early morning, at the roots.
@@ -196,7 +197,8 @@ Read each rewrite on its own, as if you'd never seen the old line. Look for:
 - a sentence that got longer.
 
 Then run the prose check from the repo root. The check must pass, so fix each failure, even one that
-What to fix leaves out. For text outside a file, write it to a file in your scratch folder first:
+What to fix leaves out. Outside a repo, or when chex can't run, skip the check and say so. For text
+outside a file, write it to a file in your scratch folder first:
 
 ```bash
 bun x @zgeoff/chex prose <file>

@@ -68,7 +68,7 @@ can cause issues".
   - "you", and the present tense;
   - the condition before the instruction;
   - the common case first;
-  - never "simply" or "easy" in a procedure, because a reader who is stuck reads them as blame.
+  - never "simply" or "easy" in a procedure. A reader who is stuck reads them as blame.
 - **[ASD-STE100](https://www.asd-ste100.org/), for instructions only**, meaning numbered steps and
   sentences that tell the reader what to do. Keep STE out of explanation and reference, where its
   short sentences read like orders.
@@ -123,8 +123,8 @@ skill-writing asks for: the Key rules lines, the References lines and the `**Rep
 **State the rule, then put the exception in a sentence of its own.** When there are two or more
 exceptions, list them.
 
-**Link the doc that owns a fact instead of writing "as noted above".** Repeat a noun rather than
-make the reader scroll back.
+**Link the doc that owns a fact instead of writing "as noted above".** Repeat a noun, so the reader
+doesn't have to scroll back.
 
 **Put the negation on the verb.** "The worker never retries a failed payment" is clear from its
 first words. "No worker retries a failed payment" reads as a claim about every worker until the verb
@@ -172,9 +172,9 @@ When the repo has a `check:docs` script, run the checks it lists in place of thi
 the same ones.
 
 Fix each failure in a file you changed, then run the checks again. When a check flags a sentence you
-want to keep, rewrite it until the check passes. Name each failure in a file you didn't change in
-your reply, and leave it: it belongs to another change. Outside a repo, or when chex can't run, skip
-the checks and say so in your reply.
+want to keep, rewrite it until the check passes. In your reply, name each failure in a file you
+didn't change, and leave it: it belongs to another change. Outside a repo, or when chex can't run,
+skip the checks and say so in your reply.
 
 - `chex prose` fails on what a search can find, such as banned words. Under "Candidates", it also
   prints lines that need a person's judgment. Fix each candidate that's a real fault. In the check
@@ -187,9 +187,9 @@ the checks and say so in your reply.
 - `chex skill` checks each skill, as the skill-writing skill describes.
 
 Then run the `cold-read` skill on each doc you changed, and act on what it finds, as that skill
-says. A code comment gets no cold read. You're done when the checks pass for the files you changed
-and the cold read has ended. For a skill, skill-writing runs the cold read and says when you're
-done.
+says. Skip the cold read for a code comment. You're done when the checks pass for the files you
+changed and the cold read has ended. For a skill, follow skill-writing for the cold read and for
+when you're done.
 
 **Reply:** for writing, the files you changed, the check output and what the cold read found; for a
 review, each finding with its line and the quoted rule.

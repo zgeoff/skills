@@ -171,7 +171,7 @@ the rule that covers the mistake, or add one.
    add a `## Checks` section with those three lines yourself. When a later commit changes a skill, a
    README or a file under `docs/`, run step 3 on what it changed, and put that commit's hash on the
    Deslop line. The PR-body check fails a Deslop hash older than the last such commit. Move the Cold
-   read hash only when the `cold-read` skill has you read the file again.
+   read hash only after you give the file another cold read.
 
 **Reply:** for a skill you wrote or edited, its path, its proof, the PR link, each rule you added to
 close a gap and each question for the user; for a review, each finding with its line and the quoted
