@@ -2,9 +2,9 @@
 name: how
 description:
   "Explains how a subsystem, a flow or a piece of code works, at the level a senior engineer needs
-  before changing it: what it is, its parts, the flow step by step, where each part lives, and
-  the  surprises. Reads the repo's docs first and reports where they differ from the code. Load it
-  for 'how does X work', a walkthrough before a change, and 'where should this live' or 'which layer
+  before changing it: what it is, its parts, the flow step by step, where each part lives, and the
+  surprises. Reads the repo's docs first and reports where they differ from the code. Load it for
+  'how does X work', a walkthrough before a change, and 'where should this live' or 'which layer
   owns this'. For why something is built a certain way, load the why skill."
 ---
 
@@ -12,15 +12,16 @@ description:
 
 Find out how part of a codebase works, for whoever asked. That's usually an agent about to change
 the code, often you, and it acts on the answer. When the user asked the question, write for the
-user. You read the repo's docs, then start subagents that trace the code and write the answer.
+user. Read the repo's docs, then start subagents that trace the code and write the answer.
 
-The answer has to let the reader predict what the code does in a case it never mentions. A
-line-by-line retelling gives them the function names, and they still can't predict the code. Repo
-docs go stale, so don't answer from them yourself: the subagents check each doc claim against the
-code. The answer lists each untraced stage, a stage of the flow nobody could follow in the code.
-Leave why the code is built this way to the [why](../why/SKILL.md) skill. Hand back the explainer's
-answer, written for the agent or for the user, as [Answer](#answer) and
-[When the user asked the question](#when-the-user-asked-the-question) say.
+The answer has to let the reader predict what the code does in a case it never mentions. Don't
+answer from the repo docs yourself. Docs go stale, and the subagents check each doc claim against
+the code. The answer lists each untraced stage, a stage of the flow nobody could follow in the code.
+Leave why the code is built this way to the [why](../why/SKILL.md) skill. It reads the commits, PRs
+and tickets that this skill never opens. Hand back the explainer's answer, written for the agent or
+for the user, as [Answer](#answer) and
+[When the user asked the question](#when-the-user-asked-the-question) say. You're done when you hand
+it back.
 
 ## Key rules
 
@@ -71,14 +72,14 @@ A complex question covers a subsystem across many files or services, such as "ho
 from the API to the device". Split the flow into 2 to 4 slices, each a distinct part of it, such as
 the API side, the queue and the delivery. When the architecture doc describes these parts, use its
 parts. Otherwise, follow the flow from its entry point and cut it where it changes module or
-service. In one message, start one general-purpose subagent, an explorer, for each slice, and give
-each explorer the list of every slice, so it knows where its slice stops. When every explorer has
+service. In one message, start one general-purpose subagent, an explorer, for each slice. Give each
+explorer the list of every slice, so it knows where its slice stops. When every explorer has
 returned, start one explainer with all their findings.
 
 When you can't tell which kind a question is, treat it as simple. When you treated it as simple and
-the explainer's answer opens with an "Untraced:" line, run the question again as complex: that stage
-as one slice, and your own cut of the rest. Do this once. When the second answer still opens with
-the line, hand it back with the line.
+the explainer's answer opens with an "Untraced:" line, run the question again as complex, with that
+stage as one slice and your own cut of the rest. Do this once. When the second answer still opens
+with the line, hand it back with the line. A third run won't trace that stage either.
 
 ## Answer
 
