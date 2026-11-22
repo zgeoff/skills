@@ -1,13 +1,15 @@
 # Agent sessions
 
-Your caller also gave you investigator.md, which defines the target, the anchor and the sections of
-your return, such as Gaps and Leads.
+Read this file after investigator.md when your caller makes you the investigator for agent sessions.
+investigator.md defines the target, the anchor and the sections of your return, such as Gaps and
+Leads. After step 5, search for the other side, as investigator.md says, then stop.
 
 The user makes decisions in chats with agents, and the chat can be the only record. A user's
-decision is one the user typed, or one an agent proposed and the user's next message said yes to.
-Report it as direct evidence, quoting both messages when the agent proposed it, with the user as the
-author. A transcript's entries of type `user` also hold launch prompts, tool results, task notices
-and messages from other agents. These look like the user typed them.
+decision is one the user typed, or the only proposal in an agent's message when the user's next
+message said yes to it. Report a user's decision as direct evidence, quoting both messages when the
+agent proposed it, with the user as the author. A yes to a message with several proposals is
+indirect evidence, as step 4 says. A transcript's entries of type `user` also hold launch prompts,
+tool results, task notices and messages from other agents. These look like the user typed them.
 
 A transcript is a `.jsonl` file with one entry per line. The transcripts live on the user's machine:
 
@@ -23,11 +25,12 @@ your return.
 
 1. Search with `grep -rn`, which gives each hit's file and line. Search for the anchor's ticket IDs,
    its PR numbers as `#123\b` or `pull/123`, and its terms. Search every folder for the ticket IDs
-   and the PR numbers, since sessions about the repo can start in any directory. Search for a term
-   only in the repo's sessions, because a common word hits every project. For Claude Code, those are
-   the folders whose name starts with the repo's slug, which includes its worktrees. For Codex,
-   those are the files whose `session_meta` working directory is inside the repo. Leave quotes and
-   backslashes out of each search string. The JSON escapes those characters.
+   and the PR numbers. A session about the repo can start in any directory. Search for a term only
+   in the repo's sessions. A common word hits every project. For Claude Code, the repo's sessions
+   are the folders whose name starts with the repo's slug, which includes its worktrees. For Codex,
+   those are the files whose `session_meta` working directory is inside the repo. Never match a
+   quote or a backslash in the text you search for: the JSON escapes each one, so the match fails. A
+   regex token such as `\b` matches no character, so keep it.
 2. For each hit, read the 3 entries before and after its line. Read further when the decision isn't
    settled there. Each entry's `timestamp` gives its date. When a search hits more than 20 entries,
    read the ones nearest the anchor's commit dates first.
