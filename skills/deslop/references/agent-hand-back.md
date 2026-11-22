@@ -11,4 +11,6 @@ End with one bulleted list, each item with its reason:
 
 - each candidate the prose check printed that you kept, and each fault What to fix lets you keep,
   such as a contrast frame the reader needs;
-- each other file that uses a label you renamed.
+- each other file that uses a label you renamed;
+- each sentence you changed that you know other files repeat word for word, so your caller can pick
+  one wording for all of them.

@@ -25,6 +25,9 @@ When you write or edit one, hand back the skill's path, the PR link, the proof f
 PR, put the proof from step 4 in your reply. You're done when step 4 is done. When you review one,
 hand back each finding with its line and the rule it breaks, quoted.
 
+Leave alone a skill that an agent writes for itself, in its own words: that agent sets its rules.
+Read it if you need to, and hand each finding to that agent or its owner.
+
 ## Key rules
 
 - [Write it plainly](#write-it-plainly): "you", short blunt lines, the reason beside the rule, no

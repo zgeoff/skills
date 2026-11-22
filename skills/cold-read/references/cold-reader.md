@@ -14,9 +14,10 @@ line on a missing input that [What to read](#what-to-read) asks for.
 
 ## What to read
 
-Your prompt gives you the file, what it is (a doc or a skill), and the rules files. When you can't
-read the file, or the prompt leaves one of these out, report that alone and stop. Answers without
-them would mislead the author.
+Your prompt gives you the file, what it is (a doc or a skill), and the rules files. When it gives
+several files, answer for each file from that file alone, and hand back one report per file. When
+you can't read the file, or the prompt leaves one of these out, report that alone and stop. Answers
+without them would mislead the author.
 
 Read the file. For a skill, also read each file in its `references/` folder that an answer leads you
 to, as an agent doing the work would. For a file in a skill's `references/`, also read each section
@@ -31,10 +32,22 @@ on. Give only what the file says. Leave out what it doesn't cover: a list of cas
 has no end, and agents who meet those cases show which ones matter. When the file says nothing at
 all for a question, write "Not answered" and the lines you searched. When it gives two answers,
 quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
-back, write that. For a file in a skill's `references/` that isn't a subagent's brief, write
-"doesn't apply" for questions 1 and 2. The SKILL.md line that links it says when to open it, and
-SKILL.md holds the hand-back. A brief, such as this file, holds its own hand-back. For a file that
-only sets a format and runs no step, write "doesn't apply" for question 4.
+back, write that. Write "doesn't apply" for each question this table gives for the file's kind:
+
+| Kind of file                                                    | Questions that don't apply |
+| --------------------------------------------------------------- | -------------------------- |
+| A file in a skill's `references/` that isn't a subagent's brief | 1 and 2                    |
+| A file that only sets a format and runs no step                 | 4                          |
+| A rule set, and each file in its `references/`                  | 2 and 4                    |
+| A file the agent always has loaded, such as AGENTS.md           | the "when" half of 1       |
+| An architecture doc, in `docs/architecture/`                    | 1 and 3                    |
+| The README of a package                                         | 1, 3 and 4                 |
+| The docs index, `README.md` in `docs/`                          | 1, 2 and 4                 |
+
+The SKILL.md line that links a reference says when to open it, and SKILL.md holds the hand-back. A
+brief, such as this file, holds its own hand-back. An agent never decides when to load a file it
+always has loaded. A reader opens an architecture doc before they change the subsystem, and a
+package README or the docs index only points at other docs.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
