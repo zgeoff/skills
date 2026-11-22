@@ -13,14 +13,18 @@ config file, isn't a red flag.
 
 For each red flag you find:
 
-1. Pick each criterion the red flag works against, such as a criterion about adding a feature for a
-   pass-through method.
+1. Pick each criterion the red flag works against. A pass-through method, for example, works against
+   a criterion about how easy a new feature is to add.
 2. Lower the sketch's score on each of those criteria by one point, to no lower than 1.
 3. Write the red flag's name in each cell you lowered.
 
 Count each red flag once per sketch, however often it appears. When one choice matches two red
 flags, count only the closer one. When a choice would mislead the builder and isn't in the list,
-count it as a red flag too, and give it a short name, such as "A shallow module".
+count it as a red flag too, and give it a short name, such as "A flag per caller".
+
+Hand back the score table, a reason for each score, and your pick: the sketch with the highest total
+after you lower the scores. You're done when every cell has a score and you've checked each sketch
+for each red flag.
 
 | Red flag                       | How to spot it in a sketch                                                                                                | How it misleads the builder                                                                      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |

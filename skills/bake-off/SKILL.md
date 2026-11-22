@@ -11,10 +11,10 @@ description:
 # Bake-off
 
 Before you commit to a design that will be costly to change later, get three sketches of it. Have a
-separate subagent write each sketch, each from a different approach: one agent that writes three
-sketches sticks close to its first. Write scoring criteria that the subagents never see. Compare the
-sketches, then have a model from another family, from a different vendor, score them without knowing
-which approach produced which, score them yourself, and pick one.
+separate subagent write each sketch, each from a different approach. One agent that writes three
+sketches sticks close to its first. Write scoring criteria that the subagents never see, and compare
+the sketches. Then score them yourself, and at the same time have a model from another family, from
+a different vendor, score them without knowing which approach produced which. Pick one.
 
 - **Run a bake-off only for a design that's costly to change and has more than one good answer.**
   Costly means other code will be built on it: a public API, a schema or a data format, or a
@@ -25,20 +25,21 @@ which approach produced which, score them yourself, and pick one.
 - **When you can test the answer, skip the bake-off.** When the question is which option is faster
   or smaller, measure it.
 - **Compare the sketches before anyone scores them.** When the sketches read the problem
-  differently, the problem isn't clear yet, and scores can't fix that.
+  differently, the problem isn't clear yet.
 - **Rework what you borrow.** A piece pasted from another sketch keeps that sketch's design.
 
 Hand back the report described in [Report](#report). When the user asked for the bake-off, or makes
 the design decision, also show them the sketches as their options, as
 [When the user decides](#when-the-user-decides) says. When you run the bake-off inside a plan, build
-the plan on the pick, after the user answers when the user decides.
+the plan on the pick. When the user decides, wait for their answer first.
 
 ## Key rules
 
 - [Criteria](#criteria): 3 to 6, from what the problem needs, kept from the subagents.
 - [Sketches](#sketches): 3 subagents, one per approach.
 - [Compare](#compare): when the sketches read the problem differently, report that and don't pick.
-- [Score](#score): the other model scores the sketch files alone, and you score the same way.
+- [Score](#score): the other model scores the sketch files blind, and you score the same files
+  against the same criteria.
 - [Pick](#pick): the highest total, with at most one or two ideas borrowed and reworked.
 - [Report](#report): the sketches, the scores, the pick and why, and what you borrowed.
 - [When the user decides](#when-the-user-decides): each option drawn on a diagram of the current
@@ -100,8 +101,10 @@ approach. Delete any comment about the approach. Send the other model:
 - the ask: a score from 1 to 5 per criterion per sketch, with any red flag it found, a pick, and a
   reason for each score.
 
-While it works, read every sketch whole, and score each against the same criteria, one criterion at
-a time. When second-opinion can't reach another model family, score alone, and say so.
+While it works, score the sketches yourself. You know which approach wrote each one, so the other
+model's score is the blind one. Read every sketch's files whole. Score each sketch against the same
+criteria, one criterion at a time, from its files rather than its reply. When second-opinion can't
+reach another model family, score alone, and say so.
 
 ## Pick
 
@@ -114,16 +117,18 @@ Borrow at most one or two ideas from the other sketches, and rewrite each one to
 
 ## Report
 
-- **The sketches:** every file of each sketch, in full, in a `<details>` block per sketch, because
-  you delete the scratch directory when you're done.
+- **The sketches:** every file of each sketch, in full, in a `<details>` block per sketch. The
+  report is the only copy once you delete the scratch folders.
 - **The scores:** a table with a row per criterion, a column per sketch, and a totals row. Each cell
   is `you / other model`, followed by any red flag you found.
 - **Your pick and why,** and each idea you borrowed, with the sketch it came from.
 - **The sketches you didn't pick,** and why.
 - **Who scored:** the other model's name, or why you scored alone.
 
-When the sketches read the problem differently, the report holds the sketches and what they disagree
-about, with no scores and no pick.
+When the sketches read the problem differently, put the sketches and what they disagree about in the
+report, with no scores and no pick.
+
+Once the report holds every sketch, delete the folders you made in your scratch directory.
 
 ## When the user decides
 
@@ -133,5 +138,10 @@ that same diagram, and show its `01-usage` code under the diagram. Put the score
 options, then your pick, then one question: whether the user takes your pick. Put the full report,
 with its `<details>` blocks, after the question.
 
-**Reply:** the report; when the user decides, also the options drawn through show-me, the score
-table, your pick and the question.
+When the sketches read the problem differently, tell the user what they disagree about, and ask one
+question: which reading is right. Put the full report after the question. Run the bake-off again
+once the user answers.
+
+**Reply:** the report. When the user decides, put before it the options drawn through show-me, the
+score table, your pick and the question. When the sketches read the problem differently, put before
+it what they disagree about and the question.
