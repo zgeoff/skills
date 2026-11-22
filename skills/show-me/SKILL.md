@@ -23,7 +23,7 @@ dialog can hide the message.
 ## Key rules
 
 - [When to draw a diagram](#when-to-draw-a-diagram): grounding, options, a shape, or a before and
-  after; not for a fact or a yes-or-no answer.
+  after; words for a fact, a status line or a factual yes or no.
 - [Build a diagram one part at a time](#build-a-diagram-one-part-at-a-time): frames, one new part in
   each, a line above each on what it adds, and no line over 100 characters.
 - [Draw each option on the base frame](#draw-each-option-on-the-base-frame): the same layout, with
@@ -69,10 +69,11 @@ Add more than one part to a frame only for:
 
 - two parts that make sense only together;
 - an option frame, with all of that option's changes;
-- the after frame of a before and after, with the whole change.
+- the after frame of a before and after, with the whole change;
+- a base frame the conversation already drew, shown again as one frame.
 
 In a decision message, build the base frame up inside the message only when the conversation holds
-no drawing of this system yet. Otherwise show it once, as a single frame.
+no drawing of this system yet.
 
 ````markdown
 A user publishes a recipe through the API:
@@ -115,11 +116,11 @@ in the table instead. The user compares options by what moved. A new layout hide
 
 ## Show code from the caller
 
-When the options differ in code, show the call site first. The user judges an option by its code
-there. Then show each new structure the option adds, such as a table or a type. Leave out every line
-that is the same in all the options. When every option needs a new function that the code has no
-name for yet, give that function the same invented name in every option. When the call site is the
-same in every option, show no code.
+Show code only when the options differ in code. For each option, start at the call site. The user
+judges an option by its code there. Then show each new structure the option adds, such as a table or
+a type. Leave out every line that is the same in all the options. When every option needs a new
+function that the code has no name for yet, give that function the same invented name in every
+option.
 
 ## Compare in a table
 
