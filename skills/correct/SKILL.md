@@ -23,12 +23,10 @@ for the whole repo.
 - **See each new check fail on a real past mistake.** Until you do, you don't know it catches
   anything.
 
-Your report has three lists: the repeated mistakes and their PRs, **Not fixed** (each repeated
-mistake you didn't fix, with the reason), and **Seen once** (each mistake you saw only once). You're
-done when each repeated mistake has an open PR with green CI, or a line under Not fixed. The user
-reviews and merges each PR. Hand back each repeated mistake with its evidence, the fix you chose,
-why a stronger fix didn't work, and the failing run that proves the fix, as [Prove it](#prove-it)
-says.
+Your report lists the repeated mistakes and their PRs, then **Not fixed** (each repeated mistake you
+didn't fix, with the reason), and **Seen once** (each mistake you saw only once). You're done when
+each repeated mistake has an open PR with green CI, or a line under Not fixed, and an open PR holds
+the Seen once list. The user reviews and merges each PR. Hand back what the **Reply** line lists.
 
 ## Key rules
 
@@ -47,9 +45,10 @@ says.
 ## Find repeated mistakes
 
 Find where the last run of this skill ended: the newest PR, in any state, with "correct pass" in its
-description (`gh pr list --state all --search "correct pass"`). When there's none, start 30 days
-back. Read its Seen once list, in its description or in its `correct-pass.md`, then what went wrong
-since it was opened:
+description. From the repo, with `gh` signed in, run
+`gh pr list --state all --search "correct pass"`. When no such PR exists, start 30 days back. Read
+its Seen once list, in its description or in its `correct-pass.md`, then what went wrong since it
+was opened:
 
 - review comments on every PR updated since then, open, merged or closed, from people and from
   review bots, and the replies to them;
@@ -69,8 +68,7 @@ open one, with "correct pass" in its description, that writes the Seen once list
 
 For each repeated mistake, search the repo's skills, AGENTS.md and docs for a rule that covers it:
 
-- **No rule:** you find no skill, AGENTS.md line or doc that covers the mistake. Pick a fix as
-  [Pick the fix](#pick-the-fix) says.
+- **No rule:** pick a fix as [Pick the fix](#pick-the-fix) says.
 - **A written rule with no check:** agents skipped it. Pick a stronger fix.
 - **A rule with a check:** the check misses a case. Find the case it let through, and extend the
   check to cover it.
@@ -82,8 +80,9 @@ sync.
 
 ## Pick the fix
 
-Try each fix in this order, and use the first one that makes the mistake fail the build or a test.
-When a fix would change more than about 20 files, use the next one, and say why in the PR.
+For each repeated mistake, try the fixes in this order, and use the first one that makes the mistake
+fail the build or a test. When a fix would change more than about 20 files, use the next one, and
+say why in the PR.
 
 1. **Architecture.** Give each piece of state one owner, and each task one way to do it. Hide a
    module's internals behind its package `exports` or its public entry file. Derive a list from its
@@ -95,11 +94,14 @@ When a fix would change more than about 20 files, use the next one, and say why 
    paths next to the check, and fail only on a new one.
 4. **A test** of the behaviour the mistake broke. When a test of that behaviour still passes with
    the mistake in place, fix that test.
-5. **A written rule,** last, and only for a judgment call no check can make. Put it in the skill for
+5. **A written rule,** last. For a repeated mistake, write one only for a judgment call no check can
+   make. When the user corrects a mistake for the first time, write a rule, as
+   [When the user corrects you](#when-the-user-corrects-you) says. Put the rule in the skill for
    that area, or in AGENTS.md when no skill covers it.
 
-When a check now enforces a written rule, delete the rule, and say which check runs, as the
-[skill-writing](../skill-writing/SKILL.md) skill says.
+When a check now enforces a written rule, replace the rule's prose with the name of the check, as
+the [skill-writing](../skill-writing/SKILL.md) skill says. In a rule set, keep a short bullet for
+the rule too.
 
 ## Prove it
 
@@ -109,6 +111,9 @@ code as it is now:
 - For a lint rule, a CI check or a test, run it: it fails with the mistake, and passes without it.
 - For a type or an architecture change, compile it: the mistake fails to compile, or there's no way
   left to write it.
+
+When the mistake still passes, change the fix, or try the next one in [Pick the fix](#pick-the-fix),
+and prove it again.
 
 Add each new lint rule, check or test to CI, running the same command you ran locally. When CI
 doesn't run the build or the type check yet, add them in a PR of their own, and base the other PRs
@@ -135,9 +140,10 @@ as [Find the written rule](#find-the-written-rule) says:
 
 - **A rule covers it:** the mistake is a repeat. Pick a stronger fix and prove it, in a PR of its
   own, on a new branch from the default branch.
-- **No rule covers it:** write the rule where it belongs, in the PR you're working on, or in a new
-  PR when you have none. When an agent is next corrected for that mistake, it finds the rule, and
-  the mistake counts as a repeat.
+- **No rule covers it:** the mistake has happened once, so add no check yet. Write the rule where it
+  belongs, in the PR you're working on, or in a new PR when you have none. The next correction finds
+  the rule, so the mistake counts as a repeat and gets a check from [Pick the fix](#pick-the-fix)
+  where one can work.
 
 Reply with the rule you found or wrote, and the PR's link.
 

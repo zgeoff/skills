@@ -98,9 +98,10 @@ one of the last three:
 - **Traced it:** you followed the case that would break, step by step, and it never gets there.
 - **Unproven:** neither. Treat the fact as a guess.
 
-When the diff is one that [When to use it](#when-to-use-it) lists, other than a refactor or a chore,
-get a second opinion on the fact. In the [second-opinion](../second-opinion/SKILL.md) prompt, ask
-"Find a case where <the fact> is false." Treat each case it finds as a risk to sort.
+When the diff is one of the kinds listed under [When to use it](#when-to-use-it), get a second
+opinion on the fact. Skip it for a refactor or a chore. In the
+[second-opinion](../second-opinion/SKILL.md) prompt, ask "Find a case where <the fact> is false."
+Treat each case it finds as a risk to sort.
 
 ## Sort the risks
 
