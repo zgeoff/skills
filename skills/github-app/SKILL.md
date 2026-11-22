@@ -121,7 +121,8 @@ When `create` exits 1, find the case that matches its last line:
   bun <skill_dir>/scripts/github-app.ts import --from <rescue-file> --dest <dest>
   ```
 
-- When it ends `the code is still unspent`, the script couldn't write in `~/.cache/github-app/`.
+- When it ends `the code is still unspent`, the script couldn't write its rescue file in
+  `~/.cache/github-app/`. The `state.json` that `create` wrote there at its start is still in place.
   Free the disk space or fix the folder. Then take the address from the browser, as
   [the next section](#when-no-callback-reaches-the-server) shows.
 - When it starts `no callback reached the server`, `create` timed out. Go on to the next section.
