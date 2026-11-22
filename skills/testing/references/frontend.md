@@ -22,10 +22,10 @@ pipeline or read a real request. For those, see
 
 ## Preloads
 
-List the preloads of
-[`@zgeoff/bun-test-react`](https://github.com/zgeoff/tools/tree/main/packages/bun-test-react) in the
-`preload` array of `bunfig.toml`, in this order. Then add the repo's own test preload, which starts
-MSW, after them:
+List these preloads in the `preload` array of `bunfig.toml`, in this order: the matchers from
+`@zgeoff/bun-test-extended`, as [Matchers](./matchers.md) says, then the preloads of
+[`@zgeoff/bun-test-react`](https://github.com/zgeoff/tools/tree/main/packages/bun-test-react), then
+the repo's own test preload, which starts MSW:
 
 ```toml
 [test]
@@ -37,8 +37,8 @@ preload = [
 ]
 ```
 
-Keep the `zustand` preload before the others, because it must wrap zustand's `createStore` before
-any store exists. In a repo without zustand, leave it out.
+Keep the `zustand` preload before `@zgeoff/bun-test-react` and the repo's preload. It must wrap
+zustand's `createStore` before any store exists. In a repo without zustand, leave it out.
 
 With these preloads, never unmount a tree or reset a zustand store yourself. They do both after each
 test, for stores from zustand's `create` and `createStore` alike.
@@ -123,8 +123,9 @@ in `src/test-utils/`. It builds a router on memory history and returns it on the
 `rendered.router`. When the repo has no such helper, write one there that does this.
 
 Give the helper each destination the test expects, with a fixed text for each, such as its path. The
-helper sends any other path to a catch-all route that renders the component under test again. Then a
-text query after a navigation finds the old screen and passes.
+helper renders the component under test on every other path, the starting path included. So after a
+navigation, query the destination's fixed text: a query for the old screen's text still passes when
+the navigation went to a wrong path.
 
 ```tsx
 const rendered = renderWithRouter(<NoteList />, { routes: { '/notes/$noteID': <p>note page</p> } });

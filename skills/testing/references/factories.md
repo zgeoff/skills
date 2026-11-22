@@ -54,8 +54,8 @@ seed, build the input with these factories.
 - Default an enum or a discriminator to the value most tests need.
 - Outside a package with a golden test, default each foreign key to a new `faker.string.uuid()`.
   Never require a parent. When a test needs a real parent, seed the parent and pass its ID.
-- When the type is a class, pass the merged fields to its constructor and return the instance, so
-  `toStrictEqual` against a real instance passes.
+- When the type is a class, return an instance in place of the object literal. Pass the merged
+  fields to its constructor, so `toStrictEqual` against a real instance passes.
 - Build a nested object with its own factory, and pass it the nested override. For a list field, the
   spread replaces the whole default list, so never write merge code for a list.
 
@@ -74,8 +74,8 @@ seed, build the input with these factories.
   }
   ```
 
-- When a domain type has one shape as a database row and another in the API, write a factory for
-  each shape, named for its type, such as `buildMockOrderLineRow` and `buildMockOrderLine`.
+- When a record has one type for its database row and another for the API, write a factory for each
+  type, such as `buildMockOrderLineRow` for `OrderLineRow` and `buildMockOrderLine` for `OrderLine`.
 - In a test file, call the factory in the test that uses its value, never in a shared constant or a
   hook. The reader then sees each value next to the assertion that uses it.
 

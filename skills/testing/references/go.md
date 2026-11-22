@@ -1,13 +1,22 @@
 # Go testing
 
-Write Go tests with the standard `testing` runner. These sections of the testing skill apply to Go
-tests as they stand: [Principles](../SKILL.md#principles), [Test data](../SKILL.md#test-data),
+Write Go tests with the standard `testing` runner. Follow these sections of the testing skill in Go:
+[Principles](../SKILL.md#principles), [Test data](../SKILL.md#test-data),
 [Assertions](../SKILL.md#assertions), [Errors](../SKILL.md#errors),
 [Access rules](./schemas-and-access.md#access-rules) and [Narrowing](../SKILL.md#narrowing). From
 [Test shape](../SKILL.md#test-shape), keep the rule on how to name a test, and the rule of one act
-per test. This file replaces the rest of Test shape for Go. Skip the Bun-only parts: `setupTest`,
-the test preload, the jest-extended matchers, the `bun run test:<name>` commands and the `bun test`
-flags.
+per test.
+
+Where this file gives a Go rule on the same point, follow this file. It replaces:
+
+- the rest of Test shape;
+- each Bun matcher and assertion API those sections name, such as `toStrictEqual`, `toMatchObject`
+  and `.rejects`, with the calls in [Assertions](#assertions);
+- the Test data rule against a shared constant, for a definition that no row changes, as
+  [Cases and data](#cases-and-data) says.
+
+Skip the Bun-only parts: `setupTest`, the test preload, the `bun run test:<name>` commands and the
+`bun test` flags.
 
 - [Cases and data](#cases-and-data)
 - [Assertions](#assertions)
@@ -36,8 +45,11 @@ flags.
   packages use in a test-support package, such as `internal/testsupport`, and test it.
 - Generate byte and string inputs with Go's native fuzzer, `testing.F`. Generate operation sequences
   with a property library, such as `pgregory.net/rapid`. Start each generated case from clean state,
-  and release its resources before the next case starts. Replay a failure as
-  [Property tests](./system-tests.md#property-tests) describes.
+  and release its resources before the next case starts.
+- When the fuzzer finds a failing input, it writes the input to `testdata/fuzz/<FuzzName>/`, and
+  `go test` replays it on every later run: commit that file. When rapid fails, it prints a
+  `-rapid.failfile` flag that replays the failure. When a failing case shows behaviour the suite
+  must keep, add a fixed test with it.
 
 ## Assertions
 
