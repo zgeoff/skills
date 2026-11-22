@@ -100,8 +100,8 @@ keeps it, with its reason beside it.
 
   When you add an architecture doc, add a paragraph and a link for it to the overview, and write the
   overview first when the repo has none. Put that paragraph under the overview item that its
-  subsystem belongs to, such as the data. The overview isn't a product overview, which says what the
-  product is and who it's for.
+  subsystem belongs to, such as the data. Leave out what the product is and who it's for: the root
+  README owns that.
 
 - **Write one architecture doc per subsystem, not per package.** A subsystem can span several
   packages, and a reader changing it needs all of it in one place. Split a doc at a concept

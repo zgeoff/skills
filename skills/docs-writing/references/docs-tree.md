@@ -1,8 +1,13 @@
 # The docs/ tree
 
-Keep `docs/` to what is true of the system today. Keep research, plans and history out of it, and
-delete a design once its code is built. Put each kind of doc in the folder that the table after the
-contents list names.
+Keep `docs/` to what is true of the system today, so a reader can trust each doc without checking
+its date. Two kinds of doc are the exceptions:
+
+- a design for work not yet built, with its spikes, which you delete once its code is built;
+- a decision record, whose `## Changes` list is its history.
+
+Keep every other plan, research write-up and history out of `docs/`. Put each kind of doc in the
+folder that the table after the contents list names.
 
 Contents: [where content goes](#where-each-kind-of-content-goes) · [length](#length) ·
 [designs and decision records](#designs-and-decision-records) · [spikes](#spikes)
@@ -38,18 +43,22 @@ subfolders by area, so a reader can scan the folder. Link `docs/reference/` from
 
 - **Development and releasing live in runbooks.** Put the contributor setup in `development.md`, in
   `docs/runbooks/`. The release runbook, `releasing.md` in the same folder, is for the steps the
-  release tooling doesn't do. When the tooling does every step, delete the runbook.
+  release tooling doesn't do. When the tooling does every step, delete the runbook: steps that
+  repeat the tooling go stale when it changes.
 
 ## Length
 
-Keep each doc under its cap. `chex length` sets the caps, and warns when a doc goes over one,
-without failing the run. Past the cap, cut paragraphs first, then split the doc at a concept
-boundary. If the doc is still over, say so in the PR body. Don't fit it under the cap by any of
-these:
+Keep each doc under its cap. A spike's files other than its README have no cap, as [Spikes](#spikes)
+says. Run `bun x @zgeoff/chex length` from the repo root: it sets the caps, and warns when a doc
+goes over one, without failing the run. Past the cap, cut paragraphs first, then split the doc at a
+concept boundary. If the doc is still over, say so in the PR body. Each of these gets a doc under
+the cap and leaves it harder to use, so don't do them:
 
-- compressing sentences, meaning dropping their articles and connecting words;
-- moving the overflow into a README or code comments;
-- splitting where the concept has no boundary.
+- compressing sentences, meaning dropping their articles and connecting words, which makes each
+  sentence harder to read;
+- moving the overflow into a README or code comments, where it is a copy that the reader of the doc
+  never finds;
+- splitting where the concept has no boundary, so the reader needs both halves open.
 
 ## Designs and decision records
 

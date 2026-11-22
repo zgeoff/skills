@@ -91,6 +91,9 @@ noticing:
 - words that make sense only next to the old version, such as "the new endpoint", or an "also" that
   means "in addition to before".
 
+A design and a decision record are the exceptions, as [The docs/ tree](./references/docs-tree.md)
+says.
+
 **Cut what a reader can get from the code.** Picture a reader who has the code open. If a paragraph
 tells them nothing new, delete the whole paragraph. Keep a fact that shows only across several
 files.
@@ -112,8 +115,12 @@ reason does the work", "the error names the fix"). That hides who acts.
 
 **Lead with what the reader does.** Open a paragraph or a bullet with the instruction or the fact
 the reader acts on. A definition first ("A heavy check is a job that…") or a label and a colon
-("Private:") leaves the reader to work out what to do. In a skill, keep the labelled lines that
-skill-writing asks for: the Key rules lines, the References lines and the `**Reply:**` line.
+("Private:") leaves the reader to work out what to do. Keep these labelled lines:
+
+- in a skill, the ones skill-writing asks for: the Key rules lines, the References lines and the
+  `**Reply:**` line;
+- in an architecture doc, a `**Why:**` paragraph, as
+  [Architecture docs](./references/architecture-docs.md#give-the-reason-next-to-the-fact) allows.
 
 **Use the plain name.** Call a thing what the reader already calls it. A label you made up, such as
 "a negative" for a failed check, reads as a term they should know.
@@ -180,7 +187,8 @@ skip the checks and say so in your reply.
   prints lines that need a person's judgment. Fix each candidate that's a real fault. In the check
   output you hand back, give the failures and the candidates you fixed. To check prose outside the
   files it covers, such as AGENTS.md, run `bun x @zgeoff/chex prose <path>`.
-- `chex length` checks each README and `docs/` file against its length limit.
+- `chex length` checks each README, and each `docs/` file outside a spike's folder, against its
+  length limit.
 - `chex links` resolves every relative link.
 - `chex readmes` fails on a README that isn't one of the five kinds in
   [READMEs](./references/readmes.md).
