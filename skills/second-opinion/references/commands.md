@@ -1,7 +1,8 @@
 # Commands
 
 One section per model, in the user's order of preference. Each section gives the model's family, its
-command and the rules for running it. Skip a model of your own family.
+command and the rules for running it. Skip a model of your own family, unless
+[Who to ask](../SKILL.md#who-to-ask) sends you to it as the fallback.
 
 For every model:
 
