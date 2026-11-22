@@ -18,7 +18,7 @@ the owner. You're done when each item is filed and checked against [Ready](#read
 - [One item, one outcome](#one-item-one-outcome): split by outcome, never by size.
 - [Write it to the template](#write-it-to-the-template): Outcome, Context, Depends on, Acceptance,
   Out of scope and Permissions.
-- [Acceptance](#acceptance): one line for each thing someone observes, with the evidence that proves
+- [Acceptance](#acceptance): one line for each thing someone observes, with the check that proves
   it.
 - [Keep the owner's words](#keep-the-owners-words): copy the words that decide something, and ask
   the owner before you change what the item asks for.
@@ -60,7 +60,7 @@ hour.
 
 ## Acceptance
 
-<!-- One line for each thing someone observes, with the evidence that the next agent will show. -->
+<!-- One line for each thing someone observes, with the check that proves it. -->
 
 - [ ] A reset email arrives within 1 minute while a newsletter goes out. Evidence: a test that
       queues 10,000 newsletter emails first.
@@ -87,14 +87,30 @@ Leave the Sketch and Constraints sections to whoever designs the work, as the
 
 ## Acceptance
 
-Write each line as one thing that someone observes, and name the evidence that will prove it: a
-test, a command and its output, a screenshot or a recording. When the line changes what a person
-sees on screen, such as a page or a button, the evidence is a screenshot or a recording.
+Write each line as one thing that someone observes, and name the check that will prove it. Leave its
+result out, because the agent that does the work runs the check and records the result.
+
+Name one of these checks when it covers the line:
+
+- a CI check, such as the tests, the lint or `chex`;
+- a feature's verdict from the repo's `bun verify` CLI. Run `bun verify features` to list the
+  features. When the work adds the feature or changes its journey, say so in the line: "Evidence:
+  the `password-reset` verdict (new feature)";
+- the review of the pull request, for a line about how the code reads;
+- a cold read and deslop, for a line about prose.
+
+When none of them covers the line, name what proves it instead:
+
+- for a change to what a person sees on screen, such as a page or a button, a screenshot or a
+  recording;
+- for anything else, the command to run and the result it shows, such as the version the lockfile
+  resolves.
+
+Then check each line against these:
 
 - Make each line for new behaviour fail today and pass when the work is done. A line for behaviour
   the work must keep, such as the newsletter line in the template, passes today too.
-- Leave out a line that you can prove only after a release. The next agent can't show it in a pull
-  request.
+- Leave out a line that you can prove only after a release. The work ends before the release.
 - When a line needs something that this item doesn't build, such as a fixture or an API, list the
   item that builds it under Depends on.
 
