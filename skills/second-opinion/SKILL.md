@@ -27,7 +27,7 @@ did, in the shape the **Reply** line at the end gives for each job.
 - [Who to ask](#who-to-ask): another model family, at medium effort; your own family only as a
   fallback, and say so.
 - [Write the prompt](#write-the-prompt): the question and the facts, never your conclusion.
-- [Ask for a reply shape](#ask-for-a-reply-shape): one shape per job.
+- [Ask for a reply shape](#ask-for-a-reply-shape): end the prompt with the reply shape for the job.
 - [After the answer](#after-the-answer): reproduce each finding before you act, and say which model
   said what.
 
@@ -92,10 +92,10 @@ Leave out your transcript and the answer you expect.
 End the prompt with the shape of the reply you want:
 
 - **Review:** every finding, each with where it is, what triggers it, what happens, and the check
-  that shows the fault. When the reviewer can run that check, the command and its output. Zero
-  findings is a valid answer.
+  that shows the fault. When the reviewer can run that check, ask for the command and its output
+  too. Say that zero findings is a valid answer.
 - **Diagnosis:** the evidence for each possible cause, the next check to run, and which cause each
-  possible result of that check points to.
+  result of that check would point to.
 - **Judge:** a score for each sketch on each criterion, with a reason, then a pick.
 
 ## After the answer
@@ -116,7 +116,7 @@ decides what to do with them.
    ask for the review shape. Stop after that round. Report anything it still finds, without fixing
    it.
 
-**Reply:** in plain language, the model and effort you used, then, for each job:
+**Reply:** in plain language, the model and effort you used, then, for the job you did:
 
 - **Review:** each finding, whether you reproduced it, and what you did about it, then the dropped
   nits.

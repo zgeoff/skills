@@ -24,7 +24,7 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 Write each Acceptance line and its evidence as [Acceptance](../../work-items/SKILL.md#acceptance) in
 the work-items skill says. When the repo has a wringer verify CLI, prove each behaviour a user sees
 with its feature's verdict, and name the feature in the line. When you can name no evidence for a
-line, rewrite the line as a behaviour that a check from that section can prove.
+line, rewrite the line as a behaviour that one of the checks in that Acceptance section can prove.
 
 Run a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`. The CLI
 uses these terms as wringer's

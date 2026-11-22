@@ -87,8 +87,8 @@ Leave the Sketch and Constraints sections to whoever designs the work, as the
 
 ## Acceptance
 
-Write each line as one thing that someone observes, and name the check that will prove it. Name only
-the check. The agent that does the work runs it and records the result.
+Write each line as one thing that someone observes, and name the check that will prove it. Leave its
+result out, because the agent that does the work runs the check and records the result.
 
 Name one of these checks when it covers the line:
 
@@ -105,6 +105,8 @@ When none of them covers the line, name what proves it instead:
   recording;
 - for anything else, the command to run and the result it shows, such as the version the lockfile
   resolves.
+
+Then check each line against these:
 
 - Make each line for new behaviour fail today and pass when the work is done. A line for behaviour
   the work must keep, such as the newsletter line in the template, passes today too.
