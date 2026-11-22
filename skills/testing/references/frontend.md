@@ -122,10 +122,10 @@ Mount a component that reads or changes the route through the project's router-a
 in `src/test-utils/`. It builds a router on memory history and returns it on the render result, as
 `rendered.router`. When the repo has no such helper, write one there that does this.
 
-Give the helper each destination the test expects, with a fixed text for each, such as its path. The
-helper renders the component under test on every other path, the starting path included. So after a
-navigation, query the destination's fixed text: a query for the old screen's text still passes when
-the navigation went to a wrong path.
+Give the helper each destination the test expects, with a fixed text for each, such as `note page`
+below. The helper renders the component under test on every other path, the starting path included.
+After a navigation, query the destination's fixed text. A query for the old screen's text still
+passes when the navigation went to a wrong path.
 
 ```tsx
 const rendered = renderWithRouter(<NoteList />, { routes: { '/notes/$noteID': <p>note page</p> } });

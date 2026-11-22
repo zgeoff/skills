@@ -142,8 +142,8 @@ test of the code that the case reaches.
 
 Never share a `setupTest` or a cleanup between `e2e/` test files: when a file needs one, give it its
 own. A file's own `setupTest` may call a shared helper from `src/test-utils/`, such as the reset
-helper below. Inside an `e2e/` test, you may chain acts, and assert after each one, because each act
-needs the state that the act before it left. Outside `e2e/`, a test has one act, as
+helper below. Inside an `e2e/` test, you may chain acts, and assert after each one. Each act needs
+the state that the act before it left. Outside `e2e/`, give each test one act, as
 [Test shape](../SKILL.md#test-shape) says, apart from a property test that applies generated
 operations, as [Property tests](#property-tests) allows.
 
@@ -184,8 +184,9 @@ a test that starts a container itself, and `bun run test:e2e` skips a file that 
 
 Test a client that the repo ships, such as a CLI or an SDK, against the real service from the same
 repo. Give each test its own data. Use a stand-in only for a system that the test can't run, such as
-a remote service. A test that `bun run test` runs can't run a VM or change a setting of the host's
-kernel. An `e2e/` test can use a VM that [Files and shared hosts](#files-and-shared-hosts) shares.
+a remote service. Never run a VM or change a setting of the host's kernel in a test that
+`bun run test` runs. An `e2e/` test can use a VM that
+[Files and shared hosts](#files-and-shared-hosts) shares.
 
 In a test that `bun run test` runs, call the service in the test's process, such as through its
 request handler or an in-memory RPC link, as [the cause table](./slow-tests.md#causes-and-fixes)

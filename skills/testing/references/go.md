@@ -7,7 +7,7 @@ Write Go tests with the standard `testing` runner. Follow these sections of the 
 [Test shape](../SKILL.md#test-shape), keep the rule on how to name a test, and the rule of one act
 per test.
 
-Where this file gives a Go rule on the same point, follow this file. It replaces:
+Where this file gives a Go rule on the same point, follow this file. This file replaces:
 
 - the rest of Test shape;
 - each Bun matcher and assertion API those sections name, such as `toStrictEqual`, `toMatchObject`
@@ -31,25 +31,24 @@ Skip the Bun-only parts: `setupTest`, the test preload, the `bun run test:<name>
   such as `TestRetryStopsAfterLastAttempt`.
 - Write a fixed table of cases as named `t.Run` subtests, one per row. Name each subtest as a short
   sentence with its value, such as `"stops after 3 attempts"`. Create each row's state inside the
-  row. Never pass mutable state from a parent test to its subtests: when one subtest changes it, the
+  row. Never pass mutable state from a parent test to its subtests. When one subtest changes it, the
   subtests after it break.
 - When two cases write the same shared state, such as one database row, give each case its own copy,
   such as its own row. When you give each case a random ID instead, the shared state stays, and a
   later test fails on it.
 - Keep the inputs that make a row differ from the others in that row. You may share a definition
   that no row changes, such as a server config.
-- You may report a failure with an `if`, such as `if got != want { t.Errorf(...) }`. This `if`
-  checks an outcome, so the rule against a branch in a test body, in
-  [Narrowing](../SKILL.md#narrowing), doesn't cover it.
+- You may report a failure with an `if`, such as `if got != want { t.Errorf(...) }`. The rule
+  against a branch in a test body, in [Narrowing](../SKILL.md#narrowing), doesn't cover this `if`.
+  It checks an outcome.
 - Keep a helper that one package uses in that package's `_test.go` files. Put a helper that several
   packages use in a test-support package, such as `internal/testsupport`, and test it.
 - Generate byte and string inputs with Go's native fuzzer, `testing.F`. Generate operation sequences
   with a property library, such as `pgregory.net/rapid`. Start each generated case from clean state,
   and release its resources before the next case starts.
-- When the fuzzer finds a failing input, it writes the input to `testdata/fuzz/<FuzzName>/`, and
-  `go test` replays it on every later run: commit that file. When rapid fails, it prints a
-  `-rapid.failfile` flag that replays the failure. When a failing case shows behaviour the suite
-  must keep, add a fixed test with it.
+- Commit each failing input that the fuzzer writes to `testdata/fuzz/<FuzzName>/`. `go test` replays
+  it on every later run. When rapid fails, it prints a `-rapid.failfile` flag that replays the
+  failure. When a failing case shows behaviour the suite must keep, add a fixed test with it.
 
 ## Assertions
 

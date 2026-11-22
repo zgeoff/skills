@@ -13,12 +13,11 @@ seed, build the input with these factories.
 
 - Keep the factory, with its own test file, in `src/test-utils/` of the package that defines the
   type. For a type from a third-party package, such as an SDK result, keep it in the package that
-  wraps that package. When no package wraps it, keep it in the package whose tests use it. Another
-  package imports the factory by package name, through the package's `"./test-utils/*"` export, with
-  a `workspace:*` dev dependency.
+  wraps that package. When no package wraps it, keep it in the package whose tests use it. From
+  another package, import the factory by package name, through the package's `"./test-utils/*"`
+  export, with a `workspace:*` dev dependency.
 - Name the file `build-mock-<type>.ts`, and export `buildMock<Type>` from it: `OrderLine` gets
-  `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`, because the factory creates no
-  resource.
+  `build-mock-order-line.ts` and `buildMockOrderLine`. Use `build`. The factory creates no resource.
 - Take one argument of overrides. Return a complete value, with every optional field filled. Return
   the object literal itself, so the return type checks each field with no cast:
 
@@ -41,8 +40,8 @@ seed, build the input with these factories.
   sets `exactOptionalPropertyTypes`, so an `undefined` override fails the type check.
 - Write one factory per type. For a variant, pass its overrides in the test, such as
   `buildMockInvoice({ status: 'paid' })`, so the reader sees them. For a stored state, write a seed,
-  such as `seedArchivedNote` in [Seeding](./seeding.md). The seed reaches the state through the
-  module's own functions, so it never sets a field such as `archivedAt` by hand.
+  such as `seedArchivedNote` in [Seeding](./seeding.md). In the seed, reach the state through the
+  module's own functions, and never set a field such as `archivedAt` by hand.
 - In a package with a golden test, default every field of the package's own factories to a literal
   value. A golden test pins output in an inline snapshot or a committed file. Faker's values follow
   the order of its calls in the run, so one new faker call in any test file changes them.

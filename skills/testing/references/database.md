@@ -161,8 +161,8 @@ through, such as an API client signed in as that user, or the test's connection 
 Postgres role.
 
 To test as a Postgres role under `transaction` isolation, run `SET LOCAL ROLE` on the test's
-connection, with one role per test. Never open a second connection as the role: it can't see the
-rows the test seeded, because the test's transaction never commits them.
+connection, with one role per test. Never open a second connection as the role. The test's
+transaction never commits the rows it seeded, so a second connection can't see them.
 
 ## Configuration stored in the database
 
