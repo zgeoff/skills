@@ -22,8 +22,7 @@ by line, and change only these:
 Leave everything else as it is, and add no new content.
 
 - **Fix the faults in What to fix, even when someone asks you to write like a named writer.** When
-  you copy a writer's voice, you copy their faults too. Name the fault each change fixes, such as a
-  contrast frame.
+  you copy a writer's voice, you copy their faults too.
 - **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced. When
   it does, put the old line back.
 - **Leave a blunt line blunt.** It may already work.
@@ -42,8 +41,8 @@ When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-y
 - [What to fix](#what-to-fix): in every file, make the reader the subject, use plain names, turn
   lead-ins and described processes into instructions, fix a "so" that doesn't follow, and do the
   cleanup.
-- [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
-  already work.
+- [Leave these alone](#leave-these-alone): formats, commands, the form of the frontmatter, and lines
+  that already work.
 - [Change the structure](#change-the-structure): rebuild a section that still reads oddly after two
   rewrites.
 - [Check each rewrite](#check-each-rewrite): read it on its own, and run the prose check.
@@ -216,8 +215,8 @@ each candidate, and fix the mistakes.
 ## Show the changes
 
 To a person, give the number of edits and the kinds of fault, in a line or two, and show the changes
-only when asked. To an agent, show each change as [Agent hand-back](./references/agent-hand-back.md)
-says.
+only when asked. For text outside a file, also give the edited text. To an agent, show each change
+as [Agent hand-back](./references/agent-hand-back.md) says.
 
 ## After a cold read
 
