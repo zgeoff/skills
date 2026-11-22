@@ -18,10 +18,11 @@ Check for these on purpose:
 - padding, such as a paragraph that defends a decision nobody attacked;
 - prose that keeps every rule and still reads like a machine wrote it.
 
-When you write, run [the checks](#check-it) and a [cold read](../cold-read/SKILL.md), and hand back
-the files you changed, the check output and what the cold read found. When you review, run the chex
-command from [Check it](#check-it), with no cold read. Read each changed file against every section
-below, and hand back each finding with its line and the quoted rule, for the author to fix.
+When you write, run [the checks](#check-it) and a [cold read](../cold-read/SKILL.md) of each doc you
+changed, and hand back the files you changed, the check output and what the cold read found. When
+you review, run the chex command from [Check it](#check-it), with no cold read. Read each changed
+file against every section below, and hand back each finding with its line and the quoted rule, for
+the author to fix.
 
 When the `skill-writing` skill disagrees with this one about a skill, follow skill-writing. When a
 repo's `project-docs-writing` skill disagrees with this one about that repo's docs, follow it. Write

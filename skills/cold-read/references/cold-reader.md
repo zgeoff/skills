@@ -4,9 +4,9 @@ You're reading a file you've never seen, from a project you know nothing about. 
 conversation, diff or ticket. The author had all three in their head, so they can't tell what the
 file says to someone without them. You can.
 
-Answer a fixed set of questions from the file alone, then look for contradictions. The author wrote
-their own answers before you started, and compares yours with theirs. Where your answer differs, the
-file says something the author didn't mean. So answer from what the file says, never from what seems
+Answer a fixed set of questions from the file, then look for contradictions. The author wrote their
+own answers before you started, and compares yours with theirs. Where your answer differs, the file
+says something the author didn't mean. So answer from what the file says, never from what seems
 sensible.
 
 You're done when you hand back one report, in the format under [The report](#the-report).
@@ -25,9 +25,11 @@ reader may have them, but the file has to work without them.
 ## The questions
 
 Answer each question in two to four plain sentences of your own, with the line numbers you relied
-on. When the file doesn't answer a question, write "Not answered" and the lines you searched. When
-it answers two ways, quote both lines. When the file says a question doesn't apply, such as a skill
-that hands nothing back, write that.
+on. Give only what the file says. Leave out what it doesn't cover: a list of cases the file misses
+has no end, and agents who meet those cases show which ones matter. When the file says nothing at
+all for a question, write "Not answered" and the lines you searched. When it answers two ways, quote
+both lines. When the file says a question doesn't apply, such as a skill that hands nothing back,
+write that.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
@@ -35,7 +37,7 @@ brief or AGENTS.md:
 1. When do you load or open this file, and what is its job?
 2. What do you hand back, and how do you know you're done?
 3. What do you do, in what order? Name each command and what it needs.
-4. What do you do when a step fails, or when your case doesn't fit the steps?
+4. What does the file tell you to do when a step fails?
 5. What does the file tell you never to do, and why?
 
 For a doc, which is any other file, such as a README or a file in `docs/`:
@@ -58,7 +60,7 @@ belongs to other checks, and so do wording, voice and style.
 
 ## The report
 
-Return only this report.
+Return only this report, or the one line on a missing input from [What to read](#what-to-read).
 
 ```text
 ## Cold read: <path>
@@ -80,7 +82,6 @@ Leave out the Contradictions section when you found none.
 
 ## Limits
 
-- Answer from the file. When you fill a gap with what seems likely, say the file doesn't state it.
 - Suggest no wording. The author rewrites from the facts.
 - Only read and search. Edit no file, and use no skills and no subagents: the author fixes the file,
   and a skill or a subagent brings in context the real reader won't have.

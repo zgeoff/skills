@@ -10,10 +10,10 @@ description:
 
 # Cold read
 
-You wrote the file with the conversation, the ticket and the diff in your head, so you can't tell
-what it says to someone without them. Write down what the file should tell a reader, hand it to a
-fresh subagent, the cold reader, and compare its answers with yours. Fix each place they differ,
-then deslop what you changed.
+You read a file with your own context in your head: the conversation, the ticket and the diff when
+you wrote it, the repo when you didn't. So you can't tell what it says to someone without them.
+Write down what the file should tell a reader, hand it to a fresh subagent, the cold reader, and
+compare its answers with yours. Fix each place they differ, then deslop what you changed.
 
 Every read asks the same questions, so a second read checks your fixes and finds little new. A read
 where every answer matches yours and nothing contradicts is clean, and it ends the reads.
@@ -61,9 +61,8 @@ Hand back:
    file, before you spawn anything. Answer with what the file is meant to tell a reader. When you
    didn't write the file, take that from the file, the skills or docs that point at it, and the
    repo. When you can't answer a question, that's a gap in the file, or in the rules: note it.
-5. Spawn one `general-purpose` subagent for each file you wrote or changed, in parallel. A skill's
-   SKILL.md and each of its references are separate files. Never use a fork: a fork inherits your
-   conversation.
+5. Spawn one `general-purpose` subagent for each file you check, in parallel. A skill's SKILL.md and
+   each of its references are separate files. Never use a fork: a fork inherits your conversation.
 6. Give each subagent this prompt and nothing else. `<skill_dir>` is the absolute path of the folder
    this SKILL.md is in.
 
@@ -81,15 +80,15 @@ Hand back:
 ## Act on it
 
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
-same facts, in any words. When an answer says the file doesn't state something, count that part as
-"Not answered", even when the rest matches.
+same facts, in any words.
 
 End every finding as a change to text in the repo. Another session never sees a call you only made
 in your head, so its cold reader raises the same finding again.
 
-- **Fix the file** when the answer differs, says "Not answered", or quotes two answers. Fix it too
-  when the cold reader misread a sentence: a fresh reader misread it, so the next one can. When the
-  answer lives in code, say which file holds it and link that file, without copying the code.
+- **Fix the file** when the answer differs, says "Not answered", or quotes two answers, and when the
+  file contradicts itself or breaks a rule that is right for it. Fix it too when the cold reader
+  misread a sentence: a fresh reader misread it, so the next one can. When the answer lives in code,
+  say which file holds it and link that file, without copying the code.
 - **Fix the rules file** when the file contradicts a rule and both are right for their own case.
   Write the exception into the rule, so no later reader raises it.
 - **Close a gap** when you couldn't write your own answer, or a fix needs a rule no rules file has.
@@ -101,7 +100,8 @@ in your head, so its cold reader raises the same finding again.
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.
 
-Leave everything else in the file alone. A sentence that misled no answer isn't a finding.
+Leave the rest of the file alone. A sentence that misled no answer and contradicts nothing isn't a
+finding.
 
 ## Read it again
 
