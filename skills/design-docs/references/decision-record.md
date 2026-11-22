@@ -1,8 +1,5 @@
 # Decision record template
 
-Open this file when you write, change or remove a decision record. Read [SKILL.md](../SKILL.md)
-first: it says who the owner is, and when a choice needs a record.
-
 When the owner asks you to record a decision, take the request as proof that the owner made it.
 Check the choice against the [three tests](../SKILL.md#write-a-decision-record):
 
@@ -79,7 +76,7 @@ That way, `chex links` fails on a citation of a record that is gone.
 When the owner changes the decision, edit the record in place:
 
 1. Rewrite the title, Decision, Why and Consequences to state the new decision. Keep the file name,
-   even though its slug no longer matches the title, so links keep working.
+   even when its slug no longer matches the title. Links to the record keep working.
 2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
 4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A reader who
@@ -112,11 +109,11 @@ Do every step in the PR that deletes the record:
    the Why nor the Rejected alternatives: they go with the deleted file.
 2. Search the repo for the record's file name, and for its bare number, such as in a table cell or a
    code comment. Point each citation at the doc from step 1. When the sentence no longer needs the
-   citation, delete it.
+   citation, delete the citation.
 3. Delete the record with `git rm`.
 4. Renumber each later record, so the numbers stay consecutive. For each one, rename the file with
    `git mv`, change the number in its heading, and rewrite each citation of it.
 
-Renumber even though it breaks links from outside the repo, such as in old PRs: those links then
-point at the wrong record or at none. Inside the repo, a gap in the numbers reads as a missing
+Renumber even though it breaks links from outside the repo, such as in old PRs. Those links then
+point at the wrong record, or at none. Inside the repo, a gap in the numbers reads as a missing
 record. Leave a link to a file at one commit's SHA as it is: that commit still holds the old file.

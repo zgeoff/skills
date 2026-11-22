@@ -1,11 +1,10 @@
 # Design doc template
 
-Open this file when you write a design doc, split a long one, or close one out once its work is
-built. Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and
-the builder are.
+Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and the
+builder are.
 
-A design doc describes the system its work will build, in the present tense. Once the work is built,
-the architecture doc describes the system, and you delete the design doc. The
+Describe the system the work will build, in the present tense. Once the work is built, the
+architecture doc describes the system, and you delete the design doc. The
 [docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows a design for unbuilt
 work in `docs/` on that condition.
 
@@ -131,11 +130,10 @@ its part.
 
 ## Close out a design doc
 
-When the last work item that the design covers is done, the agent that finishes it closes out the
-design, in the same PR:
+When you finish the last work item that the design covers, close out the design in the same PR:
 
 1. Move each fact that still describes the system into its doc in `docs/architecture/`.
-2. Check that each choice that passes the three decision-record tests in
+2. Check that each choice that passes the tests in
    [Write a decision record](../SKILL.md#write-a-decision-record) has a record. When one has none,
-   write it as the [decision record template](./decision-record.md) says.
+   write it from the [decision record template](./decision-record.md).
 3. Delete the design doc.

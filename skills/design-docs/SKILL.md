@@ -61,19 +61,18 @@ condition holds:
 Count as a shared contract any type, API, schema, event, file format or config key that code in more
 than one module reads or writes. A config key that one module reads is not one.
 
-When a design doc exists, the work item links the doc's sections and repeats none of their text.
+When a design doc exists, link its sections from the work item, and repeat none of their text.
 
 ## Show contracts as code
 
 Write each contract as a code sketch: an inline code block that shows its shape. Sketch only what
 crosses a module boundary, and leave out a parameter, a generic or an option that no caller uses
-yet: the builder would build it and keep it with no caller to test it. Keep every sketch in the
-design, never in a separate file, so the owner and the builder read the contract where the design
-uses it. The builder follows a sketch's shapes and the rules in its comments, and may rename
-anything the module does not export.
+yet. The builder would keep it, with no caller to test it. Keep each sketch in the design, where
+both readers see the contract next to its use. The builder follows a sketch's shapes and the rules
+in its comments, and may rename anything the module does not export.
 
-- Show the call first, with a realistic result in a comment. Then show the types it needs. A
-  contract with no call, such as a config key or a table, starts at its shape.
+- Show the call first, with a realistic result in a comment. Then show the types it needs. Start a
+  contract with no call, such as a config key or a table, at its shape.
 - Put a rule that belongs to one field in a comment on that field.
 - Mark existing code you extend with `// …existing fields`, and show only what changes.
 - Name the module that owns each type in a comment. Leave file paths out: the builder has grep.
@@ -103,7 +102,7 @@ Name which one, and what the code does until then. In the design's own text, wri
 never "you": an agent reads "you" as itself.
 
 When the design extends existing code, describe only the change. The sketches name the code it
-touches, so the doc needs no separate list.
+touches, so the doc needs no list of them.
 
 ## Write only the design
 
@@ -120,11 +119,9 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- Write one design doc per set of work items that build on the same shared contracts. Work that
-  ships on its own gets its own work item, and its own design doc when it needs one. When a doc
+- Write one design doc per set of work items that build on the same shared contracts. When a doc
   passes about 400 lines with its code, split it into one doc per part, as the
   [design doc template](./references/design-doc.md#split-a-long-design) says.
-
 - Give a design doc one mermaid diagram of the main path, with 10 nodes or fewer, under its summary.
   A work item needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
@@ -166,7 +163,7 @@ stop. For a work item, run only the builder test.
   under "Builder decides" needs no fix.
 
 For a design doc or a decision record, run the docs checks and a cold read too, as the
-[docs-writing](../docs-writing/SKILL.md) skill says, and add what they found to your reply.
+[docs-writing](../docs-writing/SKILL.md) skill says.
 
 **Reply:** where the design went, each decision record you wrote, what the tests found and what you
 fixed, and for a design doc or a decision record, the docs check output and what the cold read

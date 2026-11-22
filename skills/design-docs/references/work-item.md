@@ -1,7 +1,7 @@
 # Work item template
 
 Write each work item's description from this template. A work item is an issue in the work tracker,
-such as a Linear or GitHub issue, and each change that ships on its own gets one. When
+such as a Linear or GitHub issue. Open one for each change that ships on its own. When
 [Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
 design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
 says.
@@ -68,7 +68,7 @@ out.
 
 ## Sketch
 
-<!-- The function or type at the module's boundary that this work adds or changes, sketched as SKILL.md's "Show contracts as code" says. 20 lines at most: show only what changes. -->
+<!-- Sketch the function or type at the module's boundary that this work adds or changes, as SKILL.md's "Show contracts as code" says. Show only what changes, in 20 lines at most. -->
 
 ```ts
 const email = await emails.send({ to, template: 'password-reset', priority: 'urgent' });
