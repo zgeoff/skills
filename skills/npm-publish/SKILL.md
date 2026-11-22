@@ -9,13 +9,31 @@ description:
 
 # First publish to npm
 
-npm adds a trusted publisher only to a package already on the registry, so each package's first
-version goes out from the publisher's machine and CI publishes the rest through OIDC. You do the
-prep. The publisher, a person with 2FA on npm, runs one line and answers npm's prompts. You never
-see a token or a one-time code.
+The publisher publishes each package's first version from their own machine, and CI publishes the
+rest through OIDC. npm adds a trusted publisher only to a package already on the registry. The
+publisher is the user, or another person the user names, with 2FA on npm. You do the prep. The
+publisher runs `npm-first-publish` and answers npm's prompts. To add the trusted publisher later,
+they run `npm-first-publish trust`. You never see a token or a one-time code.
 
-These pass every local check and fail the first CI release: a scope someone else owns, a trusted
-publisher that allows only `npm stage publish`, and one that expired before CI used it.
+You're done when `npm view` finds each package, or you've said which ones still 404, and you've
+cleaned up.
+
+Every local check passes, and the first CI release still fails, when someone else owns the scope,
+the trusted publisher allows only `npm stage publish`, or the trusted publisher expired before CI
+used it.
+
+## Key rules
+
+- [Prep, then hand off one line](#prep-then-hand-off-one-line): you run `check`; the publisher runs
+  `npm-first-publish` in their own terminal.
+- [Scope and org](#scope-and-org): the publisher creates a free org for a scope nobody holds.
+- [Trusted publishing](#trusted-publishing): pass `--trust` only when the first CI release is less
+  than 2 days away.
+- [Provenance](#provenance): publish a placeholder first, and let CI publish the first real version.
+- [Check the publish](#check-the-publish): the `+ <name>@<version>` line proves the publish; never
+  publish that package again.
+- [Clean up](#clean-up): remove the worktree, and offer `npm logout`.
+- [What goes wrong](#what-goes-wrong): each CI publish error and its fix.
 
 ## Prep, then hand off one line
 
@@ -70,14 +88,16 @@ version has none, so publish a placeholder such as `0.0.1` and let CI publish th
 
 ## Check the publish
 
-Ask the publisher to paste the `+ <name>@<version>` line and the list under Done. A new package's
-`npm view` and page can 404 for minutes, so don't wait on them and never publish again. Run
-`npm view <name>` before you hand back, and say so if it still 404s.
+Ask the publisher to paste the `+ <name>@<version>` line and the list under Done. That line proves
+the publish. A new package's `npm view` and page can 404 for minutes after the publish. Don't wait
+for them, and never publish a package again once it has that line. Run `npm view <name>` before you
+hand back, and say so if it still 404s.
 
 ## Clean up
 
-The script removes its temporary files either way; the plan survives a failure, and a rerun
-publishes only what's left. After the last publish (and `trust`, if it ran):
+The script removes its temporary files whether the run succeeds or fails. When the publisher's run
+fails partway, ask them to run `npm-first-publish` again. The script keeps the plan, and publishes
+only the packages that aren't on npm yet. After the last publish (and `trust`, if it ran):
 
 1. `git worktree remove .worktrees/<branch>`. If `git -C .worktrees/<branch> status` shows a change,
    it isn't yours: stop and ask.

@@ -1,7 +1,7 @@
 # Work item template
 
 Write each work item's description from this template. A work item is an issue in the work tracker,
-such as a Linear or GitHub issue, and every piece of work gets one. When
+such as a Linear or GitHub issue. Open one for each change that ships on its own. When
 [Choose where the design goes](../SKILL.md#choose-where-the-design-goes) in SKILL.md calls for a
 design doc, write it too, with the [design doc template](./design-doc.md), and link it as step 5
 says.
@@ -21,17 +21,13 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 
 ## Prove acceptance
 
-Write each Acceptance line as a behaviour someone can observe, and name its evidence:
+Write each Acceptance line and its evidence as [Acceptance](../../work-items/SKILL.md#acceptance) in
+the work-items skill says. When the repo has a wringer verify CLI, prove each behaviour a user sees
+with its feature's verdict, and name the feature in the line. When you can name no evidence for a
+line, rewrite the line as a behaviour that a test or a verdict can prove.
 
-- When the repo has a wringer verify CLI, prove each behaviour a user sees with its feature's
-  verdict. Name the feature in the line.
-- Prove each other line with a test, and name what the test covers. In a repo with no verify CLI,
-  prove every line with a test.
-- Leave out a line that only a release or production traffic can prove, such as a rate on a
-  production dashboard. A PR never proves such a line before it merges.
-
-An agent runs a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`.
-The CLI uses these terms as wringer's
+Run a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`. The CLI
+uses these terms as wringer's
 [terms page](https://github.com/zgeoff/wringer/blob/main/docs/reference/terms.md) defines them:
 
 - A **feature** is a named part of the repo that has its own verdict. Its `paths` are the globs of
@@ -66,9 +62,12 @@ out.
 
 ## Sketch
 
-<!-- The function or type inside the module that this work adds or changes. 20 lines at most: show only what changes. -->
+<!-- Sketch the function or type at the module's boundary that this work adds or changes, as SKILL.md's "Show contracts as code" says. Show only what changes, in 20 lines at most. -->
 
 ```ts
+const email = await emails.send({ to, template: 'password-reset', priority: 'urgent' });
+// → { emailID: 'e_8f2', queuedAt: '2026-03-02T10:15:00Z' }
+
 // emails module, called by the password reset page
 type SendEmail = { to: string; template: TemplateName; priority: 'urgent' | 'bulk' };
 function send(input: SendEmail): Promise<QueuedEmail | UnknownTemplate>; // the queue sends each `urgent` email first

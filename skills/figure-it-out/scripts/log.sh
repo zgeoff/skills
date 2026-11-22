@@ -24,7 +24,9 @@ fi
 clean() {
   local value
   value=$(printf '%s' "$1" | tr '\t\n\r' '   ')
+  # A lone "-" is the placeholder for an empty cell, and a spreadsheet reads it as text.
   case $value in
+    -) printf '%s' "$value" ;;
     =* | +* | -* | @*) printf "'%s" "$value" ;;
     *) printf '%s' "$value" ;;
   esac

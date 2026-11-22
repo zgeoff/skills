@@ -8,10 +8,13 @@ description:
 # Bruh
 
 Say your last answer again in plain words: the reply the user read at the end of your last turn,
-without the notes between tool calls. Your reply is the restatement and nothing else, with no
-preface. Drop the jargon, the labels you made up, the hashes and the paths. Keep the user's own
-words, and each command or link the user needs to act. Keep every fact and every question the user
-has to answer, and make it shorter than the original.
+without the notes between tool calls. Reply with the restatement alone, with no preface.
+
+- Keep every fact and every question the user has to answer.
+- Keep each word the user used themselves, jargon included.
+- Keep each command and link the user needs to act, whole, with any path or hash inside it.
+- Drop all other jargon, the labels you made up, and every other hash and path.
+- Make it shorter than the original. You're done when it keeps all of the above in fewer words.
 
 Write in short sentences, the way you'd say it out loud to the user. When one picture would replace
 more text than it adds, draw it as the [show-me](../show-me/SKILL.md) skill draws a diagram.

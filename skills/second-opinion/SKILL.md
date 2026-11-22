@@ -9,15 +9,16 @@ description:
 
 # Second opinion
 
-You did the work, so you can't read it cold. Ask a model that didn't: one from another family,
-because a model from your own family shares your blind spots.
+You did the work, so you can't read it cold. Ask a model that didn't, and pick one from another
+family. A model from your own family shares your blind spots.
 
 Send it the work and the question. Leave out your conclusion. A reviewer that sees your answer tends
 to agree with it.
 
-Reproduce each finding before you act on it, fix what holds, and have the same model check the
-fixes. Then hand back what the model said and what you did about each point. The jobs are a review,
-a diagnosis and a judge, and the **Reply** line at the end gives the shape for each.
+Ask the model to review a change, diagnose a bug or judge sketches. For a review or a diagnosis,
+reproduce each finding before you act on it, fix what holds, and have the same model check the
+fixes. For a judge, report the scores and the pick. Then hand back what the model said and what you
+did, in the shape the **Reply** line at the end gives for each job.
 
 ## Key rules
 

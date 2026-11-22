@@ -3,19 +3,21 @@ name: pickup
 description:
   'Picks up work from a handoff doc: reads it whole, checks each claim against the current state of
   the branches, PRs and tickets, tells the user what changed since it was written, and starts on the
-  next action. Load it for /pickup, and when you start work that a handoff doc in `.handoff/`
-  describes.'
+  next action, or asks the user to approve a different one. Load it for /pickup, and when you start
+  work that a handoff doc in `.handoff/` describes.'
 ---
 
 # Pickup
 
 Carry on the work a handoff doc describes. The doc was true when someone wrote it. Check each claim
-against now before you act. Report what you found to the user, then start on the next action.
+against the current state before you act, and report what you found to the user. You're done when
+you've started on the doc's next action, or asked the user to approve a different one.
 
 1. Find the doc in `.handoff/`, in the repo's main working tree, which is the first path
-   `git worktree list` prints. When there are several docs, take the one whose file name matches
-   what the user named. When the user named none, ask which. When there are no docs, tell the user.
-   Then stop.
+   `git worktree list` prints.
+   - When there are several docs, take the one whose file name matches what the user named. When the
+     user named none, ask which, and go on once they answer.
+   - When there are no docs, tell the user, and stop.
 2. Read the whole doc.
 3. Check each claim in the doc against how things stand now, including:
    - the branches and worktrees, and each change the doc calls uncommitted;
@@ -29,11 +31,13 @@ against now before you act. Report what you found to the user, then start on the
    or the doc has none, choose another action.
 5. Tell the user, in a few lines: the goal, where it stands now, with the differences and the claims
    you couldn't check first, what waits on the user, and the next action.
-6. When the next action is the doc's, start on it. When you chose another, ask the user to approve
-   it. Then wait.
+6. Act on the next action:
+   - When it is the doc's, start on it, and carry on with the work.
+   - When you chose it, ask the user to approve it, and wait for the answer.
 
-When the session ends, rewrite the doc with the [handoff](../handoff/SKILL.md) skill. When the work
-has landed, ask the user before you delete the doc.
+Keep the doc after this skill ends. When your session ends before the work lands, rewrite the doc
+with the [handoff](../handoff/SKILL.md) skill. When the work has landed, ask the user before you
+delete the doc.
 
-**Reply:** the goal, where it stands now with the differences first, what waits on the user, and the
-next action.
+**Reply:** the goal; where it stands now, starting with the differences and the claims you couldn't
+check; what waits on the user; and the next action.

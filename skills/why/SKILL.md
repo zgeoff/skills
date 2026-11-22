@@ -10,9 +10,9 @@ description:
 
 # Why
 
-Find out why code or a decision is the way it is. The code tells you what it does. It never tells
-you why. The reason is in what people wrote at the time: commit messages, PRs, tickets, docs, code
-comments and agent sessions. Each place that holds such writing is an evidence source.
+Find out why code or a decision is the way it is, from what people wrote at the time: code comments,
+commit messages, PRs, tickets, docs and agent sessions. Each place that holds such writing is an
+evidence source.
 
 Trace past the latest commit. Code gets its shape from many decisions. Write "because" only for a
 reason someone wrote down. Report a source you couldn't reach as a gap in the search, and say what
@@ -157,9 +157,9 @@ Hand the weigher's report to your caller as written. Don't soften or firm up its
 ## Report
 
 Check that the weigher's report keeps what was found apart from what was inferred, gives every
-source a line, and ends with a confidence line. When a change is planned, check that it ends with
-what to keep, what can change, what to avoid, and the risk. When a part is missing, send the report
-back to the weigher. Don't fix it yourself.
+source a line, and has a confidence line. When a change is planned, check that the report ends,
+after the confidence line, with what to keep, what can change, what to avoid and the risk. When a
+part is missing, send the report back to the weigher. Don't fix it yourself.
 
 ## When the user asked the question
 
