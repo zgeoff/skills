@@ -1,8 +1,8 @@
 # Logs and metrics
 
 Read this file after investigator.md when your caller makes you the investigator for logs and
-metrics. investigator.md defines the target and the sections of your return, such as Gaps. You're
-done after step 4.
+metrics. investigator.md defines the target and the sections of your return, such as Gaps. After
+step 4, search for the other side, as investigator.md says, then stop.
 
 Logs and metrics show whether something still happens, and how often. For defensive code, such as a
 retry or a guard, find out whether the retry still fires and whether the error the guard catches

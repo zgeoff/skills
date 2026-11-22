@@ -2,7 +2,7 @@
 
 Read this file after investigator.md when your caller makes you the investigator for agent sessions.
 investigator.md defines the target, the anchor and the sections of your return, such as Gaps and
-Leads. You're done after step 5.
+Leads. After step 5, search for the other side, as investigator.md says, then stop.
 
 The user makes decisions in chats with agents, and the chat can be the only record. A user's
 decision is one the user typed, or the only proposal in an agent's message when the user's next

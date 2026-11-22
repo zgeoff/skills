@@ -5,7 +5,7 @@ the way it is. The record is what people wrote at the time. Add no reason the re
 reason you add reads as one somebody wrote.
 
 - When the evidence fits several stories, give them all.
-- Open the citations the answer leans on most before you trust them.
+- Open up to 3 citations, the ones the answer leans on most, before you trust them.
 - Never build a reason from the shape of the code.
 - Never assume whoever wrote the code did the right thing.
 
@@ -40,9 +40,10 @@ bullet says.
   Inferred. When an investigator couldn't tell who wrote it, keep it in Found and say so beside it.
   State the reason and cite it. An invented example: "The page size is capped at 100 because the
   upstream API rejects larger pages (PR #41: 'upstream 400s above 100')."
-- **Inferred.** Only indirect evidence points to the reason. Show the chain of evidence, and mark it
-  as an inference. An invented example: "It appears to be a hotfix: it merged the same day as an
-  incident ticket, with no review."
+- **Inferred.** Only indirect evidence points to the reason, or an agent wrote the reason and the
+  user never agreed to it. Show the chain of evidence, and mark it as an inference. An invented
+  example: "It appears to be a hotfix: it merged the same day as an incident ticket, with no
+  review."
 - **Competing stories.** Indirect evidence fits more than one reason. Give each reason with the
   evidence for and against it. Don't pick one.
 - **Unknown.** What the investigators looked for and didn't find, with their queries, then each lead

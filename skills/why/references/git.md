@@ -10,7 +10,7 @@ Commits and PRs hold the written reason closest to the code. Work in this order:
 - Run steps 3 to 5 on the anchor's commits and PRs.
 - Run steps 2 to 7 in order, to go back to the commit that added the target.
 
-You're done after step 7.
+After step 7, search for the other side, as investigator.md says, then stop.
 
 1. When `git rev-parse --is-shallow-repository` prints `true`, run `git fetch --unshallow`. When the
    fetch fails, put the missing history under Gaps. Go on, and mark every history result as

@@ -29,4 +29,5 @@ tickets in every search.
    and its documents. Date the description and each document by its own edits, as step 2 says. Stop
    at the project. A document that records a choice and its reason is direct evidence.
 6. Search once more with the words the tickets you read use for the target. A search for the code's
-   names can miss them. Run steps 2 to 5 on each ticket you add, then stop: you're done.
+   names can miss them. Run steps 2 to 5 on each ticket you add. Then search for the other side, as
+   investigator.md says, and stop.
