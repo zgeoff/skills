@@ -66,13 +66,14 @@ time and median in this skill as [Run times](./references/run-times.md) says.
 
 - Set `timeout-minutes` on every job that runs steps. GitHub refuses it on a job that calls a
   reusable workflow, so pass the workflow's `timeout-minutes` input when it has one.
-- Set 20 minutes on a job with tests. Once its tests have stayed within the test budget for a week
-  of runs on `main`, set twice the budget plus the job's median time outside its tests.
-- Set twice the median time on a job with no tests, and never less than 5 minutes.
-- Set the repo variable `BUN_CHECK_TIMEOUT_MINUTES` to the slowest test job's timeout.
-  `bun-checks.yml` gives that one timeout to each of its jobs that runs tests, and 5 minutes to each
-  of its jobs that runs none. Set each job you write by the bullets above. In a workflow you write
-  that calls `bun-checks.yml`, pass the variable the way
+- Work out a test job's timeout the same way, whether you write the job or `bun-checks.yml` runs it:
+  20 minutes, then, once its tests have stayed within the test budget for a week of runs on `main`,
+  twice the budget plus the job's median time outside its tests.
+- Set twice the median time on a job you write that runs no tests, and never less than 5 minutes.
+  `bun-checks.yml` sets 5 minutes on each of its own jobs that runs no tests.
+- Set the repo variable `BUN_CHECK_TIMEOUT_MINUTES` to the largest timeout among the test jobs that
+  `bun-checks.yml` runs. It gives that one timeout to each of them. In a workflow you write that
+  calls `bun-checks.yml`, pass the variable the way
   [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/src/workflow-callers/pr.yml) does.
 
 ## Reusable workflows
