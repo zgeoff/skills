@@ -1,9 +1,10 @@
 # The docs/ tree
 
 Keep `docs/` to what is true of the system today, so a reader can trust each doc without checking
-its date. Two kinds of doc are the exceptions:
+its date. Keep these kinds of doc in it too:
 
-- a design for work not yet built, with its spikes, which you delete once its code is built;
+- a design for work not yet built, and the spikes in its folder, which you delete with the design
+  once its code is built;
 - a decision record, whose `## Changes` list is its history.
 
 Keep every other plan, research write-up and history out of `docs/`. Put each kind of doc in the
@@ -41,10 +42,10 @@ subfolders by area, so a reader can scan the folder. Link `docs/reference/` from
   architecture doc that owns it. Put each finding someone will act on in the issue tracker. Delete
   the write-up.
 
-- **Development and releasing live in runbooks.** Put the contributor setup in `development.md`, in
-  `docs/runbooks/`. The release runbook, `releasing.md` in the same folder, is for the steps the
-  release tooling doesn't do. When the tooling does every step, delete the runbook: steps that
-  repeat the tooling go stale when it changes.
+- **Put development and releasing in runbooks.** Write the contributor setup in
+  `docs/runbooks/development.md`. Write the steps the release tooling doesn't do in
+  `docs/runbooks/releasing.md`. When the tooling does every step, delete the release runbook. Steps
+  that repeat the tooling go stale when it changes.
 
 ## Length
 
@@ -54,10 +55,9 @@ goes over one, without failing the run. Past the cap, cut paragraphs first, then
 concept boundary. If the doc is still over, say so in the PR body. Each of these gets a doc under
 the cap and leaves it harder to use, so don't do them:
 
-- compressing sentences, meaning dropping their articles and connecting words, which makes each
-  sentence harder to read;
-- moving the overflow into a README or code comments, where it is a copy that the reader of the doc
-  never finds;
+- dropping articles and connecting words from sentences, so each is harder to read;
+- moving the overflow into a README or code comments, where the reader of the doc never finds the
+  copy;
 - splitting where the concept has no boundary, so the reader needs both halves open.
 
 ## Designs and decision records

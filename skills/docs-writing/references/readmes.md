@@ -1,7 +1,7 @@
 # READMEs
 
-A repo has five kinds of README, and each is an index or a landing page. Keep each one short. Flags
-and edge cases belong in the code, `--help` or `docs/`, and a copy in a README goes out of date.
+A repo has five kinds of README, and each is an index or a landing page. Keep each one short. Put
+flags and edge cases in the code, `--help` or `docs/`. A copy in a README goes out of date.
 
 Contents: [the five kinds](#the-five-kinds) · [root README](#root-readme) ·
 [the header](#the-header) · [published package sections](#published-package-sections) ·
@@ -125,8 +125,8 @@ of date:
 
 ## Who reviews a README
 
-The user owns what each README says about the project, so the user reviews every README change in
-its PR. Make the change without asking first, in the PR that each line below names:
+The user owns what each README says about the project. The user reviews every README change in its
+PR. Make the change without asking first, in the PR that each line below names:
 
 - Add a new package's README in the PR that adds the package.
 - Add a new feature's README line in the PR that adds the feature.
