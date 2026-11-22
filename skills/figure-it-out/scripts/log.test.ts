@@ -65,6 +65,19 @@ test('it flattens tabs and newlines and quotes a cell a spreadsheet reads as a f
   });
 });
 
+test('it keeps a lone dash, the empty-cell placeholder, unquoted', async () => {
+  const ctx = await setupTest();
+
+  const result = await ctx.run(ctx.logPath, 'pr-3', 'expect the form to save', 'step 2', '-', '-');
+
+  expect({ exitCode: result.exitCode, log: await ctx.readLog() }).toStrictEqual({
+    exitCode: 0,
+    log:
+      'ts\tphase\tdecision\twhy\tevidence\tresult\n' +
+      'TS\tpr-3\texpect the form to save\tstep 2\t-\t-\n',
+  });
+});
+
 test('it fails with the usage line when a cell is missing', async () => {
   const ctx = await setupTest();
 

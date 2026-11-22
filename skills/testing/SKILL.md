@@ -165,6 +165,8 @@ directly only where [Seeding](./references/seeding.md) allows.
 - Assert less than the full result only for:
   - an error, as [Errors](#errors) says;
   - a raw row in the creating module's own test, with `toMatchObject`;
+  - a parsed log line or workflow file, with `toMatchObject` on the fields you check: the rest
+    changes on every run, or belongs to another test;
   - the read-back state, with one `toBe` on the changed field.
 - Assert the return value and the read-back state in separate `expect` calls.
 - Assert the parts of one result in one `expect`, such as a command's exit code, stdout and stderr.

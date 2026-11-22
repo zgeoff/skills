@@ -79,7 +79,8 @@ a skill:
    skill, with no stock opener. When a skill hands something back, repeat it in a `**Reply:**` line
    at the end.
 2. `## Key rules`: one line per `##` section, with a link and the rule in a phrase. Leave
-   `## Key rules`, `## References` and each `###` out of the list.
+   `## Key rules`, `## References` and each `###` out of the list. A skill with no `##` section
+   leaves out `## Key rules`.
 3. `## References`, when the skill has any: one line per file in `references/`, with the task that
    needs it.
 
@@ -103,8 +104,8 @@ invented path as its file and folder apart, such as `nextest.toml` in `.config/`
 placeholder, such as `<name>`: `chex skill` warns on a bare path that matches a repo file.
 
 - **Replace a list of files, functions or options,** with the rule that defines the list and the
-  search that finds it: "each stand-in is a `build-stub-*` file in `test-utils/`; search there
-  before you write one". A table of commands is fine: each row says what its command needs.
+  search that finds it: "each stand-in is a `*-stub-*` file in `test-utils/`; search there before
+  you write one". A table of commands is fine: each row says what its command needs.
 - **Replace a retelling,** such as "the script builds, tags, pushes, then rolls out", with the fact
   the agent acts on, such as "a failed push leaves the old version serving", and link the script.
 - **Quote only when the exact words are the point.** A copied error message teaches the old text
@@ -140,7 +141,8 @@ Remove the cause:
    instruction: "Pass `--region` to each deploy command. The CLI defaults to your last region."
 
 Never write a list of mistakes or a warning about one. The agent still follows the wrong step. Edit
-the rule that covers the mistake, or add one.
+the rule that covers the mistake, or add one. The same goes for a doc that one agent writes for
+another, such as a handoff doc: write each lesson as the instruction to follow, with its reason.
 
 ## Check it
 

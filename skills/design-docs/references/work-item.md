@@ -21,16 +21,10 @@ line whose evidence no longer holds, and give the reason in a comment on the iss
 
 ## Prove acceptance
 
-Write each Acceptance line as a behaviour someone can observe, and name its evidence:
-
-- When the repo has a wringer verify CLI, prove each behaviour a user sees with its feature's
-  verdict. Name the feature in the line.
-- Prove each other line with a test, and name what the test covers. In a repo with no verify CLI,
-  prove every line with a test.
-- Leave out a line that only a release or production traffic can prove, such as a rate on a
-  production dashboard. A PR never proves such a line before it merges.
-- When you can name no evidence for a line, rewrite the line as a behaviour that a test or a verdict
-  can prove.
+Write each Acceptance line and its evidence as [Acceptance](../../work-items/SKILL.md#acceptance) in
+the work-items skill says: that skill owns the rule. When the repo has a wringer verify CLI, prove
+each behaviour a user sees with its feature's verdict, and name the feature in the line. When you
+can name no evidence for a line, rewrite the line as a behaviour that a test or a verdict can prove.
 
 An agent runs a [wringer](https://github.com/zgeoff/wringer) verify CLI as `bun verify <command>`.
 The CLI uses these terms as wringer's

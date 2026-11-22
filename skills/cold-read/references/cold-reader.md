@@ -19,9 +19,10 @@ read the file, or the prompt leaves one of these out, report that alone and stop
 them would mislead the author.
 
 Read the file. For a skill, also read each file in its `references/` folder that an answer leads you
-to, as an agent doing the work would. Read the rules files only for
-[Contradictions](#contradictions). Skip linked code, linked docs, the repo and its history. The real
-reader may have them, but the file has to work without them.
+to, as an agent doing the work would. For a file in a skill's `references/`, also read each section
+of its SKILL.md that the file links to: an agent opens the reference from there. Read the rules
+files only for [Contradictions](#contradictions). Skip linked code, linked docs, the repo and its
+history. The real reader may have them, but the file has to work without them.
 
 ## The questions
 
@@ -30,7 +31,8 @@ on. Give only what the file says. Leave out what it doesn't cover: a list of cas
 has no end, and agents who meet those cases show which ones matter. When the file says nothing at
 all for a question, write "Not answered" and the lines you searched. When it gives two answers,
 quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
-back, write that.
+back, write that. For a file in a skill's `references/`, write "doesn't apply" for questions 1 and
+2: the SKILL.md line that links it says when to open it, and SKILL.md holds the hand-back.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:

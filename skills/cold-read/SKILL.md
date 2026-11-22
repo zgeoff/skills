@@ -62,10 +62,13 @@ Hand back:
    file, before you spawn anything. Answer with what the file is meant to tell a reader. When you
    didn't write the file, take that from the file, the skills or docs that point at it, and the
    repo. Write "doesn't apply" for a question this kind of file has no need to answer, such as
-   commands in a skill that runs none, or a next step in an architecture doc. When the rules have a
-   reference for the file's kind, such as READMEs, a question that reference doesn't ask for doesn't
-   apply. When a question applies and you can't answer it, note it as a gap in the file or in the
-   rules.
+   commands in a skill that runs none, or a next step in an architecture doc. For a file in a
+   skill's `references/`, questions 1 and 2 don't apply: the SKILL.md line that links it says when
+   to open it, and SKILL.md holds the hand-back. For a rule set and its references, questions 2 and
+   4 don't apply. When your answer to question 5 gives a limit no reason, note it as a gap only when
+   the limit looks arbitrary to someone without your context. When the rules have a reference for
+   the file's kind, such as READMEs, a question that reference doesn't ask for doesn't apply. When a
+   question applies and you can't answer it, note it as a gap in the file or in the rules.
 5. Spawn one `general-purpose` subagent for each file you check, in parallel. A skill's SKILL.md and
    each of its references are separate files. Never use a fork: a fork inherits your conversation.
 6. Give each subagent this prompt and nothing else. `<skill_dir>` is the absolute path of the folder
@@ -100,10 +103,18 @@ only in your head. Its cold reader raises the same finding again.
 - **Close a gap** when you couldn't write your own answer, or a fix needs a rule no rules file has.
   Write the answer most repos would expect as a rule, in the file or in the rules file, and list it
   in your reply.
-- **Ask the user** only when the gap needs a call on taste, priority or cost, or would reverse a
-  rule that exists. Write your answer as the rule anyway, and ask the user whether to keep it. Don't
-  ask about a reason you wrote for a rule, or a guess at what the author meant. The user reads the
-  rules you added in your reply.
+- **Check each fact you write** before you commit it, such as how a tool behaves, what a flag does,
+  or why a rule exists. Read the docs or the source, or run it. The user can't check it faster than
+  you can, so never ask them to confirm a fact. When you can't check one, leave that claim out and
+  keep the rule it explains.
+- **Ask the user** only when the choice needs their taste, their priorities or their money, or
+  reverses a rule that exists. Write your answer as the rule anyway, and ask whether to keep it.
+  Close everything else yourself: a reason you wrote, a guess at what the author meant, a choice any
+  convention settles, a contradiction, a fact you can check. When the fix belongs in another repo,
+  write what happens today and file an issue there. The user reads the rules you added in your
+  reply.
+- **Hand a shared-rules gap to your caller** when another session owns that rules file, and count
+  the finding as acted on.
 
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.

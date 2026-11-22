@@ -22,6 +22,19 @@ Every local check passes, and the first CI release still fails, when someone els
 the trusted publisher allows only `npm stage publish`, or the trusted publisher expired before CI
 used it.
 
+## Key rules
+
+- [Prep, then hand off one line](#prep-then-hand-off-one-line): you run `check`; the publisher runs
+  `npm-first-publish` in their own terminal.
+- [Scope and org](#scope-and-org): the publisher creates a free org for a scope nobody holds.
+- [Trusted publishing](#trusted-publishing): pass `--trust` only when the first CI release is less
+  than 2 days away.
+- [Provenance](#provenance): publish a placeholder first, and let CI publish the first real version.
+- [Check the publish](#check-the-publish): the `+ <name>@<version>` line proves it; never publish
+  again after it.
+- [Clean up](#clean-up): remove the worktree, and offer `npm logout`.
+- [What goes wrong](#what-goes-wrong): each CI publish error and its fix.
+
 ## Prep, then hand off one line
 
 [`scripts/first-publish.sh`](./scripts/first-publish.sh) does every step, run as `npm-first-publish`

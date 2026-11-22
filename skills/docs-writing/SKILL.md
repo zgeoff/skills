@@ -24,9 +24,10 @@ you review, run the chex command from [Check it](#check-it), with no cold read. 
 file against every section below, and hand back each finding with its line and the quoted rule, for
 the author to fix.
 
-When the `skill-writing` skill disagrees with this one about a skill, follow skill-writing. When a
-repo's `project-docs-writing` skill disagrees with this one about that repo's docs, follow it. Write
-committed prose by these rules, whatever style you use in chat.
+When the `skill-writing` skill disagrees with this one about a skill, or `design-docs` about a
+design or a decision record, follow that skill. When a repo's `project-docs-writing` skill disagrees
+with this one about that repo's docs, follow it. Write committed prose by these rules, whatever
+style you use in chat.
 
 ## Key rules
 
@@ -106,7 +107,8 @@ task. Explain each fact, with its reason, in one doc, and link to that doc from 
 docs disagree, check the owning doc against the code, and replace the other copy with a link.
 
 **In a code comment,** write why the code is the way it is. The rules in this section and the house
-rules apply to it.
+rules apply to it. A comment that turns off a check also holds its expiry and the PR's link, as the
+[correct](../correct/SKILL.md) skill says.
 
 ## House rules
 
@@ -159,8 +161,8 @@ A short line that sums up a rule is fine when the rule sits next to it in full.
 - **Procedures.** Number the steps, and give the expected outcome after each one that has one:
   "Expect: HTTP 202".
 - **Headings.** Name what the section is about. A role name such as "Overview" fits any section, so
-  it tells the reader nothing. Use no horizontal rule between sections: the headings already split
-  them.
+  it tells the reader nothing. A section name that a skill's output format sets is a format: keep
+  it. Use no horizontal rule between sections: the headings already split them.
 - **Formatting.** Tag every code block with a language, and link with a path relative to the file.
   Name what each placeholder stands for (`<service_id>`, never `xxx`), so the reader knows what to
   put there.
@@ -183,16 +185,10 @@ want to keep, rewrite it until the check passes. In your reply, name each failur
 didn't change, and leave it: it belongs to another change. Outside a repo, or when chex can't run,
 skip the checks and say so in your reply.
 
-- `chex prose` fails on what a search can find, such as banned words. Under "Candidates", it also
-  prints lines that need a person's judgment. Fix each candidate that's a real fault. In the check
-  output you hand back, give the failures and the candidates you fixed. To check prose outside the
-  files it covers, such as AGENTS.md, run `bun x @zgeoff/chex prose <path>`.
-- `chex length` checks each README, and each `docs/` file outside a spike's folder, against its
-  length limit.
-- `chex links` resolves every relative link.
-- `chex readmes` fails on a README that isn't one of the five kinds in
-  [READMEs](./references/readmes.md).
-- `chex skill` checks each skill, as the skill-writing skill describes.
+`chex prose` also prints "Candidates": lines that need a person's judgment. Fix each one that's a
+real fault, and hand back the failures and the candidates you fixed. To check prose outside the
+files it covers, such as AGENTS.md, run `bun x @zgeoff/chex prose <path>`. `chex length` skips each
+`docs/` file inside a spike's folder.
 
 Then run the `cold-read` skill on each doc you changed, and act on what it finds, as that skill
 says. Skip the cold read for a code comment. You're done when the checks pass for the files you

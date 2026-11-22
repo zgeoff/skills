@@ -47,6 +47,10 @@ When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-y
 - [Show the changes](#show-the-changes): a count to a person; a `diff` block per change to an agent.
 - [After a cold read](#after-a-cold-read): deslop again each section you redrafted.
 
+## References
+
+- [Agent hand-back](./references/agent-hand-back.md): handing your changes back to an agent.
+
 ## Text you wrote
 
 Text you just wrote reads as plain to you, so you miss its faults. Deslop it with a fresh
@@ -56,11 +60,12 @@ nothing else. `<skill_dir>` is the absolute path of the folder this SKILL.md is 
 ```text
 Read <skill_dir>/SKILL.md and follow it as your instructions.
 The text: <absolute path>
+It is a: <skill | doc>
 Deslop these sections: <each heading you wrote or changed>
 ```
 
-Read each change it hands back, and revert any that changes a fact or breaks a format. Then run the
-prose check.
+Read each change it hands back. Revert any that changes a fact, breaks a format, cuts a rule's
+reason, or renames a term another file uses. Then run the prose check.
 
 ## What to fix
 
@@ -140,7 +145,8 @@ The rules behind these faults live in the [skill-writing](../skill-writing/SKILL
    ```
 
 8. **Keep blunt lines blunt.** Don't explain them, qualify them or make them more formal. Cut a
-   sentence that explains the line before it, such as a closing "and that's the point".
+   sentence that explains the line before it, such as a closing "and that's the point". Keep a
+   rule's reason: the reader needs it for a case the rule didn't foresee.
 
    ```diff
    - Tomatoes hate frost. This means that they should not be planted out early in the season.
@@ -211,18 +217,8 @@ each candidate, and fix the mistakes.
 ## Show the changes
 
 To a person, give the number of edits and the kinds of fault, in a line or two, and show the changes
-only when asked. To an agent, show each change as below, so it can check each one.
-
-Give each kind of fault you fixed one `###` heading, named in a few words, such as "Cut drama
-words". Under it, write one line on why. Then give each place you changed its own `diff` block, with
-`-` before and `+` after, so the lines show in colour. When the fault is outside What to fix, use
-the heading "Prose check" or "Structure". Never show the whole file.
-
-End with short bulleted lists, each with its reasons:
-
-- each line the prose check flagged that you kept, and each fault you chose not to fix;
-- each fault in a doc that you left for docs-writing;
-- each other file that uses a label you renamed.
+only when asked. To an agent, show each change as [Agent hand-back](./references/agent-hand-back.md)
+says.
 
 ## After a cold read
 
