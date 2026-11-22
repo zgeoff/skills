@@ -65,10 +65,10 @@ Read the code and the ticket until you can write these at the top of your plan. 
 
 1. Split the work into PRs that each leave the code working once merged in order. Branch each PR
    from the one before it, and merge none of them yourself.
-2. Make the first PR the acceptance test, as a script that CI doesn't run yet, because it fails
-   until the job is done. That PR's check is that the script runs and fails as expected. The last PR
-   adds the script to CI. When you build the first PR, run the script on the code as it is now, and
-   log the result, so each later run compares against it.
+2. Make the first PR the acceptance test, as a script that CI doesn't run yet. It fails until the
+   job is done. That PR's check is that the script runs and fails as expected. The last PR adds the
+   script to CI. When you build the first PR, run the script on the code as it is now, and log the
+   result, so each later run compares against it.
 3. Put the step you're least sure of second, right after the acceptance test. Order the rest with
    setup and tests before features.
 4. Give each PR a check, such as a test or a command, that passes when the PR works.
@@ -139,8 +139,10 @@ Add an entry when you:
 - get a PR's check result;
 - revert a change;
 - hit a blocker;
-- fix a check. Skip routine steps. Never edit an entry. When one is wrong, add an entry whose `why`
-  starts `replaces <time of the wrong entry>`.
+- fix a check.
+
+Skip routine steps. Never edit an entry. When one is wrong, add an entry whose `why` starts
+`replaces <time of the wrong entry>`.
 
 When you continue a log that another session started, first add an entry with the phase `resume`. In
 its decision, write the times of the other session's first and last entries. In its evidence, write

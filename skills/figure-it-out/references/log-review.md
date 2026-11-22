@@ -2,8 +2,8 @@
 
 At the end of the job, in step 3 of the skill's "Finish" section, check your own entries in the
 decision log against your session's transcript, then have a model from another family read the log.
-The log is `decisions.tsv`, kept as the skill's "Keep a decision log" section says. You never edit
-an entry: you add a new one that replaces it.
+The log is `decisions.tsv`, kept as the skill's "Keep a decision log" section says. Never edit an
+entry. Add a new one that replaces it.
 
 The folders that hold transcripts also hold the user's other conversations. Open only your own
 transcript.
