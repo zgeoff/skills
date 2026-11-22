@@ -167,8 +167,9 @@ the rule that covers the mistake, or add one.
 
    Leave `- [ ] chex` as it is: CI ticks it when the checks clear. When the repo has no template,
    add a `## Checks` section with those three lines yourself. When a later commit changes a skill, a
-   README or a file under `docs/`, run steps 2 and 3 again on what it changed, and put that commit's
-   hash on both lines. The PR-body check fails a hash older than the last such commit.
+   README or a file under `docs/`, run step 3 on what it changed, and put that commit's hash on the
+   Deslop line. The PR-body check fails a Deslop hash older than the last such commit. Move the Cold
+   read hash only when the `cold-read` skill has you read the file again.
 
    Tell the user or your caller each rule you added to close a gap, and each gap you raised, as the
    `cold-read` skill says.
