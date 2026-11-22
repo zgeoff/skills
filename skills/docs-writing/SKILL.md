@@ -111,8 +111,8 @@ reason does the work", "the error names the fix"). That hides who acts.
 
 **Lead with what the reader does.** Open a paragraph or a bullet with the instruction or the fact
 the reader acts on. A definition first ("A heavy check is a job that…") or a label and a colon
-("Private:") leaves the reader to work out what to do. A skill's closing `**Reply:**` line is the
-one label skill-writing asks for.
+("Private:") leaves the reader to work out what to do. In a skill, keep the labelled lines that
+skill-writing asks for: the Key rules lines, the References lines and the `**Reply:**` line.
 
 **Use the plain name.** Call a thing what the reader already calls it. A label you made up, such as
 "a negative" for a failed check, reads as a term they should know.
@@ -186,7 +186,8 @@ the checks and say so in your reply.
 - `chex skill` checks each skill, as the skill-writing skill describes.
 
 Then run the `cold-read` skill on each doc you changed, and act on what it finds, as that skill
-says. For a skill, skill-writing runs the cold read.
+says. For a skill, skill-writing runs the cold read. A code comment gets no cold read. You're done
+when the checks pass for the files you changed and the cold read has ended.
 
 **Reply:** for writing, the files you changed, the check output and what the cold read found; for a
 review, each finding with its line and the quoted rule.

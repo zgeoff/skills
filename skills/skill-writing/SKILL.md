@@ -20,8 +20,9 @@ So give it what the code can't:
 
 Keep the skill short, or the agent skims.
 
-When you write or edit one, hand back the skill's path, the PR link and the proof from
-[Check it](#check-it). With no PR, put the proof from step 4 in your reply. When you review one,
+When you write or edit one, hand back the skill's path, the PR link, the proof from
+[Check it](#check-it), each rule you added to close a gap and each question for the user. With no
+PR, put the proof from step 4 in your reply. You're done when step 4 is done. When you review one,
 hand back each finding with its line and the rule it breaks, quoted.
 
 ## Key rules
@@ -153,7 +154,8 @@ the rule that covers the mistake, or add one.
    While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder that holds
    its SKILL.md. When a check flags a sentence you like, rewrite it until the check passes, and name
    the sentence and the check to the user or your caller. Name each failure in a file you didn't
-   change, and leave it: it belongs to another change.
+   change, and leave it: it belongs to another change. Outside a repo, or when chex can't run, skip
+   the checks and say so.
 
 2. Run the `cold-read` skill on each file of the skill you wrote or changed. It sets how many reads
    each file gets.
@@ -171,8 +173,5 @@ the rule that covers the mistake, or add one.
    Deslop line. The PR-body check fails a Deslop hash older than the last such commit. Move the Cold
    read hash only when the `cold-read` skill has you read the file again.
 
-   Tell the user or your caller each rule you added to close a gap, and each gap you raised, as the
-   `cold-read` skill says.
-
-**Reply:** for a skill you wrote or edited, its path, its proof and the PR link; for a review, each
-finding with its line and the quoted rule.
+**Reply:** for a skill you wrote or edited, its path, its proof, the PR link, each rule you added
+and each question for the user; for a review, each finding with its line and the quoted rule.

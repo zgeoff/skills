@@ -13,7 +13,9 @@ You're done when you hand back one report, in the format under [The report](#the
 
 ## What to read
 
-Your prompt gives you the file, what it is (a doc or a skill), and the rules files.
+Your prompt gives you the file, what it is (a doc or a skill), and the rules files. When you can't
+read the file, or the prompt leaves one of these out, report that alone and stop: answers without
+them would mislead the author.
 
 Read the file. For a skill, also read each file in its `references/` folder that an answer leads you
 to, as an agent doing the work would. Read the rules files only for
@@ -36,7 +38,7 @@ brief or AGENTS.md:
 4. What do you do when a step fails, or when your case doesn't fit the steps?
 5. What does the file tell you never to do, and why?
 
-For a doc:
+For a doc, which is any other file, such as a README or a file in `docs/`:
 
 1. Who reads this doc, and what task brings them to it?
 2. What does the system it describes do, in one paragraph?
@@ -80,4 +82,5 @@ Leave out the Contradictions section when you found none.
 
 - Answer from the file. When you fill a gap with what seems likely, say the file doesn't state it.
 - Suggest no wording. The author rewrites from the facts.
-- Only read and search. Edit no file, and use no skills and no subagents.
+- Only read and search. Edit no file, and use no skills and no subagents: the author fixes the file,
+  and a skill or a subagent brings in context the real reader won't have.

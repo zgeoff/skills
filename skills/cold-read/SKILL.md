@@ -16,7 +16,7 @@ fresh subagent, the cold reader, and compare its answers with yours. Fix each pl
 then deslop what you changed.
 
 Every read asks the same questions, so a second read checks your fixes and finds little new. A read
-where every answer matches yours and nothing contradicts is clean, and it ends the cold read.
+where every answer matches yours and nothing contradicts is clean, and it ends the reads.
 
 Hand back:
 
@@ -59,7 +59,8 @@ Hand back:
 4. Write your own answer to each question in
    [The questions](./references/cold-reader.md#the-questions) for that kind of file, in a scratch
    file, before you spawn anything. Answer with what the file is meant to tell a reader. When you
-   can't answer a question for your own file, that's a gap in the file, or in the rules: note it.
+   didn't write the file, take that from the file, the skills or docs that point at it, and the
+   repo. When you can't answer a question, that's a gap in the file, or in the rules: note it.
 5. Spawn one `general-purpose` subagent for each file you wrote or changed, in parallel. A skill's
    SKILL.md and each of its references are separate files. Never use a fork: a fork inherits your
    conversation.
@@ -73,12 +74,15 @@ Hand back:
    The rules: <absolute path to each rules file, one per line>
    ```
 
-   Leave out what the file is for and what changed. The real reader won't know either.
+   Leave out what the file is for and what changed. The real reader won't know either. When a
+   subagent ends without its report, ask it once for the report. A read with no report doesn't
+   count.
 
 ## Act on it
 
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
-same facts, in any words.
+same facts, in any words. When an answer says the file doesn't state something, count that part as
+"Not answered", even when the rest matches.
 
 End every finding as a change to text in the repo. Another session never sees a call you only made
 in your head, so its cold reader raises the same finding again.
@@ -92,7 +96,7 @@ in your head, so its cold reader raises the same finding again.
   Write the answer most repos would expect as a rule, in the file or in the rules file, and list it
   in your reply.
 - **Ask the user** only when the gap needs a call on taste, priority or cost, or would reverse a
-  rule that exists. Use your answer until the user decides.
+  rule that exists. Write your answer as the rule anyway, and ask the user whether to keep it.
 
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.
@@ -103,11 +107,11 @@ Leave everything else in the file alone. A sentence that misled no answer isn't 
 
 Give each file at most 3 reads in one pull request, or in one task when there's no pull request.
 
-1. When a read is clean, stop.
+1. When a read is clean, go to step 4.
 2. Otherwise read the file again, whole, with a fresh subagent and the same prompt. Keep your
    answers, unless you changed what the file is meant to say.
-3. Act on each read the same way. After the third read, stop, and hand back each answer that still
-   differs.
+3. Act on each read the same way. After the third read, go to step 4, and hand back each answer that
+   still differs.
 4. Run the [deslop](../deslop/SKILL.md) skill on each section you changed, then the scripted checks
    from [Run it](#run-it).
 
