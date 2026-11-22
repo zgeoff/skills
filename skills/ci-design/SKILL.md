@@ -24,7 +24,7 @@ metadata:
 
 ## Jobs
 
-Never edit [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/workflow-callers/pr.yml):
+Never edit [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/src/workflow-callers/pr.yml):
 [repo-sync](https://github.com/zgeoff/tools/blob/main/docs/architecture/repo-sync.md) copies it from
 zgeoff/tools and overwrites your change. `pr.yml` runs the shared
 [`bun-checks.yml`](https://github.com/zgeoff/tools/blob/main/.github/workflows/bun-checks.yml) on
@@ -70,9 +70,9 @@ time and median in this skill as [Run times](./references/run-times.md) says.
   of runs on `main`, set twice the budget plus the job's median time outside its tests.
 - Set twice the median time on a job with no tests, and never less than 5 minutes.
 - Set the repo variable `BUN_CHECK_TIMEOUT_MINUTES` to the slowest test job's timeout.
-  `bun-checks.yml` gives that timeout to each of its jobs, those with no tests included. In a
-  workflow you write that calls `bun-checks.yml`, pass the variable the way
-  [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/workflow-callers/pr.yml) does.
+  `bun-checks.yml` gives that timeout to each job that runs tests, and 5 minutes to each job that
+  runs none. In a workflow you write that calls `bun-checks.yml`, pass the variable the way
+  [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/src/workflow-callers/pr.yml) does.
 
 ## Reusable workflows
 
