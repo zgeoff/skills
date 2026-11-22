@@ -58,7 +58,9 @@ time and median in this skill as [Run times](./references/run-times.md) says.
   only when the repo is over its test budget.
 - In a private repo, write a job of your own only for a heavy check: one on any runner but a
   GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`. A
-  required check runs on every push to a pull request, so never require a heavy check.
+  required check runs on every push to a pull request, so never require a heavy check. The one
+  exception is the job that calls `bun-checks.yml` on a push to `main`, as
+  [Cancelling runs](#cancelling-runs) says.
 - Give a required job no `if:` or path filter. GitHub counts a skipped required check as a pass.
 
 ## Timeouts
