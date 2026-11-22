@@ -11,7 +11,7 @@ description:
 
 Write each work item as the whole brief of the agent that picks it up. That agent has only the item.
 Hand back each item you filed or changed, whether it is ready, and each decision in it that waits on
-the owner.
+the owner. You're done when each item is filed and checked against [Ready](#ready).
 
 ## Key rules
 
@@ -21,7 +21,7 @@ the owner.
 - [Acceptance](#acceptance): one line for each thing someone observes, with the evidence that proves
   it.
 - [Keep the owner's words](#keep-the-owners-words): copy the words that decide something, and ask
-  the owner before you add or change anything.
+  the owner before you change what the item asks for.
 - [Ready](#ready): the test an item passes before work starts.
 
 ## One item, one outcome
@@ -88,10 +88,11 @@ Leave the Sketch and Constraints sections to whoever designs the work, as the
 ## Acceptance
 
 Write each line as one thing that someone observes, and name the evidence that will prove it: a
-test, a command and its output, a screenshot or a recording. A change that someone can see needs a
-screenshot or a recording.
+test, a command and its output, a screenshot or a recording. When the line changes what a person
+sees on screen, such as a page or a button, the evidence is a screenshot or a recording.
 
-- Make each line fail today and pass when the work is done.
+- Make each line for new behaviour fail today and pass when the work is done. A line for behaviour
+  the work must keep, such as the newsletter line in the template, passes today too.
 - Leave out a line that you can prove only after a release. The next agent can't show it in a pull
   request.
 - When a line needs something that this item doesn't build, such as a fixture or an API, list the
