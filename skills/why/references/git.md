@@ -1,8 +1,7 @@
 # Git and GitHub
 
-Read this file after investigator.md when your caller makes you the investigator for commits and
-PRs. investigator.md defines the target, the anchor and the sections of your return, such as Gaps
-and Leads.
+Your caller made you the investigator for commits and PRs. Read investigator.md first: it defines
+the target, the anchor and the sections of your return, such as Gaps and Leads.
 
 Commits and PRs hold the written reason closest to the code. Work in this order:
 

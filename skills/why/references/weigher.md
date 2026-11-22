@@ -31,8 +31,7 @@ leads. List under Unknown any lead your caller didn't follow.
 ## Sort the reasons
 
 A reason is one answer to the question, such as "the cap protects a rate-limited API". Put each
-reason the evidence holds in Found, Inferred or Competing stories. Unknown holds the gaps, as its
-bullet says.
+reason the evidence holds in Found, Inferred or Competing stories. Put the gaps in Unknown.
 
 - **Found.** Direct evidence states the reason: a PR body, a review comment, a ticket, a code
   comment, a decision record, or an agent session where the user made the call. A reason an agent
@@ -46,9 +45,10 @@ bullet says.
   review."
 - **Competing stories.** Indirect evidence fits more than one reason. Give each reason with the
   evidence for and against it. Don't pick one.
-- **Unknown.** What the investigators looked for and didn't find, with their queries, then each lead
-  nobody followed and each reason you dropped. An invented example: "Searched Linear for 'retry
-  budget' and 'backoff', the 6 PRs on this file, and its agent sessions. None gives a reason."
+- **Unknown.** List what the investigators looked for and didn't find, with their queries. Then list
+  each lead nobody followed and each reason you dropped. An invented example: "Searched Linear for
+  'retry budget' and 'backoff', the 6 PRs on this file, and its agent sessions. None gives a
+  reason."
 
 When two investigators quote items that disagree, put both quotes beside the reason they bear on. A
 Found reason with a quote against it stays Found.
@@ -64,8 +64,8 @@ competing stories: someone copied the code from there, or someone chose it here.
   investigator quoted, move the reason to Inferred if indirect evidence supports it, or to Unknown
   if nothing does. Say why.
 - Drop any reason that rests on the shape of the code alone, and say so under Unknown. Count a code
-  comment as evidence. A person wrote it. Keep the two stories about a pattern found elsewhere: an
-  investigator found that pattern, so it is evidence.
+  comment as evidence. A person wrote it. Keep the two competing stories about a pattern found
+  elsewhere. An investigator found that pattern, so it is evidence.
 - Check each reason against the date the code landed. A reason that makes sense today may not be the
   one the code was written for.
 - Use "because", "was designed to", "fixes" and "we decided" only beside a citation. The reader

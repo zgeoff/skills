@@ -1,8 +1,8 @@
 # Linear
 
-Read this file after investigator.md when your caller makes you the investigator for tickets in
-Linear. investigator.md defines the target, the anchor and the sections of your return, such as Gaps
-and Leads.
+When your caller makes you the investigator for tickets in Linear, read investigator.md first, then
+this file. investigator.md defines the target, the anchor and the sections of your return, such as
+Gaps and Leads.
 
 Linear tickets hold the product side of the reason: what someone asked for, and why they wanted it.
 Report any other reason a ticket gives too, such as a provider's rate limit. A commit can name a
@@ -27,7 +27,7 @@ tickets in every search.
 4. Walk up from each ticket through each parent to the top. Read every ticket on the way.
 5. Read the project of each top-level ticket, when it has one: its description, its status updates
    and its documents. Date the description and each document by its own edits, as step 2 says. Stop
-   at the project. A document that records a choice and its reason is direct evidence.
+   at the project. Report a document that records a choice and its reason as direct evidence.
 6. Search once more with the words the tickets you read use for the target. A search for the code's
    names can miss them. Run steps 2 to 5 on each ticket you add. Then search for the other side, as
    investigator.md says, and stop.

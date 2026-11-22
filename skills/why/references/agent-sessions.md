@@ -25,9 +25,9 @@ your return.
 
 1. Search with `grep -rn`, which gives each hit's file and line. Search for the anchor's ticket IDs,
    its PR numbers as `#123\b` or `pull/123`, and its terms. Search every folder for the ticket IDs
-   and the PR numbers, since sessions about the repo can start in any directory. Search for a term
-   only in the repo's sessions, because a common word hits every project. For Claude Code, those are
-   the folders whose name starts with the repo's slug, which includes its worktrees. For Codex,
+   and the PR numbers. A session about the repo can start in any directory. Search for a term only
+   in the repo's sessions. A common word hits every project. For Claude Code, the repo's sessions
+   are the folders whose name starts with the repo's slug, which includes its worktrees. For Codex,
    those are the files whose `session_meta` working directory is inside the repo. Never match a
    quote or a backslash in the text you search for: the JSON escapes each one, so the match fails. A
    regex token such as `\b` matches no character, so keep it.
