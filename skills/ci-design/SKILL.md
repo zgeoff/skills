@@ -56,11 +56,10 @@ time and median in this skill as [Run times](./references/run-times.md) says.
 - In a public repo, move a script into a job in a workflow you write only when its step takes over
   60 s longer than the steps that set up a job, such as the checkout and `bun install`. Shard tests
   only when the repo is over its test budget.
-- In a private repo, write a job of your own only for a heavy check: one on any runner but a
-  GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or `workflow_dispatch`. A
-  required check runs on every push to a pull request, so never require a heavy check. The one
-  exception is the job that calls `bun-checks.yml` on a push to `main`, as
-  [Cancelling runs](#cancelling-runs) says.
+- In a private repo, keep every script in the `checks` job. Beside the push-to-`main` workflow that
+  [Cancelling runs](#cancelling-runs) asks for, write a job of your own only for a heavy check: one
+  on any runner but a GitHub-hosted `ubuntu-*`, or one that sets up KVM. Run it on `schedule` or
+  `workflow_dispatch`, and never require it. A required check runs on every push to a pull request.
 - Give a required job no `if:` or path filter. GitHub counts a skipped required check as a pass.
 
 ## Timeouts
