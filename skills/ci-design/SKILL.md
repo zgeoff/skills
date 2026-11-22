@@ -69,9 +69,9 @@ time and median in this skill as [Run times](./references/run-times.md) says.
 - Set 20 minutes on a job with tests. Once its tests have stayed within the test budget for a week
   of runs on `main`, set twice the budget plus the job's median time outside its tests.
 - Set twice the median time on a job with no tests, and never less than 5 minutes.
-- Set the timeout of the `bun-checks.yml` jobs with the repo variable `BUN_CHECK_TIMEOUT_MINUTES`.
-  Set it to the slowest test job's timeout. In a workflow you write that calls `bun-checks.yml`,
-  pass the variable the way
+- Set one timeout for every `bun-checks.yml` job, its jobs with no tests included, with the repo
+  variable `BUN_CHECK_TIMEOUT_MINUTES`. Set it to the slowest test job's timeout. In a workflow you
+  write that calls `bun-checks.yml`, pass the variable the way
   [`pr.yml`](https://github.com/zgeoff/tools/blob/main/sync/workflow-callers/pr.yml) does.
 
 ## Reusable workflows
@@ -86,7 +86,8 @@ time and median in this skill as [Run times](./references/run-times.md) says.
   uses: zgeoff/tools/.github/workflows/<name>.yml@<commit> # main
   ```
 
-- Never move the pin by hand. Repo-sync moves each pin in `.github/workflows/`, yours included.
+- After you write the call, never move its pin by hand. Repo-sync moves each pin in
+  `.github/workflows/`, yours included.
 
 ## Step scripts
 
