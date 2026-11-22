@@ -5,8 +5,7 @@ description:
   reverts and the user's corrections, and changes the repo so the next agent can't repeat them: a
   better architecture first, then types, then a lint rule whose error gives the fix, then a test,
   and a written rule last. Proves each new check fails on a real past mistake. Load it for regular
-  repo cleanup, for 'correct this repo', and when the user corrects a mistake a written rule already
-  covers."
+  repo cleanup, for 'correct this repo', and when the user corrects a mistake."
 ---
 
 # Correct

@@ -110,12 +110,14 @@ same finding again.
   or why a rule exists. Read the docs or the source, or run it. The user can't check it faster than
   you can, so never ask them to confirm a fact. When you can't check one, leave that claim out and
   keep the rule it explains.
-- **Ask the user** only when the choice needs their taste, their priorities or their money, or
-  reverses a rule that exists. Write your answer as the rule anyway, and ask whether to keep it.
-  Close everything else yourself: a reason you wrote, a guess at what the author meant, a choice any
-  convention settles, a contradiction, a fact you can check. When the fix belongs in another repo,
-  write what happens today and file an issue there. The user reads the rules you added in your
-  reply.
+- **Ask the user** only when the choice needs their taste or their priorities, or reverses a rule
+  that exists. Write your answer as the rule anyway, and ask whether to keep it. Close everything
+  else yourself: a reason you wrote, a guess at what the author meant, a choice any convention
+  settles, a contradiction, a fact you can check, a case nobody has hit yet, and what a rule costs
+  to run. When the fix belongs in another repo, write what happens today and file an issue there.
+  The user reads the rules you added in your reply. Put a question that another session raised
+  through the same test before you pass it on. A contradiction stays yours to close, even when that
+  session calls it a question of cost.
 - **Hand a shared-rules gap to your caller** when another session owns that rules file, and count
   the finding as acted on.
 
