@@ -10,8 +10,8 @@ description:
 # Figure it out
 
 A job too big for one PR needs a plan before you change any code. Write down a test that fails until
-the whole job is done, the PRs in order, and a check for each PR. Then do the PRs one at a time, and
-log each decision with its reason as you make it.
+the whole job is done, the PRs in order, and a check for each PR. Then do the PRs, and log each
+decision with its reason as you make it.
 
 - **Write the acceptance test first.** It's a command or a comparison that fails until the job is
   done. Without it, nobody can tell when the job is finished or what the work proved.
@@ -21,8 +21,9 @@ log each decision with its reason as you make it.
   loses more time finding a hidden failure than reading a reported one.
 
 When you were asked only for a plan, hand it back after [Plan the PRs](#plan-the-prs). Otherwise
-hand back the plan, the acceptance test's result, what's still open, the PR that holds the decision
-log, and the log review from [Finish](#finish).
+hand back the plan, the acceptance test's result, what's still open, a link to the last PR, whose
+description holds the decision log, and the log review. You're done when every step in
+[Finish](#finish) is done.
 
 ## Key rules
 
@@ -33,8 +34,8 @@ log, and the log review from [Finish](#finish).
   keep or revert.
 - [Keep a decision log](#keep-a-decision-log): one entry per decision, added as you go, never
   edited.
-- [Finish](#finish): rerun the acceptance test on the real program, review the log, and link it in
-  the last PR.
+- [Finish](#finish): rerun the acceptance test on the real program, review the log, and paste it
+  into the last PR.
 
 ## References
 
@@ -66,20 +67,22 @@ Read the code and the ticket until you can write these at the top of your plan. 
    from the one before it, and merge none of them yourself.
 2. Make the first PR the acceptance test, as a script that CI doesn't run yet, because it fails
    until the job is done. That PR's check is that the script runs and fails as expected. The last PR
-   adds the script to CI. Run it on the code as it is now, and log the result, so each later run
-   compares against it.
-3. Put the step you're least sure of next, and setup and tests before features.
+   adds the script to CI. When you build the first PR, run the script on the code as it is now, and
+   log the result, so each later run compares against it.
+3. Put the step you're least sure of second, right after the acceptance test. Order the rest with
+   setup and tests before features.
 4. Give each PR a check, such as a test or a command, that passes when the PR works.
 5. Work on two PRs at once only when they touch different files and data. Branch both from the last
-   finished PR, give each its own worktree, and keep one decision log for both.
+   finished PR, give each its own worktree, keep one decision log for both, and open both before you
+   start the next PR.
 6. Write the plan in your reply: the items from [Before you start](#before-you-start), then a
    numbered list of PRs. Give each PR its check and its kind: bug, feature, refactor, perf, chore or
    investigation. Someone can then file each PR as a ticket of that kind.
 
 When the user is talking with you in this session, show them the plan with the
 [show-me](../show-me/SKILL.md) skill. When the job will take more than an hour, wait for their
-approval. When an agent started you and no user is here, the agent that started you approves a step
-that can't be undone. When you were asked only for a plan, hand it back, and stop.
+approval. When an agent started you and no user is here, that agent gives each approval this skill
+asks the user for. When you were asked only for a plan, hand it back, and stop.
 
 ## Do each PR
 
@@ -90,18 +93,19 @@ a PR's kind, do its steps as part of step 3 below.
    wrong: fix it in its own commit first. A refactor's check is the existing tests, which pass
    before and after, so skip this step for a refactor.
 2. Log what you expect the next small change to do, with `-` for the evidence and the result.
-3. Make the smallest change that shows whether you're right, and run the check again. Repeat steps 2
-   to 4 until the PR's check passes.
+3. Make the smallest change that shows whether you're right, and run the check again.
 4. Log the result, and act on it:
-   - **Passed:** keep the change.
-   - **Failed:** revert the change. Plan the PR again. When the second try fails too, stop the job,
-     and report it to whoever asked.
-   - **Can't tell:** revert the change, fix the check, and try again, twice at most. After that,
-     treat it as Failed.
+   - **The change did what you expected:** keep it.
+   - **It didn't:** revert it, and plan the PR again. When a change fails under the new plan too,
+     stop the job, and report it to whoever asked.
+   - **You can't tell:** revert it, fix the check, and try again, twice at most. Then plan the PR
+     again.
 
-Open each PR, with its check passing in CI, before you start the next. When a subagent did the work,
-check its diff yourself. When a subagent makes the check pass without doing the work, reset its work
-and give it clearer instructions.
+Repeat steps 2 to 4 until the PR's check passes. Then open the PR, with CI passing, before you start
+the next.
+
+When a subagent makes the check pass without doing the work, reset its work and give it clearer
+instructions.
 
 ## Keep a decision log
 
@@ -115,7 +119,7 @@ echo decisions.tsv >> "$(git rev-parse --git-path info/exclude)"
 
 Add each entry with [`log.sh`](./scripts/log.sh). It adds the time in UTC, and keeps each entry on
 one line. Give the log's absolute path when you work in another worktree, and quote each argument
-that holds a space, as in this invented example:
+that holds a space, as in this invented example. `<skill_dir>` is the folder this SKILL.md is in.
 
 ```bash
 bash <skill_dir>/scripts/log.sh decisions.tsv pr-2 "Cache the parsed config" "Parsing ran on every request" a1b2c3d passed
@@ -131,6 +135,7 @@ bash <skill_dir>/scripts/log.sh decisions.tsv pr-2 "Cache the parsed config" "Pa
 Add an entry when you:
 
 - choose between approaches;
+- expect a change to do something, as [Do each PR](#do-each-pr) says;
 - get a PR's check result;
 - revert a change;
 - hit a blocker;
@@ -139,7 +144,7 @@ Add an entry when you:
 
 When you continue a log that another session started, first add an entry with the phase `resume`. In
 its decision, write the times of the other session's first and last entries. In its evidence, write
-the file name of your session's transcript, found as [Log review](./references/log-review.md) says.
+the path of your session's transcript, found as [Log review](./references/log-review.md) says.
 
 ## Finish
 
@@ -153,5 +158,5 @@ the file name of your session's transcript, found as [Log review](./references/l
    `Reviewed by: none` and why. Then list each problem the reviewer raised, the entries it points
    at, and what you did about it, or write "No problems raised".
 
-**Reply:** the plan, the acceptance test's result, what's still open, a link to the log, and the
-`## Log review` section.
+**Reply:** the plan, the acceptance test's result, what's still open, a link to the last PR, which
+holds the log, and the `## Log review` section.

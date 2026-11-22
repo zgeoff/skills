@@ -1,8 +1,9 @@
 # Log review
 
-The decision log is `decisions.tsv`, kept as the skill's "Keep a decision log" section says. You
-never edit an entry: you add a new one that replaces it. Check your own entries against your
-session's transcript, then have a model from another family read the log.
+At the end of the job, in step 3 of the skill's "Finish" section, check your own entries in the
+decision log against your session's transcript, then have a model from another family read the log.
+The log is `decisions.tsv`, kept as the skill's "Keep a decision log" section says. You never edit
+an entry: you add a new one that replaces it.
 
 The folders that hold transcripts also hold the user's other conversations. Open only your own
 transcript.
@@ -16,15 +17,17 @@ transcript.
 
 To find yours, pick a distinctive phrase from the first message of your session, and search the
 folder with `grep -rlF`, which prints file names and nothing else. When several files match, take
-the newest. When no file matches, skip the three checks below, but still add entries for decisions
-the log misses, from what you remember. Send the reviewer the log alone, and say so in the
-`## Log review` section of your reply.
+the newest.
+
+When no file matches, skip the three checks in [Check your entries](#check-your-entries), and do the
+rest of that section from what you remember. Say in the `## Log review` section of your reply that
+you found no transcript.
 
 ## Check your entries
 
-Your entries start at the `resume` entry whose evidence holds your transcript's path. When the log
-has no such entry, you started the log, and your entries start at the top. They end at the next
-`resume` entry, or at the end of the log.
+Your entries start at the `resume` entry you added when you took over the log. Its evidence holds
+your transcript's path. When the log has no such entry, you started the log, and your entries start
+at the top. They end at the next `resume` entry, or at the end of the log.
 
 Check each of your entries against the transcript:
 
@@ -44,8 +47,9 @@ same for another session's entry when your own work shows it's wrong.
 
 ## Ask another model
 
-Load the [second-opinion](../../second-opinion/SKILL.md) skill. Send the reviewer the paths of the
-log and your transcript. Ask it to check the log without redoing the work, and to point out:
+Load the [second-opinion](../../second-opinion/SKILL.md) skill. Send the reviewer the path of the
+log, and the path of your transcript when you found it. Ask it to check the log without redoing the
+work, and to point out:
 
 - a decision with weak evidence, or none;
 - a check the log claims that the transcript doesn't show;
