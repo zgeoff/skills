@@ -21,16 +21,16 @@ where every answer matches yours and nothing contradicts is clean, and it ends t
 Hand back:
 
 - "clean", or each answer that still differs after the last read;
-- each finding you declined, with the reason;
-- each gap in the rules;
+- each rule you added to close a gap;
+- each question for the user;
 - each check you skipped, such as the scripted checks outside a repo.
 
 ## Key rules
 
 - [Run it](#run-it): your answers first, then one fresh subagent per file, told nothing about the
   change.
-- [Act on it](#act-on-it): fix each answer that differs and each contradiction, by redrafting its
-  section.
+- [Act on it](#act-on-it): end each finding as a change in the repo: a fix to the file, to the rules
+  file, or a rule that closes a gap.
 - [Read it again](#read-it-again): at most 3 reads of a file in a pull request, stopping at a clean
   read, then deslop what you changed.
 
@@ -80,13 +80,19 @@ Hand back:
 Compare each of the cold reader's answers with yours. Count an answer as matching when it gives the
 same facts, in any words.
 
-- **Fix it** when the answer differs, says "Not answered", or quotes two answers: the file doesn't
-  say what you meant. Fix each contradiction too.
-- **Decline it** when the cold reader plainly misread a sentence that says what you meant, or when
-  the only fix is to copy code into the file. Note the reason in a few words.
-- **Report a gap** when you couldn't write your own answer, or when the fix needs a rule the rules
-  files don't have. Never add the rule yourself, even in the repo that holds the rules files: the
-  user decides each rule.
+End every finding as a change to text in the repo. Another session never sees a call you only made
+in your head, so its cold reader raises the same finding again.
+
+- **Fix the file** when the answer differs, says "Not answered", or quotes two answers. Fix it too
+  when the cold reader misread a sentence: a fresh reader misread it, so the next one can. When the
+  answer lives in code, say which file holds it and link that file, without copying the code.
+- **Fix the rules file** when the file contradicts a rule and both are right for their own case.
+  Write the exception into the rule, so no later reader raises it.
+- **Close a gap** when you couldn't write your own answer, or a fix needs a rule no rules file has.
+  Write the answer most repos would expect as a rule, in the file or in the rules file, and list it
+  in your reply.
+- **Ask the user** only when the gap needs a call on taste, priority or cost, or would reverse a
+  rule that exists. Use your answer until the user decides.
 
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.
@@ -108,5 +114,5 @@ Give each file at most 3 reads in one pull request, or in one task when there's 
 When a later commit in the same pull request changes a file you read, run deslop on what it changed.
 When the change alters what one of your answers says, and the file has reads left, read it again.
 
-**Reply:** "clean", or each answer that still differs; each finding you declined, with the reason;
-each gap in the rules; each check you skipped.
+**Reply:** "clean", or each answer that still differs; each rule you added to close a gap; each
+question for the user; each check you skipped.

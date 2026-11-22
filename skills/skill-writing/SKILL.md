@@ -152,7 +152,8 @@ the rule that covers the mistake, or add one.
 
    While you draft, check one skill with `bun x @zgeoff/chex skill <folder>`, the folder that holds
    its SKILL.md. When a check flags a sentence you like, rewrite it until the check passes, and name
-   the sentence and the check to the user or your caller.
+   the sentence and the check to the user or your caller. Name each failure in a file you didn't
+   change, and leave it: it belongs to another change.
 
 2. Run the `cold-read` skill on each file of the skill you wrote or changed. It sets how many reads
    each file gets.
@@ -169,8 +170,8 @@ the rule that covers the mistake, or add one.
    README or a file under `docs/`, run steps 2 and 3 again on what it changed, and put that commit's
    hash on both lines. The PR-body check fails a hash older than the last such commit.
 
-   Tell the user or your caller each finding you declined, and each gap in the rules, where a cold
-   reader got stuck and no rule applies.
+   Tell the user or your caller each rule you added to close a gap, and each gap you raised, as the
+   `cold-read` skill says.
 
 **Reply:** for a skill you wrote or edited, its path, its proof and the PR link; for a review, each
 finding with its line and the quoted rule.
