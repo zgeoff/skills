@@ -25,7 +25,6 @@ Leave everything else as it is, and add no new content.
   you copy a writer's voice, you copy their faults too.
 - **Reread each rewrite on its own.** A tidy rewrite can read worse than the line it replaced. When
   it does, put the old line back.
-- **Leave a blunt line blunt.** It may already work.
 
 You're done when every line of the text, or of the sections your caller named, has had one pass,
 you've reread each rewrite, and the prose check passes, or you skipped it as
@@ -82,8 +81,7 @@ Items 6 to 10 are cleanup.
    work. So does a sentence that states a rule as what "a [noun]" does, such as "a new bed fails
    when…". Start each such sentence with what the reader does. Watch for quiet verbs as well as loud
    ones: a file, a list or a doc that "says", "lists", "names", "tells" or "asks" acts like a person
-   too. Keep a definition of a term the reader already uses, and a fact about a named tool. Item 2
-   covers a made-up label.
+   too. Keep a definition of a term the reader already uses, and a fact about a named tool.
 
    ```diff
    - The seed packet decides how deep each seed goes.
@@ -200,17 +198,16 @@ Read each rewrite on its own, as if you'd never seen the old line. Look for:
 - a list that grew inside a sentence;
 - a sentence that got longer.
 
-Then run the prose check from the repo root. The check must pass, so fix each failure, even one that
-What to fix leaves out. Outside a repo, or when chex can't run, skip the check and say so. For text
-outside a file, write it to a file in your scratch folder first:
+Then run the prose check from the repo root, and fix each failure. Outside a repo, or when chex
+can't run, skip the check and say so. For text outside a file, write it to a file in your scratch
+folder first:
 
 ```bash
 bun x @zgeoff/chex prose <file>
 ```
 
-Apart from its failures, it prints candidates: possible faults, such as the contrast frames, counted
-lists and stock openers a search can find. The check can't tell a fair use from a mistake, so judge
-each candidate, and fix the mistakes.
+Apart from its failures, it prints candidates: possible faults that a search can find. Judge each
+one, and fix the mistakes.
 
 ## Show the changes
 
