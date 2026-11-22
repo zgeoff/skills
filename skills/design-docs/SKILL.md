@@ -33,7 +33,7 @@ check output and what the cold read found.
   options.
 - [Keep it short](#keep-it-short): one design doc per set of work items that share contracts, one
   diagram, under about 10 open questions.
-- [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
+- [Write a decision record](#write-a-decision-record): when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
 
@@ -131,8 +131,9 @@ Write in the present tense, about the system that the design builds.
 
 ## Write a decision record
 
-Write a record only for a choice that passes all three tests. The record lets the next person who
-proposes a rejected option read why it lost.
+Write a record for a choice that passes all three tests. The record lets the next person who
+proposes a rejected option read why it lost. When the owner asks for a record of a choice that fails
+a test, do what the [decision record template](./references/decision-record.md) says.
 
 - **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
   every change must pass one line, and a comment there can give the reason, write the comment. A
