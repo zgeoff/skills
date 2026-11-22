@@ -23,7 +23,6 @@ Hand back:
 
 - "clean", or each answer that still differs after the last read;
 - each fix you made after the third read, marked unread;
-- each finding for a file someone else owns, for its owner;
 - each rule you added to close a gap;
 - each question for the user;
 - each check you skipped, such as the scripted checks outside a repo, and each failure in a file you
@@ -149,6 +148,6 @@ Give each file at most 3 reads in one pull request, or in one task when there's 
 When a later commit in the same pull request changes a file you read, run deslop on what it changed.
 When the change alters what one of your answers says, and the file has reads left, read it again.
 
-**Reply:** "clean", or each answer that still differs; each fix made after the third read; each
-finding for another file's owner; each rule you added to close a gap; each question for the user;
-each check you skipped, and each failure in a file you didn't change.
+**Reply:** "clean", or each answer that still differs; each fix made after the third read; each rule
+you added to close a gap; each question for the user; each check you skipped, and each failure in a
+file you didn't change.
