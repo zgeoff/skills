@@ -73,11 +73,11 @@ reason, or renames a term a check or script depends on. Then run the prose check
 ## What to fix
 
 The rules behind these faults live in the [skill-writing](../skill-writing/SKILL.md) skill, under
-"Write it plainly". Fix every fault below in every kind of text: a skill, a doc, AGENTS.md, a PR
-description, an issue, a commit message or a code comment.
+"Write it plainly". Fix every fault below in one pass, line by line, in every kind of text: a skill,
+a doc, AGENTS.md, a PR description, an issue, a commit message or a code comment.
 
-Fix every fault in one pass, line by line. Items 1 to 5 leave the reader unsure what a sentence
-means, so never leave one of them in place. Items 6 to 10 are cleanup.
+Items 1 to 5 leave the reader unsure what a sentence means, so never leave one of them in place.
+Items 6 to 10 are cleanup.
 
 1. **Make a person or the reader the subject.** A thing that acts like a person hides who does the
    work. So does a sentence that states a rule as what "a [noun]" does, such as "a new bed fails
@@ -221,9 +221,9 @@ says.
 
 ## After a cold read
 
-When you fix what a cold read found, you add precision and drift back toward sentences that explain
-the line before them and long sentences. After you redraft a section for a cold read, deslop that
-section again.
+When you fix what a cold read found, you add precision, and you tend to write long sentences and
+sentences that explain the line before them. After you redraft a section for a cold read, deslop
+that section again.
 
 **Reply:** to a person, the number of edits and the kinds of fault; to an agent, the changes as
 [Agent hand-back](./references/agent-hand-back.md) says.
