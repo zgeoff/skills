@@ -16,7 +16,8 @@ Write down what the file should tell a reader, hand it to a fresh subagent, the 
 compare its answers with yours. Fix each place they differ, then deslop what you changed.
 
 Every read asks the same questions, so a second read checks your fixes and finds little new. A read
-where every answer matches yours and nothing contradicts is clean, and it ends the reads.
+where every answer matches yours and nothing contradicts is clean. It ends the reads, until a later
+commit changes what one of your answers says.
 
 Hand back:
 

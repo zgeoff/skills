@@ -187,8 +187,9 @@ the checks and say so in your reply.
 - `chex skill` checks each skill, as the skill-writing skill describes.
 
 Then run the `cold-read` skill on each doc you changed, and act on what it finds, as that skill
-says. For a skill, skill-writing runs the cold read. A code comment gets no cold read. You're done
-when the checks pass for the files you changed and the cold read has ended.
+says. A code comment gets no cold read. You're done when the checks pass for the files you changed
+and the cold read has ended. For a skill, skill-writing runs the cold read and says when you're
+done.
 
 **Reply:** for writing, the files you changed, the check output and what the cold read found; for a
 review, each finding with its line and the quoted rule.

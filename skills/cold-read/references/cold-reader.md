@@ -9,7 +9,8 @@ own answers before you started, and compares yours with theirs. Where your answe
 says something the author didn't mean. So answer from what the file says, never from what seems
 sensible.
 
-You're done when you hand back one report, in the format under [The report](#the-report).
+You're done when you hand back one report, in the format under [The report](#the-report), or the one
+line on a missing input that [What to read](#what-to-read) asks for.
 
 ## What to read
 
