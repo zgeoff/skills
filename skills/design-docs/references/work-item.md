@@ -68,7 +68,7 @@ out.
 
 ## Sketch
 
-<!-- The function or type at the module's boundary that this work adds or changes, sketched as SKILL.md's "Show contracts as code" says. 20 lines at most: show only what changes. A sketch that needs more belongs in a design doc. -->
+<!-- The function or type at the module's boundary that this work adds or changes, sketched as SKILL.md's "Show contracts as code" says. 20 lines at most: show only what changes. -->
 
 ```ts
 const email = await emails.send({ to, template: 'password-reset', priority: 'urgent' });

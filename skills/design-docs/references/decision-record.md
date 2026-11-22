@@ -3,9 +3,13 @@
 Open this file when you write, change or remove a decision record. Read [SKILL.md](../SKILL.md)
 first: it says who the owner is, and when a choice needs a record.
 
-When the owner asks you to record a decision, take the request as proof that the owner made it. When
-that choice fails one of the [three tests](../SKILL.md#write-a-decision-record), tell the owner
-which test it fails. Write the record only if the owner still wants it.
+When the owner asks you to record a decision, take the request as proof that the owner made it.
+Check the choice against the [three tests](../SKILL.md#write-a-decision-record):
+
+- When it fails the first or the second test, tell the owner which test it fails. Write the record
+  only if the owner still wants it.
+- When it fails the third test, because the owner weighed no other option, write no record. A record
+  with no rejected option has nothing to explain. Tell the owner why.
 
 - [Write a record](#write-a-record)
 - [Change a record](#change-a-record)
@@ -13,11 +17,12 @@ which test it fails. Write the record only if the owner still wants it.
 
 ## Write a record
 
-Write the record once the owner approves the choice. Until then, keep the choice in the design doc,
-or in the work item when there is no design doc:
+Write the record once the owner approves the choice. Until then, keep the choice in the design doc:
 
 - in Open questions, while the owner weighs the options;
 - in Decisions, when you propose the choice in a draft design.
+
+With no design doc, state the choice in the work item's description.
 
 Add the record to the PR that adds the design doc. With no design doc, open a PR for the record
 alone.
@@ -32,8 +37,7 @@ Write one decision per record, and link no design from it: the agent that
 3. Replace the example values. They describe an invented app.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
-   weighed, ask the owner. When the owner weighed none, the choice fails the third test: tell the
-   owner, as for any failed test.
+   weighed, ask the owner. When the owner weighed none, write no record.
 6. When Consequences would only repeat the Decision section, delete Consequences.
 7. In the design doc, give the choice a Decisions line, and end it with a link to the record. Delete
    the choice's entry in Open questions, if it has one.
@@ -78,9 +82,10 @@ When the owner changes the decision, edit the record in place:
    even though its slug no longer matches the title, so links keep working.
 2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
-4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A decision
-   record is the one doc that keeps its history, so a reader who remembers the old decision sees
-   when it changed.
+4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A reader who
+   remembers the old decision sees when it changed. The
+   [docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows this list as its
+   one exception to keeping history out of `docs/`.
 
 ```markdown
 - Date: 2026-03-01

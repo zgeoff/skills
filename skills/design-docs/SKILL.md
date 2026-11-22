@@ -16,7 +16,8 @@ it, and starts from it without asking. Settle what is costly to change later, an
 the rest.
 
 Hand back where the design went, each decision record you wrote, and what the tests in
-[Check it](#check-it) found and what you fixed.
+[Check it](#check-it) found and what you fixed. For a design doc or a decision record, add the docs
+check output and what the cold read found.
 
 ## Key rules
 
@@ -30,7 +31,7 @@ Hand back where the design went, each decision record you wrote, and what the te
   list what the builder decides.
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
-- [Keep it short](#keep-it-short): one design doc per set of work items that share a contract, one
+- [Keep it short](#keep-it-short): one design doc per set of work items that share contracts, one
   diagram, under about 10 open questions.
 - [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
@@ -98,8 +99,8 @@ the choices you leave to the builder under "Builder decides", such as internal n
 helper functions, error wording and test layout.
 
 Put a question under "Open questions" only when the owner, a spike or a measurement must settle it.
-Name which one, and what the code does until then. Write "the owner", never "you": an agent reads
-"you" as itself.
+Name which one, and what the code does until then. In the design's own text, write "the owner",
+never "you": an agent reads "you" as itself.
 
 When the design extends existing code, describe only the change. The sketches name the code it
 touches, so the doc needs no separate list.
@@ -119,9 +120,9 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- Write one design doc per set of work items that build on one shared contract. Work that ships on
-  its own gets its own work item, and its own design doc when it needs one. When a doc passes about
-  400 lines with its code, split it into one doc per part, as the
+- Write one design doc per set of work items that build on the same shared contracts. Work that
+  ships on its own gets its own work item, and its own design doc when it needs one. When a doc
+  passes about 400 lines with its code, split it into one doc per part, as the
   [design doc template](./references/design-doc.md#split-a-long-design) says.
 
 - Give a design doc one mermaid diagram of the main path, with 10 nodes or fewer, under its summary.

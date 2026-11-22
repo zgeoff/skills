@@ -4,9 +4,10 @@ Open this file when you write a design doc, split a long one, or close one out o
 built. Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and
 the builder are.
 
-A design doc describes the system its work will build, in the present tense, and lasts only until
-that work is built. It is the one doc in `docs/` that describes a plan. Once the work is built, the
-architecture doc describes the system, and the design doc is deleted.
+A design doc describes the system its work will build, in the present tense. Once the work is built,
+the architecture doc describes the system, and you delete the design doc. The
+[docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows a design for unbuilt
+work in `docs/` on that condition.
 
 - [Write a design doc](#write-a-design-doc)
 - [Split a long design](#split-a-long-design)
