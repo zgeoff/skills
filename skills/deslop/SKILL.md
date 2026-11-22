@@ -221,5 +221,5 @@ When you fix what a cold read found, you add precision, and you tend to write lo
 sentences that explain the line before them. After you redraft a section for a cold read, deslop
 that section again.
 
-**Reply:** to a person, the number of edits and the kinds of fault; to an agent, the changes as
-[Agent hand-back](./references/agent-hand-back.md) says.
+**Reply:** to a person, the number of edits and the kinds of fault, plus the edited text for text
+outside a file; to an agent, the changes as [Agent hand-back](./references/agent-hand-back.md) says.
