@@ -101,7 +101,9 @@ in your head, so its cold reader raises the same finding again.
   Write the answer most repos would expect as a rule, in the file or in the rules file, and list it
   in your reply.
 - **Ask the user** only when the gap needs a call on taste, priority or cost, or would reverse a
-  rule that exists. Write your answer as the rule anyway, and ask the user whether to keep it.
+  rule that exists. Write your answer as the rule anyway, and ask the user whether to keep it. A
+  reason you wrote for a rule, or a guess at what the author meant, needs no question: the user
+  reads the rules you added in your reply.
 
 Redraft each section a fix lands in. Start from what the section needs to say, and write it fresh.
 If you start from the sentences the cold reader quoted, you keep the shape that misled it.
