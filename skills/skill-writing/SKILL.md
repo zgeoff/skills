@@ -154,8 +154,8 @@ the rule that covers the mistake, or add one.
    its SKILL.md. When a check flags a sentence you like, rewrite it until the check passes, and name
    the sentence and the check to the user or your caller.
 
-2. Run the `cold-read` skill on each file of the skill you wrote or changed. After you fix what it
-   finds, give each changed file one more cold read, and stop.
+2. Run the `cold-read` skill on each file of the skill you wrote or changed. It sets how many reads
+   each file gets.
 3. Run the `deslop` skill on each section you wrote or changed, the cold-read fixes included. A
    cold-read fix adds words, and the checks in step 4 don't catch padding.
 4. Run the checks again, and commit. Build the PR description from the repo's

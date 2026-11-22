@@ -175,8 +175,8 @@ bun x @zgeoff/chex prose length links readmes skill
   [READMEs](./references/readmes.md).
 - `chex skill` checks each skill, as the skill-writing skill describes.
 
-After the checks, run the `cold-read` skill on each doc and skill you changed, and fix what it
-finds, as that skill says.
+After the checks, run the `cold-read` skill on each doc you changed, and act on what it finds, as
+that skill says. For a skill, skill-writing runs the cold read.
 
 **Reply:** for writing, the files you changed, the check output and what the cold read found; for a
 review, each finding with its line and the quoted rule.
