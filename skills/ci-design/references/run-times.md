@@ -2,7 +2,7 @@
 
 Measure each median time that the ci-design skill uses, such as a job's time for its timeout, across
 20 push runs on `main`. Take the newest runs that restored no `actions/cache` entry. A run that
-restored a cache skipped work that a run without one does, so its times come out short.
+restored a cache skips work, so its times come out short.
 
 1. List the push runs on `main`. Ask for more than 20, because the next step skips some:
 

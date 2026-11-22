@@ -4,8 +4,8 @@ Add an exception only for a reason you give in the pull request, such as a fix t
 `bun audit` first, then follow the first case that fits:
 
 - When a release older than `minimumReleaseAge` holds the fix, lock that release as step 2 of
-  [Release-age excludes](#release-age-excludes) says, and add no exclude. Bun installs it with no
-  exclude.
+  [Release-age excludes](#release-age-excludes) says, and add no exclude. The age gate lets that
+  release through.
 - When `bun audit` reports an advisory for the package, and the repo's `.github/workflows/` holds
   the
   [audit-fix workflow](https://github.com/zgeoff/tools/blob/main/docs/architecture/dependency-updates.md#the-audit-fix-workflow),
