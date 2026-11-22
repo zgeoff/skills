@@ -80,10 +80,10 @@ When the owner changes the decision, edit the record in place:
    even when its slug no longer matches the title. Links to the record keep working.
 2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
-4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A reader who
-   remembers the old decision sees when it changed. The
-   [docs/ tree](../../docs-writing/references/docs-tree.md) in docs-writing allows a decision record
-   to hold its history, against the rule that keeps history out of `docs/`.
+4. On the first change, add a `## Changes` section at the end. On each change, add a dated line to
+   it. A reader who remembers the old decision then sees when it changed. History stays out of
+   `docs/`, except this list, by the rules in the
+   [docs/ tree](../../docs-writing/references/docs-tree.md) reference of docs-writing.
 
 ```markdown
 - Date: 2026-03-01
