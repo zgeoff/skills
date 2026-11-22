@@ -15,7 +15,7 @@ owner skims it in two minutes and says yes or no. The builder is the agent or pe
 it, and starts from it without asking. Settle what is costly to change later, and leave the builder
 the rest.
 
-Hand back where the design went, each decision record you wrote, and what the two tests in
+Hand back where the design went, each decision record you wrote, and what the tests in
 [Check it](#check-it) found and what you fixed.
 
 ## Key rules
@@ -30,8 +30,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
   list what the builder decides.
 - [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
   options.
-- [Keep it short](#keep-it-short): one doc per piece of work, one diagram, under about 10 open
-  questions.
+- [Keep it short](#keep-it-short): one design doc per set of work items that share a contract, one
+  diagram, under about 10 open questions.
 - [Write a decision record](#write-a-decision-record): only when a newcomer would undo the choice,
   reversing it is costly, and the rejected option was real.
 - [Check it](#check-it): the skim test and the builder test, by fresh subagents.
@@ -48,7 +48,8 @@ Hand back where the design went, each decision record you wrote, and what the tw
 
 ## Choose where the design goes
 
-Give every piece of work a work item in the tracker. Add the others when their condition holds:
+Give each change that ships on its own a work item in the tracker. Add the others when their
+condition holds:
 
 | Write a         | When                                                                                       | In                              |
 | --------------- | ------------------------------------------------------------------------------------------ | ------------------------------- |
@@ -65,8 +66,10 @@ When a design doc exists, the work item links the doc's sections and repeats non
 
 Write each contract as a code sketch: an inline code block that shows its shape. Sketch only what
 crosses a module boundary, and leave out a parameter, a generic or an option that no caller uses
-yet. Never put sketches in separate files. The builder follows a sketch's shapes and the rules in
-its comments, and may rename anything the module does not export.
+yet: the builder would build it and keep it with no caller to test it. Keep every sketch in the
+design, never in a separate file, so the owner and the builder read the contract where the design
+uses it. The builder follows a sketch's shapes and the rules in its comments, and may rename
+anything the module does not export.
 
 - Show the call first, with a realistic result in a comment. Then show the types it needs. A
   contract with no call, such as a config key or a table, starts at its shape.
@@ -116,12 +119,13 @@ Write in the present tense, about the system that the design builds.
 
 ## Keep it short
 
-- Write one design doc per piece of work. Give work that ships on its own its own work item, and its
-  own doc when it needs one. When a doc passes about 400 lines with its code, split it into one doc
-  per part, as the [design doc template](./references/design-doc.md#split-a-long-design) says.
+- Write one design doc per set of work items that build on one shared contract. Work that ships on
+  its own gets its own work item, and its own design doc when it needs one. When a doc passes about
+  400 lines with its code, split it into one doc per part, as the
+  [design doc template](./references/design-doc.md#split-a-long-design) says.
 
-- Start a design doc with one mermaid diagram of the main path, with 10 nodes or fewer. A work item
-  needs none.
+- Give a design doc one mermaid diagram of the main path, with 10 nodes or fewer, under its summary.
+  A work item needs none.
 - Keep open questions under about 10. More means the design isn't ready to build.
 
 ## Write a decision record
@@ -160,7 +164,8 @@ stop. For a work item, run only the builder test.
   under "Builder decides" needs no fix.
 
 For a design doc or a decision record, run the docs checks and a cold read too, as the
-[docs-writing](../docs-writing/SKILL.md) skill says.
+[docs-writing](../docs-writing/SKILL.md) skill says, and add what they found to your reply.
 
-**Reply:** where the design went, each decision record you wrote, and what the two tests found and
-what you fixed.
+**Reply:** where the design went, each decision record you wrote, what the tests found and what you
+fixed, and for a design doc or a decision record, the docs check output and what the cold read
+found.

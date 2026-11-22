@@ -1,7 +1,12 @@
 # Design doc template
 
-Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and the
-builder are.
+Open this file when you write a design doc, split a long one, or close one out once its work is
+built. Read [SKILL.md](../SKILL.md) first, for what goes in each section and for who the owner and
+the builder are.
+
+A design doc describes the system its work will build, in the present tense, and lasts only until
+that work is built. It is the one doc in `docs/` that describes a plan. Once the work is built, the
+architecture doc describes the system, and the design doc is deleted.
 
 - [Write a design doc](#write-a-design-doc)
 - [Split a long design](#split-a-long-design)
@@ -18,7 +23,8 @@ builder are.
 5. Leave file paths out of the text and the code. The builder finds a symbol by name. Links to other
    docs are fine.
 6. Show each contract once, as a code block in Contracts. In another section, name the contract and
-   leave its shape to that block.
+   leave its shape to that block. A second copy drifts from the first.
+7. When the owner approves the design, set Status to agreed.
 
 ````markdown
 # <Work name>
@@ -26,7 +32,7 @@ builder are.
 - **Status:** draft
 - **Decision records:** [0012](../decisions/0012-urgent-emails-go-first.md)
 
-<!-- Status is draft until the owner approves the design, then agreed. Decision records lists each record the design links; delete that bullet when there are none.  -->
+<!-- Decision records lists each record the design links; delete that bullet when there are none.  -->
 
 <!-- The summary: 2 or 3 sentences on what changes, for whom, and the approach in one line. -->
 
@@ -111,8 +117,9 @@ interface QueuedEmail {
 
 ## Split a long design
 
-Split a design that passes about 400 lines with its code. Cut it where one part calls another
-through a contract, so each doc owns the contracts of its part.
+Split a design that passes about 400 lines with its code, so each builder reads only the part it
+builds. Cut it where one part calls another through a contract, so each doc owns the contracts of
+its part.
 
 1. Make the folder `docs/design/<work>/`, with one doc per part, named after the part, such as
    `queue.md`.
@@ -123,10 +130,11 @@ through a contract, so each doc owns the contracts of its part.
 
 ## Close out a design doc
 
-A design doc lasts only until its work is built. When the last work item that the design covers is
-done, the agent that finishes it closes out the design:
+When the last work item that the design covers is done, the agent that finishes it closes out the
+design, in the same PR:
 
 1. Move each fact that still describes the system into its doc in `docs/architecture/`.
 2. Check that each choice that passes the three decision-record tests in
-   [Write a decision record](../SKILL.md#write-a-decision-record) has a record.
+   [Write a decision record](../SKILL.md#write-a-decision-record) has a record. When one has none,
+   write it as the [decision record template](./decision-record.md) says.
 3. Delete the design doc.

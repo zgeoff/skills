@@ -1,13 +1,11 @@
 # Decision record template
 
-Read [SKILL.md](../SKILL.md) first: it says who the owner is, and when a choice needs a record. This
-file holds the record's shape, and how to write, change and remove one. While the owner still weighs
-the options, keep the question in the Open questions section of the design doc, or in the work item
-when there is no design doc.
+Open this file when you write, change or remove a decision record. Read [SKILL.md](../SKILL.md)
+first: it says who the owner is, and when a choice needs a record.
 
 When the owner asks you to record a decision, take the request as proof that the owner made it. When
 that choice fails one of the [three tests](../SKILL.md#write-a-decision-record), tell the owner
-which test it fails, and write the record only if the owner still wants it.
+which test it fails. Write the record only if the owner still wants it.
 
 - [Write a record](#write-a-record)
 - [Change a record](#change-a-record)
@@ -15,9 +13,14 @@ which test it fails, and write the record only if the owner still wants it.
 
 ## Write a record
 
-While a choice waits for the owner's approval, state it in the design's Decisions section. Write its
-record once the owner approves it. Add the record to the PR that adds the design doc. With no design
-doc, open a PR for the record alone.
+Write the record once the owner approves the choice. Until then, keep the choice in the design doc,
+or in the work item when there is no design doc:
+
+- in Open questions, while the owner weighs the options;
+- in Decisions, when you propose the choice in a draft design.
+
+Add the record to the PR that adds the design doc. With no design doc, open a PR for the record
+alone.
 
 Write one decision per record, and link no design from it: the agent that
 [closes out](./design-doc.md#close-out-a-design-doc) the design deletes the design doc.
@@ -29,10 +32,11 @@ Write one decision per record, and link no design from it: the agent that
 3. Replace the example values. They describe an invented app.
 4. Set `Date` to the day the owner decided.
 5. List each option the owner weighed and turned down. When you don't know which options the owner
-   weighed, ask the owner. When the owner weighed none, write no record.
+   weighed, ask the owner. When the owner weighed none, the choice fails the third test: tell the
+   owner, as for any failed test.
 6. When Consequences would only repeat the Decision section, delete Consequences.
-7. In the design doc, move the question out of Open questions, and end the choice's Decisions line
-   with a link to the record.
+7. In the design doc, give the choice a Decisions line, and end it with a link to the record. Delete
+   the choice's entry in Open questions, if it has one.
 
 ```markdown
 # 0012: Urgent emails go first
@@ -74,7 +78,9 @@ When the owner changes the decision, edit the record in place:
    even though its slug no longer matches the title, so links keep working.
 2. On the first change, add an `Updated` line under `Date`. Set it to the day of the change.
 3. Move the old decision into Rejected alternatives, as an option with the reason it lost.
-4. On the first change, add a `## Changes` section at the end. Add a dated line to it.
+4. On the first change, add a `## Changes` section at the end. Add a dated line to it. A decision
+   record is the one doc that keeps its history, so a reader who remembers the old decision sees
+   when it changed.
 
 ```markdown
 - Date: 2026-03-01
@@ -106,6 +112,6 @@ Do every step in the PR that deletes the record:
 4. Renumber each later record, so the numbers stay consecutive. For each one, rename the file with
    `git mv`, change the number in its heading, and rewrite each citation of it.
 
-A gap in the numbers reads as a missing record. Links from outside the repo, such as old PRs, then
-point at the wrong record or at none. Leave a link to a file at one commit's SHA as it is: that
-commit still holds the old file.
+Renumber even though it breaks links from outside the repo, such as in old PRs: those links then
+point at the wrong record or at none. Inside the repo, a gap in the numbers reads as a missing
+record. Leave a link to a file at one commit's SHA as it is: that commit still holds the old file.
