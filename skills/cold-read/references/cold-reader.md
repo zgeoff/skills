@@ -9,15 +9,16 @@ own answers before you started, and compares yours with theirs. Where your answe
 says something the author didn't mean. So answer from what the file says, never from what seems
 sensible.
 
-You're done when you hand back one report, in the format under [The report](#the-report), or the one
-line on a missing input that [What to read](#what-to-read) asks for.
+You're done when you hand back one report for each file, in the format under
+[The report](#the-report), or the one line on a missing input that [What to read](#what-to-read)
+asks for.
 
 ## What to read
 
 Your prompt gives you the file, what it is (a doc or a skill), and the rules files. When it gives
 several files, answer for each file from that file alone, and hand back one report per file. When
-you can't read the file, or the prompt leaves one of these out, report that alone and stop. Answers
-without them would mislead the author.
+you can't read a file, report that alone for that file. When the prompt leaves out one of these,
+report that alone and stop. Answers without them would mislead the author.
 
 Read the file. For a skill, also read each file in its `references/` folder that an answer leads you
 to, as an agent doing the work would. For a file in a skill's `references/`, also read each section

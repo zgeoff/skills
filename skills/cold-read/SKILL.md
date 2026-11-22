@@ -22,16 +22,20 @@ read, until a later commit changes what one of your answers says.
 Hand back:
 
 - "clean", or each answer that still differs after the last read;
+- each fix you made after the third read, marked unread;
+- each finding for a file someone else owns, for its owner;
 - each rule you added to close a gap;
 - each question for the user;
-- each check you skipped, such as the scripted checks outside a repo.
+- each check you skipped, such as the scripted checks outside a repo, and each failure in a file you
+  didn't change.
 
 ## Key rules
 
-- [Run it](#run-it): your answers first, then one fresh subagent per file, told nothing about the
-  change.
+- [Run it](#run-it): your answers first, then one fresh subagent per file, or one for several short
+  files, told nothing about the change.
 - [Act on it](#act-on-it): turn each finding into a change in the repo: a fix to the file or the
-  rules file, or a rule that closes a gap.
+  rules file, or a rule that closes a gap. Hand on a finding for a rules file or a file someone else
+  owns.
 - [Read it again](#read-it-again): at most 3 reads of a file in a pull request, stopping at a clean
   read, then deslop what you changed.
 
@@ -92,9 +96,9 @@ Compare each of the cold reader's answers with yours. Count an answer as matchin
 same facts, in any words. Where your answer is "doesn't apply", count two answers as matching: "Not
 answered", and an answer that says the file covers no such thing.
 
-Turn every finding into a change to text in the repo, or hand it to the caller as the last bullet
-below says. Another session never sees a call you made only in your head. Its cold reader raises the
-same finding again.
+Turn every finding into a change to text in the repo, or hand it on as the last two bullets below
+say. Another session never sees a call you made only in your head. Its cold reader raises the same
+finding again.
 
 - **Fix the file** when the answer differs, quotes two answers, or says "Not answered" to a question
   your answer says applies. Fix it when the file contradicts itself or a rule that is right for it.
@@ -145,5 +149,6 @@ Give each file at most 3 reads in one pull request, or in one task when there's 
 When a later commit in the same pull request changes a file you read, run deslop on what it changed.
 When the change alters what one of your answers says, and the file has reads left, read it again.
 
-**Reply:** "clean", or each answer that still differs; each rule you added to close a gap; each
-question for the user; each check you skipped.
+**Reply:** "clean", or each answer that still differs; each fix made after the third read; each
+finding for another file's owner; each rule you added to close a gap; each question for the user;
+each check you skipped, and each failure in a file you didn't change.
