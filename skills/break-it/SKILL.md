@@ -22,8 +22,8 @@ proven bugs, and fix nothing. The user, or the agent that owns the change, decid
   different, so most bugs turn up once.
 
 You're done when you've rerun every bug, removed the worktrees and the temporary branch, and sent
-the report. Hand back what the change is meant to do, each proven bug with its command and output,
-and what you dropped and why.
+the report. Hand back the report that [Report](#report) describes: the goal, the proven bugs and the
+dropped bugs.
 
 ## Key rules
 
@@ -32,7 +32,7 @@ and what you dropped and why.
 - [Send the subagents](#send-the-subagents): 2 or 3 subagents, each in a detached worktree, plus one
   from another model family.
 - [Check each bug](#check-each-bug): rerun it, keep it when it breaks what the change is meant to
-  do, and merge bugs with one cause.
+  do, and merge bugs that fail at the same line or assertion.
 - [Report](#report): the goal, the proven bugs, and what you dropped.
 
 ## References
@@ -52,10 +52,12 @@ use the [read-back](../read-back/SKILL.md) skill.
 
 ## Send the subagents
 
-1. Make a temporary branch, `break-it-scratch`, without touching the user's working tree. Delete a
-   `break-it-scratch` an earlier run left behind first.
+1. Remove what an earlier run left behind: each worktree under `.worktrees/` named `break-it-*`,
+   `rerun-*` or `default-*`, with `git worktree remove --force`, then the branch, with
+   `git branch -D break-it-scratch`. Then make a temporary branch, `break-it-scratch`, and leave the
+   user's working tree as it is: the user may still be editing in it.
    - **The current branch:** branch from a stash of the uncommitted changes. `git stash create`
-     leaves out untracked files, so you copy those in the next step.
+     leaves out untracked files. Copy those in the next step.
 
      ```bash
      ref=$(git stash create)
@@ -74,16 +76,18 @@ use the [read-back](../read-back/SKILL.md) skill.
    ```
 
    For the current branch, copy each file that `git ls-files --others --exclude-standard` lists into
-   every worktree. Ignored files, such as `node_modules`, stay out: install dependencies in each
-   worktree, one worktree at a time.
+   every worktree. Leave out ignored files, such as `node_modules`, and install dependencies in each
+   worktree, one worktree at a time. Installs that run at once can clash in the package manager's
+   shared cache.
 
-3. Pick an area to attack for each subagent from what the diff touches, such as bad input,
-   concurrency or failure handling, a different one each.
+3. Pick a different area to attack for each subagent, from what the diff touches, such as bad input,
+   concurrency or failure handling.
 4. When the change crosses several subsystems, start 3 subagents in one message. Otherwise start 2.
    Use your harness's general agent type for each, which is `general-purpose` in Claude Code. Give
    each one:
    - the absolute path of adversary.md;
-   - what to test, and the merge-base commit the change starts from;
+   - what to test, and the commit the change starts from: the output of
+     `git merge-base <default-branch> break-it-scratch`, or for a design, the default branch's head;
    - what the change is meant to do;
    - its worktree's path;
    - its area to attack.
@@ -91,6 +95,9 @@ use the [read-back](../read-back/SKILL.md) skill.
    [second-opinion](../second-opinion/SKILL.md) skill, with the same items, its own worktree and a
    different area. The second-opinion skill says whether that model can write files. When it can't,
    tell it to put each test or script's full contents in its reply, with the command to run it.
+
+When a subagent ends without its list, ask it once for the list. If it still sends none, go on
+without it, and say so under Dropped.
 
 ## Check each bug
 
@@ -100,21 +107,23 @@ its reply, and any untracked files you copied before. Run the command there. Whe
 a count, such as 7/20, the bug shows only in some runs: run it 20 times, and report your own count.
 
 Keep a bug when your rerun shows it at least once, and it breaks what the change is meant to do.
-When the bug also fails on the default branch, keep it, and mark it as there before the change. Drop
-the rest, with the reason.
+Drop the rest, with the reason. Then rerun each kept bug in `.worktrees/default-<n>`, a detached
+worktree of the default branch, with the same files copied in. When the bug also fails there, keep
+it, and mark it as there before the change.
 
 When two bugs fail at the same line or the same assertion, merge them into one, and list every
 subagent that found it.
 
-Copy each script over 40 lines into your report. Then remove the worktrees with
+Copy each proven bug's test or script into your report. A subagent leaves a script of 40 lines or
+more out of its reply. Read that script from the subagent's worktree. Then remove the worktrees with
 `git worktree remove --force`, and delete `break-it-scratch`.
 
 ## Report
 
 - **Goal:** what the change is meant to do, in your words.
-- **Bugs:** for each proven bug, the command, your rerun's output, how it breaks the goal, and the
-  worktree number of each subagent that found it, or "second opinion". When none survive, write "no
-  proven bugs".
+- **Bugs:** for each proven bug, the command, its test or script, your rerun's output, how it breaks
+  the goal, and the worktree number of each subagent that found it, or "second opinion". When none
+  survive, write "no proven bugs".
 - **Dropped:** for each subagent, the bugs you dropped, and why.
 
 **Reply:** the goal, the proven bugs, and the dropped bugs.
