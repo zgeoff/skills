@@ -28,12 +28,15 @@ Leave everything else as it is, and add no new content.
 - **Leave a blunt line blunt.** Leave a short, flat line as it is: it may already work.
 
 You're done when every line has had one pass, you've reread each rewrite, and the prose check
-passes. Write your edits into the file, then hand back each change as a `diff` block, and what you
-left as it was. Whoever asked reads each change, and reverts the ones they reject. For text outside
-a file, such as a PR description, hand back the changes and leave the source alone.
+passes. Write your edits into the file, then hand back the changes as
+[Show the changes](#show-the-changes) says. For text outside a file, such as a PR description, hand
+back the changes and leave the source alone.
+
+When the text is yours, hand it to a fresh subagent, as [Text you wrote](#text-you-wrote) says.
 
 ## Key rules
 
+- [Text you wrote](#text-you-wrote): a fresh subagent deslops it, and you check its changes.
 - [What to fix](#what-to-fix): lead with the job, give the instruction, open each bullet with what
   the reader does, use plain names, and cut contrast frames, drama and counted lists.
 - [Leave these alone](#leave-these-alone): formats, commands, the frontmatter, and lines that
@@ -41,9 +44,23 @@ a file, such as a PR description, hand back the changes and leave the source alo
 - [Change the structure](#change-the-structure): rebuild a section that still reads oddly after two
   rewrites.
 - [Check each rewrite](#check-each-rewrite): read it on its own, and run the prose check.
-- [Show the changes](#show-the-changes): a heading and a reason per kind of fault, and a `diff`
-  block per place.
+- [Show the changes](#show-the-changes): a count to a person; a `diff` block per change to an agent.
 - [After a cold read](#after-a-cold-read): deslop again each section you redrafted.
+
+## Text you wrote
+
+Text you just wrote reads as plain to you, so you miss its faults. Deslop it with a fresh
+`general-purpose` subagent, never a fork: a fork inherits your context. Give it this prompt and
+nothing else. `<skill_dir>` is the absolute path of the folder this SKILL.md is in.
+
+```text
+Read <skill_dir>/SKILL.md and follow it as your instructions.
+The text: <absolute path>
+Deslop these sections: <each heading you wrote or changed>
+```
+
+Read each change it hands back, and revert any that changes a fact or breaks a format. Then run the
+prose check.
 
 ## What to fix
 
@@ -191,6 +208,9 @@ each candidate, and fix the mistakes.
 
 ## Show the changes
 
+To a person, give the number of edits and the kinds of fault, in a line or two, and show the changes
+only when asked. To an agent, show each change as below, so it can check each one.
+
 Give each kind of fault you fixed one `###` heading, named in a few words, such as "Cut drama
 words". Under it, write one line on why. Then give each place you changed its own `diff` block, with
 `-` before and `+` after, so the lines show in colour. When the fault is outside What to fix, use
@@ -208,5 +228,6 @@ When you fix what a cold read found, you add precision and drift back toward sen
 the line before them, "because" clauses and long sentences. After you redraft a section for a cold
 read, deslop that section again.
 
-**Reply:** each change as a `diff` block, then what you left as it was, the faults left for
-docs-writing, and the other files a renamed label touches.
+**Reply:** to a person, the number of edits and the kinds of fault; to an agent, each change as a
+`diff` block. Then what you left as it was, the faults left for docs-writing, and the other files a
+renamed label touches.
