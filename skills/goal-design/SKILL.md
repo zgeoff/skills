@@ -1,15 +1,15 @@
 ---
-name: goal
+name: goal-design
 description:
   "Writes the text of a /goal for a long autonomous Claude Code session: the outcome and its source
   of truth, the ordered work with its dependencies, the steps for each item, what the session may do
   without asking, what it brings the user, the known waits, the rules, the handoff doc, the reports,
   a done-when the Stop hook can judge, and what to do when stopped. Hands back text to paste, under
-  the 4,000-character limit. Load it for 'write a goal', 'set up a /goal', and when a walkthrough
-  agrees a big new scope for a running goal."
+  the 4,000-character limit. Load it for /goal-design, 'write a goal', 'set up a /goal', and when a
+  walkthrough agrees a big new scope for a running goal."
 ---
 
-# Goal
+# Goal design
 
 Write the text of a `/goal` that the user pastes into a Claude Code session. A `/goal` sets a Stop
 hook: after each turn, a small model reads the goal and the conversation and decides whether the
