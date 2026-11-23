@@ -69,8 +69,8 @@ yourself when it still has a fault from What to fix. Then read each fault it kep
 and fix each one whose reason doesn't hold.
 
 Then give the same sections to a second fresh subagent, with the same prompt, and check its work the
-same way. One subagent can't judge its own pass: it misses what it talked itself into keeping. Stop
-after the second pass, and run the prose check.
+same way. A subagent misses what it talked itself into keeping. Stop after the second pass, and run
+the prose check.
 
 ## What to fix
 
