@@ -43,7 +43,7 @@ passes [Check it](#check-it).
 
 ## When to write or refresh one
 
-Write a goal when the user wants a session to run unattended for more than a few turns.
+Write a goal for a session that runs unattended for more than a few turns.
 
 Refresh a running goal when the user agrees a big new scope with you, such as new work from a design
 walkthrough or a new grant. Write the whole goal again from the current state: drop each item that
@@ -86,7 +86,7 @@ them.
    to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a
    design, and say what releases it. Name each item by what it does, with its ticket ID after. boxxy
    mode lists batches in place of lanes.
-3. **For each item.** The steps every item goes through, in order, from the reference for the mode:
+3. **For each item.** The steps every item goes through, from the reference for the mode:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
    do, and what it must never do. Put each action that is hard to undo in one of the three. Add what
@@ -152,7 +152,7 @@ but it learns what it may do and when to stop only from the goal.
    what to do, in what order, and when to stop and ask? Fix each gap.
 2. Read the done-when as the Stop hook's model. For each line, ask: could I tell from the
    conversation alone that this holds? Rewrite each line that needs a command or a file.
-3. Check each name, ID and PR state against the live state once more.
+3. Check each name, ID and PR state against the live state again.
 4. Count the characters, and cut as [Fit the limit](#fit-the-limit) says.
 
 **Reply:** the goal as one `text` block that starts with `/goal `, its character count, whether it
