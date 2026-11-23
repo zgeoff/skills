@@ -56,8 +56,8 @@ Leave a small change out of the goal. Tell the session in chat, and record it in
 2. Check the live state of each item: its PR, its branch, its CI and its ticket. Write only what is
    true now. When you call a merged PR open, the session redoes it. When you can't check an item,
    say so in the goal, and make checking it the session's first step for that item.
-3. Collect each decision the user made, with where it lives. Name them in the goal, so the session
-   doesn't reopen them.
+3. Collect each decision the user made, and where it's recorded. Name them in the goal, so the
+   session doesn't reopen them.
 4. Collect what the user lets the session do without asking, and what the user keeps. Take them from
    the user's words in this conversation, their instruction files, and an earlier goal. When the
    user hasn't said, ask before you write. Never grant an action the user didn't grant: the session
@@ -85,13 +85,13 @@ them.
    to do when a permission check refuses an action: stop and give the user the exact command.
 5. **Bring the user.** The kinds of decision that are the user's, such as naming, money, an outside
    account or a tap only they can make. Then how to ask: one decision at a time, with options and a
-   recommendation, never in the same turn as an explanation, and keep building what doesn't depend
-   on the answer. Record each blocker once, with its next step.
+   recommendation, never in the same turn as an explanation. Tell the session to keep building what
+   doesn't depend on the answer, and to record each blocker once, with its next step.
 6. **Known waits.** Each thing the work waits on that the session can't speed up, such as an outside
    review or a card the user must add, with how to check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,
-   a model on every subagent, and the repo's AGENTS.md and its skills. Keep to the rules a long run
-   tends to break.
+   a model on every subagent, and the repo's AGENTS.md and its skills. List only the rules a long
+   run tends to break.
 8. **Handoff.** Always include this line, in these words or close to them: "Keep a handoff doc in
    `.handoff/` current at each milestone, as the handoff skill says. After a compaction, read it
    before anything else." A compaction drops most of the conversation, and the doc gives the session
@@ -101,8 +101,8 @@ them.
 10. **Done when.** The lines the Stop hook judges, as [The done-when](#the-done-when) says.
 11. **When stopped.** What the session does once the condition holds: list each block with the exact
     action the user must take, and give the final report.
-12. **Out of scope.** Leave this part out when nothing tempting sits next to the work. Otherwise
-    name it, so the session doesn't start it.
+12. **Out of scope.** Name the nearby work the session might be tempted to start, so it doesn't.
+    Leave this part out when there is none.
 
 Copy the shape from the [example goal](./references/example-goal.md).
 
