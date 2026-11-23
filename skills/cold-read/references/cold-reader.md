@@ -34,17 +34,17 @@ brief or AGENTS.md:
 
 1. When do you load or open this file, and what is its job?
 2. What do you hand back, and how do you know you're done?
-3. What do you do, in what order? Name each command the file gives, and what it needs.
-4. What does the file tell you to do when a step fails?
-5. What limits does the file set on what you do, and what reason does it give for each?
+3. What do you do, in what order? Name each command you run, and what it needs.
+4. What do you do when a step fails?
+5. What limits do you keep to, and what is the reason for each?
 
 For a doc, which is any other file, such as a README or a file in `docs/`:
 
 1. Who reads this doc, and what task brings them to it?
-2. What does the system it describes do, in one paragraph?
+2. What does the system in the doc do, in one paragraph?
 3. What does the reader do next, after reading it?
 4. Which facts must a change keep true, and why?
-5. Where does the doc send the reader for what it doesn't cover?
+5. Where does the reader go for what the doc doesn't cover?
 
 Answer all five, in order, before you open the rules files.
 
@@ -55,7 +55,8 @@ Answer all five, in order, before you open the rules files.
   agents who meet those cases show which ones matter.
 - When you find nothing for a question, write "Not answered" and the lines you searched.
 - When you find two answers, quote both lines.
-- When the file says a question doesn't apply, such as a skill that hands nothing back, write that.
+- When you can see from the file that a question has no answer, such as question 2 for a skill that
+  hands nothing back, write "doesn't apply".
 
 ### Questions to skip
 
