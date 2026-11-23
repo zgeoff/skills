@@ -41,7 +41,9 @@ skills are in `.agents/skills/`, and `.claude/skills` links to that folder.
 
 repo-sync delivers each shared skill at the `zgeoff/skills` commit that `zgeoff/tools` pins, and
 overwrites a local edit. Never edit a shared skill here. Put a rule of this repo's own in a
-`project-<name>` skill.
+`project-<name>` skill. repo-sync copies no `design-docs` skill: before you write a design or a
+decision record, load [`design-docs`](https://github.com/zgeoff/skills/tree/main/skills/design-docs)
+from zgeoff/skills.
 
 When you write or edit a skill:
 

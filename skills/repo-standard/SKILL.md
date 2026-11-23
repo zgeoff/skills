@@ -77,9 +77,8 @@ of shape. Put the package in `packages/<name>/`.
 1. Pin Bun in `.bun-version` and in `packageManager` in the root `package.json`, to the same
    version.
 2. Write `bunfig.toml` as [Files](./references/files.md#bunfigtoml) gives: the isolated linker,
-   exact versions and a 7-day `minimumReleaseAge`. Then run `bun x @zgeoff/chex dependency-gates`
-   and add each package it lists, as
-   [First-party packages](../ci-design/SKILL.md#first-party-packages) in ci-design says.
+   exact versions, a 7-day `minimumReleaseAge`, and the first-party excludes, which you list by
+   hand. `chex dependency-gates` reads `bun.lock`, so it lists nothing until the first install.
 3. Write the root `package.json` and the package's `package.json` with the fields in
    [Files](./references/files.md#packagejson). Put each dependency's version in the catalog, and
    write `catalog:` in the package.
@@ -88,12 +87,19 @@ of shape. Put the package in `packages/<name>/`.
    script that bundles with `--target node`.
 5. Write `tsconfig.base.json` and `tsconfig.json` as [Files](./references/files.md#tsconfig) gives.
    Type-check with `tsrs --fast`.
+6. Write `lefthook.yml` as [Files](./references/files.md#lefthookyml) gives, before the first
+   `bun install`. The install runs lefthook, which writes a sample `lefthook.yml` when the repo has
+   none.
+7. Run `bun install`, then `bun x @zgeoff/chex dependency-gates`, and add each package it lists, as
+   [First-party packages](../ci-design/SKILL.md#first-party-packages) in ci-design says.
 
-Check: `bun install` passes, and `bun packages/<name>/src/cli.ts --help` runs.
+Check: `bun x @zgeoff/chex dependency-gates` passes, and `bun packages/<name>/src/cli.ts --help`
+runs.
 
 ## Checks and hooks
 
-Install each shared config with the line in its README in zgeoff/tools:
+Install each shared config with the line in its README in zgeoff/tools, and write its config file as
+[Files](./references/files.md#tool-configs) gives:
 
 - [`@zgeoff/oxfmt-config`](https://github.com/zgeoff/tools/blob/main/packages/oxfmt-config/README.md),
   in an `oxfmt.config.ts` that spreads it;
@@ -101,18 +107,21 @@ Install each shared config with the line in its README in zgeoff/tools:
   which runs after oxfmt;
 - [`@zgeoff/oxlint-config`](https://github.com/zgeoff/tools/blob/main/packages/oxlint-config/README.md),
   extended from `.oxlintrc.json`. Its install line adds `@stylistic/eslint-plugin`, which the shared
-  config loads, so list that package in `ignoreDependencies` in `knip.json`;
+  config loads;
 - [`@zgeoff/commitlint-config`](https://github.com/zgeoff/tools/blob/main/packages/commitlint-config/README.md),
   extended from `commitlint.config.js`.
 
 Then:
 
 1. Define the six scripts that the shared CI runs: `audit`, `deadcode`, `format:check`, `lint`,
-   `typecheck` and `test`. CI fails before it runs anything when one is missing.
-   [Files](./references/files.md#packagejson) gives each command.
+   `typecheck` and `test`. CI fails before it runs anything when one is missing. Add `lint:full`
+   too, the type-aware lint, which CI runs only once the [GitHub settings](#github-settings) step
+   lists it. [Files](./references/files.md#packagejson) gives each command.
 2. Take the pre-push baseline from chex with
    [Taking the baseline from chex](https://github.com/zgeoff/tools/blob/main/docs/runbooks/downstream-repo-setup.md#taking-the-baseline-from-chex)
-   in the tools runbook. It installs lefthook's hooks and adds `check:docs`.
+   in the tools runbook. It adds the baseline to your `lefthook.yml`, and adds `check:docs`. The
+   baseline holds no commit-msg hook and no pre-commit fixer, so keep the ones your `lefthook.yml`
+   already runs.
 3. Set up the tests with `bun x rig init`, as the [testing](../testing/SKILL.md) skill says. Load
    testing before you write the first test.
 
@@ -131,16 +140,24 @@ Check: `bun run check:docs` passes, and `bun x @zgeoff/chex prose AGENTS.md` pas
 
 ## Push the first commit
 
-Commit the scaffold as `chore: set up the workspace` and push it to `main`. The commit-msg hook runs
-commitlint, and the pre-push hook runs the chex baseline.
+Commit the scaffold as `chore: set up the workspace`. The commit-msg hook runs commitlint.
+
+The pre-push hook can't pass on an empty remote: `chex commits` and `chex local-paths` find no
+branch on the remote to compare with. Run each check from the last two steps by hand, then push with
+the hooks off:
+
+```bash
+LEFTHOOK=0 git push -u origin main
+```
 
 Check: `git log origin/main --oneline` shows the one commit.
 
 ## GitHub settings
 
-Allow squash merges only, turn on auto-merge, and delete each branch on merge, with the commands in
-[GitHub](./references/github.md#repo-settings). Allow no other merge type: a squash makes the pull
-request title the commit subject, and CI checks that title as a Conventional Commit.
+Allow squash merges only, turn on auto-merge, delete each branch on merge, and set the
+`BUN_CHECK_SCRIPTS` variable, with the commands in [GitHub](./references/github.md#repo-settings).
+Allow no other merge type: a squash makes the pull request title the commit subject, and CI checks
+that title as a Conventional Commit.
 
 Check: the command's output shows each setting.
 
@@ -148,14 +165,20 @@ Check: the command's output shows each setting.
 
 1. Do every step of
    [Wiring up a downstream repo](https://github.com/zgeoff/tools/blob/main/docs/runbooks/downstream-repo-setup.md#wiring-up-a-downstream-repo)
-   in the tools runbook. In the `include` list of `repo-sync.yml`, opt in to `workflow-bun-pr`,
-   `workflow-audit-fix`, `knip-runner`, `hook-start` and the skills the repo uses, such as
-   `testing`, `code-style`, `docs-writing` and `ci-design`. The sync pull request brings `pr.yml`,
-   the PR template, `socket.yml` and `.editorconfig`.
+   in the tools runbook. Set its two secrets with the guarded commands in
+   [GitHub](./references/github.md#repo-sync-secrets). In the `include` list of `repo-sync.yml`, opt
+   in to `workflow-bun-pr`, `workflow-audit-fix`, `knip-runner`, `hook-start` and an entry for each
+   skill the repo uses, such as `skill-testing`, `skill-code-style`, `skill-docs-writing`,
+   `skill-skill-writing` and `skill-ci-design`. The sync pull request brings `pr.yml`, the PR
+   template, `socket.yml` and `.editorconfig`. Sync copies no design-docs skill, so the AGENTS.md
+   template points at zgeoff/skills for it.
 2. Opt in to the agent hooks and the knip runner with the two sections that follow it in the
    runbook.
 3. Add `renovate.json` with only `{ "extends": ["github>zgeoff/tools"] }`, and ask the owner to
    install the Renovate GitHub App on the repo. Renovate skips a repo without both.
+
+A pull request opened before `pr.yml` reached `main` gets no `pr / checks` until its branch moves.
+Run `gh pr update-branch <number> -R <owner>/<repo>` on each one.
 
 Check: the sync pull request merged, and `pr / checks` passed on it.
 

@@ -15,8 +15,30 @@ gh api repos/<owner>/<repo> --jq '[.allow_squash_merge, .allow_merge_commit, .al
 
 Expect: `[true,false,false,true,true]`.
 
+The shared CI runs plain `lint` unless `BUN_CHECK_SCRIPTS` lists its scripts. Set the variable to
+the standard list with `lint:full` in place of `lint`:
+
+```bash
+gh variable set BUN_CHECK_SCRIPTS -R <owner>/<repo> --body 'audit deadcode format:check lint:full typecheck test'
+```
+
+Expect: `gh variable list -R <owner>/<repo>` lists `BUN_CHECK_SCRIPTS`.
+
 Repo-sync and Renovate merge their pull requests with auto-merge. The release job opens its pull
 request through the Actions permission that the second command grants.
+
+## Repo-sync secrets
+
+Set the two repo-sync secrets with these commands in place of the runbook's. A pipe from `op read`
+into `gh secret set` sets an empty secret when the read fails, and `&&` stops before the set:
+
+```bash
+id=$(op read 'op://zgeoff/repo-sync-github-app/client-id') && gh secret set REPO_SYNC_APP_CLIENT_ID -R <owner>/<repo> --body "$id"
+key=$(op read 'op://zgeoff/repo-sync-github-app/private-key') && gh secret set REPO_SYNC_APP_PRIVATE_KEY -R <owner>/<repo> --body "$key"
+```
+
+Expect: `gh secret list -R <owner>/<repo>` lists both names. When `op read` fails because its
+service-account token expired, mint a new one with `op-mint <profile>`, then run the commands again.
 
 ## The ruleset
 
