@@ -57,7 +57,7 @@ handoff doc.
 
 In direct mode, the session builds each item itself. In boxxy mode, the session files the work in
 boxxy, which starts an agent on each item, and the session manages the items to their end. Take the
-mode from the user's request, and ask when it doesn't say. Then read that mode's reference.
+mode the user asked for, and ask when they named none. Then read that mode's reference.
 
 ## Gather the facts first
 
@@ -84,9 +84,9 @@ them.
 2. **Work.** The items as ordered lanes, such as `A.`, `B.` and `C.`. Inside a lane, list the items
    in the order they must land. Say which lanes run in parallel, the most builds at once, and what
    to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a
-   design, and say what releases it. Name each item by what it does, with its ticket ID after. boxxy
-   mode lists batches in place of lanes.
-3. **For each item.** The steps every item goes through, from the reference for the mode:
+   design, and say what releases it. Name each item by what it does, with its ticket ID after. In
+   boxxy mode, write this part as [boxxy mode](./references/boxxy-mode.md) says.
+3. **For each item.** Each item's steps, by its kind of work, from the mode's reference:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
    do, and what it must never do. Put each action that is hard to undo in one of the three. Add what
@@ -102,8 +102,8 @@ them.
    run tends to break.
 8. **Handoff.** Always include this line, in these words or close to them: "Keep a handoff doc in
    `.handoff/` current at each milestone, as the handoff skill says. After a compaction, read it
-   before anything else." A compaction drops most of the conversation, and the doc gives the session
-   its place back.
+   before anything else." A compaction drops most of the conversation, and the session gets its
+   place back from the doc.
 9. **Reports.** When the session reports, and in what shape, such as two lines after each merge:
    what landed, linked, and what's next.
 10. **Done when.** The lines the Stop hook judges, as [The done-when](#the-done-when) says.
