@@ -2,7 +2,7 @@
 
 An invented goal for an invented notes app, Tidepool, with every part from
 [The parts](../SKILL.md#the-parts). Copy its shape and the length of its parts. Write your own
-content.
+content: the session acts on every word.
 
 ```text
 /goal Land Tidepool's open builds to merged, released and deployed, and get the sharing design signed off. Source of truth: the signed-off design docs in docs/design/ and the tracker. Don't reopen a signed-off decision; if one proves unbuildable, stop and ask the owner.
