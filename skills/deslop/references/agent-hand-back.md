@@ -9,8 +9,8 @@ to fix, use the heading "Prose check" or "Structure". Never show the whole file:
 
 End with one bulleted list, each item with its reason:
 
-- each candidate the prose check printed that you kept, and each fault you kept under an exception
-  in What to fix, such as a contrast frame the reader needs;
+- each fault you noticed and left in place, whether What to fix names it or the prose check printed
+  it as a candidate, such as a contrast frame the reader needs;
 - each other file that uses a label you renamed;
 - each sentence you changed that also appears word for word in another file you know of, so your
   caller can pick one wording for all of them.
