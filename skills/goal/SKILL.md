@@ -59,9 +59,9 @@ Leave a small change out of the goal. Tell the session in chat, and record it in
 3. Collect each decision the user made, and where it's recorded. Name them in the goal, so the
    session doesn't reopen them.
 4. Collect what the user lets the session do without asking, and what the user keeps. Take them from
-   the user's words in this conversation, their instruction files, and an earlier goal. When the
-   user hasn't said, ask before you write. Never grant an action the user didn't grant: the session
-   acts on each grant for hours, with nobody watching.
+   this conversation, the user's instruction files and any earlier goal. When the user hasn't said,
+   ask before you write. Never grant an action the user didn't grant: the session acts on each grant
+   for hours, with nobody watching.
 
 ## The parts
 
@@ -97,7 +97,7 @@ them.
    before anything else." A compaction drops most of the conversation, and the doc gives the session
    its place back.
 9. **Reports.** When the session reports, and in what shape, such as two lines after each merge:
-   what landed, with the PR link, and what's next.
+   what landed, linked, and what's next.
 10. **Done when.** The lines the Stop hook judges, as [The done-when](#the-done-when) says.
 11. **When stopped.** What the session does once the condition holds: list each block with the exact
     action the user must take, and give the final report.
