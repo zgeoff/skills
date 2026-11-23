@@ -50,7 +50,8 @@ walkthrough or a new grant. Write the whole goal again from the current state: d
 landed, keep each approval the user still grants, and add the new work. Tell the user the new
 `/goal` replaces the running one.
 
-Leave a small change out of the goal. Tell the session in chat, and record it in the handoff doc.
+Leave a small change out of the goal. Tell the session in chat, and have it record the change in its
+handoff doc.
 
 ## Pick the mode
 
@@ -78,12 +79,13 @@ Write these in order. Open the goal with the outcome. Give each later part excep
 short label the session can scan, such as `Authority:`. Name the user the way the session knows
 them.
 
-1. **Outcome.** One or two sentences: the end state, then the source of truth. Add the decisions the
-   session must not reopen, and what to do when one proves unbuildable: stop and ask.
+1. **Outcome.** The end state, then the source of truth. Add the decisions the session must not
+   reopen, and what to do when one proves unbuildable: stop and ask.
 2. **Work.** The items as ordered lanes, such as `A.`, `B.` and `C.`. Inside a lane, list the items
    in the order they must land. Say which lanes run in parallel, the most builds at once, and what
    to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a
-   design, and say what releases it. Name each item by what it does, with its ticket ID after.
+   design, and say what releases it. Name each item by what it does, with its ticket ID after. boxxy
+   mode lists batches in place of lanes.
 3. **For each item.** The steps every item goes through, in order, from the reference for the mode:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
