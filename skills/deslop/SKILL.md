@@ -185,7 +185,7 @@ it off only when the sentence is too long to read in one go.
 - The shape of numbered steps, templates, tables and report formats. An agent copies a format into
   its own output exactly. You may still edit the wording of a sentence inside a step.
 - Commands and code blocks.
-- The form of the frontmatter. The skill-writing skill sets it. Fix a prose-check failure in its
+- The form of the frontmatter, set out in the skill-writing skill. Fix a prose-check failure in its
   wording.
 - A term that a check or a script depends on, such as a heading a script greps for. Search the repo
   for a term before you rename it. Rename a made-up label that only other prose uses, as
@@ -208,7 +208,7 @@ folder first:
 bun x @zgeoff/chex prose <file>
 ```
 
-It also prints candidates, which a search found. Judge each one, and fix the real faults.
+The check also prints candidates from a search. Judge each one, and fix the real faults.
 
 ## Show the changes
 

@@ -5,8 +5,8 @@ conversation, diff or ticket. The author had all three in their head, so they ca
 file says to someone without them. You can.
 
 Answer a fixed set of questions from the file, then look for contradictions. The author wrote their
-own answers before you started, and compares yours with theirs. Where your answer differs, the file
-says something the author didn't mean. So answer from what the file says, never from what seems
+own answers before you started, and compares yours with theirs. Where your answer differs, the
+author wrote something they didn't mean. So answer from what the file says, never from what seems
 sensible.
 
 You're done when you hand back one report for each file, in the format under
@@ -46,10 +46,7 @@ its second column:
 | The README of a package                                         | 1, 3 and 4                 |
 | The docs index, `README.md` in `docs/`                          | 1, 2 and 4                 |
 
-You learn when to open a reference from the SKILL.md line that links it, and you find its hand-back
-in SKILL.md. A brief, such as this file, holds its own hand-back. An agent never decides when to
-load a file it always has loaded. A reader opens an architecture doc before they change the
-subsystem, and a package README or the docs index only points at other docs.
+A brief, such as this file, holds its own hand-back, so the first row leaves it out.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
