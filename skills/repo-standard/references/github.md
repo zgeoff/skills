@@ -24,8 +24,10 @@ gh variable set BUN_CHECK_SCRIPTS -R <owner>/<repo> --body 'audit deadcode forma
 
 Expect: `gh variable list -R <owner>/<repo>` lists `BUN_CHECK_SCRIPTS`.
 
-Repo-sync and Renovate merge their pull requests with auto-merge. The release job opens its pull
-request through the Actions permission that the second command grants.
+Repo-sync and Renovate merge their pull requests with auto-merge. The second command grants the
+Actions permission that the release setup needs; for why, see the
+[GitHub App section](https://github.com/zgeoff/tools/blob/main/RELEASING.md#github-app-required-for-the-automated-chain)
+of the tools release doc. The release App's token opens the release pull request.
 
 ## Repo-sync secrets
 

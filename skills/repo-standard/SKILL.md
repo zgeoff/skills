@@ -68,6 +68,10 @@ next step.
 An empty repo has no `main` to branch from and no ruleset yet, so build the first commit in the
 clone and push it straight to `main`. Every later change goes through a pull request.
 
+To bring an existing repo up to the standard, skip this step and
+[Push the first commit](#push-the-first-commit). Run each other step's check, and fix what fails in
+a pull request.
+
 ## Workspace and package
 
 Make the repo a Bun workspace, even when it holds one package. Every repo of the owner is a
@@ -76,9 +80,9 @@ of shape. Put the package in `packages/<name>/`.
 
 1. Pin Bun in `.bun-version` and in `packageManager` in the root `package.json`, to the same
    version.
-2. Write `bunfig.toml` as [Files](./references/files.md#bunfigtoml) gives: the isolated linker,
-   exact versions, a 7-day `minimumReleaseAge`, and the first-party excludes, which you list by
-   hand. `chex dependency-gates` reads `bun.lock`, so it lists nothing until the first install.
+2. Write `bunfig.toml` with the content in [Files](./references/files.md#bunfigtoml): the isolated
+   linker, exact versions, a 7-day `minimumReleaseAge`, and the first-party excludes, which you list
+   by hand. `chex dependency-gates` reads `bun.lock`, so it lists nothing until the first install.
 3. Write the root `package.json` and the package's `package.json` with the fields in
    [Files](./references/files.md#packagejson). Put each dependency's version in the catalog, and
    write `catalog:` in the package.
@@ -130,10 +134,10 @@ Check: `bun run format:check`, `bun run lint`, `bun run typecheck`, `bun run tes
 
 ## Agent files and docs
 
-1. Copy the template in [AGENTS.md template](./references/agents-md.md) into `AGENTS.md` and
-   `CLAUDE.md`, and fill in each placeholder.
+1. Copy the template in [AGENTS.md template](./references/agents-md.md) into `AGENTS.md`, fill in
+   each placeholder, and write the one-line `CLAUDE.md` it gives.
 2. Load [docs-writing](../docs-writing/SKILL.md), and write the root README and the package's README
-   by its README rules. A repo that publishes one package gets the published-package sections in
+   by its README rules. When the repo publishes one package, add the published-package sections to
    both. Copy `LICENSE` into the package folder: npm packs only the files in that folder.
 
 Check: `bun run check:docs` passes, and `bun x @zgeoff/chex prose AGENTS.md` passes.

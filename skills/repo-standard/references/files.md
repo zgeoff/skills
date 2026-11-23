@@ -1,6 +1,6 @@
 # Files
 
-Write each file that the first three steps of the repo-standard skill name, with the content below.
+Write each file named in the first three steps of the repo-standard skill, with the content below.
 Replace each placeholder: `<owner>` and `<repo>` name the GitHub repo, `@<scope>/<name>` is the npm
 name, and `<command>` is the name a user types to run the CLI.
 
@@ -41,7 +41,7 @@ linker = "isolated"
 exact = true
 # install only releases at least 7 days old
 minimumReleaseAge = 604800
-# each first-party package by its full name, from `bun x @zgeoff/chex dependency-gates`
+# each first-party package by its full name; `bun x @zgeoff/chex dependency-gates` lists any missing
 minimumReleaseAgeExcludes = [
   "@zgeoff/bun-test-extended",
   "@zgeoff/chex",
@@ -151,8 +151,9 @@ TypeScript, such as `*.ts` and `scripts/**/*.ts`. Write one in `packages/<name>/
 
 ## lefthook.yml
 
-Write it before the first `bun install`, with the pre-commit fixers and the commit-msg hook. The
-chex baseline holds neither. `chex init` adds the `extends` line and its guard jobs later.
+Write it before the first `bun install`: the install runs lefthook, which writes a sample file when
+the repo has none. Give it the pre-commit fixers and the commit-msg hook, because the chex baseline
+holds neither. `chex init` adds the `extends` line and its guard jobs later.
 
 ```yaml
 pre-commit:

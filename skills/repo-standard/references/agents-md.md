@@ -14,14 +14,16 @@ agent finds the same rule in the same place in each repo.
 | `<adds>`          | what the project skill adds or replaces, such as "the repo's test lanes and stand-ins"                     |
 | `<folder>`        | each folder at the top two levels, with a line on what it holds                                            |
 
-When the repo has no `docs/` yet, delete the sentence that names `<overview>`. Add a section of the
-repo's own after `## Commits and pull requests`, and only for a rule that no skill holds.
+When the repo has no `docs/` yet, delete the sentence that names `<overview>`. Put a rule of the
+repo's own about code, tests, docs or CI in a `project-<name>` skill beside the shared skill on that
+topic. Add a section after `## Commits and pull requests` only for a rule that fits no skill, such
+as a rule about the repo's hosts.
 
 ````markdown
 # Agent Guidelines
 
-This repo is <repo>, <purpose>. <overview> explains how its parts fit. Hand back a pull request into
-`main` with green CI, and never merge it: the repo owner merges every pull request.
+This repo is <repo>, <purpose>. Read <overview> to see how its parts fit. Hand back a pull request
+into `main` with green CI, and never merge it: the repo owner merges every pull request.
 
 ## Required reading
 
@@ -40,10 +42,10 @@ skills are in `.agents/skills/`, and `.claude/skills` links to that folder.
 | `<project-skill>` | the same, beside `<shared-skill>`: <adds>                                   |
 
 repo-sync delivers each shared skill at the `zgeoff/skills` commit that `zgeoff/tools` pins, and
-overwrites a local edit. Never edit a shared skill here. Put a rule of this repo's own in a
-`project-<name>` skill. repo-sync copies no `design-docs` skill: before you write a design or a
-decision record, load [`design-docs`](https://github.com/zgeoff/skills/tree/main/skills/design-docs)
-from zgeoff/skills.
+overwrites a local edit. Never edit a shared skill here. Put a rule of this repo's own about code,
+tests, docs or CI in a `project-<name>` skill beside the shared skill on that topic. repo-sync
+copies no `design-docs` skill: before you write a design or a decision record, load
+[`design-docs`](https://github.com/zgeoff/skills/tree/main/skills/design-docs) from zgeoff/skills.
 
 When you write or edit a skill:
 
@@ -65,8 +67,8 @@ When you write or edit a skill:
 
 - Every external version lives once, in the root `workspaces.catalog`. A package writes `"catalog:"`
   for an external dependency and `"workspace:*"` for an internal one.
-- Pin exact versions, with no `^` or `~` ranges. `bun add` saves exact versions, so the rule covers
-  hand-written edits.
+- Pin exact versions, with no `^` or `~` ranges. `bun add` saves exact versions; apply the same rule
+  to hand-written edits.
 
 ## Commands
 
