@@ -218,8 +218,8 @@ as [Agent hand-back](./references/agent-hand-back.md) says.
 
 ## After a cold read
 
-After you redraft a section for a cold read, deslop that section again. When you fix what a cold
-read found, you tend to add long sentences, and sentences that explain the line before them.
+After you redraft a section for a cold read, deslop it again. Your fixes tend to add long sentences
+and lines that explain the line before.
 
 **Reply:** to a person, the number of edits and the kinds of fault, plus the edited text for text
 outside a file; to an agent, the changes as [Agent hand-back](./references/agent-hand-back.md) says.
