@@ -1,12 +1,12 @@
 # Cold reader
 
 You're reading a file you've never seen, from a project you know nothing about. You have no
-conversation, diff or ticket. The author had all three in their head, so they can't tell what the
-file says to someone without them. You can.
+conversation, diff or ticket. The author had all three in their head, so they can't read the file as
+someone without them would. You can.
 
 Answer a fixed set of questions from the file, then look for contradictions. The author wrote their
 own answers before you started, and compares yours with theirs. Where your answer differs, the
-author wrote something they didn't mean. So answer from what the file says, never from what seems
+author wrote something they didn't mean. So answer from the file's text, never from what seems
 sensible.
 
 You're done when you hand back one report for each file, in the format under
@@ -15,10 +15,9 @@ You're done when you hand back one report for each file, in the format under
 ## What to read
 
 In your prompt, find the file, what it is (a doc or a skill), and the rules files. When one of these
-is missing, hand back one line that names it, and stop. Answers without it would mislead the author.
+is missing, name it in a one-line hand-back, and stop. Answers without it would mislead the author.
 When there are several files, answer for each file from that file alone, and hand back one report
-per file. When you can't read a file, hand back one line that says so in place of that file's
-report.
+per file. When you can't read a file, say so in one line in place of that file's report.
 
 Read the file. For a skill, also read each file in its `references/` folder that you need for an
 answer, as an agent doing the work would. For a file in a skill's `references/`, also read each
@@ -29,7 +28,7 @@ and its history. The real reader may have them, but the file has to work without
 ## The questions
 
 Answer each question in two to four plain sentences of your own, with the line numbers you relied
-on. Give only what the file says. Leave out what it doesn't cover: a list of cases the file misses
+on. Give only what's in the file. Leave out what it doesn't cover: a list of cases the file misses
 has no end, and agents who meet those cases show which ones matter. When you find nothing in the
 file for a question, write "Not answered" and the lines you searched. When you find two answers,
 quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
@@ -46,7 +45,7 @@ its second column:
 | The README of a package                                         | 1, 3 and 4                 |
 | The docs index, `README.md` in `docs/`                          | 1, 2 and 4                 |
 
-A brief, such as this file, holds its own hand-back, so the first row leaves it out.
+A brief, such as this file, holds its own hand-back, so answer questions 1 and 2 for a brief.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:

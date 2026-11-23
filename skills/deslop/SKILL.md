@@ -21,8 +21,8 @@ by line, and change only these:
 
 Leave everything else as it is, and add no new content.
 
-- **Fix the faults in What to fix, even when someone asks you to write like a named writer.** When
-  you copy a writer's voice, you copy their faults too.
+Fix the faults in What to fix even when someone asks you to write like a named writer. When you copy
+a writer's voice, you copy their faults too.
 
 You're done when every line of the text, or of the sections your caller named, has had one pass,
 you've reread each rewrite, and the prose check passes, or you skipped it as
@@ -218,8 +218,8 @@ as [Agent hand-back](./references/agent-hand-back.md) says.
 
 ## After a cold read
 
-After you redraft a section for a cold read, deslop that section again. A cold-read fix adds long
-sentences, and sentences that explain the line before them.
+After you redraft a section for a cold read, deslop that section again. When you fix what a cold
+read found, you tend to add long sentences, and sentences that explain the line before them.
 
 **Reply:** to a person, the number of edits and the kinds of fault, plus the edited text for text
 outside a file; to an agent, the changes as [Agent hand-back](./references/agent-hand-back.md) says.

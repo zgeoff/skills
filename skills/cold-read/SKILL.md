@@ -15,9 +15,10 @@ you wrote it, the repo when you didn't. So you can't tell how it reads to someon
 Write down what the file should tell a reader, hand the file to a fresh subagent, the cold reader,
 and compare its answers with yours. Fix each place they differ, then deslop what you changed.
 
-Every read asks the same questions, so a second read checks your fixes and finds little new. A read
-is clean when every answer matches yours and the cold reader finds no contradiction. Stop at a clean
-read. Read again only when a later commit changes what one of your answers says.
+Each cold reader answers the same questions, so expect a second read to confirm your fixes and find
+little new. A read is clean when every answer matches yours and the cold reader finds no
+contradiction. Stop at a clean read. Read again only when a later commit changes what one of your
+answers says.
 
 Hand back:
 
@@ -96,7 +97,7 @@ same facts, in any words. Where your answer is "doesn't apply", count either "No
 answer that says the file covers no such thing as a match.
 
 Turn every finding into a change to text in the repo, or hand it to whoever owns the file, as in the
-last two bullets below. Another session never sees a call you made only in your head. Its cold
+last two bullets below. Another session never sees a decision you made only in your head. Its cold
 reader raises the same finding again.
 
 - **Fix the file** when the answer differs, quotes two answers, or says "Not answered" to a question
