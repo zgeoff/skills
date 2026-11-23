@@ -72,19 +72,21 @@ When you write or edit a skill:
 
 ## Commands
 
-- `bun run typecheck`, `bun run lint` and `bun run test` are the local checks. Run them before you
-  push, and fix every failure.
-- `bun run format` fixes formatting, and `bun run check:docs` runs the docs checks.
-- lefthook runs the light checks before a commit and a push. Leave the larger checks to CI, because
-  the host may have little memory.
+- Before you push, run `bun run typecheck`, `bun run lint`, `bun run test` and `bun run check:docs`,
+  and fix every failure.
+- `bun run format` fixes formatting.
+- lefthook fixes the staged files before a commit, and runs the chex baseline before a push.
+- Leave `bun run lint:full`, the type-aware lint, to CI. It can run out of memory on a small host.
 
 ## Commits and pull requests
 
 - Every change reaches `main` through a pull request from its own branch. Open it with the repo's
   pull request template.
-- Write each commit message and PR title as a Conventional Commit in the imperative mood: "add X",
-  never "added X". A squash merge makes the PR title the commit subject.
-- Add no attribution lines: no co-author trailers and no generator notes.
+- Write each commit message and PR title as a Conventional Commit in the imperative mood, such as
+  "add X". A squash merge makes the PR title the commit subject.
+- Write the subject in lower case, file names included, such as `docs: update agents.md`. commitlint
+  and the PR-title check reject a capital letter.
+- Never add attribution lines, such as co-author trailers or generator notes.
 ````
 
 Write `CLAUDE.md` beside it as one line:
