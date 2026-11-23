@@ -32,8 +32,8 @@ next step.
   a workspace with one catalog, even for one package.
 - [Checks and hooks](#checks-and-hooks): the shared configs from zgeoff/tools, the six scripts CI
   runs, and the chex baseline.
-- [Agent files and docs](#agent-files-and-docs): `AGENTS.md` with a one-line `CLAUDE.md`, and a
-  README by the docs-writing rules.
+- [Agent files and docs](#agent-files-and-docs): `AGENTS.md` and `CLAUDE.md` from the template, and
+  a README by the docs-writing rules.
 - [Push the first commit](#push-the-first-commit): every check passes on your machine first.
 - [GitHub settings](#github-settings): squash merges only, auto-merge on, merged branches deleted.
 - [Sync and updates](#sync-and-updates): wire repo-sync with the tools runbook, then add Renovate.
@@ -43,7 +43,8 @@ next step.
 
 ## References
 
-- [Files](./references/files.md): the content of each file the first four steps write.
+- [Files](./references/files.md): the content of each config file the first three steps write.
+- [AGENTS.md template](./references/agents-md.md): writing `AGENTS.md` and `CLAUDE.md`.
 - [GitHub](./references/github.md): the settings commands and the ruleset.
 - [Release](./references/release.md): the release config, the `main.yml` jobs and the order of the
   first publish.
@@ -120,8 +121,8 @@ Check: `bun run format:check`, `bun run lint`, `bun run typecheck`, `bun run tes
 
 ## Agent files and docs
 
-1. Write `AGENTS.md` in the shape that [Files](./references/files.md#agentsmd) gives, and
-   `CLAUDE.md` as the one line `See @AGENTS.md for project guidelines.`
+1. Copy the template in [AGENTS.md template](./references/agents-md.md) into `AGENTS.md` and
+   `CLAUDE.md`, and fill in each placeholder.
 2. Load [docs-writing](../docs-writing/SKILL.md), and write the root README and the package's README
    by its README rules. A repo that publishes one package gets the published-package sections in
    both. Copy `LICENSE` into the package folder: npm packs only the files in that folder.

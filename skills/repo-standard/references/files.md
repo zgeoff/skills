@@ -1,6 +1,6 @@
 # Files
 
-Write each file that the first four steps of the repo-standard skill name, with the content below.
+Write each file that the first three steps of the repo-standard skill name, with the content below.
 Replace each placeholder: `<owner>` and `<repo>` name the GitHub repo, `@<scope>/<name>` is the npm
 name, and `<command>` is the name a user types to run the CLI.
 
@@ -8,7 +8,6 @@ name, and `<command>` is the name a user types to run the CLI.
 - [bunfig.toml](#bunfigtoml)
 - [package.json](#packagejson)
 - [tsconfig](#tsconfig)
-- [AGENTS.md](#agentsmd)
 
 ## Root files
 
@@ -128,19 +127,3 @@ Write a `tsconfig.json` beside it that extends `./tsconfig.base.json` and includ
 TypeScript, such as `*.ts` and `scripts/**/*.ts`. Write one in `packages/<name>/` that extends
 `../../tsconfig.base.json` and includes `src`. Add no strictness option of your own:
 `@tsconfig/strictest` sets them all.
-
-## AGENTS.md
-
-Give `AGENTS.md` these parts, in this order:
-
-1. `# Agent Guidelines`, then a paragraph: what the repo is for, and what an agent hands back, which
-   is a pull request into `main` with green CI that the agent never merges.
-2. `## Required reading`: a table of the tasks, such as writing a test, with the skill to load for
-   each.
-3. `## Repo structure`: a `text` block with the top two levels and a line on each folder.
-4. `## Checks`: the commands to run before a push.
-5. `## Commits and pull requests`: Conventional Commits in the imperative mood, squash merges, and
-   no attribution lines.
-
-Say in Required reading that a synced skill is never edited in the repo: repo-sync overwrites it.
-Put each rule of the repo's own in a `project-<name>` skill in `.agents/skills/`.
