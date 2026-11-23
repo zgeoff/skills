@@ -27,25 +27,7 @@ and its history. The real reader may have them, but the file has to work without
 
 ## The questions
 
-Answer each question in two to four plain sentences of your own, with the line numbers you relied
-on. Give only what's in the file. Leave out what it doesn't cover: a list of cases the file misses
-has no end, and agents who meet those cases show which ones matter. When you find nothing in the
-file for a question, write "Not answered" and the lines you searched. When you find two answers,
-quote both lines. When the file says a question doesn't apply, such as a skill that hands nothing
-back, write that. For each kind of file in this table, write "doesn't apply" for the questions in
-its second column:
-
-| Kind of file                                                    | Questions that don't apply |
-| --------------------------------------------------------------- | -------------------------- |
-| A file in a skill's `references/` that isn't a subagent's brief | 1 and 2                    |
-| A file that only sets a format and runs no step                 | 4                          |
-| A rule set, and each file in its `references/`                  | 2 and 4                    |
-| A file the agent always has loaded, such as AGENTS.md           | the "when" half of 1       |
-| An architecture doc, in `docs/architecture/`                    | 1 and 3                    |
-| The README of a package                                         | 1, 3 and 4                 |
-| The docs index, `README.md` in `docs/`                          | 1, 2 and 4                 |
-
-A brief, such as this file, holds its own hand-back, so answer questions 1 and 2 for a brief.
+Answer five questions about the file, from the set for its kind.
 
 For a skill, which is any file an agent reads to do its work, such as a SKILL.md, a reference, a
 brief or AGENTS.md:
@@ -65,6 +47,30 @@ For a doc, which is any other file, such as a README or a file in `docs/`:
 5. Where does the doc send the reader for what it doesn't cover?
 
 Answer all five, in order, before you open the rules files.
+
+### How to answer
+
+- Write two to four plain sentences of your own, with the line numbers you relied on.
+- Give only what's in the file. Leave out the cases it doesn't cover: that list has no end, and
+  agents who meet those cases show which ones matter.
+- When you find nothing for a question, write "Not answered" and the lines you searched.
+- When you find two answers, quote both lines.
+- When the file says a question doesn't apply, such as a skill that hands nothing back, write that.
+
+### Questions to skip
+
+For these kinds of file, write "doesn't apply" for each question in the second column, and answer
+the rest.
+
+| Kind of file                                           | Skip                                                     |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| A skill's reference that isn't a subagent's brief      | 1 (when you open it) and 2 (what you hand back)          |
+| A skill file that only sets a format and runs no step  | 4 (when a step fails)                                    |
+| A rule set, and each of its references                 | 2 (what you hand back) and 4 (when a step fails)         |
+| A skill the agent always has loaded, such as AGENTS.md | The "when" half of 1                                     |
+| An architecture doc, in `docs/architecture/`           | 1 (who reads it) and 3 (what next)                       |
+| The README of a package                                | 1 (who reads it), 3 (what next) and 4 (facts to keep)    |
+| The docs index, `README.md` in `docs/`                 | 1 (who reads it), 2 (what it does) and 4 (facts to keep) |
 
 ## Contradictions
 

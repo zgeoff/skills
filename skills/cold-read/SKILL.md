@@ -66,11 +66,11 @@ Hand back:
    [The questions](./references/cold-reader.md#the-questions) for that kind of file, in a scratch
    file, before you spawn anything. Answer with what the file is meant to tell a reader. When you
    didn't write the file, take that from the file, the skills or docs that point at it, and the
-   repo. Write "doesn't apply" for each question in the file's row of the table in
-   [The questions](./references/cold-reader.md#the-questions), and for a question this file has no
-   need to answer, such as commands in a skill that runs none. When you answer question 5 with a
-   limit that has no reason, note it as a gap only when the limit looks arbitrary to someone without
-   your context. When the rules have a reference for the file's kind, such as READMEs, write
+   repo. Write "doesn't apply" for each question in the file's row of
+   [Questions to skip](./references/cold-reader.md#questions-to-skip), and for a question this file
+   has no need to answer, such as commands in a skill that runs none. When you answer question 5
+   with a limit that has no reason, note it as a gap only when the limit looks arbitrary to someone
+   without your context. When the rules have a reference for the file's kind, such as READMEs, write
    "doesn't apply" for each question outside that reference. When a question applies and you can't
    answer it, note it as a gap in the file or in the rules.
 5. Spawn one `general-purpose` subagent for each file you check, in parallel. A skill's SKILL.md and
