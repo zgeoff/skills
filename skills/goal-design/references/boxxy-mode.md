@@ -20,9 +20,11 @@ When a fact in this file differs from them, follow boxxy.
 Name the source of the work in the goal, such as a tracker project, a filter of small issues, or a
 folder of design docs. Then tell the session how to file each source item:
 
-- File one item per source item, written with the work-items skill: the repo, a title, the outcome
-  and acceptance lines. Put the source's link, and the path of any design doc, in the item's body.
-  boxxy has no field for a tracker issue or a design doc.
+- File one item per source item with the work-items skill, and give each item the repo, a title, the
+  outcome and acceptance lines. In one acceptance line, name the new check that proves the item,
+  such as a test that fails without the change, or a new verify journey for a user-facing change.
+  Put the source's link, and the path of any design doc, in the item's body. boxxy has no field for
+  a tracker issue or a design doc.
 - Before filing, search the items for the source's link, and skip a source item whose link is
   already on an item. After a compaction, the session can't tell what it filed from memory.
 - Set the kind from the rules file. boxxy runs its own design first for a kind with a design phase,
@@ -76,7 +78,7 @@ An invented boxxy goal, at about 2,000 characters:
 
 Work: file in this order, expediting batch 1. 1. The small issues, one item each. 2. The export designs: the CSV export, then the PDF export, which the CSV item blocks.
 
-Filing: write each item with the work-items skill, with the issue or doc link in its body. Search the items for the link first, and never file a source twice. File a signed-off design's work as a build kind. File an issue that needs the owner's decision held. Keep each source ID with its item ID in the handoff doc.
+Filing: write each item with the work-items skill, with the issue or doc link in its body, and one acceptance line that names the new test or verify journey that proves it. Search the items for the link first, and never file a source twice. File a signed-off design's work as a build kind. File an issue that needs the owner's decision held. Keep each source ID with its item ID in the handoff doc.
 
 Authority: file, note, hold, release, retry, defer, expedite and close items without asking; answer a hold that a note can fix. Not authorised: signing off a PR boxxy holds for the owner, pausing the runner, registering for notices. Never: a ruleset bypass, printing a secret.
 

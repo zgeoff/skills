@@ -19,6 +19,9 @@ item matches no row, take its steps from the repo's AGENTS.md, or ask the user.
 
 Then add the steps every item shares:
 
+- add a test that fails without the change. For a user-facing change in a repo with a verify setup,
+  also add or extend a verify feature and journey. A rerun of the old checks proves only that
+  nothing broke;
 - the bar for a merge, such as green CI on the latest push and every review finding fixed or
   answered;
 - the rule for a flaky job, such as one rerun, then treat it as real;
