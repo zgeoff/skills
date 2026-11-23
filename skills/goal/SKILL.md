@@ -81,16 +81,16 @@ them.
 
 1. **Outcome.** The end state, then the source of truth. Add the decisions the session must not
    reopen, and what to do when one proves unbuildable: stop and ask.
-2. **Work.** The items as ordered lanes, such as `A.`, `B.` and `C.`. Inside a lane, list the items
-   in the order they must land. Say which lanes run in parallel, the most builds at once, and what
-   to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a
-   design, and say what releases it. Name each item by what it does, with its ticket ID after. In
-   boxxy mode, write this part as [boxxy mode](./references/boxxy-mode.md) says.
+2. **Work.** The items as lanes, such as `A.`, `B.` and `C.`, each in the order its items must land.
+   Say which lanes run in parallel, the most builds at once, and what to do when two lanes touch the
+   same files: finish one first. Mark an item held on a decision or a design, and say what releases
+   it. Name each item by what it does, with its ticket ID after. In boxxy mode, write this part as
+   [boxxy mode](./references/boxxy-mode.md) says.
 3. **For each item.** Each item's steps, by its kind of work, from the mode's reference:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
-   do, and what it must never do. Put each action that is hard to undo in one of the three. Add what
-   to do when a permission check refuses an action: stop and give the user the exact command.
+   do, and what it must never do. Put each action that is hard to undo in a list. Add what to do
+   when a permission check refuses an action: stop and give the user the exact command.
 5. **Bring the user.** The decisions that are the user's, such as naming, money or an outside
    account. Then how to ask: one decision at a time, with options and a recommendation, never in the
    same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
