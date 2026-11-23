@@ -25,6 +25,8 @@ passes [Check it](#check-it).
 
 - [When to write or refresh one](#when-to-write-or-refresh-one): a new long run, or a big new scope
   agreed for a running one.
+- [Pick the mode](#pick-the-mode): direct, where the session builds each item, or boxxy, where it
+  files and manages items.
 - [Gather the facts first](#gather-the-facts-first): the source of truth, the live state of every
   item, and the user's decisions.
 - [The parts](#the-parts): twelve parts, in order, in the example goal's shape.
@@ -35,19 +37,26 @@ passes [Check it](#check-it).
 
 ## References
 
-- [Example goal](./references/example-goal.md): an invented goal with every part, to copy the shape
-  from.
+- [Example goal](./references/example-goal.md): the shape to copy.
+- [Direct mode](./references/direct-mode.md): each item's steps, from the repo's tools.
+- [boxxy mode](./references/boxxy-mode.md): a goal that files work in boxxy, with an example.
 
 ## When to write or refresh one
 
 Write a goal when the user wants a session to run unattended for more than a few turns.
 
-Refresh a running goal when the user agrees a big new scope with you, such as new work items in a
-design walkthrough, or a change to what the session may do without asking. Write the whole goal
-again from the current state: drop each item that landed, keep each approval the user still grants,
-and add the new work. Tell the user the new `/goal` replaces the running one.
+Refresh a running goal when the user agrees a big new scope with you, such as new work from a design
+walkthrough or a new grant. Write the whole goal again from the current state: drop each item that
+landed, keep each approval the user still grants, and add the new work. Tell the user the new
+`/goal` replaces the running one.
 
 Leave a small change out of the goal. Tell the session in chat, and record it in the handoff doc.
+
+## Pick the mode
+
+In direct mode, the session builds each item itself. In boxxy mode, the session files the work in
+boxxy, which starts an agent on each item, and the session manages the items to their end. Take the
+mode from the user's request, and ask when it doesn't say. Then read that mode's reference.
 
 ## Gather the facts first
 
@@ -75,20 +84,17 @@ them.
    in the order they must land. Say which lanes run in parallel, the most builds at once, and what
    to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a
    design, and say what releases it. Name each item by what it does, with its ticket ID after.
-3. **For each item.** The steps every item goes through, in order: make its ticket buildable, plan,
-   build, review, verify, merge, release, check after deploy, clean up, close the ticket with
-   evidence. Name the workflow and the reviewer for each step that has one. Give the bar for a
-   merge, such as green CI on the latest push and every finding answered, and the rule for a flaky
-   job.
+3. **For each item.** The steps every item goes through, in order, from the reference for the mode:
+   [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
    do, and what it must never do. Put each action that is hard to undo in one of the three. Add what
    to do when a permission check refuses an action: stop and give the user the exact command.
-5. **Bring the user.** The kinds of decision that are the user's, such as naming, money, an outside
-   account or a tap only they can make. Then how to ask: one decision at a time, with options and a
-   recommendation, never in the same turn as an explanation. Tell the session to keep building what
-   doesn't depend on the answer, and to record each blocker once, with its next step.
-6. **Known waits.** Each thing the work waits on that the session can't speed up, such as an outside
-   review or a card the user must add, with how to check it.
+5. **Bring the user.** The decisions that are the user's, such as naming, money or an outside
+   account. Then how to ask: one decision at a time, with options and a recommendation, never in the
+   same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
+   and to record each blocker once, with its next step.
+6. **Known waits.** Each outside wait, such as a review or a card the user must add, with how to
+   check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,
    a model on every subagent, and the repo's AGENTS.md and its skills. List only the rules a long
    run tends to break.
@@ -110,15 +116,13 @@ Copy the shape from the [example goal](./references/example-goal.md).
 
 The Stop hook's model reads only the conversation. It runs no command and opens no file, so it can
 judge only what the session printed. Write each line as an end state with its evidence, such as
-"every PR in lanes A and B is merged, with its link in a report" or "`bun test` exits 0 on main
-after the last merge".
+"every PR in lanes A and B is merged, with its link in a report".
 
 - Give each line a state the session can reach without the user, or a held state: "deployed, or
   blocked on the user with the exact action listed".
 - Never write "when the work is done" or "when it's good enough". The model can't judge either, and
   the session runs on or stops early.
-- Tell the session to state the evidence for each done-when line at the end, where the model finds
-  it in the latest turn.
+- Tell the session to print the evidence for each line in its last turn.
 
 ## Fit the limit
 
