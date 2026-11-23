@@ -69,8 +69,8 @@ Write these in order. Open the goal with the outcome. Give each later part excep
 short label the session can scan, such as `Authority:`. Name the user the way the session knows
 them.
 
-1. **Outcome.** One sentence: the end state, and the source of truth. Add the decisions the session
-   must not reopen, and what to do when one proves unbuildable: stop and ask.
+1. **Outcome.** One or two sentences: the end state, then the source of truth. Add the decisions the
+   session must not reopen, and what to do when one proves unbuildable: stop and ask.
 2. **Work.** The items as ordered lanes, such as `A.`, `B.` and `C.`. Inside a lane, list the items
    in the order they must land. Say which lanes run in parallel, the most builds at once, and what
    to do when two lanes touch the same files: finish one first. Mark an item held on a decision or a

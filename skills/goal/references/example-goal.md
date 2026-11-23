@@ -11,7 +11,7 @@ Work (lanes run in parallel; at most 3 builds at once; when two lanes touch the 
 A. Offline sync: fix the review findings on its open PR (TP-41), merge, release, deploy. Then conflict prompts (TP-44).
 B. Search: the index rebuild (TP-52), then search filters (TP-53).
 C. Held until the sharing design is signed off: shared notebooks (TP-60), then link expiry (TP-61).
-Design: the sharing design PR. Run the design tests, deslop, cold read, open the PR, walk the owner through it one section at a time, fold in the answers, merge on sign-off.
+D. The sharing design PR (TP-58): run the design tests, deslop, cold read, open the PR, walk the owner through it one section at a time, fold in the answers, merge on sign-off.
 
 For each item: make its ticket a buildable work item, split it if one PR would be too big; check the plan against the design with the advisor; run build-feature with review 'codex'; verify it as a user with the repo's verify command and publish the report into the PR. Merge when CI is green on the latest push and every finding is answered; rerun a flaky job once, then treat it as real. Rebase before each merge, and merge one PR at a time. Release and deploy after each merge that changes prod. After a deploy, check health and run the read-only prod checks. Clean up worktrees, branches and previews. Move a ticket to Done only with evidence for each acceptance line.
 
