@@ -1,7 +1,7 @@
 # Release
 
-The release setup of the repo-standard skill, for one package in `packages/<name>/`. Load
-[npm-publish](../../npm-publish/SKILL.md) before you start: it owns the first publish and the
+Set up releases for one package in `packages/<name>/`. Load
+[npm-publish](../../npm-publish/SKILL.md) before you start: it covers the first publish and the
 trusted publisher.
 
 A release takes two runs of `main.yml`. The push run of a merged release pull request tags the
@@ -73,3 +73,8 @@ npm expires an unused trusted publisher after 2 days, so do steps 3 to 6 within 
 5. Merge a `feat` or `fix` pull request. Expect the release job to open a release pull request.
 6. Ask the owner to merge the release pull request. Expect `npm view @<scope>/<name> version` to
    print the new version, which CI published with provenance.
+
+When the publish fails, follow [What goes wrong](../../npm-publish/SKILL.md#what-goes-wrong) in
+npm-publish. When the release pull request stays open or a merged one stays untagged, use
+[Troubleshooting](https://github.com/zgeoff/tools/blob/main/RELEASING.md#troubleshooting) in the
+tools release doc.

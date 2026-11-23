@@ -1,8 +1,8 @@
 # Files
 
-The content of each file that the first four steps of the repo-standard skill write. Replace each
-placeholder: `<owner>` and `<repo>` name the GitHub repo, `@<scope>/<name>` is the npm name, and
-`<command>` is the name a user types to run the CLI.
+Write each file that the first four steps of the repo-standard skill name, with the content below.
+Replace each placeholder: `<owner>` and `<repo>` name the GitHub repo, `@<scope>/<name>` is the npm
+name, and `<command>` is the name a user types to run the CLI.
 
 - [Root files](#root-files)
 - [bunfig.toml](#bunfigtoml)
@@ -47,7 +47,7 @@ minimumReleaseAgeExcludes = []
 preload = ["@zgeoff/bun-test-extended", "@zgeoff/testing/preload"]
 ```
 
-The [testing](../../testing/SKILL.md) skill sets what else goes under `[test]`.
+Add under `[test]` whatever else the [testing](../../testing/SKILL.md) skill requires.
 
 ## package.json
 

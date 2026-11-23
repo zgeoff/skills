@@ -11,16 +11,18 @@ description:
 # Repo standard
 
 Set up a repo the way every repo of the owner is set up, or bring an existing repo up to it. Copy
-from this skill and the files it links, never from an older repo: each older repo carries leftovers
-that aren't part of the standard. Do the steps in order, because a later step needs what an earlier
-one made, and run each step's check before the next step.
+only from this skill and the files it links. Copy no other file from an older repo: each older repo
+carries leftovers that aren't part of the standard. Do the steps in order, because a later step
+needs what an earlier one made, and run each step's check before the next step. When a check fails,
+fix the cause and run the check again. When only the owner can fix it, such as an App install or a
+merge, stop at that step and say so in your reply.
 
 The owner reads your reply to see what's done and what waits on them. Hand back the repo's URL, the
 pull requests you opened, the result of each check, and each step you skipped or left to the owner,
 with its reason.
 
-Where another skill or doc owns a step, this skill says when to load it. Follow that skill for the
-step, and come back here for the order.
+When a step sends you to another skill or doc, follow it for that step, then come back here for the
+next step.
 
 ## Key rules
 
@@ -136,7 +138,7 @@ Check: `git log origin/main --oneline` shows the one commit.
 ## GitHub settings
 
 Allow squash merges only, turn on auto-merge, and delete each branch on merge, with the commands in
-[GitHub](./references/github.md#repo-settings). Squash only, because the squash makes the pull
+[GitHub](./references/github.md#repo-settings). Allow no other merge type: a squash makes the pull
 request title the commit subject, and CI checks that title as a Conventional Commit.
 
 Check: the command's output shows each setting.
@@ -162,17 +164,16 @@ Add the ruleset in [GitHub](./references/github.md#the-ruleset) only after the s
 `main`. A ruleset that requires `pr / checks` before then blocks every pull request, because nothing
 reports that check.
 
-The ruleset requires a pull request and the one check `pr / checks`, never an up-to-date branch, and
-gives nobody a bypass. Load [ci-design](../ci-design/SKILL.md) before you require another check.
+Require a pull request and the one check `pr / checks`. Do not require an up-to-date branch, and
+give nobody a bypass. Load [ci-design](../ci-design/SKILL.md) before you require another check.
 
 Check: `gh api repos/<owner>/<repo>/rulesets` lists one active ruleset.
 
 ## Release and publish
 
 Load [npm-publish](../npm-publish/SKILL.md) before this step: it owns the first publish and trusted
-publishing. Then follow [Release](./references/release.md), which adds the release config, the
-release and publish jobs in `main.yml`, and the order that keeps the trusted publisher from
-expiring.
+publishing. Then follow [Release](./references/release.md) to add the release config and the release
+and publish jobs in `main.yml`, in the order that keeps the trusted publisher from expiring.
 
 A person merges each release pull request: the release job runs with `merge: false`.
 

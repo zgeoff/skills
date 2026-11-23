@@ -5,7 +5,7 @@ repo.
 
 ## Repo settings
 
-Run these after the first push:
+Run these after the first push, as a user with admin rights on the repo:
 
 ```bash
 gh repo edit <owner>/<repo> --enable-squash-merge --enable-merge-commit=false --enable-rebase-merge=false --enable-auto-merge --delete-branch-on-merge
@@ -20,7 +20,8 @@ request through the Actions permission that the second command grants.
 
 ## The ruleset
 
-Add the ruleset after the synced `pr.yml` is on `main`. Write this file to your scratch folder as
+Add the ruleset after the synced `pr.yml` is on `main`. Before then, nothing reports `pr / checks`,
+so the ruleset would block every pull request. Write this file to your scratch folder as
 `ruleset.json`:
 
 ```json
