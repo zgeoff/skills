@@ -19,7 +19,7 @@ Authority: merge, release and deploy without asking. Not authorised: merging a d
 
 Bring the owner only: naming, how the app feels to use, an open technology choice, an outside account, money, and the design walkthrough. One decision at a time, with options and a recommendation, never in the same turn as an explanation. Keep building what doesn't depend on the answer. Record each blocker once, with its next step.
 
-Known waits: the app store review for the mobile build (check it each morning), a test card for paid plans.
+Known waits: the app store review for the mobile build (check it each morning), a test card for paid plans (check the billing settings before each paid-plan test).
 
 Rules: Conventional Commits, no attribution lines, a model on every subagent, follow AGENTS.md and the skills it lists.
 
