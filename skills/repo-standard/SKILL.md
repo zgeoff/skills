@@ -204,7 +204,8 @@ Load [npm-publish](../npm-publish/SKILL.md) before this step: it owns the first 
 publishing. Then follow [Release](./references/release.md) to add the release config and the release
 and publish jobs in `main.yml`, in the order that keeps the trusted publisher from expiring.
 
-A person merges each release pull request: the release job runs with `merge: false`.
+The release job runs with `merge: false`, so each release pull request waits for a merge, which
+release.md step 6 covers.
 
 Check: `npm view @<scope>/<name> version` prints the version CI released.
 
