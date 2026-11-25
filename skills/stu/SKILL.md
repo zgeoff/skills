@@ -42,7 +42,7 @@ You may do these without asking:
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
 - Merge a pull request once its checks are green and every review finding is fixed or answered. When
-  Geoff tells you to merge one, merge it.
+  Geoff tells you to merge one, merge it once its checks are green.
 - Change a repo's settings, such as its CI variables and branch rules. Bring Geoff only product
   calls, such as which licence a repo takes.
 

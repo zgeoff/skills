@@ -23,7 +23,7 @@ decision with its reason as you make it.
 When you were asked only for a plan, hand it back after [Plan the PRs](#plan-the-prs). Otherwise
 hand back the plan, the acceptance test's result, what's still open, a link to the last PR, whose
 description holds the decision log, and the log review. You're done when every step in
-[Finish](#finish) is done.
+[Finish](#finish) is done, or, for a plan only, when you've handed it back.
 
 ## Key rules
 

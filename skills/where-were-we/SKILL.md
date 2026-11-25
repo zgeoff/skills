@@ -20,7 +20,7 @@ waits on no one, as [The decisions](#the-decisions) says.
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
   [Catch yourself up](#catch-yourself-up). Skip a PR or a branch that `www` printed with a result
-  this turn.
+  this turn, other than `no check` or `unchecked`.
 - **Spend the words on the decisions.** Keep the account of what happened short.
 - **Let the user decide from the reply alone.** A link can give more detail, but the user shouldn't
   have to open it to decide.
