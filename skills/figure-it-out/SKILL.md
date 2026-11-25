@@ -23,7 +23,7 @@ decision with its reason as you make it.
 When you were asked only for a plan, hand it back after [Plan the PRs](#plan-the-prs). Otherwise
 hand back the plan, the acceptance test's result, what's still open, a link to the last PR, whose
 description holds the decision log, and the log review. You're done when every step in
-[Finish](#finish) is done.
+[Finish](#finish) is done, or, for a plan only, when you've handed it back.
 
 ## Key rules
 
@@ -49,8 +49,7 @@ Read the code and the ticket until you can write these at the top of your plan. 
 
 1. **Acceptance test:** a command or comparison, and the result that means done, such as "every page
    renders with a pixel difference of 0 from the saved screenshots".
-2. **Size:** roughly how many PRs and hours, and each blocker you found. Update it when the plan
-   changes.
+2. **Size:** roughly how many PRs, and each blocker you found. Update it when the plan changes.
 3. **How careful to be:** normal or high. Pick high when a step can't be undone, such as a data
    migration or a change to a public API, or when three or more services or repos depend on the
    change. When you can't decide, pick high. With normal care you take none of these safeguards, and
@@ -59,12 +58,13 @@ Read the code and the ticket until you can write these at the top of your plan. 
      more than one good answer;
    - a review from another model family, through the [second-opinion](../second-opinion/SKILL.md)
      skill, on each PR before you open it;
-   - the user's approval before you run a step that can't be undone.
+   - the user's approval before you run a step that can't be undone, unless the user's instructions
+     grant that step.
 
 ## Plan the PRs
 
 1. Split the work into PRs that each leave the code working once merged in order. Branch each PR
-   from the one before it, and merge none of them yourself.
+   from the one before it, except as step 5 says. Merge them only as the user's instructions say.
 2. Make the first PR the acceptance test, as a script that CI doesn't run yet. It fails until the
    job is done. That PR's check is that the script runs and fails as expected. The last PR adds the
    script to CI. When you build the first PR, run the script on the code as it is now, and log the
@@ -80,9 +80,9 @@ Read the code and the ticket until you can write these at the top of your plan. 
    investigation. Someone can then file each PR as a ticket of that kind.
 
 When the user is talking with you in this session, show them the plan with the
-[show-me](../show-me/SKILL.md) skill. When the job will take more than an hour, wait for their
-approval. When an agent started you and no user is here, that agent gives each approval this skill
-asks the user for. When you were asked only for a plan, hand it back, and stop.
+[show-me](../show-me/SKILL.md) skill, then start. Wait for their approval only when they asked to
+see the plan first. When an agent started you and no user is here, that agent gives each approval
+this skill asks the user for.
 
 ## Do each PR
 

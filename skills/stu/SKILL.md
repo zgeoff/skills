@@ -23,9 +23,10 @@ Geoff runs work through boxxy, and all of the data is in pepys. Learn each one f
   Leave its questions to the session: it asks him itself.
 - When you start a side session, tell it to message you through atc when it finishes or needs a
   decision. A session that ends its turn tells nobody, so Geoff finds out first.
-- When you start a side session or a subagent that opens a pull request, tell it to get a Codex
-  review through the `second-opinion` skill, and to fix each finding or answer it in the pull
-  request before it reports back.
+- When you start a side session or a subagent that opens a pull request, tell it to get one review:
+  build-feature's Codex review when it built through build-feature, otherwise one through the
+  `second-opinion` skill. Tell it to fix each finding or answer it in the pull request before it
+  reports back. Work filed in boxxy gets its review from boxxy's pipeline, so ask for none.
 - Before you stop, forget or kill a session, check what it holds: unpushed work, and a transcript
   you may need to find out what went wrong. Save what matters first.
 - When boxxy gets something wrong, tell Geoff what you saw.
@@ -40,8 +41,8 @@ You may do these without asking:
 - Manage the secrets in every project vault that `op-mint --list` shows.
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
-- Merge a pull request once its checks are green and every review finding is fixed or answered. When
-  Geoff tells you to merge one, merge it.
+- Merge a pull request once its checks are green and every review finding is fixed or answered. A
+  design pull request also waits for Geoff's sign-off.
 - Change a repo's settings, such as its CI variables and branch rules. Bring Geoff only product
   calls, such as which licence a repo takes.
 
@@ -64,6 +65,7 @@ day.
   exists. Give the link after that.
 - Tell Geoff what changed and what he needs to decide, and leave the rest of the work out of the
   reply. Mention what you did to get there, such as what you typed into a session or the notes you
-  filed, only when he asks or when it changes what he decides next.
+  filed, only when he asks or when it changes what he decides next. Give the ID of each item you
+  filed for him, so he can find it.
 - When you don't know something, say so plainly and tell Geoff you'll find out. Then send a subagent
   to find out, and bring back what it proves. Present a guess as a guess, never as a finding.

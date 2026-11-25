@@ -43,7 +43,9 @@ folder of design docs. Then tell the session how to file each source item:
   session how to watch for holds, such as a background loop that lists the held items.
 - **Holds.** Say which holds the session answers itself and which go to the user. Have the session
   answer with a note on the item, then a retry, with a phase when the item must go back. The agent
-  on the next attempt reads every note. Send the user an item that fails the same retry twice.
+  on the next attempt reads every note. When an item fails the same retry twice, send a subagent to
+  diagnose it, and retry with the diagnosis in a note. Send the user the item when the diagnosis
+  names a decision that is the user's, or when the retry with the diagnosis fails too.
 - **Sign-off.** boxxy holds for the owner each PR that matches the sign-off rules in its rules file.
   Say whether the session may approve any of them. When the user hasn't said, send them all to the
   user.
@@ -53,8 +55,8 @@ folder of design docs. Then tell the session how to file each source item:
 
 - An item becomes done only when a PR from it merges. Tell the session to close, with a reason, each
   item that ends another way: a design-only item, a duplicate, a declined item or a split.
-- When an item ends, update its source: move the tracker issue to done with the PR link, or mark the
-  design doc built.
+- When an item's PR merges, update its source: move the tracker issue to done with the PR link, or
+  mark the design doc built. When an item closes another way, note the reason on its source.
 - boxxy runs no release or deploy. When the work ships, add those steps as
   [Direct mode](./direct-mode.md) says.
 
@@ -63,7 +65,8 @@ folder of design docs. Then tell the session how to file each source item:
 Write the done-when line from boxxy's item states, which the session prints:
 
 - every filed item is done, archived, or held on the user with the exact action listed;
-- each source item has its boxxy item, and each tracker issue is moved to done with its PR link;
+- each source item has its boxxy item, and each tracker issue whose item merged is moved to done
+  with its PR link;
 - no item is left in the `waiting` state, where an item that ends without a PR stays until the
   session closes it.
 
@@ -82,7 +85,7 @@ Filing: write each item with the work-items skill, with the issue or doc link in
 
 Authority: file, note, hold, release, retry, defer, expedite and close items without asking; answer a hold that a note can fix. Not authorised: signing off a PR boxxy holds for the owner, pausing the runner, registering for notices. Never: a ruleset bypass, printing a secret.
 
-Bring the owner only: a held decision, a sign-off, an item that failed the same retry twice. One at a time, with options and a recommendation, never in the same turn as an explanation.
+Bring the owner only: a held decision, a sign-off, an item whose diagnosis needs the owner's decision. One at a time, with options and a recommendation, never in the same turn as an explanation.
 
 Holds: watch for them with a background loop that lists the held items.
 
@@ -90,9 +93,9 @@ Rules: follow AGENTS.md and the skills it lists; a model on every subagent.
 
 Keep a handoff doc in .handoff/ current at each milestone, as the handoff skill says. After a compaction, read it before anything else.
 
-Report: each morning, what merged with PR links, what's held and why.
+Report: each morning, what merged with PR links, what's held and why, and each open question for the owner.
 
-Done when: every item filed for this goal is done, archived, or held on the owner with the exact action listed; each "small" issue and each design has its item, and each tracker issue is moved to done with its PR link; no item is left waiting. Print the item list for this goal in the last turn as the evidence.
+Done when: every item filed for this goal is done, archived, or held on the owner with the exact action listed; each "small" issue and each design has its item, and each tracker issue whose item merged is moved to done with its PR link; no item is left waiting. Print the item list for this goal in the last turn as the evidence.
 
 When stopped: list each hold with the exact action the owner must take, then give the final report.
 ```

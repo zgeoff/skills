@@ -19,8 +19,8 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
-  [Catch yourself up](#catch-yourself-up). Skip a PR or a branch whose state `www` printed this
-  turn.
+  [Catch yourself up](#catch-yourself-up). Skip a PR or a branch that `www` printed with a result
+  this turn, other than `no check` or `unchecked`.
 - **Spend the words on the decisions.** Keep the account of what happened short.
 - **Let the user decide from the reply alone.** A link can give more detail, but the user shouldn't
   have to open it to decide.
@@ -89,8 +89,9 @@ agent by a name the user knows.
 ## The decisions
 
 A decision here is a step only the user can take, such as a choice, an approval, a step that can't
-be undone, or access you don't have. Work you can still do yourself isn't one: report it as running,
-and do it in the same turn, after you send the reply. List every decision that waits on the user,
+be undone, or access you don't have. A step the user's instructions already grant, such as a merge
+they allowed, isn't one: do it. Work you can still do yourself isn't one: report it as running, and
+do it in the same turn, after you send the reply. List every decision that waits on the user,
 including one raised before their last message. Never invent one to fill the reply.
 
 For each decision, give:
@@ -101,9 +102,10 @@ For each decision, give:
 - the risk, even when it's low;
 - your recommendation.
 
-When several items need the same decision, such as a set of PRs to merge, write the decision and
-your recommendation once, then one bullet per item, riskiest first, each with its link, evidence and
-risk. For a choice between options, give each option what it gets the user and what it costs.
+When several items need the same decision, such as a set of design docs to sign off, write the
+decision and your recommendation once, then one bullet per item, riskiest first, each with its link,
+evidence and risk. For a choice between options, give each option what it gets the user and what it
+costs.
 
 Write "unknown" for a fact you don't have.
 

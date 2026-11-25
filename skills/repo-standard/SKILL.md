@@ -13,9 +13,10 @@ description:
 Set up a repo the way every repo of the owner is set up, or bring an existing repo up to it. Copy
 only from this skill and the files it links. Copy no other file from an older repo: each older repo
 carries leftovers that aren't part of the standard. Do the steps in order, because a later step
-needs what an earlier one made, and run each step's check before the next step. When a check fails,
-fix the cause and run the check again. When only the owner can fix it, such as an App install or a
-merge, stop at that step and say so in your reply.
+needs what an earlier one made, and run each step's check before a step that depends on it. When a
+check fails, fix the cause and run the check again. When only the owner can do a step, such as the
+Renovate App install, ask them, go on with the steps that don't depend on it, and list it in your
+reply.
 
 The owner reads your reply to see what's done and what waits on them. Hand back the repo's URL, the
 pull requests you opened, the result of each check, and each step you skipped or left to the owner,
@@ -203,7 +204,8 @@ Load [npm-publish](../npm-publish/SKILL.md) before this step: it owns the first 
 publishing. Then follow [Release](./references/release.md) to add the release config and the release
 and publish jobs in `main.yml`, in the order that keeps the trusted publisher from expiring.
 
-A person merges each release pull request: the release job runs with `merge: false`.
+The release job runs with `merge: false`, so each release pull request waits for a merge. Follow
+release.md step 6 to merge it.
 
 Check: `npm view @<scope>/<name> version` prints the version CI released.
 

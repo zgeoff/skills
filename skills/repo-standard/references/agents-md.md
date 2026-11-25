@@ -23,7 +23,7 @@ as a rule about the repo's hosts.
 # Agent Guidelines
 
 This repo is <repo>, <purpose>. Read <overview> to see how its parts fit. Hand back a pull request
-into `main` with green CI, and never merge it: the repo owner merges every pull request.
+into `main` with green CI.
 
 ## Required reading
 

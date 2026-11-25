@@ -2,8 +2,9 @@
 
 This repo holds every agent skill of the zgeoff GitHub account. Write each skill for a reader in
 another repo: invent each example, and never use a term that only one repo uses. Hand back a pull
-request into `main` with green CI, and for a skill change, a `## Checks` section in the PR
-description, as [Skill pull requests](#skill-pull-requests) says.
+request into `main` with green CI. When it changes a skill, a README or a file under `docs/`, fill
+in the `## Checks` section of the PR description, as [Skill pull requests](#skill-pull-requests)
+says.
 
 Never open a pull request in another repo to deliver your change: this rule covers each agent that
 works in this repo. The `zgeoff/tools` change that moves its pin to your merged commit is a separate
@@ -78,13 +79,16 @@ step in the "Check it" section of [skill-writing](skills/skill-writing/SKILL.md)
 [the PR template](.github/PULL_REQUEST_TEMPLATE.md), and fill in its Checks section as step 4 of
 "Check it" says.
 
+When it changes a README or a file under `docs/`, run the checks and the cold read that
+[docs-writing](skills/docs-writing/SKILL.md) asks for. Then deslop each changed file, and fill in
+the Checks section the same way.
+
 A pull request that changes no skill, no README and no file under `docs/` needs only green CI:
 delete the template's Checks section.
 
 ## Commits and pull requests
 
-Work on a branch, and open a pull request into `main`. The repo owner reviews it and squash-merges
-it.
+Work on a branch, and open a pull request into `main`.
 
 Write each commit message and each PR title as a Conventional Commit in the imperative mood, such as
 "add X", never "added X". Use the skill's folder name as the scope, or `skills` for a change to
