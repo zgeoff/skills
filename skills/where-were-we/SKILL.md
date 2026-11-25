@@ -19,7 +19,8 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
-  [Catch yourself up](#catch-yourself-up).
+  [Catch yourself up](#catch-yourself-up). A result that a `www` brief printed this turn counts as a
+  look.
 - **Spend the words on the decisions.** Keep the account of what happened short.
 - **Let the user decide from the reply alone.** A link can give more detail, but the user shouldn't
   have to open it to decide.
@@ -41,8 +42,9 @@ doesn't count. Otherwise read, in this order:
 
 1. The `www` brief. `www`, the wherewerewe command, keeps a session's notes in a store on this
    machine, and prints them as one brief with each checkable claim checked. Run `www`, with no
-   `--session` flag and no `--json`. When it exits 4, or the command is missing, this session has no
-   store: go to step 2. When it exits 0, take from the brief:
+   `--session` flag and no `--json`, so you read only the session bound to you, as text. When it
+   exits 4, or the command is missing, this session has no store: go to step 2. When it exits 5, run
+   the command on its `Run:` line, then run `www` again. When it exits 0, take from the brief:
    - what you may do without asking, from `GRANT`;
    - a decision for the reply, from each line under `OWNER SAYS` and each wait on `owner`;
    - what happened since the last write, from `CHANGED SINCE WRITTEN`;

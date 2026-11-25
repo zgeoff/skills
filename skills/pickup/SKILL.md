@@ -22,7 +22,8 @@ you've started on the doc's next action, or asked the user to approve a differen
 3. When the doc names a wherewerewe session under "Where things are", bind to it. `www`, the
    wherewerewe command, keeps that session's notes in a store on this machine, and prints them as
    one brief with each checkable claim checked.
-   1. Run `www attach <name>`, then `www`, with no `--session` flag and no `--json`.
+   1. Run `www attach <name>`, then `www`, with no `--session` flag and no `--json`, so you read
+      only the session bound to you, as text.
    2. When `www` is missing or `attach` is refused, as it is on another machine, go on with no
       store.
    3. When the brief has no `GRANT` section and the doc's Approvals section holds the user's words,
@@ -49,8 +50,8 @@ you've started on the doc's next action, or asked the user to approve a differen
    - When it is the doc's, start on it, and carry on with the work.
    - When you chose it, ask the user to approve it, and wait for the answer.
 
-   With a store, write as you go: `www now <id> "<next step>" --note "<detail>"`. A note holds what
-   you need on your next turn to that item.
+   With a store, write as you go: `www now <id> "<next step>"`. Add `--note "<detail>"` only to
+   replace the item's note. A note holds what you need on your next turn to that item.
 
 Keep the doc after this skill ends. When your session ends before the work lands, rewrite the doc
 with the [handoff](../handoff/SKILL.md) skill. When the work has landed, ask the user before you

@@ -37,6 +37,9 @@ Before you write:
    `feat-csv-export`. The doc is `.handoff/<name>.md`.
 5. When that doc exists, read it. Carry over what still holds into the new doc, approvals included,
    and replace the file.
+6. Run `www`. When it exits 0, do steps 1 and 2 of
+   [Fill it from a www store](#fill-it-from-a-www-store) now, and take each section's content from
+   the store as you write it.
 
 Hand back the doc's path, and the next action from it. The doc stays on this machine, so also say
 that the next session must run here.
@@ -78,11 +81,13 @@ under its own `##` heading. Under a section with nothing in it, write "None".
 
 ## Fill it from a www store
 
-`www`, the wherewerewe command, keeps a session's notes in a store on this machine. It prints them
-as one brief, and checks each claim that has a check. Run `www` before you write the doc:
+`www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe), a tool some sessions
+keep their notes in. It holds the notes in a store on this machine, prints them as one brief, and
+checks each claim that has a check. Run `www` before you write the doc:
 
 - When it exits 0, this session has a store. Follow the steps below.
-- When it exits 4, or the command is missing, there is no store. Skip this section.
+- When it exits 4, or the command is missing, there is no store. Skip this section, and write each
+  section from what you know.
 - When it exits 5, run the command on its `Run:` line, then run `www` again.
 
 Run `www` with no `--session` flag and no `--json`, so you read only the session bound to you, as
@@ -101,7 +106,7 @@ text.
    | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                         |
    | Approvals        | First list: `GRANT`, with the user's words copied whole and the reading beside them, then `APPROVED ONCE`. Second list: what the reading says the user kept back, and each wait on `owner`. |
    | Waiting          | `WAITING`                                                                                                                                                                                   |
-   | Next             | `NOW` and its note. When the brief shows no step, set one with `www now` first.                                                                                                             |
+   | Next             | `NOW` and its note. When the brief shows no step, set one first, with `www now <id> "<next step>"`. Leave `--note` off: it replaces the item's note.                                        |
    | Where things are | `WHERE`, and the session's name, which opens the brief's first line                                                                                                                         |
    | Do it this way   | `RULES`, and each row of `LESSONS` with its reason                                                                                                                                          |
    | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                        |
