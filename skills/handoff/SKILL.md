@@ -97,25 +97,25 @@ Leave off `--session`, which reads another session's notes, and `--json`.
    needs to start on that task. Run `www show` to read each open task with its note.
 3. Run `www` again, and copy each section of the doc from it:
 
-   | Section          | Copy it from                                                                                                                                                                                                                                          |
-   | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | Goal             | the `GOAL` line                                                                                                                                                                                                                                       |
-   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note. Write "note owed" beside a task marked `owed`.                                                                  |
-   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                                                                                   |
-   | Approvals        | First list: the `GRANT` section, with the user's words exactly as printed and the `reading:` line under them, then the `APPROVED ONCE` section. Second list: what the `reading:` line says the user kept back, and each `WAITING` row marked `owner`. |
-   | Waiting          | the `WAITING` section                                                                                                                                                                                                                                 |
-   | Next             | the `NOW` line and its note. When there is no `NOW` line, run `www now <id> "<next step>"` first. Leave `--note` off, because `--note` replaces the task's note.                                                                                      |
-   | Where things are | the `WHERE` section, and the session's name, which is the first word `www` prints                                                                                                                                                                     |
-   | Do it this way   | the `RULES` section, and each row of `LESSONS` with its reason                                                                                                                                                                                        |
-   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                                                                                  |
+   | Section          | Copy it from                                                                                                                                                                                                                                               |
+   | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | Goal             | the `GOAL` line                                                                                                                                                                                                                                            |
+   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note. Write "note owed" beside a task marked `owed`.                                                                       |
+   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                                                                                        |
+   | Approvals        | First list: the `GRANT` section, with the user's words exactly as printed and the `reading:` line under them, then the `APPROVED ONCE` section. Second list: what the user kept back, as the `reading:` line shows, and each `WAITING` row marked `owner`. |
+   | Waiting          | the `WAITING` section                                                                                                                                                                                                                                      |
+   | Next             | the `NOW` line and its note. When there is no `NOW` line, run `www now <id> "<next step>"` first. Leave `--note` off, because `--note` replaces the task's note.                                                                                           |
+   | Where things are | the `WHERE` section, and the session's name, which is the first word `www` prints                                                                                                                                                                          |
+   | Do it this way   | the `RULES` section, and each row of `LESSONS` with its reason                                                                                                                                                                                             |
+   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                                                                                       |
 
 4. Add what `www` didn't print, such as an uncommitted file you copied into `.handoff/<name>/`.
 
 Copy the user's words in `GRANT` exactly. An agent on another machine can't read these notes, and
-acts on the doc alone. The next agent on this machine reads them with `www attach <name>`, so the
-doc needs the session's name.
+acts on the doc alone. The next agent on this machine reads them with `www attach <name>`, so put
+the session's name in the doc.
 
-Each time `www` prints, it looks up the PR, branch, file or process that a task names. In
+Each time `www` prints, it looks up the PR, branch, file or process that a task refers to. In
 [Check it](#check-it), skip a claim that `www` printed with a result. Check each claim it printed
 with `no check` or `unchecked`, and each claim you added.
 

@@ -27,8 +27,8 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 ## Key rules
 
-- [Catch yourself up](#catch-yourself-up): only when this session lost track. Run `www`, then read
-  the handoff doc, the current branches, PRs and tickets, and then the chat history.
+- [Catch yourself up](#catch-yourself-up): do it only when this session lost track. Run `www`, then
+  read the handoff doc, the current branches, PRs and tickets, and then the chat history.
 - [What happened](#what-happened): one sentence on what waits, then under 100 words, with a diagram
   when it helps.
 - [The decisions](#the-decisions): each with its link, what it changes for the product's users, the
@@ -40,7 +40,7 @@ Skip this when this session still holds the whole history of the work. A summary
 doesn't count. Otherwise read, in this order:
 
 1. Your session's notes in `www`, the command of
-   [wherewerewe](https://github.com/zgeoff/wherewerewe). An agent uses it to keep notes on a long
+   [wherewerewe](https://github.com/zgeoff/wherewerewe). Agents use it to keep notes on a long
    session: the goal, the open tasks, what the user allows and what's decided. Run `www` with no
    arguments, and leave off `--session`, which reads another session's notes, and `--json`. When it
    exits 4, or there is no `www` command, your session has no notes: go to step 2. When it exits 5,
@@ -57,8 +57,8 @@ doesn't count. Otherwise read, in this order:
    - each PR's state and checks, with `gh pr view`;
    - each ticket named in a PR body.
 
-   When `www` printed notes in step 1, open only each PR and branch it printed with `no check` or
-   `unchecked`, and each one it didn't print. `www` looked up the rest when it ran.
+   When `www` printed notes in step 1, open only the PRs and branches it printed with `no check` or
+   `unchecked`, and any it didn't print. `www` already looked up the rest.
 
 4. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
    directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names

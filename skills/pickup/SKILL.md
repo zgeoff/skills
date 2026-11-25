@@ -19,14 +19,13 @@ you've started on the doc's next action, or asked the user to approve a differen
      user named none, ask which, and go on once they answer.
    - When there are no docs, tell the user, and stop.
 2. Read the whole doc.
-3. When the doc gives a wherewerewe session name under "Where things are", read that session's
-   notes. `www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). An agent
-   uses it to keep notes on a long session: the goal, the open tasks, what the user allows and
-   what's decided.
+3. When "Where things are" in the doc has a wherewerewe session name, read that session's notes.
+   `www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). Agents use it to
+   keep notes on a long session: the goal, the open tasks, what the user allows and what's decided.
    1. Run `www attach <name>`, then `www` with no arguments. Leave off `--session` and `--json`.
    2. When there is no `www` command, or `www attach` refuses, as it does on another machine, go to
       step 4.
-   3. When `www` prints no `GRANT` section and the doc's Approvals section holds the user's words,
+   3. When `www` prints no `GRANT` section and the doc's Approvals section has the user's words,
       save them:
       `www grant --may "<their words>" --where <where they said it> --reading "<what they cover; what the user kept back>"`.
       Repeat `--may`, `--not` and `--never`, one per bullet, with each bullet's words exactly as the
