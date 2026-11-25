@@ -43,7 +43,9 @@ folder of design docs. Then tell the session how to file each source item:
   session how to watch for holds, such as a background loop that lists the held items.
 - **Holds.** Say which holds the session answers itself and which go to the user. Have the session
   answer with a note on the item, then a retry, with a phase when the item must go back. The agent
-  on the next attempt reads every note. Send the user an item that fails the same retry twice.
+  on the next attempt reads every note. When an item fails the same retry twice, send a subagent to
+  diagnose it, and retry with the diagnosis in a note. Send the user the item only when the
+  diagnosis names a decision that is the user's.
 - **Sign-off.** boxxy holds for the owner each PR that matches the sign-off rules in its rules file.
   Say whether the session may approve any of them. When the user hasn't said, send them all to the
   user.
@@ -82,7 +84,7 @@ Filing: write each item with the work-items skill, with the issue or doc link in
 
 Authority: file, note, hold, release, retry, defer, expedite and close items without asking; answer a hold that a note can fix. Not authorised: signing off a PR boxxy holds for the owner, pausing the runner, registering for notices. Never: a ruleset bypass, printing a secret.
 
-Bring the owner only: a held decision, a sign-off, an item that failed the same retry twice. One at a time, with options and a recommendation, never in the same turn as an explanation.
+Bring the owner only: a held decision, a sign-off, an item whose diagnosis needs the owner's decision. One at a time, with options and a recommendation, never in the same turn as an explanation.
 
 Holds: watch for them with a background loop that lists the held items.
 

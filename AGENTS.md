@@ -83,8 +83,7 @@ delete the template's Checks section.
 
 ## Commits and pull requests
 
-Work on a branch, and open a pull request into `main`. The repo owner reviews it and squash-merges
-it.
+Work on a branch, and open a pull request into `main`.
 
 Write each commit message and each PR title as a Conventional Commit in the imperative mood, such as
 "add X", never "added X". Use the skill's folder name as the scope, or `skills` for a change to

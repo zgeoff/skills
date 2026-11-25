@@ -60,7 +60,8 @@ When the model fails to run, or gives no reply in 15 minutes, stop it and try th
 list from another family. When none is left, run the command for your own family with the same
 prompt, and say in your reply that the read came from your own family. Never use a fork of your
 session, because it inherits your conversation and isn't blind. When your own family fails too, tell
-the user, and on a review wait for them before you hand off.
+the user, and retry later. On a review, keep working on what doesn't depend on it, and hand off only
+once a model has reviewed the change.
 
 ## Write the prompt
 

@@ -14,8 +14,8 @@ Set up a repo the way every repo of the owner is set up, or bring an existing re
 only from this skill and the files it links. Copy no other file from an older repo: each older repo
 carries leftovers that aren't part of the standard. Do the steps in order, because a later step
 needs what an earlier one made, and run each step's check before the next step. When a check fails,
-fix the cause and run the check again. When only the owner can fix it, such as an App install or a
-merge, stop at that step and say so in your reply.
+fix the cause and run the check again. When only the owner can fix it, such as an App install, stop
+at that step and say so in your reply.
 
 The owner reads your reply to see what's done and what waits on them. Hand back the repo's URL, the
 pull requests you opened, the result of each check, and each step you skipped or left to the owner,

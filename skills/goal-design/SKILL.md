@@ -46,18 +46,16 @@ passes [Check it](#check-it).
 Write a goal for a session that runs unattended for more than a few turns.
 
 Refresh a running goal when the user agrees a big new scope with you, such as new work from a design
-walkthrough or a new grant. Write the whole goal again from the current state: drop each item that
-landed, keep each approval the user still grants, and add the new work. Tell the user the new
-`/goal` replaces the running one.
+walkthrough or a new grant. Write the whole goal again from the current state, with each approval
+the user still grants. Tell the user the new `/goal` replaces the running one.
 
-Leave a small change out of the goal. Tell the session in chat, and have it record the change in its
-handoff doc.
+Tell the session a small change in chat, and have it record the change in its handoff doc.
 
 ## Pick the mode
 
 In direct mode, the session builds each item itself. In boxxy mode, the session files the work in
-boxxy, which starts an agent on each item, and the session manages the items to their end. Take the
-mode the user asked for, and ask when they named none. Then read that mode's reference.
+boxxy and manages the items to their end. Take the mode the user asked for, and ask when they named
+none. Then read that mode's reference.
 
 ## Gather the facts first
 
@@ -69,9 +67,8 @@ mode the user asked for, and ask when they named none. Then read that mode's ref
 3. Collect each decision the user made, and where it's recorded. Name them in the goal, so the
    session doesn't reopen them.
 4. Collect what the user lets the session do without asking, and what the user keeps. Take them from
-   this conversation, the user's instruction files and any earlier goal. When the user hasn't said,
-   ask before you write. Never grant an action the user didn't grant: the session acts on each grant
-   for hours, with nobody watching.
+   this conversation, the user's instruction files and any earlier goal. Ask only about an action
+   beyond the session's own branches and pull requests that no source covers.
 
 ## The parts
 
@@ -80,21 +77,25 @@ short label the session can scan, such as `Authority:`. Name the user the way th
 them.
 
 1. **Outcome.** The end state, then the source of truth. Add the decisions the session must not
-   reopen, and what to do when one proves unbuildable: stop and ask.
+   reopen. When one proves unbuildable, the session holds the work that depends on it, asks the
+   user, and builds the rest.
 2. **Work.** The items as lanes, such as `A.`, `B.` and `C.`, each in the order its items must land.
    Say which lanes run in parallel, the most builds at once, and what to do when two lanes touch the
    same files: finish one first. Mark an item held on a decision or a design, and say what releases
    it. Name each item by what it does, with its ticket ID after. In boxxy mode, write this part as
    [boxxy mode](./references/boxxy-mode.md) says.
-3. **For each item.** Each item's steps, by its kind of work, from the mode's reference:
+3. **For each item.** Each item's steps, from the mode's reference:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
-   do, and what it must never do. Put each action that is hard to undo in a list. Add what to do
-   when a permission check refuses an action: stop and give the user the exact command.
+   do, and what it must never do. Open the first list with the routine work on the session's own
+   branches and pull requests, such as a force-push with lease, a rebase and a CI rerun, unless the
+   user withheld it: a permission check refuses an action the goal doesn't grant. Put each action
+   that is hard to undo in a list.
 5. **Bring the user.** The decisions that are the user's, such as naming, money or an outside
    account. Then how to ask: one decision at a time, with options and a recommendation, never in the
    same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
-   and to record each blocker once, with its next step.
+   to record each blocker once, such as a refused action with its exact command, and to repeat each
+   open question in every report until the user answers.
 6. **Known waits.** Each outside wait, such as a review or a card the user must add, with how to
    check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,
@@ -102,8 +103,7 @@ them.
    run tends to break.
 8. **Handoff.** Always include this line, in these words or close to them: "Keep a handoff doc in
    `.handoff/` current at each milestone, as the handoff skill says. After a compaction, read it
-   before anything else." A compaction drops most of the conversation, and the session gets its
-   place back from the doc.
+   before anything else." A compaction drops most of the conversation.
 9. **Reports.** When the session reports, and in what shape, such as two lines after each merge:
    what landed, linked, and what's next.
 10. **Done when.** The lines the Stop hook judges, as [The done-when](#the-done-when) says.
@@ -143,13 +143,14 @@ When the goal runs over, cut in this order:
 3. Steps you can move into a doc the session reads, such as a plan in `.handoff/`. Name that doc in
    the goal.
 
-Keep the authority lists, the handoff line and the done-when whole. The session can look up a step,
-but it learns what it may do and when to stop only from the goal.
+Keep the authority lists, the handoff line and the done-when whole: the session learns what it may
+do and when to stop only from the goal.
 
 ## Check it
 
 1. Read the goal as the session agent, with none of this conversation. For each item, ask: do I know
-   what to do, in what order, and when to stop and ask? Fix each gap.
+   what to do, in what order, what to do when a step is blocked, and which decisions go to the user?
+   Fix each gap.
 2. Read the done-when as the Stop hook's model. For each line, ask: could I tell from the
    conversation alone that this holds? Rewrite each line that needs a command or a file.
 3. Check each name, ID and PR state against the live state again.
