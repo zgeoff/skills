@@ -77,25 +77,25 @@ short label the session can scan, such as `Authority:`. Name the user the way th
 them.
 
 1. **Outcome.** The end state, then the source of truth. Add the decisions the session must not
-   reopen. When one proves unbuildable, the session holds the work that depends on it, asks the
-   user, and builds the rest.
+   reopen. When a decision proves unbuildable, tell the session to hold the work that depends on it,
+   ask the user, and build the rest.
 2. **Work.** The items as lanes, such as `A.`, `B.` and `C.`, each in the order its items must land.
    Say which lanes run in parallel, the most builds at once, and what to do when two lanes touch the
    same files: finish one first. Mark an item held on a decision or a design, and say what releases
    it. Name each item by what it does, with its ticket ID after. In boxxy mode, write this part as
    [boxxy mode](./references/boxxy-mode.md) says.
-3. **For each item.** Each item's steps, from the mode's reference:
+3. **For each item.** Give each item's steps from the mode's reference:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
-4. **Authority.** Three lists: what the session may do without asking, what it isn't authorised to
-   do, and what it must never do. Open the first list with the routine work on the session's own
-   branches and pull requests, such as a force-push with lease, a rebase and a CI rerun, unless the
-   user withheld it: a permission check refuses an action the goal doesn't grant. Put each action
-   that is hard to undo in a list.
-5. **Bring the user.** The decisions that are the user's, such as naming, money or an outside
-   account. Then how to ask: one decision at a time, with options and a recommendation, never in the
-   same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
-   to record each blocker once, such as a refused action with its exact command, and to repeat each
-   open question in every report until the user answers.
+4. **Authority.** Write three lists: what the session may do without asking, what it isn't
+   authorised to do, and what it must never do. Open the first list with the routine work on the
+   session's own branches and pull requests, such as a force-push with lease, a rebase and a CI
+   rerun, unless the user withheld it: a permission check refuses an action the goal doesn't grant.
+   Put each action that is hard to undo in a list.
+5. **Bring the user.** List the decisions that are the user's, such as naming, money or an outside
+   account. Then say how to ask: one decision at a time, with options and a recommendation, never in
+   the same turn as an explanation. Tell the session to keep building what doesn't depend on the
+   answer, to record each blocker once, such as a refused action with its exact command, and to
+   repeat each open question in every report until the user answers.
 6. **Known waits.** Each outside wait, such as a review or a card the user must add, with how to
    check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,

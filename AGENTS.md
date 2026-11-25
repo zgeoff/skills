@@ -77,9 +77,11 @@ When your pull request changes a skill's `SKILL.md`, or a file under its `refere
 step in the "Check it" section of [skill-writing](skills/skill-writing/SKILL.md). Run
 `bun run check` in place of the chex command in step 1 of "Check it". Build the PR description from
 [the PR template](.github/PULL_REQUEST_TEMPLATE.md), and fill in its Checks section as step 4 of
-"Check it" says. When it changes a README or a file under `docs/`, cold read and deslop each changed
-file, as [docs-writing](skills/docs-writing/SKILL.md) says, and fill in the Checks section the same
-way.
+"Check it" says.
+
+When it changes a README or a file under `docs/`, run the checks and the cold read that
+[docs-writing](skills/docs-writing/SKILL.md) asks for. Then deslop each changed file, and fill in
+the Checks section the same way.
 
 A pull request that changes no skill, no README and no file under `docs/` needs only green CI:
 delete the template's Checks section.
