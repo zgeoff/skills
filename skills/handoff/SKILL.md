@@ -37,9 +37,9 @@ Before you write:
    `feat-csv-export`. The doc is `.handoff/<name>.md`.
 5. When that doc exists, read it. Carry over what still holds into the new doc, approvals included,
    and replace the file.
-6. Run `www`. When it exits 0, do steps 1 and 2 of
-   [Fill it from a www store](#fill-it-from-a-www-store) now, and take each section's content from
-   the store as you write it.
+6. Run `www`. When it exits 0, follow
+   [When the session keeps notes in www](#when-the-session-keeps-notes-in-www) before you write the
+   doc.
 
 Hand back the doc's path, and the next action from it. The doc stays on this machine, so also say
 that the next session must run here.
@@ -48,8 +48,8 @@ that the next session must run here.
 
 - [The sections](#the-sections): a title, then nine sections in order, each under its own heading,
   with "None" under an empty one.
-- [Fill it from a www store](#fill-it-from-a-www-store): when `www` exits 0, make the store true,
-  then take each section from it.
+- [When the session keeps notes in www](#when-the-session-keeps-notes-in-www): update the notes,
+  then copy each section from what `www` prints.
 - [Check it](#check-it): open what each claim points at, and correct the wrong ones.
 
 ## The sections
@@ -79,46 +79,45 @@ under its own `##` heading. Under a section with nothing in it, write "None".
    root, the integration tests don't run."
 9. **Ruled out.** Each approach tried or rejected, and why, so nobody tries it again.
 
-## Fill it from a www store
+## When the session keeps notes in www
 
-`www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe), a tool some sessions
-keep their notes in. It holds the notes in a store on this machine, prints them as one brief, and
-checks each claim that has a check. Run `www` before you write the doc:
+`www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). An agent uses it to
+keep notes on a long session: the goal, the open tasks, what the user allows and what's decided. Run
+`www` with no arguments to print the notes of your session:
 
-- When it exits 0, this session has a store. Follow the steps below.
-- When it exits 4, or the command is missing, there is no store. Skip this section, and write each
-  section from what you know.
+- When it exits 0, your session has notes. Follow the steps below.
+- When it exits 4, or there is no `www` command, your session has none. Skip this section.
 - When it exits 5, run the command on its `Run:` line, then run `www` again.
 
-Run `www` with no `--session` flag and no `--json`, so you read only the session bound to you, as
-text.
+Leave off `--session`, which reads another session's notes, and `--json`.
 
-1. Make the store true. For each row under `CHANGED SINCE WRITTEN`, run the command in the row, or
-   close the item with `www done` or `www drop`.
-2. Give each open item its note, with `www set <id> --note "<detail>"`. A note holds what the next
-   agent needs on its first turn to that item. `www show` prints each open task with its note.
-3. Take each section from the store:
+1. Update the notes. For each row under `CHANGED SINCE WRITTEN`, run the command in the row, or
+   close the task with `www done` or `www drop`.
+2. Write where you are on each open task: `www set <id> --note "<detail>"`. Give what the next agent
+   needs to start on that task. Run `www show` to read each open task with its note.
+3. Run `www` again, and copy each section of the doc from it:
 
-   | Section          | Take it from                                                                                                                                                                                |
-   | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | Goal             | `GOAL`                                                                                                                                                                                      |
-   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note, and "owed" beside a note the row marks `owed`.        |
-   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                         |
-   | Approvals        | First list: `GRANT`, with the user's words copied whole and the reading beside them, then `APPROVED ONCE`. Second list: what the reading says the user kept back, and each wait on `owner`. |
-   | Waiting          | `WAITING`                                                                                                                                                                                   |
-   | Next             | `NOW` and its note. When the brief shows no step, set one first, with `www now <id> "<next step>"`. Leave `--note` off: it replaces the item's note.                                        |
-   | Where things are | `WHERE`, and the session's name, which opens the brief's first line                                                                                                                         |
-   | Do it this way   | `RULES`, and each row of `LESSONS` with its reason                                                                                                                                          |
-   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                        |
+   | Section          | Copy it from                                                                                                                                                                                                                                          |
+   | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | Goal             | the `GOAL` line                                                                                                                                                                                                                                       |
+   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note. Write "note owed" beside a task marked `owed`.                                                                  |
+   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                                                                                   |
+   | Approvals        | First list: the `GRANT` section, with the user's words exactly as printed and the `reading:` line under them, then the `APPROVED ONCE` section. Second list: what the `reading:` line says the user kept back, and each `WAITING` row marked `owner`. |
+   | Waiting          | the `WAITING` section                                                                                                                                                                                                                                 |
+   | Next             | the `NOW` line and its note. When there is no `NOW` line, run `www now <id> "<next step>"` first. Leave `--note` off, because `--note` replaces the task's note.                                                                                      |
+   | Where things are | the `WHERE` section, and the session's name, which is the first word `www` prints                                                                                                                                                                     |
+   | Do it this way   | the `RULES` section, and each row of `LESSONS` with its reason                                                                                                                                                                                        |
+   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                                                                                  |
 
-4. Add what the store doesn't hold, such as an uncommitted file you copied into `.handoff/<name>/`.
+4. Add what `www` didn't print, such as an uncommitted file you copied into `.handoff/<name>/`.
 
-Copy the grant's words whole, because an agent on another machine can't read this store, and acts on
-the doc alone. Write the session's name so the next agent on this machine can run
-`www attach <name>`.
+Copy the user's words in `GRANT` exactly. An agent on another machine can't read these notes, and
+acts on the doc alone. The next agent on this machine reads them with `www attach <name>`, so the
+doc needs the session's name.
 
-In [Check it](#check-it), the brief has already checked each claim that shows a result. Check by
-hand each claim it shows with `no check` or `unchecked`, and each claim you added.
+Each time `www` prints, it looks up the PR, branch, file or process that a task names. In
+[Check it](#check-it), skip a claim that `www` printed with a result. Check each claim it printed
+with `no check` or `unchecked`, and each claim you added.
 
 ## Check it
 

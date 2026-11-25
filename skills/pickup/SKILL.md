@@ -19,26 +19,27 @@ you've started on the doc's next action, or asked the user to approve a differen
      user named none, ask which, and go on once they answer.
    - When there are no docs, tell the user, and stop.
 2. Read the whole doc.
-3. When the doc names a wherewerewe session under "Where things are", bind to it. `www`, the
-   wherewerewe command, keeps that session's notes in a store on this machine, and prints them as
-   one brief with each checkable claim checked.
-   1. Run `www attach <name>`, then `www`, with no `--session` flag and no `--json`, so you read
-      only the session bound to you, as text.
-   2. When `www` is missing or `attach` is refused, as it is on another machine, go on with no
-      store.
-   3. When the brief has no `GRANT` section and the doc's Approvals section holds the user's words,
-      record them:
+3. When the doc gives a wherewerewe session name under "Where things are", read that session's
+   notes. `www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). An agent
+   uses it to keep notes on a long session: the goal, the open tasks, what the user allows and
+   what's decided.
+   1. Run `www attach <name>`, then `www` with no arguments. Leave off `--session` and `--json`.
+   2. When there is no `www` command, or `www attach` refuses, as it does on another machine, go to
+      step 4.
+   3. When `www` prints no `GRANT` section and the doc's Approvals section holds the user's words,
+      save them:
       `www grant --may "<their words>" --where <where they said it> --reading "<what they cover; what the user kept back>"`.
-      Repeat `--may`, `--not` and `--never`, one per bullet, with each bullet's words whole.
+      Repeat `--may`, `--not` and `--never`, one per bullet, with each bullet's words exactly as the
+      doc has them.
 4. Check each claim in the doc against how things stand now, including:
    - the branches and worktrees, and each change the doc calls uncommitted;
    - each PR's state and checks;
    - the state of each ticket in the doc, in the tracker your session can reach;
    - each process, preview, container or CI run the doc calls running.
 
-   After a brief, skip each claim that has a result in the brief: the brief has just run that check.
-   Check by hand each claim marked `no check` or `unchecked`, and each claim in the doc that the
-   store doesn't hold. Count each row under `CHANGED SINCE WRITTEN` as a difference.
+   When `www` printed notes in step 3, skip each claim it printed with a result: `www` looked that
+   claim up when it ran. Check each claim it printed with `no check` or `unchecked`, and each claim
+   in the doc that it didn't print. Count each row under `CHANGED SINCE WRITTEN` as a difference.
 
    List each difference, and each claim you couldn't check.
 
@@ -50,8 +51,9 @@ you've started on the doc's next action, or asked the user to approve a differen
    - When it is the doc's, start on it, and carry on with the work.
    - When you chose it, ask the user to approve it, and wait for the answer.
 
-   With a store, write as you go: `www now <id> "<next step>"`. Add `--note "<detail>"` only to
-   replace the item's note. A note holds what you need on your next turn to that item.
+   When `www` printed notes in step 3, write each next step as you take it:
+   `www now <id> "<next step>"`. Add `--note "<detail>"` only to replace the task's note with what
+   you need the next time you work on that task.
 
 Keep the doc after this skill ends. When your session ends before the work lands, rewrite the doc
 with the [handoff](../handoff/SKILL.md) skill. When the work has landed, ask the user before you
