@@ -2,10 +2,10 @@
 name: where-were-we
 description:
   'Catches the user up after a gap: when this session lost track of the work, works out where it
-  stands from a handoff doc, the chat history, and the current branches, PRs and tickets; then tells
-  the user what happened in plain words and lists every decision waiting on them, each one they can
-  make from the reply alone. Load it for /where-were-we, when the user comes back to work they left,
-  and after a compaction or a long break.'
+  stands from its `www` notes, a handoff doc, the chat history, and the current branches, PRs and
+  tickets; then tells the user what happened in plain words and lists every decision waiting on
+  them, each one they can make from the reply alone. Load it for /where-were-we, when the user comes
+  back to work they left, and after a compaction or a long break.'
 ---
 
 # Where were we
@@ -19,15 +19,16 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
-  [Catch yourself up](#catch-yourself-up).
+  [Catch yourself up](#catch-yourself-up). Skip a PR or a branch whose state `www` printed this
+  turn.
 - **Spend the words on the decisions.** Keep the account of what happened short.
 - **Let the user decide from the reply alone.** A link can give more detail, but the user shouldn't
   have to open it to decide.
 
 ## Key rules
 
-- [Catch yourself up](#catch-yourself-up): only when this session lost track, from the handoff doc,
-  the current branches, PRs and tickets, and then the chat history.
+- [Catch yourself up](#catch-yourself-up): do it only when this session lost track. Run `www`, then
+  read the handoff doc, the current branches, PRs and tickets, and then the chat history.
 - [What happened](#what-happened): one sentence on what waits, then under 100 words, with a diagram
   when it helps.
 - [The decisions](#the-decisions): each with its link, what it changes for the product's users, the
@@ -38,15 +39,32 @@ waits on no one, as [The decisions](#the-decisions) says.
 Skip this when this session still holds the whole history of the work. A summary after a compaction
 doesn't count. Otherwise read, in this order:
 
-1. The handoff doc, when the repo has one in `.handoff/`. Check it against the current state, as the
+1. Your session's notes in `www`, the command of
+   [wherewerewe](https://github.com/zgeoff/wherewerewe). Agents use it to keep notes on a long
+   session: the goal, the open tasks, what the user allows and what's decided. Run `www` with no
+   arguments, and leave off `--session`, which reads another session's notes, and `--json`. When it
+   exits 4, or there is no `www` command, your session has no notes: go to step 2. When it exits 5,
+   run the command on its `Run:` line, then run `www` again. When it exits 0, read:
+   - the `GRANT` section, for what you may do without asking;
+   - the `OWNER SAYS` section and each `WAITING` row marked `owner`, and put each in the reply as a
+     decision;
+   - the `CHANGED SINCE WRITTEN` section, for what changed since you wrote each task;
+   - the note under `NOW`, for where you were. Run `www show <id>` to read another task's note.
+2. The handoff doc, when the repo has one in `.handoff/`. Check it against the current state, as the
    [pickup](../pickup/SKILL.md) skill says.
-2. The current state:
+3. The current state:
    - the branches and worktrees;
    - each PR's state and checks, with `gh pr view`;
    - each ticket named in a PR body.
-3. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
+
+   When `www` printed notes in step 1, open only the PRs and branches it printed with `no check` or
+   `unchecked`, and any it didn't print. `www` already looked up the rest.
+
+4. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
    directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names
-   and PR numbers from step 2 before you read one whole. In another tool, skip this step.
+   and PR numbers from step 3 before you read one whole. In another tool, skip this step.
+
+In the reply, call each task by a name the user knows. The user has never seen the ids `www` prints.
 
 When the chat history shows three or more tries at the same fix, load the [why](../why/SKILL.md)
 skill to find what was tried, and use its answer as evidence for a decision.
