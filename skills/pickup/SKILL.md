@@ -16,8 +16,8 @@ you've started on the doc's next action, or on the one you chose in its place.
 1. Find the doc in `.handoff/`, in the repo's main working tree, which is the first path
    `git worktree list` prints.
    - When there are several docs, take the one whose file name matches what the user named. When the
-     user named none, take the one named after the current branch. When none matches, ask which, and
-     go on once they answer.
+     user named none, take the one named after the current branch, with each `/` replaced by `-`, as
+     the handoff skill names it. When none matches, ask which, and go on once they answer.
    - When there are no docs, tell the user, and stop.
 2. Read the whole doc.
 3. When "Where things are" in the doc has a wherewerewe session name, read that session's notes.
@@ -56,7 +56,8 @@ you've started on the doc's next action, or on the one you chose in its place.
    you need the next time you work on that task.
 
 Keep the doc after this skill ends. When your session ends before the work lands, rewrite the doc
-with the [handoff](../handoff/SKILL.md) skill. When the work has landed, delete the doc.
+with the [handoff](../handoff/SKILL.md) skill. When the work has landed and the doc lists nothing
+still waiting, delete the doc.
 
 **Reply:** the goal; where it stands now, starting with the differences and the claims you couldn't
 check; what waits on the user; and the next action.

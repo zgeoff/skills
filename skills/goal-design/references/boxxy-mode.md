@@ -44,8 +44,8 @@ folder of design docs. Then tell the session how to file each source item:
 - **Holds.** Say which holds the session answers itself and which go to the user. Have the session
   answer with a note on the item, then a retry, with a phase when the item must go back. The agent
   on the next attempt reads every note. When an item fails the same retry twice, send a subagent to
-  diagnose it, and retry with the diagnosis in a note. Send the user the item only when the
-  diagnosis names a decision that is the user's.
+  diagnose it, and retry with the diagnosis in a note. Send the user the item when the diagnosis
+  names a decision that is the user's, or when the retry with the diagnosis fails too.
 - **Sign-off.** boxxy holds for the owner each PR that matches the sign-off rules in its rules file.
   Say whether the session may approve any of them. When the user hasn't said, send them all to the
   user.
@@ -93,7 +93,7 @@ Rules: follow AGENTS.md and the skills it lists; a model on every subagent.
 
 Keep a handoff doc in .handoff/ current at each milestone, as the handoff skill says. After a compaction, read it before anything else.
 
-Report: each morning, what merged with PR links, what's held and why.
+Report: each morning, what merged with PR links, what's held and why, and each open question for the owner.
 
 Done when: every item filed for this goal is done, archived, or held on the owner with the exact action listed; each "small" issue and each design has its item, and each tracker issue whose item merged is moved to done with its PR link; no item is left waiting. Print the item list for this goal in the last turn as the evidence.
 

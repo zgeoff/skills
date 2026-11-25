@@ -67,14 +67,14 @@ none. Then read that mode's reference.
 3. Collect each decision the user made, and where it's recorded. Name them in the goal, so the
    session doesn't reopen them.
 4. Collect what the user lets the session do without asking, and what the user keeps. Take them from
-   this conversation, the user's instruction files and any earlier goal. Ask only about an action
-   beyond the session's own branches and pull requests that no source covers.
+   this conversation, the user's instruction files and any earlier goal. Ask only about an action no
+   source covers, other than routine work on the session's own branches and PRs. A merge or a deploy
+   isn't routine.
 
 ## The parts
 
-Write these in order. Open the goal with the outcome. Give each later part except the handoff line a
-short label the session can scan, such as `Authority:`. Name the user the way the session knows
-them.
+Write these in order. Give each later part except the handoff line a short label the session can
+scan, such as `Authority:`. Name the user the way the session knows them.
 
 1. **Outcome.** The end state, then the source of truth. Add the decisions the session must not
    reopen. When a decision proves unbuildable, tell the session to hold the work that depends on it,
@@ -92,18 +92,18 @@ them.
    rerun, unless the user withheld it: a permission check refuses an action the goal doesn't grant.
    Put each action that is hard to undo in a list.
 5. **Bring the user.** List the decisions that are the user's, such as naming, money or an outside
-   account. Then say how to ask: one decision at a time, with options and a recommendation, never in
-   the same turn as an explanation. Tell the session to keep building what doesn't depend on the
-   answer, to record each blocker once, such as a refused action with its exact command, and to
+   account. Say how to ask: one decision at a time, with options and a recommendation, never in the
+   same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
+   to record each blocker once, such as a refused action with its command, minus any secret, and to
    repeat each open question in every report until the user answers.
 6. **Known waits.** Each outside wait, such as a review or a card the user must add, with how to
    check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,
    a model on every subagent, and the repo's AGENTS.md and its skills. List only the rules a long
    run tends to break.
-8. **Handoff.** Always include this line, in these words or close to them: "Keep a handoff doc in
-   `.handoff/` current at each milestone, as the handoff skill says. After a compaction, read it
-   before anything else." A compaction drops most of the conversation.
+8. **Handoff.** Always include this line, or one close to it: "Keep a handoff doc in `.handoff/`
+   current at each milestone, as the handoff skill says. After a compaction, read it before anything
+   else." A compaction drops most of the conversation.
 9. **Reports.** When the session reports, and in what shape, such as two lines after each merge:
    what landed, linked, and what's next.
 10. **Done when.** The lines the Stop hook judges, as [The done-when](#the-done-when) says.
@@ -116,9 +116,9 @@ Copy the shape from the [example goal](./references/example-goal.md).
 
 ## The done-when
 
-The Stop hook's model reads only the conversation. It runs no command and opens no file, so it can
-judge only what the session printed. Write each line as an end state with its evidence, such as
-"every PR in lanes A and B is merged, with its link in a report".
+The Stop hook's model reads only the conversation, so it can judge only what the session printed.
+Write each line as an end state with its evidence, such as "every PR in lanes A and B is merged,
+with its link in a report".
 
 - Give each line a state the session can reach without the user, or a held state: "deployed, or
   blocked on the user with the exact action listed".

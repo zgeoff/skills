@@ -41,7 +41,8 @@ You may do these without asking:
 - Manage the secrets in every project vault that `op-mint --list` shows.
 - Delete a git branch once no open pull request uses it and its work is merged or saved on another
   branch.
-- Merge a pull request once its checks are green and every review finding is fixed or answered.
+- Merge a pull request once its checks are green and every review finding is fixed or answered. A
+  design pull request also waits for Geoff's sign-off.
 - Change a repo's settings, such as its CI variables and branch rules. Bring Geoff only product
   calls, such as which licence a repo takes.
 

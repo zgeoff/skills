@@ -81,9 +81,11 @@ npm expires an unused trusted publisher after 2 days, so do steps 3 to 6 within 
 3. Publish `0.0.1` by hand with a trusted publisher for `main.yml`, as npm-publish says. Expect
    `npm view @<scope>/<name> version` to print `0.0.1`.
 4. Turn the release job on with `gh variable set RELEASE_ENABLED -R <owner>/<repo> --body true`.
-5. Merge a `feat` or `fix` pull request. Expect the release job to open a release pull request.
-6. Ask the owner to merge the release pull request. Expect `npm view @<scope>/<name> version` to
-   print the new version, which CI published with provenance.
+5. Merge a `feat` or `fix` pull request, as the owner's instructions allow. Expect the release job
+   to open a release pull request.
+6. Merge the release pull request when the owner granted releases. Otherwise ask the owner to merge
+   it. Expect `npm view @<scope>/<name> version` to print the new version, which CI published with
+   provenance.
 
 When the publish fails, follow [What goes wrong](../../npm-publish/SKILL.md#what-goes-wrong) in
 npm-publish. When the release pull request stays open or a merged one stays untagged, use
