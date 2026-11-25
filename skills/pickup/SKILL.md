@@ -22,7 +22,8 @@ you've started on the doc's next action, or asked the user to approve a differen
 3. When "Where things are" in the doc has a wherewerewe session name, read that session's notes.
    `www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). Agents use it to
    keep notes on a long session: the goal, the open tasks, what the user allows and what's decided.
-   1. Run `www attach <name>`, then `www` with no arguments. Leave off `--session` and `--json`.
+   1. Run `www attach <name>`, then `www` with no arguments. Leave off `--session`, which reads
+      another session's notes, and `--json`.
    2. When there is no `www` command, or `www attach` refuses, as it does on another machine, go to
       step 4.
    3. When `www` prints no `GRANT` section and the doc's Approvals section has the user's words,
