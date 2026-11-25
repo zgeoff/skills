@@ -27,7 +27,7 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 ## Key rules
 
-- [Catch yourself up](#catch-yourself-up): only when this session lost track, from the `www` brief
+- [Catch yourself up](#catch-yourself-up): only when this session lost track, read the `www` brief
   when there is one, the handoff doc, the current branches, PRs and tickets, and then the chat
   history.
 - [What happened](#what-happened): one sentence on what waits, then under 100 words, with a diagram
@@ -64,7 +64,7 @@ doesn't count. Otherwise read, in this order:
    directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names
    and PR numbers from step 3 before you read one whole. In another tool, skip this step.
 
-In the reply, call each item by a name the user knows, never by its id in the store.
+In the reply, call each item by a name the user knows. The user has never seen its id in the store.
 
 When the chat history shows three or more tries at the same fix, load the [why](../why/SKILL.md)
 skill to find what was tried, and use its answer as evidence for a decision.

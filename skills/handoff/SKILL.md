@@ -93,8 +93,8 @@ checks each claim that has a check. Run `www` before you write the doc:
 Run `www` with no `--session` flag and no `--json`, so you read only the session bound to you, as
 text.
 
-1. Make the store true. For each row under `CHANGED SINCE WRITTEN`, run the command the row gives,
-   or close the item with `www done` or `www drop`.
+1. Make the store true. For each row under `CHANGED SINCE WRITTEN`, run the command in the row, or
+   close the item with `www done` or `www drop`.
 2. Give each open item its note, with `www set <id> --note "<detail>"`. A note holds what the next
    agent needs on its first turn to that item. `www show` prints each open task with its note.
 3. Take each section from the store:

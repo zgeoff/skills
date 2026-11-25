@@ -36,9 +36,9 @@ you've started on the doc's next action, or asked the user to approve a differen
    - the state of each ticket in the doc, in the tracker your session can reach;
    - each process, preview, container or CI run the doc calls running.
 
-   After a brief, a claim the brief shows with a result needs no check by hand: the brief has just
-   run it. Check by hand each claim it shows with `no check` or `unchecked`, and each claim in the
-   doc that the store doesn't hold. Each row under `CHANGED SINCE WRITTEN` is a difference.
+   After a brief, skip each claim that has a result in the brief: the brief has just run that check.
+   Check by hand each claim marked `no check` or `unchecked`, and each claim in the doc that the
+   store doesn't hold. Count each row under `CHANGED SINCE WRITTEN` as a difference.
 
    List each difference, and each claim you couldn't check.
 
