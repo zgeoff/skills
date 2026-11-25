@@ -64,7 +64,7 @@ Read the code and the ticket until you can write these at the top of your plan. 
 ## Plan the PRs
 
 1. Split the work into PRs that each leave the code working once merged in order. Branch each PR
-   from the one before it, and merge them only as the user's instructions say.
+   from the one before it, except as step 5 says. Merge them only as the user's instructions say.
 2. Make the first PR the acceptance test, as a script that CI doesn't run yet. It fails until the
    job is done. That PR's check is that the script runs and fails as expected. The last PR adds the
    script to CI. When you build the first PR, run the script on the code as it is now, and log the
@@ -82,7 +82,7 @@ Read the code and the ticket until you can write these at the top of your plan. 
 When the user is talking with you in this session, show them the plan with the
 [show-me](../show-me/SKILL.md) skill, then start. Wait for their approval only when they asked to
 see the plan first. When an agent started you and no user is here, that agent gives each approval
-this skill asks the user for. When you were asked only for a plan, hand it back, and stop.
+this skill asks the user for.
 
 ## Do each PR
 

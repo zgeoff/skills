@@ -79,7 +79,7 @@ your scratch folder, in this order:
 For a diagnosis, add these after item 3, and keep item 4:
 
 - the exact error text;
-- what you observed, kept apart from what you suspect;
+- what you observed, without what you suspect;
 - each fix you tried, and what happened;
 - a request for the cause. Never ask the reviewer to confirm your diagnosis.
 

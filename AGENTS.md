@@ -2,8 +2,9 @@
 
 This repo holds every agent skill of the zgeoff GitHub account. Write each skill for a reader in
 another repo: invent each example, and never use a term that only one repo uses. Hand back a pull
-request into `main` with green CI, and for a skill change, a `## Checks` section in the PR
-description, as [Skill pull requests](#skill-pull-requests) says.
+request into `main` with green CI. When it changes a skill, a README or a file under `docs/`, fill
+in the `## Checks` section of the PR description, as [Skill pull requests](#skill-pull-requests)
+says.
 
 Never open a pull request in another repo to deliver your change: this rule covers each agent that
 works in this repo. The `zgeoff/tools` change that moves its pin to your merged commit is a separate

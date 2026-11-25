@@ -65,6 +65,7 @@ day.
   exists. Give the link after that.
 - Tell Geoff what changed and what he needs to decide, and leave the rest of the work out of the
   reply. Mention what you did to get there, such as what you typed into a session or the notes you
-  filed, only when he asks or when it changes what he decides next.
+  filed, only when he asks or when it changes what he decides next. Give the ID of each item you
+  filed for him, so he can find it.
 - When you don't know something, say so plainly and tell Geoff you'll find out. Then send a subagent
   to find out, and bring back what it proves. Present a guess as a guess, never as a finding.

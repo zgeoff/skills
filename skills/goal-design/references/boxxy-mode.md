@@ -55,8 +55,8 @@ folder of design docs. Then tell the session how to file each source item:
 
 - An item becomes done only when a PR from it merges. Tell the session to close, with a reason, each
   item that ends another way: a design-only item, a duplicate, a declined item or a split.
-- When an item ends, update its source: move the tracker issue to done with the PR link, or mark the
-  design doc built.
+- When an item's PR merges, update its source: move the tracker issue to done with the PR link, or
+  mark the design doc built. When an item closes another way, note the reason on its source.
 - boxxy runs no release or deploy. When the work ships, add those steps as
   [Direct mode](./direct-mode.md) says.
 
@@ -65,7 +65,8 @@ folder of design docs. Then tell the session how to file each source item:
 Write the done-when line from boxxy's item states, which the session prints:
 
 - every filed item is done, archived, or held on the user with the exact action listed;
-- each source item has its boxxy item, and each tracker issue is moved to done with its PR link;
+- each source item has its boxxy item, and each tracker issue whose item merged is moved to done
+  with its PR link;
 - no item is left in the `waiting` state, where an item that ends without a PR stays until the
   session closes it.
 
@@ -94,7 +95,7 @@ Keep a handoff doc in .handoff/ current at each milestone, as the handoff skill 
 
 Report: each morning, what merged with PR links, what's held and why.
 
-Done when: every item filed for this goal is done, archived, or held on the owner with the exact action listed; each "small" issue and each design has its item, and each tracker issue is moved to done with its PR link; no item is left waiting. Print the item list for this goal in the last turn as the evidence.
+Done when: every item filed for this goal is done, archived, or held on the owner with the exact action listed; each "small" issue and each design has its item, and each tracker issue whose item merged is moved to done with its PR link; no item is left waiting. Print the item list for this goal in the last turn as the evidence.
 
 When stopped: list each hold with the exact action the owner must take, then give the final report.
 ```

@@ -14,12 +14,12 @@ description:
 Write the text of a `/goal` that the user pastes into a Claude Code session. A `/goal` sets a Stop
 hook: after each turn, a small model reads the goal and the conversation and decides whether the
 condition holds, and the session can't stop until it does. The session agent then works for hours
-with nobody to ask, so the goal is its whole contract. Write it for an agent that obeys each word
-and guesses at each gap.
+with nobody to ask, so the goal is its contract. Write it for an agent that obeys each word and
+guesses at each gap.
 
-Hand back the goal as one `text` block that starts with `/goal `, its character count, whether it
-replaces a running goal, and each question you still have for the user. You're done when the text
-passes [Check it](#check-it).
+Hand back the goal as one `text` block that starts with `/goal `, its character count from
+[Fit the limit](#fit-the-limit), whether it replaces a running goal, and each question for the user.
+You're done when the text passes [Check it](#check-it).
 
 ## Key rules
 
@@ -110,7 +110,7 @@ them.
 11. **When stopped.** What the session does once the condition holds: list each block with the exact
     action the user must take, and give the final report.
 12. **Out of scope.** Name the nearby work the session might be tempted to start, so it doesn't.
-    Leave this part out when there is none.
+    Leave it out when there is none.
 
 Copy the shape from the [example goal](./references/example-goal.md).
 
