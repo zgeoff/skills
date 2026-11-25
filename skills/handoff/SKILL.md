@@ -45,6 +45,8 @@ that the next session must run here.
 
 - [The sections](#the-sections): a title, then nine sections in order, each under its own heading,
   with "None" under an empty one.
+- [Fill it from a www store](#fill-it-from-a-www-store): when `www` exits 0, make the store true,
+  then take each section from it.
 - [Check it](#check-it): open what each claim points at, and correct the wrong ones.
 
 ## The sections
@@ -73,6 +75,45 @@ under its own `##` heading. Under a section with nothing in it, write "None".
    as the instruction to follow, with its reason, such as "Run the tests from `api/`. From the repo
    root, the integration tests don't run."
 9. **Ruled out.** Each approach tried or rejected, and why, so nobody tries it again.
+
+## Fill it from a www store
+
+`www`, the wherewerewe command, keeps a session's notes in a store on this machine. It prints them
+as one brief, and checks each claim that has a check. Run `www` before you write the doc:
+
+- When it exits 0, this session has a store. Follow the steps below.
+- When it exits 4, or the command is missing, there is no store. Skip this section.
+- When it exits 5, run the command on its `Run:` line, then run `www` again.
+
+Run `www` with no `--session` flag and no `--json`, so you read only the session bound to you, as
+text.
+
+1. Make the store true. For each row under `CHANGED SINCE WRITTEN`, run the command the row gives,
+   or close the item with `www done` or `www drop`.
+2. Give each open item its note, with `www set <id> --note "<detail>"`. A note holds what the next
+   agent needs on its first turn to that item. `www show` prints each open task with its note.
+3. Take each section from the store:
+
+   | Section          | Take it from                                                                                                                                                                                |
+   | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | Goal             | `GOAL`                                                                                                                                                                                      |
+   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note, and "owed" beside a note the row marks `owed`.        |
+   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                         |
+   | Approvals        | First list: `GRANT`, with the user's words copied whole and the reading beside them, then `APPROVED ONCE`. Second list: what the reading says the user kept back, and each wait on `owner`. |
+   | Waiting          | `WAITING`                                                                                                                                                                                   |
+   | Next             | `NOW` and its note. When the brief shows no step, set one with `www now` first.                                                                                                             |
+   | Where things are | `WHERE`, and the session's name, which opens the brief's first line                                                                                                                         |
+   | Do it this way   | `RULES`, and each row of `LESSONS` with its reason                                                                                                                                          |
+   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                        |
+
+4. Add what the store doesn't hold, such as an uncommitted file you copied into `.handoff/<name>/`.
+
+Copy the grant's words whole, because an agent on another machine can't read this store, and acts on
+the doc alone. Write the session's name so the next agent on this machine can run
+`www attach <name>`.
+
+In [Check it](#check-it), the brief has already checked each claim that shows a result. Check by
+hand each claim it shows with `no check` or `unchecked`, and each claim you added.
 
 ## Check it
 

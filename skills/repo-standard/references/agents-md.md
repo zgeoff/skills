@@ -47,7 +47,7 @@ tests, docs or CI in a `project-<name>` skill beside the shared skill on that to
 copies no `design-docs` skill: before you write a design or a decision record, load
 [`design-docs`](https://github.com/zgeoff/skills/tree/main/skills/design-docs) from zgeoff/skills.
 
-When you write or edit a skill:
+When you write or edit a skill of this repo's own, such as a project skill:
 
 1. Load the `skill-writing`, `cold-read` and `deslop` skills from `.agents/skills/`.
 2. Do every step in the "Check it" section of `.agents/skills/skill-writing/SKILL.md`. In its last
