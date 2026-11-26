@@ -54,7 +54,9 @@ doesn't count. Otherwise read, in this order:
    - each PR's state and checks, with `gh pr view`;
    - each ticket named in a PR body;
    - each subagent, workflow and background command this session started. A restart or a re-auth
-     ends them without telling you. Start each dead one again before you report it as running.
+     ends them without telling you, so look before you report one as running. Start a dead one again
+     after you send the reply.
+
 4. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
    directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names
    and PR numbers from step 3 before you read one whole. In another tool, skip this step.
