@@ -44,7 +44,7 @@ doesn't count. Otherwise read, in this order:
    Run `www` with no arguments. When it exits 4, or there is no `www` command, your session has no
    notes: go to step 2. When it exits 0, read:
    - the `GRANT` rows, for what you may do without asking;
-   - each `WAIT` row that waits on the user, and put each in the reply as a decision;
+   - each `WAIT` row that waits on the user, for the decisions the reply may need;
    - the `NOW` row, for where you were. `www` prints only the first line of a note, so read a whole
      row with `www rows | jq 'select(.id == "<id>")'`.
 2. The handoff doc, when the repo has one in `.handoff/`. Check it against the current state, as the

@@ -110,9 +110,9 @@ label:
 4. Add what you never wrote as a row, such as an approach you ruled out, or an uncommitted file you
    copied into `.handoff/<name>/`.
 
-Copy each `GRANT` row as `www` prints it. An agent on another machine can't read these notes, and
-acts on the doc alone. The next agent on this machine reads them with `www attach <name>`, so put
-the session's name in the doc.
+A `GRANT` row is already what the user meant, so copy each one as `www` prints it. The next agent
+acts on the doc, and might never open the notes. Put the session's name in the doc, so that agent
+can read them with `www attach <name>`.
 
 ## Check it
 
