@@ -63,8 +63,8 @@ doesn't count. Otherwise read, in this order:
 
 In the reply, call each task by a name the user knows. The user has never seen the ids `www` prints.
 
-When the chat history shows three or more tries at the same fix, load the [why](../why/SKILL.md)
-skill to find what was tried, and use its answer as evidence for a decision.
+When you find three or more tries at the same fix in the chat history, load the
+[why](../why/SKILL.md) skill to find what was tried, and use its answer as evidence for a decision.
 
 ## What happened
 
@@ -86,12 +86,12 @@ agent by a name the user knows.
 ## The decisions
 
 A decision here is a step only the user can take, such as a choice, an approval, a step that can't
-be undone, or access you don't have. A step the user's instructions already grant, such as a merge
-they allowed, isn't one: do it. Work you can still do yourself isn't one: report it as running, and
-do it in the same turn, after you send the reply. List every decision that waits on the user,
-including one raised before their last message. Before you list one, look at the setting, the file
-or the PR that would show it is done already: a step carried over from a summary may be stale. Never
-invent one to fill the reply.
+be undone, or access you don't have. When the user already allowed a step, such as a merge, it isn't
+a decision: do it. Work you can still do yourself isn't one: report it as running, and do it in the
+same turn, after you send the reply. List every decision that waits on the user, including one
+raised before their last message. Before you list one, look at the setting, the file or the PR that
+would show it is done already: a step carried over from a summary may be stale. Never invent one to
+fill the reply.
 
 For each decision, give:
 

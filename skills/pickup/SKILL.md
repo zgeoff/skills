@@ -41,8 +41,8 @@ you've started on the doc's next action, or on the one you chose in its place.
    or the doc has none, choose another action.
 6. Tell the user, in a few lines: the goal, where it stands now, with the differences and the claims
    you couldn't check first, what waits on the user, and the next action.
-7. Start on the next action, and carry on with the work. When you chose it, tell the user which
-   action you chose and why.
+7. Start on the next action, and carry on with the work. When you chose a different action from the
+   doc's, tell the user which one and why.
 
    When `www` printed notes in step 3, write each next step as you take it: `www now "<next step>"`.
 

@@ -58,14 +58,15 @@ under its own `##` heading. Under a section with nothing in it, write "None".
 
 1. **Goal.** What the work is for, and why, in two or three sentences. Name a ticket by what it
    does, with its ID after.
-2. **Where it stands.** Three lists: done, in progress and not started. Each "done" has its
+2. **Where it stands.** Three lists: done, in progress and not started. Give each done item its
    evidence. Put a blocked item under Waiting.
 3. **Decided.** Each decision, with its reason and who made it, so the next agent doesn't reopen it.
    Link where it was decided, such as a PR comment or a ticket, when you can.
-4. **Approvals.** Two lists. The first holds each approval the user gave, for work like this rather
-   than for one action, which the next agent may act on without asking. The second holds what still
-   needs the user's approval. Write each approval as what the user meant, in plain words the next
-   agent can act on. Quote the user only when the exact wording matters.
+4. **Approvals.** Two lists. In the first, list each approval the user gave for work like this: the
+   next agent may act on each one without asking. Leave out an approval the user gave for one action
+   only. In the second, list what still needs the user's approval. Write each approval as what the
+   user meant, in plain words the next agent can act on. Quote the user only when the exact wording
+   matters.
 5. **Waiting.** Each item blocked on someone, with what it waits on and the next step.
 6. **Next.** The one action to take first, small enough to start now.
 7. **Where things are:**
