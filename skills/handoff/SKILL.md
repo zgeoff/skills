@@ -65,7 +65,8 @@ under its own `##` heading. Under a section with nothing in it, write "None".
    Link where it was decided, such as a PR comment or a ticket, when you can.
 4. **Approvals.** Two lists. The first holds each approval the user gave, for work like this rather
    than for one action, which the next agent may act on without asking. The second holds what still
-   needs the user's approval.
+   needs the user's approval. Write each approval as what the user meant, in plain words the next
+   agent can act on. Quote the user only when the exact wording matters.
 5. **Waiting.** Each item blocked on someone, with what it waits on and the next step.
 6. **Next.** The one action to take first, small enough to start now.
 7. **Where things are:**
@@ -82,42 +83,36 @@ under its own `##` heading. Under a section with nothing in it, write "None".
 ## When the session keeps notes in www
 
 `www` is the command of [wherewerewe](https://github.com/zgeoff/wherewerewe). An agent uses it to
-keep notes on a long session: the goal, the open tasks, what the user allows and what's decided. Run
-`www` with no arguments to print the notes of your session:
+keep notes on a long session as short labelled rows: the goal, the next step, what the user allows
+and what's decided. Run `www` with no arguments to print the open rows of your session, grouped by
+label:
 
 - When it exits 0, your session has notes. Follow the steps below.
 - When it exits 4, or there is no `www` command, your session has none. Skip this section.
-- When it exits 5, run the command on its `Run:` line, then run `www` again.
 
-Leave off `--session`, which reads another session's notes, and `--json`.
-
-1. Update the notes. For each row under `CHANGED SINCE WRITTEN`, run the command in the row, or
-   close the task with `www done` or `www drop`.
+1. Update the notes. Close each row about finished work with
+   `www done <id> --evidence "<PR, commit or test run>"`, or with `www drop <id>` when it no longer
+   matters. Correct a row that is wrong with `www set <id> "<text>"`.
 2. Write where you are on each open task: `www set <id> --note "<detail>"`. Give what the next agent
-   needs to start on that task. Run `www show` to read each open task with its note.
-3. Run `www` again, and copy each section of the doc from it:
+   needs to start on that task. Then write the next step: `www now "<next step>"`.
+3. Run `www` again, and write each section of the doc from the rows whose label matches it, such as
+   Goal from the `GOAL` row, Next from the `NOW` row and Waiting from the `WAIT` rows. `www` prints
+   only the first line of a note, so read each whole note with `www rows | jq`. Write these sections
+   from more than one label:
 
-   | Section          | Copy it from                                                                                                                                                                                                                                               |
-   | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | Goal             | the `GOAL` line                                                                                                                                                                                                                                            |
-   | Where it stands  | Done: each row of `www log --op done`, with its evidence. In progress and not started: each open task from `www show`, with its note. Write "note owed" beside a task marked `owed`.                                                                       |
-   | Decided          | each row of `www log --op decide`, with who decided                                                                                                                                                                                                        |
-   | Approvals        | First list: the `GRANT` section, with the user's words exactly as printed and the `reading:` line under them, then the `APPROVED ONCE` section. Second list: what the user kept back, as the `reading:` line shows, and each `WAITING` row marked `owner`. |
-   | Waiting          | the `WAITING` section                                                                                                                                                                                                                                      |
-   | Next             | the `NOW` line and its note. When there is no `NOW` line, run `www now <id> "<next step>"` first. Leave `--note` off, because `--note` replaces the task's note.                                                                                           |
-   | Where things are | the `WHERE` section, and the session's name, which is the first word `www` prints                                                                                                                                                                          |
-   | Do it this way   | the `RULES` section, and each row of `LESSONS` with its reason                                                                                                                                                                                             |
-   | Ruled out        | each row of `www log --op ruled-out`                                                                                                                                                                                                                       |
+   | Section          | Write it from                                                                                                                                                                                                        |
+   | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | Where it stands  | Done: each row that `www rows --all \| jq 'select(.closed.how == "done")'` prints, with its evidence. In progress and not started: each open row for a piece of work, such as a `TASK` or a `PR` row, with its note. |
+   | Approvals        | First list: each `GRANT` row that allows something. Second list: each `GRANT` row that keeps something back, and each `WAIT` row that waits on the user.                                                             |
+   | Where things are | each `WHERE` row, and the session's name, which is the first word `www` prints                                                                                                                                       |
+   | Do it this way   | each `RULE` row, and each `LESSON` row with its reason                                                                                                                                                               |
 
-4. Add what `www` didn't print, such as an uncommitted file you copied into `.handoff/<name>/`.
+4. Add what you never wrote as a row, such as an approach you ruled out, or an uncommitted file you
+   copied into `.handoff/<name>/`.
 
-Copy the user's words in `GRANT` exactly. An agent on another machine can't read these notes, and
+Copy each `GRANT` row as `www` prints it. An agent on another machine can't read these notes, and
 acts on the doc alone. The next agent on this machine reads them with `www attach <name>`, so put
 the session's name in the doc.
-
-Each time `www` prints, it looks up the PR, branch, file or process that a task refers to. In
-[Check it](#check-it), skip a claim that `www` printed with a result. Check each claim it printed
-with `no check` or `unchecked`, and each claim you added.
 
 ## Check it
 
