@@ -111,8 +111,8 @@ label.
    uncommitted file you copied into `.handoff/<name>/`.
 
 A `GRANT` row is already what the user meant, so copy each one as `www` prints it. The next agent
-acts on the doc, and might never open the notes. To read them, it runs `www attach <name>` with the
-session's name you put under Where things are.
+acts on the doc, and might never open the notes. An agent that does open them needs the session's
+name from Where things are, for `www attach <name>`.
 
 ## Check it
 
