@@ -40,7 +40,7 @@ key=$(op read 'op://agents/repo-sync-github-app/private-key') && gh secret set R
 ```
 
 Expect: `gh secret list -R <owner>/<repo>` lists both names. When `op read` fails because its
-service-account token expired, mint a new one with `op-mint <profile>`, then run the commands again.
+service-account token expired, mint a new one with `op-mint global`, the profile that reads the `agents` vault, then run the commands again.
 
 ## The ruleset
 
