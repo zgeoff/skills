@@ -91,7 +91,7 @@ scan, such as `Authority:`. Name the user the way the session knows them.
    session's own branches and pull requests, such as a force-push with lease, a rebase and a CI
    rerun, unless the user withheld it: a permission check refuses an action the goal doesn't grant.
    Put each action that is hard to undo in a list. Tell the session to act on a grant without asking
-   first: the permission check stops what the goal doesn't cover.
+   first, because that same check stops anything the goal leaves out.
 5. **Bring the user.** List the decisions that are the user's, such as naming, money or an outside
    account. Say how to ask: one decision at a time, with options and a recommendation, never in the
    same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,

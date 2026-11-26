@@ -27,13 +27,14 @@ you've started on the doc's next action, or on the one you chose in its place.
    1. Run `www attach <name>`, then `www` with no arguments.
    2. When there is no `www` command, or `www attach` refuses, as it does on another machine, go to
       step 4.
-   3. When `www` prints no `GRANT` row and the doc's Approvals section lists approvals, save each
-      one as the doc has it: `www grant "<the approval>"`.
+   3. When `www` prints no `GRANT` row, save both lists in the doc's Approvals section, in the doc's
+      words. Save each line of the first list with `www grant "<the approval>"`, and each line of
+      the second with `www grant "Kept back: <the line>"`.
 4. Check each claim in the doc against how things stand now, including:
-   - the branches and worktrees, and each change the doc calls uncommitted;
+   - the branches and worktrees, and each change marked uncommitted;
    - each PR's state and checks;
    - the state of each ticket in the doc, in the tracker your session can reach;
-   - each process, preview, container or CI run the doc calls running.
+   - each process, preview, container or CI run marked running.
 
    List each difference, and each claim you couldn't check.
 
