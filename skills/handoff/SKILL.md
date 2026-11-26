@@ -37,9 +37,8 @@ Before you write:
    `feat-csv-export`. The doc is `.handoff/<name>.md`.
 5. When that doc exists, read it. Carry over what still holds into the new doc, approvals included,
    and replace the file.
-6. Run `www`. When it exits 0, follow
-   [When the session keeps notes in www](#when-the-session-keeps-notes-in-www) before you write the
-   doc.
+6. Run `www`. When it exits 0, write the doc as
+   [When the session keeps notes in www](#when-the-session-keeps-notes-in-www) says.
 
 Hand back the doc's path, and the next action from it. The doc stays on this machine, so also say
 that the next session must run here.
@@ -103,12 +102,12 @@ label:
    | Section          | Write it from                                                                                                                                                                                                        |
    | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | Where it stands  | Done: each row that `www rows --all \| jq 'select(.closed.how == "done")'` prints, with its evidence. In progress and not started: each open row for a piece of work, such as a `TASK` or a `PR` row, with its note. |
-   | Approvals        | First list: each `GRANT` row that allows something. Second list: each `GRANT` row that keeps something back, and each `WAIT` row that waits on the user.                                                             |
+   | Approvals        | First list: each `GRANT` row that allows something. Second list: each `GRANT` row that keeps something back, and each `WAIT` row that waits on the user's approval. Put that `WAIT` row under Waiting too.           |
    | Where things are | each `WHERE` row, and the session's name, which is the first word `www` prints                                                                                                                                       |
    | Do it this way   | each `RULE` row, and each `LESSON` row with its reason                                                                                                                                                               |
 
-4. Add what you never wrote as a row, such as an approach you ruled out, or an uncommitted file you
-   copied into `.handoff/<name>/`.
+4. Add to the doc what you never wrote as a row, such as an approach you ruled out, or an
+   uncommitted file you copied into `.handoff/<name>/`.
 
 A `GRANT` row is already what the user meant, so copy each one as `www` prints it. The next agent
 acts on the doc, and might never open the notes. Put the session's name in the doc, so that agent
