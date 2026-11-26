@@ -62,13 +62,13 @@ timeouts and step scripts. Then run `bun x @zgeoff/chex workflows`.
 npm expires an unused trusted publisher after 2 days, so do steps 3 to 6 within 2 days.
 
 1. Install the release GitHub App on the repo. Every repo uses the same App, whose client ID and
-   private key are in the `release-github-app` item of the `zgeoff` 1Password vault. Set them as the
+   private key are in the `release-github-app` item of the `agents` 1Password vault. Set them as the
    `RELEASE_APP_ID` variable and the `RELEASE_APP_PRIVATE_KEY` secret. Each command sets nothing
    when its read fails:
 
    ```bash
-   id=$(op read 'op://zgeoff/release-github-app/client-id') && gh variable set RELEASE_APP_ID -R <owner>/<repo> --body "$id"
-   key=$(op read 'op://zgeoff/release-github-app/private-key') && gh secret set RELEASE_APP_PRIVATE_KEY -R <owner>/<repo> --body "$key"
+   id=$(op read 'op://agents/release-github-app/client-id') && gh variable set RELEASE_APP_ID -R <owner>/<repo> --body "$id"
+   key=$(op read 'op://agents/release-github-app/private-key') && gh secret set RELEASE_APP_PRIVATE_KEY -R <owner>/<repo> --body "$key"
    ```
 
    Expect `gh variable list -R <owner>/<repo>` to list `RELEASE_APP_ID`, and

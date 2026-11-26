@@ -35,12 +35,13 @@ Set the two repo-sync secrets with these commands in place of the runbook's. A p
 into `gh secret set` sets an empty secret when the read fails, and `&&` stops before the set:
 
 ```bash
-id=$(op read 'op://zgeoff/repo-sync-github-app/client-id') && gh secret set REPO_SYNC_APP_CLIENT_ID -R <owner>/<repo> --body "$id"
-key=$(op read 'op://zgeoff/repo-sync-github-app/private-key') && gh secret set REPO_SYNC_APP_PRIVATE_KEY -R <owner>/<repo> --body "$key"
+id=$(op read 'op://agents/repo-sync-github-app/client-id') && gh secret set REPO_SYNC_APP_CLIENT_ID -R <owner>/<repo> --body "$id"
+key=$(op read 'op://agents/repo-sync-github-app/private-key') && gh secret set REPO_SYNC_APP_PRIVATE_KEY -R <owner>/<repo> --body "$key"
 ```
 
 Expect: `gh secret list -R <owner>/<repo>` lists both names. When `op read` fails because its
-service-account token expired, mint a new one with `op-mint <profile>`, then run the commands again.
+service-account token expired, mint a new one with `op-mint global`, the profile that reads the
+`agents` vault, then run the commands again.
 
 ## The ruleset
 
