@@ -19,8 +19,7 @@ waits on no one, as [The decisions](#the-decisions) says.
 
 - **Check each fact before you report it.** A PR you remember as open may have merged. Look at each
   PR, branch and ticket again before it goes in the reply, even when you skip
-  [Catch yourself up](#catch-yourself-up). Skip a PR or a branch that `www` printed with a result
-  this turn, other than `no check` or `unchecked`.
+  [Catch yourself up](#catch-yourself-up).
 - **Spend the words on the decisions.** Keep the account of what happened short.
 - **Let the user decide from the reply alone.** A link can give more detail, but the user shouldn't
   have to open it to decide.
@@ -41,24 +40,22 @@ doesn't count. Otherwise read, in this order:
 
 1. Your session's notes in `www`, the command of
    [wherewerewe](https://github.com/zgeoff/wherewerewe). Agents use it to keep notes on a long
-   session: the goal, the open tasks, what the user allows and what's decided. Run `www` with no
-   arguments, and leave off `--session`, which reads another session's notes, and `--json`. When it
-   exits 4, or there is no `www` command, your session has no notes: go to step 2. When it exits 5,
-   run the command on its `Run:` line, then run `www` again. When it exits 0, read:
-   - the `GRANT` section, for what you may do without asking;
-   - the `OWNER SAYS` section and each `WAITING` row marked `owner`, and put each in the reply as a
-     decision;
-   - the `CHANGED SINCE WRITTEN` section, for what changed since you wrote each task;
-   - the note under `NOW`, for where you were. Run `www show <id>` to read another task's note.
+   session as short labelled rows: the goal, the next step, what the user allows and what's decided.
+   Run `www` with no arguments. When it exits 4, or there is no `www` command, your session has no
+   notes: go to step 2. When it exits 0, read:
+   - the `GRANT` rows, for what you may do without asking;
+   - each `WAIT` row that waits on the user, for the decisions the reply may need;
+   - the `NOW` row, for where you were. `www` prints only the first line of a note, so read a whole
+     row with `www rows | jq 'select(.id == "<id>")'`.
 2. The handoff doc, when the repo has one in `.handoff/`. Check it against the current state, as the
    [pickup](../pickup/SKILL.md) skill says.
 3. The current state:
    - the branches and worktrees;
    - each PR's state and checks, with `gh pr view`;
-   - each ticket named in a PR body.
-
-   When `www` printed notes in step 1, open only the PRs and branches it printed with `no check` or
-   `unchecked`, and any it didn't print. `www` already looked up the rest.
+   - each ticket named in a PR body;
+   - each subagent, workflow and background command this session started. A restart or a re-auth
+     ends them without telling you, so look before you report one as running. Start a dead one again
+     after you send the reply.
 
 4. Your chat history on the work. In Claude Code, it's the `.jsonl` files in this working
    directory's folder under `~/.claude/projects/`. Search them, newest first, for the branch names
@@ -66,8 +63,8 @@ doesn't count. Otherwise read, in this order:
 
 In the reply, call each task by a name the user knows. The user has never seen the ids `www` prints.
 
-When the chat history shows three or more tries at the same fix, load the [why](../why/SKILL.md)
-skill to find what was tried, and use its answer as evidence for a decision.
+When you find three or more tries at the same fix in the chat history, load the
+[why](../why/SKILL.md) skill to find what was tried, and use its answer as evidence for a decision.
 
 ## What happened
 
@@ -89,10 +86,12 @@ agent by a name the user knows.
 ## The decisions
 
 A decision here is a step only the user can take, such as a choice, an approval, a step that can't
-be undone, or access you don't have. A step the user's instructions already grant, such as a merge
-they allowed, isn't one: do it. Work you can still do yourself isn't one: report it as running, and
-do it in the same turn, after you send the reply. List every decision that waits on the user,
-including one raised before their last message. Never invent one to fill the reply.
+be undone, or a step that needs access you don't have. When the user already allowed a step, such as
+a merge, it isn't a decision: do it. Work you can still do yourself isn't one: report it as running,
+and do it in the same turn, after you send the reply. List every decision that waits on the user,
+including one raised before their last message. Before you list one, look at the setting, the file
+or the PR that would show it is done already: a step carried over from a summary may be stale. Never
+invent one to fill the reply.
 
 For each decision, give:
 
