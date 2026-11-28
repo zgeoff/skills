@@ -4,7 +4,7 @@ description:
   "Writes the text of a /goal for a long autonomous Claude Code session: the outcome and its source
   of truth, the ordered work with its dependencies, the steps for each item, what the session may do
   without asking, what it brings the user, the known waits, the rules, the handoff doc, the reports,
-  a done-when the Stop hook can judge, and what to do when stopped. Hands back text to paste, under
+  a done-when the Stop hook can judge, and what to do when stopped. Hands back text to paste, within
   the 4,000-character limit. Load it for /goal-design, 'write a goal', 'set up a /goal', and when a
   walkthrough agrees a big new scope for a running goal."
 ---
@@ -87,16 +87,22 @@ scan, such as `Authority:`. Name the user the way the session knows them.
 3. **For each item.** Give each item's steps from the mode's reference:
    [Direct mode](./references/direct-mode.md) or [boxxy mode](./references/boxxy-mode.md).
 4. **Authority.** Write three lists: what the session may do without asking, what it isn't
-   authorised to do, and what it must never do. Open the first list with the routine work on the
-   session's own branches and pull requests, such as a force-push with lease, a rebase and a CI
-   rerun, unless the user withheld it: a permission check refuses an action the goal doesn't grant.
-   Put each action that is hard to undo in a list. Tell the session to act on a grant without asking
-   first, because that same check stops anything the goal leaves out.
+   authorised to do, and what it must never do. A permission check refuses each action the goal
+   doesn't grant, so open the first list with the routine work on the session's own branches and
+   pull requests, such as a force-push with lease, a rebase and a CI rerun, unless the user withheld
+   it. Name each action that is hard to undo in one of the lists. Tell the session to act on a grant
+   without asking first, because that same check stops anything the goal leaves out. Tell it to
+   retry a refused step with a fresh agent, then do the step itself, and to hold the step only for a
+   blocker, as item 5 defines it. A refusal can come from a limit of the harness, such as a subagent
+   that can't start one of its own. When you make every refusal a blocker, the session stalls on
+   work the user allows.
 5. **Bring the user.** List the decisions that are the user's, such as naming, money or an outside
-   account. Say how to ask: one decision at a time, with options and a recommendation, never in the
-   same turn as an explanation. Tell the session to keep building what doesn't depend on the answer,
-   to record each blocker once, such as a refused action with its command, minus any secret, and to
-   repeat each open question in every report until the user answers.
+   account. Tell the session to bring one decision at a time, with options and a recommendation, and
+   never in the same turn as an explanation. Tell it to keep building what doesn't depend on the
+   answer, and to repeat each open question in every report until the user answers. Tell it that a
+   blocker is an action in the second or third authority list, or a step still refused after it
+   tries the step itself. Tell it to record each blocker once, with its next step and its command,
+   minus any secret.
 6. **Known waits.** Each outside wait, such as a review or a card the user must add, with how to
    check it.
 7. **Rules.** The house rules the session must not drift from, such as commit style, no attribution,
